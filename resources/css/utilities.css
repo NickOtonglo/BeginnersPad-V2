@@ -1,0 +1,896 @@
+/* Params */
+:root {
+    --rounded-btn-radius: 25px;
+    --container-width-default: 80%;
+    --section-auth-container-width: 600px;
+}
+
+button, .btn {
+    padding: 9px 14px;
+    border-radius: var(--rounded-btn-radius);
+    cursor: pointer;
+    border: none;
+    font-family: inherit;
+    /* https://stackoverflow.com/questions/6900124/how-to-make-certain-text-not-selectable-with-css */
+    -webkit-user-select: none; /* Safari */        
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* IE10+/Edge */
+    user-select: none; /* Standard */
+}
+
+.btn-link {
+    background: none;
+    border: 1px solid var(--color-font);
+    margin: 3px;
+}
+
+/* Primary button */
+.btn-primary {
+    background: var(--color-primary);
+    color: #fff;
+}
+
+.btn-primary:hover,
+.btn-danger:hover,
+.btn-warning:hover,
+.btn-dropdown-grp .btn-dropdown:hover {
+    opacity: 0.8;
+}
+
+.btn-warning {
+    background: var(--color-warning);
+    color: #fff;
+}
+
+.btn-danger {
+    background: var(--color-danger);
+    color: #fff;
+}
+
+/* Button group (.btn-grp) */
+.btn-grp {
+    display: flex;
+    padding: 8px;
+}
+
+.btn-grp.vertical {
+    flex-direction: column;
+    max-width: 285px;
+    min-width: 211px;
+}
+
+.btn-grp.vertical > button {
+    border-bottom: none;
+    font-size: 1rem;
+}
+
+.btn-grp.vertical > button:first-child {
+    border-radius: 15px 15px 0 0;
+}
+
+.btn-grp.vertical > button:last-child {
+    border-radius: 0 0 15px 15px;
+    border-bottom: 1px solid #666;
+}
+
+.btn-grp.horizontal {
+    flex-direction: row;
+}
+
+.btn-grp.horizontal > button {
+    border-right: none;
+}
+
+.btn-grp.horizontal > button:first-child {
+    border-radius: 15px 0 0 15px;
+}
+
+.btn-grp.horizontal > button:last-child {
+    border-radius: 0 15px 15px 0;
+    border-right: 1px solid #666;
+}
+
+.btn-grp > button {
+    border-radius: 0;
+    border: 1px solid #666;
+    background: var(--color-background-main);
+    transition: background 0.15s;
+}
+
+.btn-grp > button:hover {
+    background: #aaa;
+    /* color: #fff; */
+}
+
+.btn-grp > button.selected {
+    background: #666;
+    color: #fff;
+}
+
+.btn-close {
+    border-radius: 5px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 6px 12px;
+    z-index: 1;
+    background: var(--color-background-main);
+}
+
+.btn-close:hover {
+    background: var(--color-danger);
+    color: #fff;
+    border-color: var(--color-danger);
+}
+
+.btn-popup-close {
+    border-radius: 5px;
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+.btn-popup-close:hover {
+    border: 1px solid var(--color-danger);
+    color: var(--color-danger);
+}
+
+/* Floating action button */
+.fab-container {
+    padding: 10px;
+    margin: 10px;
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    z-index: 17;
+}
+
+.fab-container .fab {
+    font-family: inherit;
+    padding: 15px;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.9);
+    font-size: 1rem;
+}
+
+/* Text */
+/* single-line text with ellipsis overflow */
+.txt-single-line, .card-info.txt-single-line > * {
+    width: inherit;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 1; /* number of lines to show */
+    -webkit-box-orient: vertical;
+}
+
+.cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+}
+
+/* Main card */
+.card {
+    margin: 35px;
+    border-radius: 20px;
+    position: relative;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.4);
+    transition: 0.3s;
+    /* https://stackoverflow.com/questions/6900124/how-to-make-certain-text-not-selectable-with-css */
+    -webkit-user-select: none; /* Safari */        
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* IE10+/Edge */
+    user-select: none; /* Standard */
+}
+
+.card:hover,
+.card-sm:hover,
+.card-user:hover,
+.card-generic:hover {
+    box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.4);
+    transform: translateY(-5px);
+}
+
+.card a:hover,
+.card-sm a:hover,
+.card-user a:hover,
+.card-generic a:hover {
+    text-decoration: none;
+    font-weight: normal;
+}
+
+.card .image {
+    position: relative;
+    background: url(../images/static/thumb_default.jpg) center center;
+    height: 225px;
+    border-radius: 20px 20px 0 0;
+}
+
+.card .image .stars {
+    text-shadow: 0 0 2px rgba(255, 255, 255, 0.8);
+    padding: 8px;
+    font-size: 0.9rem;
+}
+
+.card .image img {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 50px;
+    height: 50px;
+    opacity: 0.8;
+}
+
+.card .card-info {
+    padding: 8px 14px;
+}
+
+.card-info h4 {
+    font-size: 1.1rem;
+}
+
+.card-info .location {
+    font-size: 1.1rem;
+}
+
+.card-info .price {
+    font-size: 1.15rem;
+}
+
+.card-info .timestamp {
+    font-size: 0.8rem;
+}
+
+/* Card v2 & Unit cards */
+.card-sm,
+.card-user,
+.card-generic {
+    margin: 15px;
+    border-radius: 7px;
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.4);
+    transition: 0.3s;
+}
+
+.card-sm a {
+    display: flex;
+    flex-direction: row;
+    text-decoration: none;
+}
+
+.card-sm .details,
+.fav .details {
+    padding: 15px;
+    width: 60%;
+}
+
+.card-sm .details .label,
+.fav .details .label {
+    font-size: 0.9rem;
+}
+
+.card-sm .details .timestamp,
+.fav .details .timestamp {
+    font-size: 0.85rem;
+}
+
+.card-sm .info-rating-grp,
+.fav .info-rating-grp {
+    font-size: 1.1rem;
+    margin-top: 5px;
+}
+
+.card-sm .thumb,
+.fav .thumb {
+    background-size: cover;
+    height: inherit;
+    width: 40%;
+}
+
+.card-unit .thumb {
+    background: url('../images/static/thumb_unit.jpg') no-repeat;
+    border-radius: 0 7px 7px 0;
+}
+
+.card-2 .thumb {
+    background: url('../images/static/thumb_default.jpg') no-repeat center;
+    border-radius: 7px 0 0 7px;
+}
+
+.card-generic .text {
+    padding: 8px;
+}
+
+.card-generic .text .txt-sm {
+    font-size: 0.9rem;
+}
+
+/* Section title */
+.section-title {
+    text-align: center;
+    padding: 15px 0;
+    font-size: 1.7rem;
+    text-transform: capitalize;
+}
+
+.section-title .lowercase {
+    text-transform: lowercase;
+}
+
+/* Links */
+#section-links {
+    padding: 0 50px;
+    background: var(--color-tertiary);
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+}
+
+/* #section-links div {
+    padding: 70px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+}
+
+#section-links div:nth-child(2) {
+    align-self: flex-start;
+} */
+
+#section-links div {
+    padding: 70px 0;
+    display: inline-block;
+    align-items: center;
+    margin: 0 auto;
+}
+
+#section-links div a {
+    display: block;
+    margin: 18px 0;
+    font-size: 1.1rem;
+}
+
+/* Section .section-more link */
+.container .section-more {
+    text-align: right;
+}
+
+/* Form */
+form {
+    padding: 15px;
+}
+
+form .btn-submit {
+    border-radius: var(--rounded-btn-radius);
+    padding: 9px 14px;
+    margin-top: 15px;
+    border: 1px solid var(--color-font);
+    color: var(--color-font);
+    background: none;
+    font-size: 0.9rem;
+    font-weight: normal;
+    cursor: pointer;
+}
+
+form .btn-submit:hover {
+    background: var(--color-font);
+    color: var(--color-background-main);
+}
+
+.form-group {
+    padding-top: 5px;
+}
+
+.form-group * {
+    display: block;
+    width: 100%;
+    font-size: 1rem;
+    margin: 3px 0;
+    outline: none;
+    font-family: inherit;
+}
+
+.form-group input, .form-group select, .form-group textarea {
+    background: transparent;
+    border-radius: 3px;
+    border: 1px solid var(--color-form-border);
+    padding: 6px 16px;
+}
+
+.form-group select {
+    padding: 6px 10px;
+}
+
+.form-group .form-check {
+    text-align: left;
+}
+
+.form-group .form-check * {
+    display: inline;
+}
+
+.form-group .form-check input[type=checkbox] {
+    display: inline;
+    width: 15px;
+}
+
+.form-group.danger label {
+    color: var(--color-danger);
+}
+
+.form-group.danger input,
+.form-group.danger select,
+.form-group.danger textarea {
+    background: rgba(238, 33, 33, 0.3);
+    border-color: var(--color-danger);
+    padding: 6px 16px;
+    color: var(--color-danger);
+    font-weight: bold;
+}
+
+/* No scroll footer */
+.page-min-height {
+    position:absolute;
+    bottom:0;
+    width:100%;
+}
+
+/* Select dropdown with  button styling */
+select.btn-dropdown {
+    padding: 10px;
+    font-size: inherit;
+    font-family: inherit;
+    background: transparent;
+    border-radius: 3px;
+    border: 1px solid var(--color-form-border);
+    outline: none;
+}
+
+.container-btn-dropdown {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+}
+
+.container-btn-dropdown.multi {
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.container-btn-dropdown.multi > * {
+    margin: 8px 4px;
+}
+
+/* btn-dropdown-grp */
+.btn-dropdown-grp {
+    position: relative;
+    width: 100%;
+    /* https://stackoverflow.com/questions/6900124/how-to-make-certain-text-not-selectable-with-css */
+    -webkit-user-select: none; /* Safari */        
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* IE10+/Edge */
+    user-select: none; /* Standard */
+}
+
+.btn-dropdown-grp .btn-dropdown {
+    border-radius: 5px;
+    background: var(--color-primary);
+    color: var(--color-font-contrast);
+    font-size: 1.1rem;
+}
+
+.btn-dropdown-grp .btn-dropdown:active {
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.4);
+    transition: box-shadow 0.15s;
+}
+
+.btn-dropdown-grp .btn-dropdown-items {
+    background: #fff;
+    border-radius: 3px;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
+    margin-top: 2px;
+    z-index: 17;
+    visibility: hidden;
+    position: absolute;
+    top: 45px;
+    transition: visibility 0.15s;
+}
+
+.btn-dropdown-grp .btn-dropdown-items.open {
+    visibility: visible;
+}
+
+.btn-dropdown-grp .btn-dropdown-items .item {
+    padding: 5px 10px;
+    border-top: 1px solid #eee;
+    cursor: pointer;
+}
+
+.btn-dropdown-grp .btn-dropdown-items .item:active {
+    background: rgba(0, 0, 0, 0.3);
+}
+
+.btn-dropdown-grp .btn-dropdown-items .item:first-child {
+    border-top: none;
+}
+
+/* .btn-dropdown-grp .btn-dropdown-items .item:hover {
+    background: rgba(0, 0, 0, 0.1);
+} */
+
+.btn-dropdown-grp .btn-dropdown-items .item:first-child:hover {
+    border-radius: 3px 3px 0 0;
+}
+
+.btn-dropdown-grp .btn-dropdown-items .item:last-child:hover {
+    border-radius: 0 0 3px 3px;
+}
+
+/* Maps */
+.listing-map #map,
+.zone-map #map {
+    border: 1px solid #666;
+    margin: 15px;
+    padding: 10px;
+    height: 300px;
+}
+
+.section-showcase-map {
+    height: 350px;
+    border-bottom: 1px solid var(--color-primary);
+    border-top: 1px solid var(--color-primary);
+}
+
+.section-showcase-map #map {
+    height: 100%;
+}
+
+/* More images button */
+.more-images {
+    display: inline-block;
+    padding: 6px;
+    /* margin: 0 auto; */
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    color: var(--color-background-main);
+    border: 1px dashed var(--color-background-main);
+    background: var(--color-font);
+    cursor: pointer;
+    opacity: 0.8;
+}
+
+.more-images:hover {
+    opacity: 1;
+}
+
+/* Search bar */
+#search-bar {
+    padding: 0;
+}
+
+#search-bar.sticky {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    background: var(--color-background-main);
+    box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.4);
+    z-index: 11;
+}
+
+.search-bar {
+    /* background: black; */
+    height: 80px;
+    display: flex;
+    align-content: center;
+    justify-content: center;
+}
+
+.search-bar .search-bar-grp {
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    width: 900px;
+    /* border: 1px solid #666; */
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+.search-bar .search-bar-grp .search-input {
+    flex: 9;
+    font-size: 1.2rem;
+    padding: 8px 0;
+    padding-left: 18px;
+    background: var(--color-background-main);
+    outline: none;
+    border: none;
+    font-family: inherit;
+}
+
+.search-input::placeholder {
+    color: rgba(0, 0, 0, 0.4);
+    font-weight: lighter;
+}
+
+.search-bar .search-bar-grp .search-button {
+    flex: 1;
+    display: flex;
+    align-self: center;
+    justify-content: center;
+    padding: 1px;
+    cursor: pointer;
+    /* transition: 0.15s; */
+}
+
+/* .search-bar .search-bar-grp .search-button:hover {
+    background:#666;
+    color: var(--color-background-main);
+} */
+
+.search-button .fa-search {
+    padding: 15px;
+    opacity: 0.6;
+}
+
+/* .categories-grp */
+.categories-grp {
+    display: flex;
+    flex-direction: row;
+    padding: 5px 10px;
+    width: 100%;
+    border-top: 1px solid rgba(95, 92, 92, 0.4);
+    border-bottom: 1px solid rgba(95, 92, 92, 0.4);
+    overflow-x: scroll;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+}
+
+.categories-grp::-webkit-scrollbar { /* WebKit */
+    width: 0;
+    height: 0;
+}
+
+.categories-grp .category {
+    margin: 0 5px;
+}
+
+.categories-grp .category button {
+    border: 1px solid #666;
+    background: transparent;
+    white-space:nowrap;
+}
+
+.categories-grp .category button:hover {
+    color: var(--color-background-main);
+    background: #666;
+}
+
+.categories-grp .category.selected button {
+    color: var(--color-background-main);
+    background: #666;
+}
+
+.section-blank {
+    padding: 40px 0;
+}
+
+/* .section-read (e.g. view-topics.html) */
+.section-read .panel-grp {
+    grid-template-columns: 3fr 1fr;
+}
+
+.section-read .item {
+    padding: 15px 0;
+}
+
+.section-read .item.item-bottom-border {
+    border-bottom: 1px dashed #666;
+}
+
+.section-read .item.item-bottom-border:last-child {
+    border-bottom: none;
+}
+
+/* .section-read .item h4 {
+    font-size: 1.1rem;
+} */
+
+.section-read .item h5 {
+    font-size: 0.9rem;
+}
+
+.section-read .item .title-main {
+    margin-top: 12px;
+}
+
+.section-read.links .item .text-main,
+.txt-triple-line {
+    padding: 5px 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3; /* number of lines to show */
+    -webkit-box-orient: vertical;
+}
+
+.section-read .item .text-beginner-application {
+    font-size: 0.9rem;
+    margin-top: 5px;
+}
+
+.section-read .item .text-approved span {
+    color: var(--color-success);
+}
+
+.section-read .item .text-declined span {
+    color: var(--color-danger);
+}
+
+.section-read .item .user-grp {
+    display: flex;
+    flex-direction: row;
+    margin: 10px 0;
+}
+
+.section-read .item .user-grp .thumb {
+    width: 130px;
+    height: 130px;
+    margin: 0 10px;
+    border: 1px solid #666;
+}
+
+.section-read .item .user-grp .details .timestamp {
+    font-size: .9rem;
+}
+
+.txt-six-line {
+    padding: 5px 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 6; /* number of lines to show */
+    -webkit-box-orient: vertical;
+}
+
+/* .panel-grp */
+.panel-grp {
+    display: grid;
+}
+
+.panel-sub .sub-grp {
+    border: 1px solid #666;
+    margin: 15px;
+    padding: 10px;
+    max-height: 400px;
+}
+
+#occupied.sub-grp {
+    border: none;
+}
+
+#occupied.sub-grp .item {
+    display: inline-block;
+    margin: 0 5px;
+}
+
+.sub-grp ul li {
+    list-style: square;
+    margin-left: 20px;
+}
+
+.sub-grp ul li > span {
+    font-weight: bold;
+}
+
+/* Popup */
+.popup {
+    display: unset;
+    position: fixed;
+    z-index: 19;
+    height: 300px;
+    width: 100%;
+    bottom: 0;
+    background: #aaa;
+}
+
+.popup.closed {
+    display: none;
+}
+
+.popup-wrapper {
+    margin: auto;
+    padding: 25px;
+}
+
+.modal {
+    background: #ddd;
+    padding: 15px;
+    /* margin: 30px 0; */
+    height: 100%;
+    width: 480px;
+    position: fixed;
+    top: 0;
+    box-shadow: -2px 0px 4px rgba(0, 0, 0, 0.4);
+    z-index: 18;
+    overflow-y: auto;
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+    display: none;
+}
+
+.modal::-webkit-scrollbar {
+    display: none;
+}
+
+.modal-small {
+    width: 480px;
+}
+
+.modal.open {
+    display: flex;
+    flex-direction: column;
+}
+
+.modal .modal-content .category,
+.modal .modal-footer {
+    border-top: 1px solid #666;
+    padding: 8px 0;
+}
+
+.modal .modal-footer {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+}
+
+.modal .modal-content .img-grp.rounded {
+    position: relative;
+    width: 1;
+    display: flex;
+    justify-content: center;
+}
+
+.modal .modal-content .img-grp.rounded img {
+    width: 170px;
+    border-radius: 50%;
+    border: 3px solid #eee;
+}
+
+.modal .modal-content .img-grp.rounded button {
+    border-radius: 50%;
+    position: absolute;
+    left: 60%;
+}
+
+.share-panel {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: 5px;
+}
+
+.share-panel .item {
+    margin: 3px auto;
+    padding: 0 5px;
+    cursor: pointer;
+}
+
+.share-panel .item:hover {
+    color: var(--color-links);
+}
+
+.share-panel .item.facebook:hover {
+    color: rgba(66,103,178,0.8);
+}
+
+.share-panel .item.messenger:hover {
+    color: rgba(0,160,255,0.6);
+}
+
+.share-panel .item.twitter:hover {
+    color: rgba(29,161,242,1.0);
+}
+
+.share-panel .item i {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}

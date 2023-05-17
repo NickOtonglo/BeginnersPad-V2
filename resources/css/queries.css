@@ -1,0 +1,671 @@
+@media(max-height: 573px) {
+    .page-min-height {
+        display: none;
+    }
+}
+
+/* Page - /index */
+/* Page - /view-listings */
+/* Page - /view-listing */
+/* Page - /view-listing-unit */
+/* Page - /view-listing-reviews */
+/* Page - /help */
+/* Page - /sign-up */
+/* Page - /sign-in */
+/* Page - /view-faqs */
+/* Page - /view-topics */
+/* Page - /view-tickets-user */
+/* Page - /view-ticket-user */
+
+@media(min-width: 2560px) {
+    .showcase-listing {
+        min-height: 600px;
+    }
+
+    .cards {
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    .listing-units-grp {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media(min-width: 1920px) {
+    .listing-nearby-places .places-list,
+    .listing-reviews .reviews-list {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media(min-width: 1600px) {
+    .cards {
+        gap: 50px;
+        padding: 20px 0;
+    }
+
+    /* Main card */
+    .card {
+        margin: auto;
+        width: 356px;
+    }
+
+    .card-sm,
+    .lister-details .details {
+        width: 580px;
+    }
+
+    .listing-info-aux {
+        width: 1240px;
+        margin: 20px auto;
+    }
+}
+
+@media(max-width: 1225px) {
+    .container {
+        width: 90%;
+    }
+
+    #showcase .container, .showcase-small .container {
+        width: 80%;
+    } 
+    
+    .card {
+        margin: 20px 10px;
+    }
+
+    .listing-info-aux .aux-grp {
+        padding: 0 15px;
+    }
+
+    .listing-info-aux .aux-grp .data {
+        font-size: 1.0rem;
+    }
+
+    #sectionUserProfile.section-user .container {
+        justify-content: space-between;
+    }
+}
+
+@media(max-width: 1024px) {
+    #sectionManageReviews.section-listing-reviews .reviews-list {
+        display: grid;
+        grid-template-columns: 1fr;
+    }
+
+    .section-dash #dashNavAdmin.dash-nav ul {
+        justify-content: flex-start;
+    }
+}
+
+@media(max-width: 941px) {
+    .panel-grp,
+    .section-listing-secondary .panel-grp,
+    .section-unit-secondary .panel-grp,
+    .section-tag .panel-grp,
+    .section-user-profile .panel-grp {
+        grid-template-columns: 1fr;
+    }
+
+    .listing-units-grp,
+    .listing-nearby-places .places-list,
+    .listing-reviews .reviews-list {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .section-listing-reviews .reviews-list,
+    .listing-units-grp#sectionZoneListingUnits {
+        grid-template-columns: 1fr;
+    }
+
+    .section-tag .favourites-grp {
+        justify-content: space-between;
+    }
+
+    .section-tag .favourites-grp .fav {
+        margin: 8px 2px;
+        width: 100%;
+    }
+}
+
+@media(max-width: 800px) {
+    .section-dash #dashNavLister.dash-nav ul {
+        justify-content: flex-start;
+    }
+}
+
+@media(max-width: 768px) {
+    #section-listings .container, #section-marketing .container,
+    .section-listings .container{
+        width: 95%;
+    }
+
+    .section-listing-primary .container {
+        width: 80%;
+    }
+
+    #showcase .container, .showcase-small .container {
+        width: 80%;
+    }
+
+    .section-unit-main .container {
+        width: 90%;
+    }
+
+    .section-unit-secondary .container {
+        width: 100%;
+    }
+    
+    .info-name .name {
+        font-size: 1.6rem;
+    }
+
+    .listing-units-grp {
+        grid-template-columns: 1fr;
+        padding: 0 20px;
+    }
+
+    .listing-info-aux {
+        padding: 10px;
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .listing-info-aux .aux-grp {
+        padding: 10px;
+        border: none;
+    }
+
+    .listing-info-aux .aux-grp .data {
+        font-size: .9rem;
+    }
+
+    .listing-info-aux .aux-grp:nth-child(odd) {
+        border-right: 1px solid var(--color-font);
+    }
+
+    .listing-info-aux .aux-grp:nth-child(1),
+    .listing-info-aux .aux-grp:nth-child(2) {
+        border-bottom: 1px solid var(--color-font);
+    }
+
+    .section-unit-main .container .main-img .img:nth-child(2),
+    .section-unit-main .container .main-img .img:nth-child(3),
+    .section-unit-main .container .main-img .img:last-child {
+        height: 110px;
+    }
+
+    .section-help .container {
+        grid-template-columns: 1fr;
+    }
+
+    .section-help .help-form {
+        padding-top: 25px;
+    }
+
+    .section-read .panel-grp {
+        grid-template-columns: 1fr;
+    }
+
+    .section-read .panel-grp .panel:last-child {
+        grid-row: 1;
+        grid-column: 1 / span 1;
+    }
+    
+    .tickets-categories-user .btn-grp.vertical {
+        margin: 0 auto;
+    }
+
+    .secondary-nav ul {
+        justify-content: flex-start;
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    .section-zones .panel-grp {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media(max-width: 753px) {
+    .section-users .cards {
+        justify-content: center;
+    }
+}
+
+@media(max-width: 720px) {
+    #section-listings {
+        padding-bottom: 30px;
+    }
+
+    #section-marketing {
+        padding-top: 30px;
+    }
+
+    .cards {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .card {
+        margin: 25px;
+    }
+
+    .listing-nearby-places .places-list,
+    .listing-reviews .reviews-list {
+        grid-template-columns: 1fr;
+        padding: 0 20px;
+    }
+    
+    .section-unit-main .container {
+        grid-template-columns: 1fr;
+    }
+
+    .section-unit-main {
+        padding-top: 0px;
+        padding-bottom: 15px;
+    }
+
+    .section-unit-main .container .main-img .img:first-child {
+        margin-top: 0;
+    }
+
+    .section-unit-secondary {
+        padding-top: 15px;
+    }
+
+    .section-listing-info-header .header-grp {
+        height: 200px;
+    }
+
+    .section-listing-info-header .header-grp .thumb {
+        width: 170px;
+    }
+
+    .section-listing-info-header .header-grp .details,
+    .section-listing-info-header .header-grp .details .timestamp,
+    .section-listing-info-header .header-grp .details .info-rating-grp {
+        font-size: 0.85rem;
+    }
+
+    .section-read.links .panel-grp .panel .text-main {
+        -webkit-line-clamp: 5;
+    }
+
+    .section-auth .container {
+        width: 90%;
+    }
+
+    #showcaseListingUnit.showcase-small {
+        margin-bottom: 5px;
+    }
+
+    #showcaseListingUnit.showcase-small .container div {
+        top: 30%;
+    }
+}
+
+@media(max-width: 688px) {
+    .section-dash .dash-grp .items {
+        justify-content: center;
+    }
+
+    .section-listing-images .image-grp {
+        justify-content: center;
+    }
+
+    .section-listings#sectionMyListings .top-buttons .vertical,
+    .section-users#sectionManageUsers .top-buttons .vertical {
+        display: flex;
+    }
+    
+    .section-listings#sectionMyListings .top-buttons .horizontal,
+    .section-users#sectionManageUsers .top-buttons .horizontal {
+        display: none;
+    }
+}
+
+@media(max-width: 565px) {
+    #section-marketing .marketing-item h4 {
+        font-size: 1.3rem;
+    }
+
+    #section-marketing .marketing-item p {
+        font-size: 1.1rem;
+    }
+
+    #section-links div a {
+        font-size: 1rem;
+    }
+
+    .listing-units-grp,
+    .listing-nearby-places .places-list,
+    .listing-reviews .reviews-list {
+        padding: 0;
+    }
+
+    #form-auth .form-group {
+        flex-direction: column;
+    }
+
+    #form-auth .grp-name:first-child {
+        margin-right: 0;
+    }
+    
+    #form-auth .grp-name:last-child {
+        margin-left: 0;
+    }
+
+    .form-group .form-check .form-check-label, .form-group .form-check .form-check-label a {
+        font-size: 0.9rem;
+    }
+
+    .section-dash .dash-grp .profile {
+        grid-template-columns: 1fr;
+    }
+
+    /* .table-grp {
+        overflow-x:auto;
+    } */
+}
+
+@media(max-width: 546px) {
+    .section-zones .cards {
+        justify-content: center;
+    }
+
+    .section-zones .panel .cards {
+        justify-content: space-between;
+    }
+}
+
+@media(max-width: 499px) {
+    nav {
+        flex-direction: column;
+    }
+
+    nav h1 {
+        margin-bottom: 15px;
+    }
+
+    #showcase .container div,
+    .showcase-small .container div {
+        position: absolute;
+        top: 30%;
+        width: inherit;
+    }
+
+    #showcase .container h1 {
+        font-size: 1.7rem;
+    }
+    
+    #section-listings .container, #section-marketing .container {
+        width: 80%;
+    }
+
+    .section-listing-primary .container {
+        width: 90%;
+    }
+
+    .section-listing-secondary .container,
+    .section-listing-reviews .container {
+        width: 95%;
+    }
+    
+    #showcase .container, .showcase-small .container {
+        width: 80%;
+    }
+
+    .section-help .container {
+        width: 100%;
+    }
+
+    .cards {
+        grid-template-columns: 1fr;
+    }
+
+    #section-links {
+        grid-template-columns: unset;
+        grid-template-rows: 1fr;
+        padding: 20px;
+    }
+
+    #section-links div {
+        padding: 0;
+        align-items: unset;
+        margin: unset;
+    }
+
+    .listing-info-main .info-name .name,
+    .listing-info-main .info-name .info-actions {
+        font-size: 1.3rem;
+    }
+
+    .listing-info-main .location,
+    .listing-info-main .info-rating-grp {
+        font-size: 1rem;
+    }
+
+    .listing-info-description {
+        text-align: justify;
+    }
+
+    .card-sm, .card-sm .details .label {
+        font-size: 0.75rem;
+    }
+
+    .section-listing-info-header {
+        padding-top: 10px;
+    }
+
+    .section-read {
+        /* padding-top: 10px; */
+        padding-top: 0;
+    }
+
+    /* #tickets-user-list.section-read {
+        padding-top: 0;
+    } */
+
+    .section-help {
+        padding-top: 0;
+    }
+
+    .section-auth {
+        padding: 0;
+    }
+    
+    #showcaseListingUnit.showcase-small .container h2 {
+        font-size: 1.2rem;
+    }
+
+    .panel-sub .sub-grp#occupied {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+
+    #sectionMyReviews.section-listing-reviews {
+        padding-top: 0;
+    }
+
+    .section-dash .dash-nav ul {
+        justify-content: flex-start;
+    }
+
+    .section-listing-images {
+        padding: 0;
+    }
+
+    .section-read .item .user-grp {
+        flex-wrap: wrap;
+    }
+
+    .section-read .item .user-grp .thumb {
+        margin: 10px;
+    }
+
+    #sectionTable {
+        padding-top: 10px;
+    }
+
+    #sectionManageReviews {
+        padding-top: 0;
+    }
+
+    #sectionViewZone {
+        padding-top: 0;
+    }
+
+    #sectionTag {
+        padding-top: 0;
+    }
+
+    .showcase-avatar .action-buttons {
+        align-items: flex-start;
+    }
+
+    .showcase-avatar {
+        height: 180px;
+    }
+
+    .showcase-avatar .container .card-wrapper {
+        position: absolute;
+        width: 100%;
+        color: var(--color-font);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        top: 60px;
+    }
+
+    .section-user-profile .panel-item .favourites-grp .fav {
+        width: 300px;
+    }
+
+    .modal {
+        width: 100%;
+    }
+}
+
+@media(max-width: 408px) {
+    body > * {
+        font-size: 0.9rem;
+    }
+
+    #showcase .container h1 {
+        font-size: 1.5rem;
+    }
+
+    .section-title {
+        font-size: 1.4rem;
+    }
+
+    #section-marketing .marketing-item h4 {
+        font-size: 1.2rem;
+    }
+
+    #section-marketing .marketing-item p {
+        font-size: 1.0rem;
+    }
+
+    .section-listing-info-header .header-grp {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .section-listing-info-header .header-grp .thumb {
+        opacity: 0.3;
+    }
+
+    #showcaseListingUnit.showcase-small .container div {
+        top: 10%;
+    }
+
+    #showcaseListingUnit.showcase-small {
+        height: 140px;
+    }
+
+    .section-listing-reviews .review-item.plus {
+        grid-template-columns: 1fr;
+        height: unset;
+    }
+}
+
+@media(max-width: 375px) {
+    nav {
+        padding-bottom: 0;
+    }
+
+    nav h1 {
+        line-height: unset;
+    }
+
+    nav .toggle {
+        right: -2%;
+    }
+
+    nav .nav-menu {
+        /* https://stackoverflow.com/questions/3331353/transitions-on-the-css-display-property */
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        visibility: hidden;
+        opacity: 0;
+        height: 0;
+        transition: visibility 0s, opacity 0.3s linear;
+    }
+
+    nav .nav-menu.authed {
+        display: none;
+    }
+
+    nav .nav-menu.open {
+        visibility: visible;
+        opacity: 1;
+        height: unset;
+    }
+
+    nav .nav-menu .badge {
+        padding: 8px;
+        border-top: 1px solid #666;
+    }
+
+    nav .nav-menu .badge:last-child {
+        padding-bottom: 16px;
+    }
+
+    .nav-drawer {
+        width: 300px;
+    }
+
+    .card {
+        margin: 20px 0;
+    }
+
+    .card-sm .details {
+        padding: 8px;
+    }
+
+    
+    .section-listing-secondary .container {
+        width: 100%;
+    }
+
+    .form-group label {
+        font-size: 0.9rem;
+    }
+
+    #showcaseListingUnit.showcase-small .container h2 {
+        font-size: 1.1rem;
+    }
+
+    #showcaseListingUnit.showcase-small .container p {
+        font-size: .8rem;
+    }
+
+    .section-user-profile .panel-item .favourites-grp .fav {
+        width: 220px;
+    }
+}
