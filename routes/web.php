@@ -17,11 +17,11 @@ use Illuminate\Support\Facades\Route;
 //     return view('app');
 // });
 
-Route::post('login', '\App\Http\Controllers\AuthController@login');
-Route::post('logout', '\App\Http\Controllers\AuthController@logout')->middleware(['auth:sanctum']);
+Route::post('sign-in', '\App\Http\Controllers\AuthController@login')->name('auth.login');
+Route::post('sign-out', '\App\Http\Controllers\AuthController@logout')->middleware(['auth:sanctum'])->name('auth.logout');
 
-Route::view('/', 'app');
+// Route::view('/', 'app');
 
-// Route::view('/{any?}', 'app')
-//     ->name('app')
-//     ->where('any', '.*');
+Route::view('/{any?}', 'app')
+    ->name('app')
+    ->where('any', '.*');

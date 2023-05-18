@@ -6,11 +6,11 @@
         </div>
         <div class="badge">
             <span class="badge-mark"></span>
-            <li><a href="sign-up.html"><i class="fas fa-user-plus"></i> Sign Up</a></li>
+            <li><router-link :to="{ name: 'auth.register' }" href="/sign-up"><i class="fas fa-user-plus"></i> Sign Up</router-link></li>
         </div>
         <div class="badge">
             <span class="badge-mark"></span>
-            <li><a href="sign-in.html"><i class="fas fa-sign-in-alt"></i> Sign In</a></li>
+            <li><router-link :to="{ name: 'auth.login' }" href="/sign-in"><i class="fas fa-sign-in-alt"></i> Sign In</router-link></li>
         </div>
     </ul>
 </template>
