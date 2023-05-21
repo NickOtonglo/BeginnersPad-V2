@@ -2,11 +2,31 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\SaveUserRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 
 class AuthController extends Controller
 {
+    public function register(SaveUserRequest $request) {
+        $user = new User;
+        $user->firstname = $request->fname;
+        $user->lastname = $request->lname;
+        $user->email = $request->email;
+        $user->username = $request->username;
+        $user->telephone = $request->telephone;
+        $user->type = $request->user_type;
+        $user->password = bcrypt($request->password);
+        $user->save();
+
+        $response = [
+            'user' => $user,
+            'message' => 'User @'.$user->username.' created successfully',
+        ];
+
+        return response($response, 201);
+    }
+
     public function login(Request $request) {
         $request->validate([
             'email' => 'required|email',

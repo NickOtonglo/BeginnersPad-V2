@@ -426,6 +426,19 @@ form .btn-submit:hover {
     font-weight: bold;
 }
 
+.form-group .name-grp {
+    display: flex;
+    flex-direction: row;
+}
+
+.form-group .name-grp .name:first-child {
+    margin-right: 2.5px;
+}
+
+.form-group .name-grp .name:last-child {
+    margin-left: 2.5px;
+}
+
 .txt-alert {
     font-weight: bold;
     border-left: 3px solid;

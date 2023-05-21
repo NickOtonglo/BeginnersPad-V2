@@ -1,7 +1,7 @@
 <template>
     <!-- Navbar -->
     <nav>
-        <h1><a href="index.html">Beginners Pad</a></h1>
+        <h1><router-link :to="{ name: 'app.home' }" href="/">Beginners Pad</router-link></h1>
         <i id="navToggle" class="fas fa-bars fa-2x toggle"></i>
         <NavbarGuest />
     </nav>

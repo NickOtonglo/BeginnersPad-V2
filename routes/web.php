@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('sign-in', '\App\Http\Controllers\AuthController@login')->name('auth.login');
 Route::post('sign-out', '\App\Http\Controllers\AuthController@logout')->middleware(['auth:sanctum'])->name('auth.logout');
+Route::post('sign-up', '\App\Http\Controllers\AuthController@register');
 
 // Route::view('/', 'app');
 
