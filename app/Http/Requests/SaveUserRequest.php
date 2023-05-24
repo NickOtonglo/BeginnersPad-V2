@@ -26,7 +26,8 @@ class SaveUserRequest extends FormRequest
             'lname' => 'required|min:1|max:50',
             'email' => 'required|email',
             'telephone' => 'required|regex:/(254)[0-9]{9}/',
-            'username' => 'required|max:50|unique:users,username',
+            // https://stackoverflow.com/q/4424179/11113076
+            'username' => 'required|max:50|unique:users,username|regex:/^[A-Za-z0-9_-]{1,15}$/',
             'user_type' => 'required|max:50',
             'password' => 'required|confirmed|min:6',
             'password_confirmation' => 'required|',
