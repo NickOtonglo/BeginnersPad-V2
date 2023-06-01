@@ -16,9 +16,19 @@
 
     <!-- Nav drawer -->
     <template v-if="isUserFetched">
-        <NavDrawerAdmin v-if="user.role <= 'Admin'" />
-        <NavDrawerLister v-if="user.role == 'Lister'" />
-        <NavDrawerBeginner v-if="user.role == 'Beginner'" />
+        <div class="nav-drawer closed" id="navDrawer">
+            <i id="navDrawerClose" class="fas fa-times fa-2x"></i>
+            <div class="nav-drawer-category">
+                <ul>
+                    <li><a href="/help.html"><i class="fas fa-question-circle"></i> Help</a></li>
+                    <li><a href="#"><i class="fas fa-user-circle"></i> Manage account</a></li>
+                    <li><a href="#" @click="userLogin.logout"><i class="fas fa-sign-out-alt"></i> Sign out</a></li>
+                </ul>
+            </div>
+            <NavDrawerAdmin v-if="user.role <= 'Admin'" />
+            <NavDrawerLister v-if="user.role == 'Lister'" />
+            <NavDrawerBeginner v-if="user.role == 'Beginner'" />
+        </div>
     </template>
     <!-- beginner -->
     <!-- lister -->
@@ -34,9 +44,12 @@ import NavDrawerAdmin from './NavDrawer/Admin.vue'
 import NavDrawerLister from './NavDrawer/Lister.vue'
 import NavDrawerBeginner from './NavDrawer/Beginner.vue'
 import checkAuth from '../composables/checkAuth';
-import { ref, reactive, onMounted, onBeforeMount } from 'vue';
+import loginUser from '../composables/login'
+import operateNavDrawer from '../composables/nav-drawer';
+import { ref, onMounted, onBeforeMount } from 'vue';
 import axios from 'axios';
 
+const userLogin = loginUser()
 const userAuth = checkAuth()
 const user = ref({
     username: '',
@@ -55,6 +68,10 @@ function getUserData() {
 
 onBeforeMount(() => {
     getUserData()
+})
+
+onMounted(() => {
+    operateNavDrawer()
 })
 
 </script>

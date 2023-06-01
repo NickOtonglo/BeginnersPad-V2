@@ -4,14 +4,14 @@ import Login from '../components/Auth/Login.vue'
 import Register from '../components/Auth/Register.vue'
 
 function auth(to, from, next) {
-    if (JSON.parse(localstorage.getItem('authenticated'))) {
+    if (JSON.parse(localStorage.getItem('authenticated'))) {
         next()
     }
     else next('/sign-in')
 }
 
 function checkLoginGuest(to, from, next) {
-    if (JSON.parse(localstorage.getItem('authenticated'))) {
+    if (JSON.parse(localStorage.getItem('authenticated'))) {
         next('/')
     }
     else next()
@@ -31,6 +31,7 @@ const routes = [
     {
         path: '/sign-in',
         name: 'auth.login',
+        beforeEnter: checkLoginGuest,
         component: Login
     },
 ]

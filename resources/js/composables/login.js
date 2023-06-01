@@ -47,5 +47,19 @@ export default function loginUser() {
         router.go()
     }
 
-    return { credentials, validationErrors, isLoading, submitLogin }
+    const logout = async() => {
+        if (isLoading.value) return
+
+        isLoading.value = true
+
+        axios.post('/sign-out')
+            .then(response => {
+                localStorage.removeItem('authenticated')
+                localStorage.removeItem('authToken')
+                router.go()
+            })
+            .catch(error => console.log(error.response))
+    }
+
+    return { credentials, validationErrors, isLoading, submitLogin, logout }
 }
