@@ -42,6 +42,11 @@ class RoleSeeder extends Seeder
                         'id' => '5.0',
                         'description' => ''
                     ],
+                    [
+                        'title' => 'Unset',
+                        'id' => '6.0',
+                        'description' => ''
+                    ],
                 ))->create();
     }
 }
