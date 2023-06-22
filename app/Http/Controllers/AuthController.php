@@ -36,7 +36,7 @@ class AuthController extends Controller
         $credentials = request(['email', 'password']);
         if (!auth()->attempt($credentials)) {
             return response()->json([
-                'message' => 'The given data was invalid. Please check your credentials and try again',
+                'message' => 'The given data was invalid. Please check your credentials and try again.',
                 'errors' => [
                     'credentials' => [
                         'Invalid credentials',

@@ -886,9 +886,12 @@ select.btn-dropdown {
 }
 
 .modal .modal-content .img-grp.rounded button {
-    border-radius: 50%;
+    border-radius: 50px;
+    width: 35px;
+    height: 35px;
     position: absolute;
     left: 60%;
+    padding: 6px;
 }
 
 .share-panel {
