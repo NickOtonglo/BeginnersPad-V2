@@ -7,6 +7,8 @@ use App\Http\Requests\UpdateUserPasswordRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
@@ -63,6 +65,64 @@ class UserController extends Controller
         $response = [
             'user' => $user,
             'message' => 'Password for @'.$user->username.' updated successfully',
+        ];
+
+        return response($response, 201);
+    }
+
+    public function updateAvatar(Request $request) {
+        $request->validate([
+            'avatar' => 'required',
+        ]);
+
+        $user = auth()->user();
+
+        if ($request->hasFile('avatar')) {
+            $filename = time()
+                        .'_'
+                        .$user->username
+                        .'.'
+                        .$request->avatar->extension();
+            // $request->file('avatar')->storeAs('public/images/user/avatar/'.$user->username, $filename);
+            $request->file('avatar')->storeAs('images/user/avatar/'.$user->username, $filename, ['disk' => 'public_uploads']);
+
+            // Delete old avatar
+            Storage::disk('public_uploads')->delete('images/user/avatar/'.$user->username.'/'.$user->avatar);
+            
+            $user->avatar = $filename;
+            $user->save();
+
+            $response = [
+                'user' => $user,
+                'message' => 'Avatar for @'.$user->username.' updated successfully',
+            ];
+    
+            return response($response, 201);
+        }
+
+        return response()->json([
+            'message' => 'An error occured. Please try again.',
+            'errors' => [
+                'avatar' => [
+                    'Avatar missing from request',
+                ]
+            ],
+        ], 422);
+    }
+
+    public function removeAvatar() {
+        $user = auth()->user();
+        
+        // Storage::disk('public_uploads')->delete('images/user/avatar/'.$user->username.'/'.$user->avatar);
+
+        $user->avatar = null;
+        $user->save();
+
+        Storage::disk('public_uploads')->deleteDirectory('images/user/avatar/'.$user->username);
+
+        $response = [
+            'user' => $user,
+            'message' => 'Avatar for @'.$user->username.' removed successfully',
         ];
 
         return response($response, 201);

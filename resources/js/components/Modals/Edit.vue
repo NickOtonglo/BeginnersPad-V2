@@ -6,10 +6,36 @@
         </div>
         <div class="modal-content">
             <div class="category">
-                <div class="img-grp rounded">
-                    <img src="/images/static/avatar.png" alt="">
-                    <button class="btn-link btn-close"><i class="fas fa-times"></i></button>
-                </div>
+                <form @submit.prevent="submitAvatar(credentials)">
+                    <div class="img-grp rounded">
+                        <input @change="setAvatar" type="file" name="avatar" ref="avatar">
+                        <template v-if="credentials.avatar">
+                            <img :src="'/images/user/avatar/' + credentials.username + '/' + credentials.avatar" 
+                                  alt=""
+                                  @click="triggerFileInput" 
+                                  ref="avatarHolder" 
+                                  name="avatarHolder">
+                        </template>
+                        <template v-else>
+                            <img src="/images/static/avatar.png" 
+                                 alt=""
+                                 @click="triggerFileInput" 
+                                 ref="avatarHolder" 
+                                 name="avatarHolder">
+                        </template>
+                        
+                        <button v-if="credentials.avatar" class="btn-link btn-close" type="button" @click="removeAvatar"><i class="fas fa-times"></i></button>
+                    </div>
+                    <p v-show="isLoading" style="text-align: center;"><div v-show="isLoading" class="lds-dual-ring"></div> Loading...</p>
+                    <div v-for="message in validationErrors?.avatar" class="txt-alert txt-danger">
+                        <li>{{ message }}</li>
+                    </div>
+                    <button :disabled="isLoading" class="btn-submit" type="submit" :hidden="true" ref="formAvatarSubmit">
+                        <div v-show="isLoading" class="lds-dual-ring"></div>
+                        <span v-if="isLoading">Loading...</span>
+                        <span v-else>Update</span>
+                    </button>
+                </form>
             </div>
             <div class="category">
                 <h3>Account details</h3>
@@ -99,7 +125,9 @@
 </template>
 
 <script setup>
+import axios from 'axios';
 import operateModal from '../../composables/modal'
+import { onBeforeUpdate } from 'vue';
 import { onMounted, ref, inject } from 'vue';
 import { useRouter } from "vue-router";
 
@@ -113,6 +141,7 @@ const credentials = ref({
     email: '',
     telephone: '',
     username: '',
+    avatar: '',
 })
 const secret = ref({
     password_old: '',
@@ -120,6 +149,9 @@ const secret = ref({
     password_confirmation: '',
 })
 const swal = inject('$swal')
+const avatar = ref(null)
+const avatarHolder = ref(null)
+const formAvatarSubmit = ref(null)
 
 function openModal() {
     operateModal(modalRef.value)
@@ -133,21 +165,60 @@ function getUserAccount() {
         .catch(error => console.log(error))
 }
 
+function submitAvatar() {
+    if (isLoading.value) return
+
+    isLoading.value = true
+    validationErrors.value = {}
+
+    let serialisedPost = new FormData()
+    for (let item in credentials) {
+        if(credentials.hasOwnProperty(item)) {
+            serialisedPost.append(item, credentials[item])
+        }
+    }
+    serialisedPost.append('method', '_PUT')
+
+    axios.post('/api/user/avatar', serialisedPost)
+        .then(response => {
+            swal({
+                icon: 'success',
+                title: 'Avatar updated',
+                didClose: () => {
+                    router.go(0)
+                }
+            })
+        })
+        .catch(error => {
+            if (error.response?.data) {
+                validationErrors.value = error.response.data.errors
+            }
+            if (error.response?.data.errors) {
+                swal({
+                    icon: 'error',
+                    title: 'Error',
+                    text: error.response.data.message,
+                })
+            }
+        })
+        .finally(() => isLoading.value = false)
+}
+
 function submitAccountForm() {
     if (isLoading.value) return
 
     isLoading.value = true
     validationErrors.value = {}
 
-    console.log(credentials.value.firstname)
-
     axios.post('api/user/account', credentials.value)
         .then(response => {
-            router.go(0)
-            // swal({
-            //     icon: 'success',
-            //     title: 'Account information updated'
-            // })
+            swal({
+                icon: 'success',
+                title: 'Account information updated',
+                didClose: () => {
+                    router.go(0)
+                }
+            })
         })
         .catch(error => {
             if (error.response?.data) {
@@ -172,20 +243,21 @@ function submitPasswordForm() {
 
     axios.post('api/user/secret', secret.value)
         .then(response => {
-            router.go(0)
-            // swal({
-            //     icon: 'success',
-            //     title: 'Password updated'
-            // })
+            swal({
+                icon: 'success',
+                title: 'Password updated',
+                didClose: () => {
+                    router.go(0)
+                }
+            })
         })
         .catch(error => {
             if (error.response?.data) {
                 validationErrors.value = error.response.data.errors
-            }
-            if (error.response?.data) {
                 swal({
                     icon: 'error',
-                    title: error.response.data.errors.password,
+                    // title: error.response.data.errors.password,
+                    title: 'Error',
                     text: error.response.data.message,
                 })
             }
@@ -193,9 +265,73 @@ function submitPasswordForm() {
         .finally(() => isLoading.value = false)
 }
 
+function triggerFileInput() {
+    avatar.value.click()
+}
+
+function setAvatar(event) {
+    // get image frim <input> and set src in <img>
+    var selectedFile = event.target.files[0]
+    var reader = new FileReader()
+    var placeHolder = avatarHolder.value
+
+    reader.onload = ((event) => {
+        placeHolder.src = event.target.result
+    })
+
+    reader.readAsDataURL(selectedFile)
+    credentials.avatar = selectedFile
+    formAvatarSubmit.value.click()
+}
+
+function removeAvatar() {
+    if (isLoading.value) return
+
+    swal.fire({
+        icon: 'warning',
+        title: 'Are you sure?',
+        text: 'Your avatar will be removed',
+        showCancelButton: true,
+        confirmButtonColor: 'rgb(207, 95, 50)',
+        cancelButtonColor: 'rgb(238, 14, 14)',
+        confirmButtonText: 'Confirm',
+    }).then((result) => {
+        if (result.isConfirmed) {
+            isLoading.value = true
+
+            axios.delete('api/user/avatar')
+                .then(response => {
+                    swal({
+                        icon: 'success',
+                        title: 'Avatar removed',
+                        didClose: () => {
+                            router.go(0)
+                        }
+                    })
+                })
+                .catch(error => {
+                    if (error.response?.data.errors) {
+                        swal({
+                            icon: 'error',
+                            title: 'Error',
+                            text: error.response.data.message,
+                        })
+                    }
+                })
+                .finally(() => isLoading.value = false)
+        }
+    })
+
+    
+}
+
 onMounted(() => {
     openModal()
     getUserAccount()
+})
+
+onBeforeUpdate(() => {
+    credentials.avatar = ''
 })
 
 defineExpose({

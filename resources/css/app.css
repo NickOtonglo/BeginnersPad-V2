@@ -759,7 +759,7 @@ nav .nav-menu .badge li.selected a {
 
 .section-unit-main .container .main-img .img:first-child {
     height: 300px;
-    background: url('../images/thumb_unit.jpg');
+    background: url('../images/static/thumb_unit.jpg');
     grid-column: 1 / span 3;
     grid-row: 1 / span 1;
     position: relative;
@@ -769,7 +769,7 @@ nav .nav-menu .badge li.selected a {
 .section-unit-main .container .main-img .img:nth-child(3),
 .section-unit-main .container .main-img .img:last-child {
     height: 150px;
-    background: url('../images/thumb_unit.jpg');
+    background: url('../images/static/thumb_unit.jpg');
     background-size: cover;
 }
 
@@ -948,7 +948,7 @@ nav .nav-menu .badge li.selected a {
 
 .section-listing-reviews .review-item.plus a .thumb {
     height: 200px;
-    background: url('/images/thumb_default.jpg') no-repeat center;
+    background: url('/images/static/thumb_default.jpg') no-repeat center;
 }
 
 .section-listing-reviews .review-item.plus .plus-info {
@@ -1064,7 +1064,7 @@ nav .nav-menu .badge li.selected a {
 }
 
 .favourites-grp .fav.unit .thumb {
-    background: url('../images/thumb_unit.jpg') no-repeat;
+    background: url('../images/static/thumb_unit.jpg') no-repeat;
 }
 
 /* Page - /beginner/property-history.html */

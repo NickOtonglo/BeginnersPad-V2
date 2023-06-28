@@ -18,5 +18,7 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::get('/user', '\App\Http\Controllers\Api\UserController@getAuthenticatedUser');
     Route::get('/user/account', '\App\Http\Controllers\Api\UserController@getAuthenticatedUserAccount');
     Route::post('/user/account', '\App\Http\Controllers\Api\UserController@updateAccount');
+    Route::post('/user/avatar', '\App\Http\Controllers\Api\UserController@updateAvatar');
+    Route::delete('/user/avatar', '\App\Http\Controllers\Api\UserController@removeAvatar');
     Route::post('/user/secret', '\App\Http\Controllers\Api\UserController@updatePassword');
 });

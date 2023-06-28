@@ -200,7 +200,7 @@ button, .btn {
 
 .card .image {
     position: relative;
-    background: url(../images/static/thumb_default.jpg) center center;
+    background: url(../images/static/th.jpg) center center;
     height: 225px;
     border-radius: 20px 20px 0 0;
 }
@@ -883,6 +883,9 @@ select.btn-dropdown {
     width: 170px;
     border-radius: 50%;
     border: 3px solid #eee;
+    cursor: pointer;
+    width: 170px;
+    height: 170px;
 }
 
 .modal .modal-content .img-grp.rounded button {
@@ -892,6 +895,10 @@ select.btn-dropdown {
     position: absolute;
     left: 60%;
     padding: 6px;
+}
+
+.modal .modal-content .img-grp.rounded input {
+    display: none;
 }
 
 .share-panel {
