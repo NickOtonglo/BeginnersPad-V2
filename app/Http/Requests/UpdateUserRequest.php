@@ -27,7 +27,7 @@ class UpdateUserRequest extends FormRequest
             'email' => 'required|email',
             'telephone' => 'required|regex:/(254)[0-9]{9}/',
             // https://stackoverflow.com/q/4424179/11113076
-            // 'username' => 'required|max:50|unique:users,username|regex:/^[A-Za-z0-9_-]{1,15}$/',
+            'username' => 'required|max:50|unique:users,username|regex:/^[A-Za-z0-9_-]{1,15}$/',
         ];
     }
 

@@ -200,7 +200,7 @@ button, .btn {
 
 .card .image {
     position: relative;
-    background: url(../images/static/th.jpg) center center;
+    background: url(../images/static/thumb_default.jpg) center center;
     height: 225px;
     border-radius: 20px 20px 0 0;
 }

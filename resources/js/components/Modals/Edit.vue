@@ -72,13 +72,13 @@
                             <li>{{ message }}</li>
                         </div>
                     </div>
-                    <!-- <div class="form-group" id="grpUname">
+                    <div class="form-group" id="grpUname">
                         <label for="username">Username (must be unique)</label>
                         <input v-model="credentials.username" type="text" name="username" id="username">
                         <div v-for="message in validationErrors?.username" class="txt-alert txt-danger">
                             <li>{{ message }}</li>
                         </div>
-                    </div> -->
+                    </div>
                     <button :disabled="isLoading" class="btn-submit" type="submit">
                         <div v-show="isLoading" class="lds-dual-ring"></div>
                         <span v-if="isLoading">Loading...</span>

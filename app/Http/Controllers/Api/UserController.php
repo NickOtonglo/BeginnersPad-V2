@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\UpdateUserPasswordRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Http\Resources\UserResource;
+use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -29,11 +30,11 @@ class UserController extends Controller
     }
 
     public function updateAccount(UpdateUserRequest $request) {
-        $user = auth()->user();
+        $user = User::where('id', auth()->user()->id)->first();
         $user->firstname = $request->firstname;
         $user->lastname = $request->lastname;
         $user->email = $request->email;
-        // $user->username = $request->username;
+        $user->username = $request->username;
         $user->telephone = substr($request->telephone, -12);
         $user->save();
 
