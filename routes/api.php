@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('/articles', '\App\Http\Controlelrs\Api\ArticlesController@index');
+
 Route::middleware('auth:sanctum')->group(function() {
     Route::get('/user', '\App\Http\Controllers\Api\UserController@getAuthenticatedUser');
     Route::get('/user/account', '\App\Http\Controllers\Api\UserController@getAuthenticatedUserAccount');
@@ -21,4 +23,8 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::post('/user/avatar', '\App\Http\Controllers\Api\UserController@updateAvatar');
     Route::delete('/user/avatar', '\App\Http\Controllers\Api\UserController@removeAvatar');
     Route::post('/user/secret', '\App\Http\Controllers\Api\UserController@updatePassword');
+    
+    Route::post('/articles', '\App\Http\Controllers\Api\ArticlesController@store');
+    
+    Route::get('tags', '\App\Http\Controllers\Api\TagsController@index');
 });

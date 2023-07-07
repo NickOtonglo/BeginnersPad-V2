@@ -3,6 +3,9 @@ import Home from '../components/Home.vue'
 import Login from '../components/Auth/Login.vue'
 import Register from '../components/Auth/Register.vue'
 import UserAccount from '../components/Users/Account.vue'
+import ArticlesIndex from '../components/Articles/Index.vue'
+import ArticleView from '../components/Articles/View.vue'
+import ArticleCreate from '../components/Articles/Create.vue'
 
 function auth(to, from, next) {
     if (JSON.parse(localStorage.getItem('authenticated'))) {
@@ -40,6 +43,21 @@ const routes = [
         name: 'users.account',
         beforeEnter: auth,
         component: UserAccount
+    },
+    {
+        path: '/articles',
+        name: 'articles.index',
+        component: ArticlesIndex
+    },
+    {
+        path: '/articles/new',
+        name: 'article.create',
+        component: ArticleCreate
+    },
+    {
+        path: '/articles/view',
+        name: 'article.view',
+        component: ArticleView
     },
 ]
 

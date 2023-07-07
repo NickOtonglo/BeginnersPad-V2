@@ -40,7 +40,7 @@ class UserController extends Controller
 
         $response = [
             'user' => $user,
-            'message' => 'Account @'.$user->username.' updated successfully',
+            'message' => 'Account @'.$user->username.' updated successfully.',
         ];
 
         return response($response, 201);
@@ -65,7 +65,7 @@ class UserController extends Controller
 
         $response = [
             'user' => $user,
-            'message' => 'Password for @'.$user->username.' updated successfully',
+            'message' => 'Password for @'.$user->username.' updated successfully.',
         ];
 
         return response($response, 201);
@@ -95,7 +95,7 @@ class UserController extends Controller
 
             $response = [
                 'user' => $user,
-                'message' => 'Avatar for @'.$user->username.' updated successfully',
+                'message' => 'Avatar for @'.$user->username.' updated successfully.',
             ];
     
             return response($response, 201);
@@ -105,7 +105,7 @@ class UserController extends Controller
             'message' => 'An error occured. Please try again.',
             'errors' => [
                 'avatar' => [
-                    'Avatar missing from request',
+                    'Avatar missing in request',
                 ]
             ],
         ], 422);
@@ -123,7 +123,7 @@ class UserController extends Controller
 
         $response = [
             'user' => $user,
-            'message' => 'Avatar for @'.$user->username.' removed successfully',
+            'message' => 'Avatar for @'.$user->username.' removed successfully.',
         ];
 
         return response($response, 201);

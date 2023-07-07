@@ -673,9 +673,10 @@ select.btn-dropdown {
     -ms-overflow-style: none;  /* Internet Explorer 10+ */
 }
 
-.categories-grp::-webkit-scrollbar { /* WebKit */
+.categories-grp::-webkit-scrollbar {
     width: 0;
     height: 0;
+    /* height: 8px; */
 }
 
 .categories-grp .category {
