@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SaveArticleRequest;
+use App\Http\Resources\ArticlesResource;
 use App\Http\Resources\TagsResource;
 use App\Models\Article;
 use App\Models\Tag;
@@ -18,7 +19,8 @@ class ArticlesController extends Controller
      */
     public function index()
     {
-        //
+        $articles = ArticlesResource::collection(Article::latest()->get());
+        return $articles;
     }
 
     /**
@@ -89,9 +91,9 @@ class ArticlesController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Article $article)
     {
-        //
+        return new ArticlesResource($article);
     }
 
     /**

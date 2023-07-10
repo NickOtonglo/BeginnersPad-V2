@@ -14,7 +14,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/articles', '\App\Http\Controlelrs\Api\ArticlesController@index');
+Route::get('/articles', '\App\Http\Controllers\Api\ArticlesController@index');
+Route::get('/articles/{article}', '\App\Http\Controllers\Api\ArticlesController@show');
 
 Route::middleware('auth:sanctum')->group(function() {
     Route::get('/user', '\App\Http\Controllers\Api\UserController@getAuthenticatedUser');
