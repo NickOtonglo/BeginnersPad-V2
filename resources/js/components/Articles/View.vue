@@ -1,33 +1,35 @@
 <template>
     <section>
         <div class="container">
-            <h1>{{ article.title }}</h1>
+            <h1><u>{{ article.title }}</u></h1>
+            <br>
             <img src="/images/static/thumb_default.jpg">
             <br>
-            <h3>by Author</h3>
-            <p>Published on: 00-00-0000 00:00:00</p>
-            <!-- <template v-if="isAuthor()">
+            <h3>by {{ article.author.name }}</h3>
+            <p>Published on: {{ article.timestamp }}</p>
+            <template v-if="isAuthor()">
                 <router-link class="btn btn-primary"
                     :to="{ name: 'article.edit', params: { slug: article.slug } }">Update</router-link>
-                <button @click.prevent="deleteArticle(article.slug)" :disabled="isLoading" type="submit"
+                <button @click.prevent="deleteArticle(rt, article.slug)" :disabled="isLoading" type="submit"
                     class="btn-danger">
                     <div v-show="isLoading" class="lds-dual-ring"></div>
                     <span v-if="isLoading">Processing...</span>
                     <span v-else>Delete article</span>
                 </button>
                 <br><br>
-            </template> -->
+            </template>
         </div>
         <div class="categories-grp">
-            <div class="category">
-                <button>Tag 1</button>
-            </div>
-            <div class="category">
-                <button>Tag 2</button>
-            </div>
-            <div class="category">
-                <button>Tag 3</button>
-            </div>
+            <template v-for="tag in tags">
+                <div class="category">
+                    <!-- <router-link :to="{ name: 'tag.articles', params: { name: tag.name } }" class="btn">
+                        {{ tag.name }}
+                    </router-link> -->
+                    <a class="btn">
+                        {{ tag.name }}
+                    </a>
+                </div>
+            </template>
         </div>
         <div class="container">
             <br>
@@ -37,13 +39,29 @@
 </template>
 
 <script setup>
-import getArticle from '../../composables/viewArticle';
-import { onBeforeMount } from 'vue';
+import getArticle from '../../composables/getArticle';
+import { onBeforeMount, ref } from 'vue';
 
-const { getArticleData, isLoading, article } = getArticle()
+const {
+    getArticleAuthor,
+    getArticleData,
+    getArticleTags,
+    deleteArticle,
+    isLoggedIn,
+    isLoading,
+    isAuthor,
+    article,
+    route,
+    tags,
+} = getArticle()
+
+const rt = '/api/articles'
 
 onBeforeMount(() => {
-    getArticleData('/api/articles')
+    // async-await to set isLoading() to false once the 3 methods have completed
+    getArticleData(rt, route.params.slug)
+    getArticleAuthor(rt, route.params.slug)
+    getArticleTags(rt, route.params.slug)
 })
 </script>
 

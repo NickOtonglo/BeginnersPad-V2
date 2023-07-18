@@ -59,6 +59,11 @@ const routes = [
         name: 'article.view',
         component: ArticleView
     },
+    // {
+    //     path: '/tags/:name/articles',
+    //     name: 'tag.articles',
+    //     component: TagArticles,
+    // },
 ]
 
 export default createRouter({

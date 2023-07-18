@@ -14,18 +14,21 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/articles', '\App\Http\Controllers\Api\ArticlesController@index');
-Route::get('/articles/{article}', '\App\Http\Controllers\Api\ArticlesController@show');
+Route::get('articles', '\App\Http\Controllers\Api\ArticlesController@index');
+Route::get('articles/{article}', '\App\Http\Controllers\Api\ArticlesController@show');
+Route::get('articles/{article}/author', '\App\Http\Controllers\Api\ArticlesController@getAuthorName');
+
+Route::get('articles/{article}/tags', '\App\Http\Controllers\Api\ArticlesController@getTags');
 
 Route::middleware('auth:sanctum')->group(function() {
-    Route::get('/user', '\App\Http\Controllers\Api\UserController@getAuthenticatedUser');
-    Route::get('/user/account', '\App\Http\Controllers\Api\UserController@getAuthenticatedUserAccount');
-    Route::post('/user/account', '\App\Http\Controllers\Api\UserController@updateAccount');
-    Route::post('/user/avatar', '\App\Http\Controllers\Api\UserController@updateAvatar');
-    Route::delete('/user/avatar', '\App\Http\Controllers\Api\UserController@removeAvatar');
-    Route::post('/user/secret', '\App\Http\Controllers\Api\UserController@updatePassword');
-    
-    Route::post('/articles', '\App\Http\Controllers\Api\ArticlesController@store');
-    
+    Route::get('user', '\App\Http\Controllers\Api\UserController@getAuthenticatedUser');
+    Route::get('user/account', '\App\Http\Controllers\Api\UserController@getAuthenticatedUserAccount');
+    Route::post('user/account', '\App\Http\Controllers\Api\UserController@updateAccount');
+    Route::post('user/avatar', '\App\Http\Controllers\Api\UserController@updateAvatar');
+    Route::delete('user/avatar', '\App\Http\Controllers\Api\UserController@removeAvatar');
+    Route::post('user/secret', '\App\Http\Controllers\Api\UserController@updatePassword');
+
+    Route::post('articles', '\App\Http\Controllers\Api\ArticlesController@store');
+
     Route::get('tags', '\App\Http\Controllers\Api\TagsController@index');
 });
