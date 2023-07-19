@@ -28,6 +28,7 @@ window.axios.interceptors.response.use(
             if (JSON.parse(localStorage.getItem('authenticated'))) {
                 localStorage.removeItem('authenticated')
                 localStorage.removeItem('authToken')
+                localStorage.removeItem('user')
             }
             location.assign('/sign-in')
         }

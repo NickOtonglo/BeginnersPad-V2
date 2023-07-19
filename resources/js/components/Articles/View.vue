@@ -57,11 +57,24 @@ const {
 
 const rt = '/api/articles'
 
+function initialiseFunctions() {
+    return new Promise((resolve, reject) => {
+        getArticleData(rt, route.params.slug)
+        getArticleAuthor(rt, route.params.slug)
+        getArticleTags(rt, route.params.slug)
+
+        const error = false
+
+        if (!error) {
+            resolve()
+        } else {
+            reject('Error: Something went wrong.')
+        }
+    })
+}
+
 onBeforeMount(() => {
-    // async-await to set isLoading() to false once the 3 methods have completed
-    getArticleData(rt, route.params.slug)
-    getArticleAuthor(rt, route.params.slug)
-    getArticleTags(rt, route.params.slug)
+    initialiseFunctions().then(isLoading.value = false)
 })
 </script>
 
