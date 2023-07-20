@@ -7,15 +7,23 @@
 
 button, .btn {
     padding: 9px 14px;
+    margin: 2px 4px;
     border-radius: var(--rounded-btn-radius);
     cursor: pointer;
     border: none;
     font-family: inherit;
+    font-size: medium;
     /* https://stackoverflow.com/questions/6900124/how-to-make-certain-text-not-selectable-with-css */
     -webkit-user-select: none; /* Safari */        
     -moz-user-select: none; /* Firefox */
     -ms-user-select: none; /* IE10+/Edge */
     user-select: none; /* Standard */
+}
+
+.btn:hover {
+    text-decoration: none;
+    text-shadow: none;
+    font-weight: unset;
 }
 
 .btn-link {

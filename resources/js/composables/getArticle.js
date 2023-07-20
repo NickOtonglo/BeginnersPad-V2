@@ -1,9 +1,10 @@
 import axios from "axios";
 import { ref, inject, computed } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 
 export default function getArticle() {
     const route = useRoute()
+    const router = useRouter()
     const isLoading = ref(false)
     const article = ref({
         title: '',
@@ -57,10 +58,12 @@ export default function getArticle() {
                 isLoading.value = true
                 axios.delete(rt+'/'+slug)
                     .then(response => {
-                        router.push({ name: 'articles.index' })
                         swal({
                             icon: 'success',
-                            title: 'Article deleted.'
+                            title: 'Article deleted.',
+                            didClose: () => {
+                                router.push({ name: 'articles.index' })
+                            }
                         })
                     })
                     .catch(error => {
@@ -77,14 +80,19 @@ export default function getArticle() {
     }
 
     const isAuthor = () => {
-        if (isLoggedIn.value && article.value.author.id == localStorage.getItem.getItem('user')) {
+        if (isLoggedIn.value && article.value.author.id == localStorage.getItem('user')) {
             return true
         }
+        console.log(
+            // ' isLoggedIn.value: '+isLoggedIn.value+
+            // '\n article.value.author.id: '+article.value.author.id+
+            // "\n localStorage.getItem('user'): "+localStorage.getItem('user')
+        )
         return false
     }
 
     const isLoggedIn = computed(() => {
-        return !!window.localStorage.getItem('loggedIn')
+        return !!window.localStorage.getItem('authenticated')
     })
 
     return {

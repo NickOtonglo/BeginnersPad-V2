@@ -154,7 +154,7 @@
         <div class="others">
             <a href="#">Privacy policy</a>
             <a href="#">Terms of service</a>
-            <a href="/view-topics.html">Topics/articles</a>
+            <router-link :to="{ name: 'articles.index' }">Articles</router-link>
         </div>
     </section>
 </template>

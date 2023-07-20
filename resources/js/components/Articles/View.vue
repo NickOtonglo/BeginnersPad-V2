@@ -3,7 +3,12 @@
         <div class="container">
             <h1><u>{{ article.title }}</u></h1>
             <br>
-            <img src="/images/static/thumb_default.jpg">
+            <template v-if="article.thumbnail">
+                <img :src="'/images/articles/' + article.slug + '/' + article.thumbnail" :alt="article.thumbnail">
+            </template>
+            <template v-else>
+                <img src="/images/static/thumb_default.jpg" alt="">
+            </template>
             <br>
             <h3>by {{ article.author.name }}</h3>
             <p>Published on: {{ article.timestamp }}</p>

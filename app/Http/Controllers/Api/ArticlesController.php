@@ -45,7 +45,8 @@ class ArticlesController extends Controller
                         .'-'.$slug.'.'
                         .$request->thumbnail->extension();
             // $path = $request->file('thumbnail')->storeAs('public/images/articles/'.$slug, $filename);
-            $path = $request->file('thumbnail')->storeAs('images/articles/'.$slug, $filename, ['disk' => 'public_uploads']);
+            // $path = $request->file('thumbnail')->storeAs('images/articles/'.$slug, $filename, ['disk' => 'public_uploads']);
+            $request->file('thumbnail')->storeAs('images/articles/'.$slug, $filename, ['disk' => 'public_uploads']);
 
             $data = new Article;
             $data->title = $request->title;
@@ -117,7 +118,8 @@ class ArticlesController extends Controller
             $filename = time()
                         .'-'.$slug.'.'
                         .$request->thumbnail->extension();
-                        $path = $request->file('thumbnail')->storeAs('images/articles/'.$slug, $filename, ['disk' => 'public_uploads']);
+            // $path = $request->file('thumbnail')->storeAs('images/articles/'.$slug, $filename, ['disk' => 'public_uploads']);
+            $request->file('thumbnail')->storeAs('images/articles/'.$slug, $filename, ['disk' => 'public_uploads']);
 
             // Delete old thumbnail
             Storage::disk('public_uploads')->delete('images/articles/'.$slug.'/'.$article->thumbnail);
@@ -148,9 +150,15 @@ class ArticlesController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Article $article)
     {
-        //
+        // Delete thumbnail
+        Storage::disk('public_uploads')->deleteDirectory('images/articles/'.$article->slug);
+
+        $this->unlinkTag($article);
+
+        $article->delete();
+        return response()->noContent();
     }
 
     public function createTag($tag) {
