@@ -4,12 +4,14 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SaveArticleRequest;
+use App\Http\Requests\UpdateArticleRequest;
 use App\Http\Resources\ArticlesResource;
 use App\Http\Resources\TagsResource;
 use App\Models\Article;
 use App\Models\Tag;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class ArticlesController extends Controller
@@ -107,9 +109,40 @@ class ArticlesController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateArticleRequest $request, Article $article)
     {
-        //
+        $slug = $article->slug;
+
+        if($request->hasFile('thumbnail')) {
+            $filename = time()
+                        .'-'.$slug.'.'
+                        .$request->thumbnail->extension();
+                        $path = $request->file('thumbnail')->storeAs('images/articles/'.$slug, $filename, ['disk' => 'public_uploads']);
+
+            // Delete old thumbnail
+            Storage::disk('public_uploads')->delete('images/articles/'.$slug.'/'.$article->thumbnail);
+        }
+
+        $data = $article;
+        $data->title = $request->title;
+        $data->preview = substr($request->preview, 0, 500);
+        $data->content = $request->content;
+        if($request->hasFile('thumbnail')) {
+            $data->thumbnail = $filename;
+        }
+        $data->save();
+
+        $this->unlinkTag($article);
+
+        if($request->has('tags')) {
+            $tagsRequest = explode(',',$request->tags);
+            foreach ($tagsRequest as $tag) {
+                $this->createTag($tag);
+                $this->linkTagToArticle($data, $tag);
+            }
+        }
+
+        return new ArticlesResource($data);
     }
 
     /**

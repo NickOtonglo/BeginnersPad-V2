@@ -6,6 +6,7 @@ import UserAccount from '../components/Users/Account.vue'
 import ArticlesIndex from '../components/Articles/Index.vue'
 import ArticleView from '../components/Articles/View.vue'
 import ArticleCreate from '../components/Articles/Create.vue'
+import ArticleEdit from '../components/Articles/Edit.vue'
 
 function auth(to, from, next) {
     if (JSON.parse(localStorage.getItem('authenticated'))) {
@@ -58,6 +59,11 @@ const routes = [
         path: '/articles/:slug',
         name: 'article.view',
         component: ArticleView
+    },
+    {
+        path: '/articles/:slug/edit',
+        name: 'article.edit',
+        component: ArticleEdit
     },
     // {
     //     path: '/tags/:name/articles',

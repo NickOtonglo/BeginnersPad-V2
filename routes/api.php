@@ -28,6 +28,7 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::delete('user/avatar', '\App\Http\Controllers\Api\UserController@removeAvatar');
     Route::post('user/secret', '\App\Http\Controllers\Api\UserController@updatePassword');
 
+    Route::patch('articles/{article}/edit', '\App\Http\Controllers\Api\ArticlesController@update');
     Route::post('articles', '\App\Http\Controllers\Api\ArticlesController@store');
 
     Route::get('tags', '\App\Http\Controllers\Api\TagsController@index');
