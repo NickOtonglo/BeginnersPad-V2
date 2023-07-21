@@ -174,7 +174,7 @@
 </template>
 
 <script setup>
-import UpdateForm from '../Modals/Edit.vue'
+import UpdateForm from '../Modals/EditUserAccount.vue'
 import { onMounted } from 'vue';
 import { ref } from 'vue';
 import operateModal from '../../composables/modal'

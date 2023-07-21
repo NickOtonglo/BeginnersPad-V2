@@ -49,10 +49,10 @@ class TagsController extends Controller
                 ]);
             } else {
                 return response()->json([
-                    'message' => "Tag '".$tag."' already exists. Operation aborted",
+                    'message' => "Tag '".$tag."' already exists. Operation aborted!",
                     'errors' => [
                         'name' => [
-                            "The tag '".$tag."' already exists!",
+                            "The tag '".$tag."' already exists",
                         ]
                     ],
                 ], 422);

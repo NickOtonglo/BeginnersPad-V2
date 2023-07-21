@@ -1,17 +1,19 @@
 <template>
-    <form @submit.prevent="updateTag(tag)" ref="form">
-        <div class="form-control">
-            <input v-model="tag.name" type="text" name="name" placeholder="Tag name">
-            <div v-for="message in validationErrors?.name" class="txt-alert txt-danger">
-                <p>{{ message }}</p>
+    <div class="container">
+        <form @submit.prevent="updateTag(tag)" ref="form">
+            <div class="form-group">
+                <input v-model="tag.name" type="text" name="name" placeholder="Tag name">
+                <div v-for="message in validationErrors?.name" class="txt-alert txt-danger">
+                    <p>{{ message }}</p>
+                </div>
             </div>
-        </div>
-        <button :disabled="isLoading" type="submit" class="btn-primary btn-medium">
-            <div v-show="isLoading" class="lds-dual-ring"></div>
-            <span v-if="isLoading">Processing...</span>
-            <span v-else>Update tag</span>
-        </button>
-    </form>
+            <button :disabled="isLoading" type="submit" class="btn-primary btn-medium">
+                <div v-show="isLoading" class="lds-dual-ring"></div>
+                <span v-if="isLoading">Processing...</span>
+                <span v-else>Update tag</span>
+            </button>
+        </form>
+    </div>
 </template>
 
 <script setup>
