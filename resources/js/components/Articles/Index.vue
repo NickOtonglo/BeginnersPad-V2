@@ -30,6 +30,9 @@
                 <p style="text-align: center;">-no articles-</p>
             </template>
         </div>
+        <div class="fab-container">
+            <router-link :to="{ name: 'article.create' }" class="fab btn btn-primary"><i class="fa-solid fa-plus"></i></router-link>
+        </div>
     </section>
 </template>
 

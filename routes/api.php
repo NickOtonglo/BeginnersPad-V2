@@ -19,6 +19,8 @@ Route::get('articles/{article}', '\App\Http\Controllers\Api\ArticlesController@s
 Route::get('articles/{article}/author', '\App\Http\Controllers\Api\ArticlesController@getAuthorName');
 
 Route::get('articles/{article}/tags', '\App\Http\Controllers\Api\ArticlesController@getTags');
+Route::get('tags/{tag}', '\App\Http\Controllers\Api\TagsController@show');
+Route::get('tags/{tag}/articles', '\App\Http\Controllers\Api\TagsController@getArticles');
 
 Route::middleware('auth:sanctum')->group(function() {
     Route::get('user', '\App\Http\Controllers\Api\UserController@getAuthenticatedUser');
@@ -33,4 +35,7 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::delete('articles/{article}', '\App\Http\Controllers\Api\ArticlesController@destroy');
 
     Route::get('tags', '\App\Http\Controllers\Api\TagsController@index');
+    Route::post('tags', '\App\Http\Controllers\Api\TagsController@store');
+    Route::patch('tags/{tag}', '\App\Http\Controllers\Api\TagsController@update');
+    Route::delete('tags/{tag}', '\App\Http\Controllers\Api\TagsController@destroy');
 });

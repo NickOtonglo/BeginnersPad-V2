@@ -14,7 +14,7 @@ export default function getArticle() {
         timestamp: '',
         author: {},
     })
-    const tags = {}
+    const tags = ref({})
     const swal = inject('$swal')
 
     if (isLoading.value) return
@@ -47,7 +47,7 @@ export default function getArticle() {
 
         swal.fire({
             title: 'Are you sure?',
-            text: "This post will be erased from the system.",
+            text: "This article will be erased from the system.",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: 'rgb(207, 95, 50)',

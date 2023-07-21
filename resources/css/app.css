@@ -85,6 +85,11 @@ table, th, td {
     border: 1px solid;
 }
 
+th {
+    text-align: left;
+}
+
+
 th, td {
     padding: 8px 10px;
 }
@@ -95,6 +100,11 @@ tr {
 
 tr:first-child:hover {
     cursor: default;
+}
+
+tr.single-column th {
+    border-left: none;
+    border-right: none;
 }
 
 footer {
