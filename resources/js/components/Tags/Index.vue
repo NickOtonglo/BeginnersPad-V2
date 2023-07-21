@@ -52,7 +52,7 @@
 import { onBeforeMount } from 'vue';
 import tagsMaster from '../../composables/tags'
 
-const { getTagsList, storeTags, deleteTag, tags, tagsList, validationErrors  } = tagsMaster()
+const { getTagsList, storeTags, deleteTag, tags, tagsList, validationErrors, isLoading  } = tagsMaster()
 
 onBeforeMount(() => {
     getTagsList()

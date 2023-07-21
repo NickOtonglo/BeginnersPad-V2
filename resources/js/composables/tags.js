@@ -37,6 +37,7 @@ export default function tagsMaster() {
             .catch(error => {
                 if (error.response?.data) {
                     validationErrors.value = error.response.data.errors
+                    console.log(validationErrors.value)
                 }
             })
             .finally(() => isLoading.value = false)

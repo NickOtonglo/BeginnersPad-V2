@@ -62,7 +62,7 @@ import VueMultiselect from 'vue-multiselect'
 import 'vue-multiselect/dist/vue-multiselect.css'
 import getArticle from '../../composables/getArticle';
 
-const { getArticleData, route, getArticleTags, article,} = getArticle()
+const { getArticleData, route, getArticleTags, article } = getArticle()
 
 const quillContent = ref('')
 const router = useRouter()

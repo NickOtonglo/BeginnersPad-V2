@@ -47,6 +47,15 @@ class TagsController extends Controller
                 Tag::create([
                     'name' => $tag,
                 ]);
+            } else {
+                return response()->json([
+                    'message' => "Tag '".$tag."' already exists. Operation aborted",
+                    'errors' => [
+                        'name' => [
+                            "The tag '".$tag."' already exists!",
+                        ]
+                    ],
+                ], 422);
             }
         }
 
