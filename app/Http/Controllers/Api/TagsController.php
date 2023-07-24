@@ -96,8 +96,10 @@ class TagsController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Tag $tag)
     {
-        //
+        $tag->articles()->detach();
+        $tag->delete();
+        return response()->noContent();
     }
 }
