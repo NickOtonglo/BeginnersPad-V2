@@ -35,9 +35,9 @@
                     <th></th>
                     <th></th>
                 </tr>
-                <tr v-for="tag in tagsList">
+                <tr class="single-column" v-for="tag in tagsList">
                     <td>{{ tag.name }}</td>
-                    <td><router-link :to="{ name: 'tag.edit', params: { name: tag.name } }">Edit</router-link></td>
+                    <td><a href="#" @click="click(tag.name)">Edit</a></td>
                     <td><a id="linkDelete" href="#" @click.prevent="deleteTag(tag.name)">Delete</a></td>
                 </tr>
             </table>
@@ -46,16 +46,35 @@
             </template>
         </div>
     </section>
+
+    <UpdateForm ref="childComponentRef"/>
 </template>
 
 <script setup>
-import { onBeforeMount } from 'vue';
+import { onMounted, ref, onBeforeUnmount, onBeforeMount } from 'vue';
+import UpdateForm from '../Modals/EditTag.vue'
 import tagsMaster from '../../composables/tags'
+import operateModal from '../../composables/modal'
 
-const { getTagsList, storeTags, deleteTag, tags, tagsList, validationErrors, isLoading  } = tagsMaster()
+const { getTagsList, storeTags, deleteTag, tags, tagsList, validationErrors, isLoading } = tagsMaster()
+const childComponentRef = ref(null);
+
+function click(item) {
+    localStorage.setItem('tagName', item)
+    childComponentRef.value.openModal();    
+}
 
 onBeforeMount(() => {
+    localStorage.removeItem('tagName')
+})
+
+onMounted(() => {
     getTagsList()
+    operateModal(document.querySelector('#modal'))
+})
+
+onBeforeUnmount(() => {
+    localStorage.removeItem('tagName')
 })
 
 </script>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\SaveTagRequest;
 use App\Http\Resources\TagsResource;
 use App\Models\Tag;
 use Illuminate\Http\Request;
@@ -30,7 +31,7 @@ class TagsController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(SaveTagRequest $request)
     {
         $request->validate([
             'name' => 'required',
@@ -81,9 +82,15 @@ class TagsController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(SaveTagRequest $request, $id)
     {
-        //
+        $tagNew = Tag::where('id', $request->id)->first();
+        $tagNew->name = Str::slug(trim($request->name), '-');
+
+        if(!Tag::where('name',$request->name)->exists()) {
+            $tagNew->save();
+        }
+        return new TagsResource($tagNew);
     }
 
     /**

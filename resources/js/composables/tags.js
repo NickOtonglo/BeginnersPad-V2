@@ -43,8 +43,11 @@ export default function tagsMaster() {
     }
 
     const getTag = (name) => {
+        if (name)
         axios.get('/api/tags/' + name)
-            .then(response => tag.value = response.data.data)
+            .then(response => {
+                tag.value = response.data.data
+            })
             .catch(error => console.log(error))
     }
 
@@ -53,9 +56,9 @@ export default function tagsMaster() {
         isLoading.value = true
         validationErrors.value = ''
 
-        axios.patch('/api/tags/' + tag.name, tag)
+        axios.patch('/api/tags/' + tag.id, tag)
             .then(response => {
-                router.push({ name: 'tags.index' })
+                router.go(0)
             })
             .catch(error => {
                 if (error.response?.data) {

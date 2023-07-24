@@ -36,6 +36,6 @@ Route::middleware('auth:sanctum')->group(function() {
 
     Route::get('tags', '\App\Http\Controllers\Api\TagsController@index');
     Route::post('tags', '\App\Http\Controllers\Api\TagsController@store');
-    Route::patch('tags/{tag}', '\App\Http\Controllers\Api\TagsController@update');
+    Route::patch('tags/{id}', '\App\Http\Controllers\Api\TagsController@update');
     Route::delete('tags/{tag}', '\App\Http\Controllers\Api\TagsController@destroy');
 });
