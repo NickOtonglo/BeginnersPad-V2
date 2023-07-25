@@ -672,7 +672,8 @@ select.btn-dropdown {
 .categories-grp {
     display: flex;
     flex-direction: row;
-    padding: 5px 10px;
+    /* padding: 15px 10px; */
+    padding: 15px 0;
     width: 100%;
     border-top: 1px solid rgba(95, 92, 92, 0.4);
     border-bottom: 1px solid rgba(95, 92, 92, 0.4);
@@ -687,22 +688,29 @@ select.btn-dropdown {
     /* height: 8px; */
 }
 
+.categories-grp .container {
+    display: flex;
+}
+
 .categories-grp .category {
     margin: 0 5px;
 }
 
-.categories-grp .category button {
+.categories-grp .category button,
+.categories-grp .category .btn {
     border: 1px solid #666;
     background: transparent;
     white-space:nowrap;
 }
 
-.categories-grp .category button:hover {
+.categories-grp .category button:hover,
+.categories-grp .category .btn:hover {
     color: var(--color-background-main);
     background: #666;
 }
 
-.categories-grp .category.selected button {
+.categories-grp .category.selected button,
+.categories-grp .category.selected .btn {
     color: var(--color-background-main);
     background: #666;
 }

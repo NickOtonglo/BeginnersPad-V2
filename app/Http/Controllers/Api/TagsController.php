@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SaveTagRequest;
+use App\Http\Resources\ArticlesResource;
 use App\Http\Resources\TagsResource;
 use App\Models\Tag;
 use Illuminate\Http\Request;
@@ -101,5 +102,10 @@ class TagsController extends Controller
         $tag->articles()->detach();
         $tag->delete();
         return response()->noContent();
+    }
+
+    public function getArticles(Tag $tag) {
+        $articles = $tag->articles;
+        return ArticlesResource::collection($articles);
     }
 }

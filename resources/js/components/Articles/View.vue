@@ -25,16 +25,18 @@
             </template>
         </div>
         <div class="categories-grp">
-            <template v-for="tag in tags">
-                <div class="category">
-                    <!-- <router-link :to="{ name: 'tag.articles', params: { name: tag.name } }" class="btn">
-                        {{ tag.name }}
-                    </router-link> -->
-                    <a class="btn">
-                        {{ tag.name }}
-                    </a>
-                </div>
-            </template>
+            <div class="container">
+                <template v-for="tag in tags">
+                    <div class="category">
+                        <router-link :to="{ name: 'tag.articles', params: { name: tag.name } }" class="btn">
+                            {{ tag.name }}
+                        </router-link>
+                        <!-- <a class="btn">
+                            {{ tag.name }}
+                        </a> -->
+                    </div>
+                </template>
+            </div>
         </div>
         <div class="container">
             <br>

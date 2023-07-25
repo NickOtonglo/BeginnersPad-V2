@@ -57,19 +57,18 @@
 
 <script setup>
 import { inject, ref, onMounted, onBeforeUpdate } from 'vue'
-import { useRouter, useRoute } from 'vue-router';
+import { useRouter } from 'vue-router';
 import VueMultiselect from 'vue-multiselect'
 import 'vue-multiselect/dist/vue-multiselect.css'
 import getArticle from '../../composables/getArticle';
 
-const { getArticleData, route, getArticleTags, article } = getArticle()
+const { getArticleData, route, getArticleTags, article, tags } = getArticle()
 
 const quillContent = ref('')
 const router = useRouter()
 const validationErrors = ref('')
 const isLoading = ref(false)
 const swal = inject('$swal')
-const tags = ref('')
 const tagsList = ref([])
 const quillEditor = ref(null)
 const thumbnail = ref(null)

@@ -9,6 +9,7 @@ import ArticleCreate from '../components/Articles/Create.vue'
 import ArticleEdit from '../components/Articles/Edit.vue'
 import TagsIndex from '../components/Tags/Index.vue'
 // import TagEdit from '../components/Tags/Edit.vue'
+import TagArticles from '../components/Tags/Articles.vue'
 
 function auth(to, from, next) {
     if (JSON.parse(localStorage.getItem('authenticated'))) {
@@ -77,11 +78,11 @@ const routes = [
     //     name: 'tag.edit',
     //     component: TagEdit,
     // },
-    // {
-    //     path: '/tags/:name/articles',
-    //     name: 'tag.articles',
-    //     component: TagArticles,
-    // },
+    {
+        path: '/tags/:name/articles',
+        name: 'tag.articles',
+        component: TagArticles,
+    },
 ]
 
 export default createRouter({

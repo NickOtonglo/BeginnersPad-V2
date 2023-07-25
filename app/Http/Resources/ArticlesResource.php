@@ -19,7 +19,7 @@ class ArticlesResource extends JsonResource
             'title' => $this->title,
             'slug' => $this->slug,
             // 'preview' => substr($this->preview, 0, 500).'...',
-            'preview' => substr($this->preview, 0, 500),
+            'preview' => substr($this->preview, 0, 650),
             'content' => $this->content,
             'thumbnail' => $this->thumbnail,
             'timestamp' => $this->created_at->format('jS F Y'),
