@@ -1,0 +1,115 @@
+import { computed } from "vue";
+
+export default function pagination() {
+    const emit = defineEmits({})
+    
+    // props
+    const props = defineProps({
+        maxVisibleButtons: {
+            type: Number,
+            required: false,
+            default: 3,
+        },
+        totalPages: {
+            type: Number,
+            required: true,
+        },
+        perPage: {
+            type: Number,
+            required: true,
+        },
+        currentPage: {
+            type: Number,
+            required: true,
+        },
+        // metaLinks: {
+        //     type: Array,
+        //     required: true,
+        // }
+    })
+
+    // computed
+    const startPage = computed(() => {
+        // when on the first page
+        if (props.currentPage === 1) {
+            return 1
+        }
+
+        // when on the last page
+        if (props.currentPage === props.totalPages) {
+            const start = props.totalPages - (props.maxVisibleButtons - 1);
+
+            if (start === 0) {
+                return 1;
+            } else {
+                return start;
+            }
+        }
+
+        // when in-between
+        return props.currentPage - 1
+    })
+
+    const pages = computed(() => {
+        const range = []
+        for(
+            let i = startPage.value;
+            i <= Math.min(startPage.value + props.maxVisibleButtons - 1, props.totalPages);
+            i++
+        ) {
+            range.push({
+                name: i,
+                isDisabled: i === props.currentPage
+            })
+        }
+
+        return range
+    })
+
+    const isInFirstPage = computed(() => {
+        return props.currentPage === 1
+    })
+
+    const isInLastPage = computed(() => {
+        return props.currentPage === props.totalPages
+    })
+
+    // methods
+    const onClickFirstPage = () => {
+        emit('pagechanged', 1)
+    }
+
+    const onClickPreviousPage = () => {
+        emit('pagechanged', props.currentPage - 1)
+    }
+
+    const onClickPage = (page) => {
+        emit('pagechanged', page)
+    }
+
+    const onClickNextPage = () => {
+        emit('pagechanged', props.currentPage + 1)
+    }
+    
+    const onClickLastPage = () => {
+        emit('pagechanged', props.totalPages)
+    }
+    
+    const isPageActive = (page) => {
+        return props.currentPage === page;
+    }
+
+    return {
+        props,
+        startPage,
+        pages,
+        isInFirstPage,
+        isInLastPage,
+        onClickFirstPage,
+        onClickPreviousPage,
+        onClickPage,
+        onClickNextPage,
+        onClickLastPage,
+        isPageActive
+    }
+}

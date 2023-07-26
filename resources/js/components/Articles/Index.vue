@@ -29,6 +29,11 @@
             <template v-if="!articles.length">
                 <p style="text-align: center;">-no articles-</p>
             </template>
+            <Pagination :totalPages="total_pages"
+                        :perPage="per_page"
+                        :currentPage="current_page"
+                        @pagechanged="onPageChange"
+            />
         </div>
         <div class="fab-container">
             <router-link :to="{ name: 'article.create' }" class="fab btn btn-primary"><i class="fa-solid fa-plus"></i></router-link>
@@ -38,13 +43,20 @@
 
 <script setup>
 import SearchBar from '../Search/SearchBar.vue';
-import { onBeforeUnmount, onMounted, ref } from 'vue';
-import getArticles from '../../composables/getArticles'
-import { onBeforeMount } from 'vue';
+import { onBeforeUnmount, onMounted, ref, watch, onBeforeMount } from 'vue';
+import pagination from '../../composables/pagination';
 
 const header = ref(null)
 
-const { getData, isLoading, articles } = getArticles()
+const { 
+    total_pages,
+    per_page,
+    current_page,
+    articles,
+    isLoading,
+    onPageChange,
+    getPaginationData
+} = pagination()
 
 function initialiseScroll() {
     // let sticky = header.value.offsetTop
@@ -58,7 +70,7 @@ function initialiseScroll() {
 }
 
 onBeforeMount(() => {
-    getData('/api/articles')
+    getPaginationData(current_page.value)
 })
 
 onMounted(() => {

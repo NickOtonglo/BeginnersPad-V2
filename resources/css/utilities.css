@@ -981,3 +981,45 @@ select.btn-dropdown {
         transform: rotate(360deg);
     }
 }
+
+.pagination {
+    display: flex;
+    margin: 15px auto;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.pagination li button {
+    box-shadow: 0 0 1px rgba(0, 0, 0, .2);
+    border-radius: 2px;
+    padding: 8px 14px;
+    margin: 8px 1px;
+    min-width: 40px;
+    cursor: pointer;
+    border: 1px solid var(--color-secondary);
+    color: var(--color-secondary);
+    background-color: var(--color-background-main);
+}
+
+.pagination li button:disabled {
+    opacity: .3;
+}
+
+.pagination li button:hover {
+    background-color: rgba(112, 54, 128, .2);
+    text-shadow: unset;
+}
+
+.pagination li button.active {
+    background-color: var(--color-secondary);
+    color: var(--color-font-contrast);
+    border: 1px solid var(--color-secondary);
+    cursor: not-allowed;
+    /* padding: 10px 16px; */
+    opacity: unset;
+}
+
+.pagination li button.active:hover {
+    opacity: .7;
+}

@@ -21,7 +21,7 @@ class ArticlesController extends Controller
      */
     public function index()
     {
-        $articles = ArticlesResource::collection(Article::latest()->get());
+        $articles = ArticlesResource::collection(Article::latest()->paginate(25));
         return $articles;
     }
 

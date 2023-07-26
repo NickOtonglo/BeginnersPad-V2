@@ -10,11 +10,12 @@ export default function getArticles() {
 
     const getData = (route) => {
         axios.get(route)
-        .then(response => {
-            articles.value = response.data.data
-        })
-        .catch(error => console.log(error))
-        .finally(isLoading.value = false)
+            .then(response => {
+                articles.value = response.data.data
+                // console.log(articles.value)
+            })
+            .catch(error => console.log(error))
+            .finally(isLoading.value = false)
     }
 
     return { getData, isLoading, articles }
