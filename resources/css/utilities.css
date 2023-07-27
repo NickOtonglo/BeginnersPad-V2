@@ -663,7 +663,7 @@ select.btn-dropdown {
     color: var(--color-background-main);
 } */
 
-.search-button .fa-search {
+.search-button i {
     padding: 15px;
     opacity: 0.6;
 }

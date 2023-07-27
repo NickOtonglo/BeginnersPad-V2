@@ -13,7 +13,7 @@ export default function pagination() {
         if(isLoading.value) {return}
         isLoading.value = true
 
-        axios.get('/api/articles?page=' + page)
+        axios.get(`/api/articles?page=${page}&search_global=${search_global.value}`)
             .then(response => {
                 total_pages.value = response.data.meta.last_page
                 per_page.value = response.data.meta.per_page
@@ -22,7 +22,7 @@ export default function pagination() {
             .catch(error => console.log(error.response))
             .finally(() => {
                 isLoading.value = false
-                getData('/api/articles?page=' + page)
+                getData('/api/articles?page=' + page, '&search_global=' + search_global.value)
                 // callback(page, search_global.value)
             })
     }

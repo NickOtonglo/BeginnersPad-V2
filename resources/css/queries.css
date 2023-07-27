@@ -668,4 +668,8 @@
     .section-user-profile .panel-item .favourites-grp .fav {
         width: 220px;
     }
+
+    .search-bar .search-bar-grp .search-button .fa-search {
+        display: none;
+    }
 }

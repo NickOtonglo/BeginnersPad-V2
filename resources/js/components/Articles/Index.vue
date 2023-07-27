@@ -3,10 +3,13 @@
     <!-- Search bar -->
     <section id="searchBar" ref="header">
         <div class="container">
-            <form class="search-bar">
+            <form @submit.prevent="getPaginationData(1)" class="search-bar">
                 <div class="search-bar-grp">
-                    <input type="text" class="search-input" placeholder="search...">
-                    <div class="search-button">
+                    <input v-model="search_global" type="text" class="search-input" placeholder="search...">
+                    <div ref="btnClearSearch" v-show="search_global !== ''" @click="search_global = ''" class="search-button">
+                        <i class="fas fa-xmark"></i>
+                    </div>
+                    <div @click="getPaginationData(1)" class="search-button">
                         <i class="fas fa-search"></i>
                     </div>
                 </div>
@@ -47,8 +50,10 @@ import { onBeforeUnmount, onMounted, ref, watch, onBeforeMount } from 'vue';
 import pagination from '../../composables/pagination';
 
 const header = ref(null)
+const btnClearSearch = ref(null)
 
 const { 
+    search_global,
     total_pages,
     per_page,
     current_page,
@@ -79,6 +84,11 @@ onMounted(() => {
 
 onBeforeUnmount(() => {
     // window.removeEventListener("scroll", initialiseScroll)
+})
+
+watch(search_global, (current, previous) => {
+    // To show instant results during search, uncomment the line below
+    // getPaginationData(1)
 })
 </script>
 

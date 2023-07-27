@@ -21,8 +21,14 @@ class ArticlesController extends Controller
      */
     public function index()
     {
-        $articles = ArticlesResource::collection(Article::latest()->paginate(25));
-        return $articles;
+        $articles = Article::when(request('search_global'), function($query) {
+            $query->where(function($q) {
+                $q->where('slug', 'like', '%'.request('search_global').'%')
+                  ->orWhere('title', 'like', '%'.request('search_global').'%')
+                  ->orWhere('content', 'like', '%'.request('search_global').'%');
+            });
+        })->latest()->paginate(10);
+        return ArticlesResource::collection($articles);
     }
 
     /**
