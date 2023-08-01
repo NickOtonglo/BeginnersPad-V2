@@ -35,84 +35,20 @@
                 </select>
             </div>
             <div class="cards">
-                <div class="card-generic">
-                    <a href="/admin/manage-zone.html">
-                        <div class="text">
-                            <h4>Zone name (ID <span>000</span>)</h4>
-                            <p>County: <span>county name</span></p>
-                            <p>State: <span>state name</span></p>
-                            <p>Coordinates: <span>0.000, 0.000</span></p>
-                            <p>Radius: <span>0 km</span></p>
-                            <p>Timezone: <span>GMT +3</span></p>
-                            <p class="txt-sm">Added on: <span>01-01-2021 00:00:00</span></p>
-                        </div>
-                    </a>
-                </div>
-                <div class="card-generic">
-                    <a href="/admin/manage-zone.html">
-                        <div class="text">
-                            <h4>Zone name (ID <span>000</span>)</h4>
-                            <p>County: <span>county name</span></p>
-                            <p>State: <span>state name</span></p>
-                            <p>Coordinates: <span>0.000, 0.000</span></p>
-                            <p>Radius: <span>0 km</span></p>
-                            <p>Timezone: <span>GMT +3</span></p>
-                            <p class="txt-sm">Added on: <span>01-01-2021 00:00:00</span></p>
-                        </div>
-                    </a>
-                </div>
-                <div class="card-generic">
-                    <a href="/admin/manage-zone.html">
-                        <div class="text">
-                            <h4>Zone name (ID <span>000</span>)</h4>
-                            <p>County: <span>county name</span></p>
-                            <p>State: <span>state name</span></p>
-                            <p>Coordinates: <span>0.000, 0.000</span></p>
-                            <p>Radius: <span>0 km</span></p>
-                            <p>Timezone: <span>GMT +3</span></p>
-                            <p class="txt-sm">Added on: <span>01-01-2021 00:00:00</span></p>
-                        </div>
-                    </a>
-                </div>
-                <div class="card-generic">
-                    <a href="/admin/manage-zone.html">
-                        <div class="text">
-                            <h4>Zone name (ID <span>000</span>)</h4>
-                            <p>County: <span>county name</span></p>
-                            <p>State: <span>state name</span></p>
-                            <p>Coordinates: <span>0.000, 0.000</span></p>
-                            <p>Radius: <span>0 km</span></p>
-                            <p>Timezone: <span>GMT +3</span></p>
-                            <p class="txt-sm">Added on: <span>01-01-2021 00:00:00</span></p>
-                        </div>
-                    </a>
-                </div>
-                <div class="card-generic">
-                    <a href="/admin/manage-zone.html">
-                        <div class="text">
-                            <h4>Zone name (ID <span>000</span>)</h4>
-                            <p>County: <span>county name</span></p>
-                            <p>State: <span>state name</span></p>
-                            <p>Coordinates: <span>0.000, 0.000</span></p>
-                            <p>Radius: <span>0 km</span></p>
-                            <p>Timezone: <span>GMT +3</span></p>
-                            <p class="txt-sm">Added on: <span>01-01-2021 00:00:00</span></p>
-                        </div>
-                    </a>
-                </div>
-                <div class="card-generic">
-                    <a href="/admin/manage-zone.html">
-                        <div class="text">
-                            <h4>Zone name (ID <span>000</span>)</h4>
-                            <p>County: <span>county name</span></p>
-                            <p>State: <span>state name</span></p>
-                            <p>Coordinates: <span>0.000, 0.000</span></p>
-                            <p>Radius: <span>0 km</span></p>
-                            <p>Timezone: <span>GMT +3</span></p>
-                            <p class="txt-sm">Added on: <span>01-01-2021 00:00:00</span></p>
-                        </div>
-                    </a>
-                </div>
+                <template v-for="zone in zones">
+                    <div class="card-generic">
+                        <a href="/admin/manage-zone.html">
+                            <div class="text">
+                                <h4>{{ zone.name }} (ID <span>{{ zone.id }}</span>)</h4>
+                                <p>County: <span>{{ zone.county_code }}</span></p>
+                                <p>Coordinates: <span>{{ zone.lat }}, {{ zone.lng }}</span></p>
+                                <p>Radius: <span>{{ zone.radius }} km</span></p>
+                                <p>Timezone: <span>{{ zone.timezone }}</span></p>
+                                <p class="txt-sm">Added on: <span>{{ zone.timestamp }}</span></p>
+                            </div>
+                        </a>
+                    </div>
+                </template>
             </div>
         </div>
     </section>

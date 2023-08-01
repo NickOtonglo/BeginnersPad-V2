@@ -22,6 +22,7 @@ class ZonesResource extends JsonResource
             'radius' => $this->radius*0.001,
             'timezone' => $this->timezone,
             'description' => $this->description,
+            'timestamp' => $this->created_at->format('jS F Y'),
         ];
     }
 }
