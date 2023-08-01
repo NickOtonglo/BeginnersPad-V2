@@ -39,7 +39,7 @@
             />
         </div>
         <div class="fab-container">
-            <router-link :to="{ name: 'article.create' }" class="fab btn btn-primary"><i class="fa-solid fa-plus"></i></router-link>
+            <router-link :to="{ name: 'article.create' }" class="fab btn btn-primary"><i class="fa-solid fa-plus"></i> New article</router-link>
         </div>
     </section>
 </template>

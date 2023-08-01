@@ -61,7 +61,7 @@ const childComponentRef = ref(null);
 
 function click(item) {
     localStorage.setItem('tagName', item)
-    childComponentRef.value.openModal();    
+    childComponentRef.value.openModal();
 }
 
 onBeforeMount(() => {

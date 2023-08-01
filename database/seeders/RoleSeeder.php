@@ -15,7 +15,7 @@ class RoleSeeder extends Seeder
     public function run(): void
     {
         Role::factory()
-                ->count(5)
+                ->count(6)
                 ->state(new Sequence(
                     [
                         'title' => 'System Admin',

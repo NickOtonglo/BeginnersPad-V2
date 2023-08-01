@@ -10,6 +10,7 @@ import ArticleEdit from '../components/Articles/Edit.vue'
 import TagsIndex from '../components/Tags/Index.vue'
 // import TagEdit from '../components/Tags/Edit.vue'
 import TagArticles from '../components/Tags/Articles.vue'
+import ZonesIndex from '../components/Zones/Index.vue'
 
 function auth(to, from, next) {
     if (JSON.parse(localStorage.getItem('authenticated'))) {
@@ -73,15 +74,15 @@ const routes = [
         name: 'tags.index',
         component: TagsIndex,
     },
-    // {
-    //     path: '/tags/:name',
-    //     name: 'tag.edit',
-    //     component: TagEdit,
-    // },
     {
         path: '/tags/:name/articles',
         name: 'tag.articles',
         component: TagArticles,
+    },
+    {
+        path: '/zones',
+        name: 'zones.index',
+        component: ZonesIndex,
     },
 ]
 

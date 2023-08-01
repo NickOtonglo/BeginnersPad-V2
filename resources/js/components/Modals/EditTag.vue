@@ -30,8 +30,7 @@
 <script setup>
 import tagsMaster from '../../composables/tags';
 import operateModal from '../../composables/modal'
-import { onMounted, ref } from 'vue';
-import { onBeforeUnmount } from 'vue';
+import { onMounted, ref, onBeforeUnmount } from 'vue';
 
 const { getTag, tag, validationErrors, isLoading, updateTag } = tagsMaster()
 const modalRef = ref(null)

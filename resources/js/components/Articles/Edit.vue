@@ -90,11 +90,6 @@ function updateArticle(article, tags) {
     article.preview = quillEditor.value.getContents().ops[0].insert
 
     let serialisedPost = new FormData()
-    for (let item in article) {
-        if (article.hasOwnProperty(item)) {
-            serialisedPost.append(item, article[item])
-        }
-    }
 
     let tagsFinal = []
     for (let item in tags) {
@@ -103,8 +98,16 @@ function updateArticle(article, tags) {
         }
     }
     serialisedPost.append('tags', tagsFinal)
+
+    for (let item in article) {
+        if (article.hasOwnProperty(item)) {
+            serialisedPost.append(item, article[item])
+        }
+    }
+    
     serialisedPost.append('_method', 'PATCH')
 
+    console.log(article.content)
     // console.log(serialisedPost.get('slug'))
 
     /**

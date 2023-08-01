@@ -1,18 +1,5 @@
 <template>
     <h3 class="section-title">Articles</h3>
-    <!-- Search bar -->
-    <section id="searchBar" ref="header">
-        <div class="container">
-            <form class="search-bar">
-                <div class="search-bar-grp">
-                    <input type="text" class="search-input" placeholder="search...">
-                    <div class="search-button">
-                        <i class="fas fa-search"></i>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </section>
     <section class="section-read links">
         <div class="container">
             <div id="isLoading">
@@ -62,7 +49,7 @@ function initialiseScroll() {
 }
 
 onBeforeMount(() => {
-    getData(`/api/tags/${tag.value.name}/articles`)
+    getData(`/api/tags/${tag.value.name}/articles`, '')
 })
 
 onMounted(() => {
