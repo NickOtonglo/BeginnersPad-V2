@@ -11,6 +11,7 @@ import TagsIndex from '../components/Tags/Index.vue'
 // import TagEdit from '../components/Tags/Edit.vue'
 import TagArticles from '../components/Tags/Articles.vue'
 import ZonesIndex from '../components/Zones/Index.vue'
+import ZoneView from '../components/Zones/View.vue'
 
 function auth(to, from, next) {
     if (JSON.parse(localStorage.getItem('authenticated'))) {
@@ -83,6 +84,11 @@ const routes = [
         path: '/zones',
         name: 'zones.index',
         component: ZonesIndex,
+    },
+    {
+        path: '/zones/:id',
+        name: 'zone.view',
+        component: ZoneView,
     },
 ]
 

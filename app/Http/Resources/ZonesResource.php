@@ -23,6 +23,7 @@ class ZonesResource extends JsonResource
             'timezone' => $this->timezone,
             'description' => $this->description,
             'timestamp' => $this->created_at->format('jS F Y'),
+            'county_code' => $this->county_code,
         ];
     }
 }

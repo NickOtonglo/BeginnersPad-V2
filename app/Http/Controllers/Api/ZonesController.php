@@ -36,10 +36,20 @@ class ZonesController extends Controller
      */
     public function store(SaveZoneRequest $request)
     {
-        $zone = Zone::create($request->all());
+        // $zone = Zone::create($request->all());
+        $zone = new Zone;
+        $zone->name = $request->name;
+        $zone->lat = $request->lat;
+        $zone->lng = $request->lng;
+        $zone->radius = $request->radius*1000;
+        $zone->timezone = $request->timezone;
+        $zone->description = $request->description;
+        $zone->county_code = $request->county_code;
+        $zone->save();
+
         $response = [
             'zone' => $zone,
-            'message' => "New article '".$zone->name."' created successfully.",
+            'message' => "New zone '".$zone->name."' created successfully.",
         ];
         return response($response, 201);
     }
@@ -47,9 +57,9 @@ class ZonesController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Zone $zone)
     {
-        //
+        return new ZonesResource($zone);
     }
 
     /**
@@ -63,9 +73,24 @@ class ZonesController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(SaveZoneRequest $request, Zone $zone)
     {
-        //
+        // $zone->update($request->all());
+
+        $zone->name = $request->name;
+        $zone->lat = $request->lat;
+        $zone->lng = $request->lng;
+        $zone->radius = $request->radius*1000;
+        $zone->timezone = $request->timezone;
+        $zone->description = $request->description;
+        $zone->county_code = $request->county_code;
+        $zone->save();
+
+        $response = [
+            'zone' => $zone,
+            'message' => "Zone '".$zone->name."' updated successfully.",
+        ];
+        return response($response, 201);
     }
 
     /**

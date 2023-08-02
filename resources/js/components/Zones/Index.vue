@@ -37,7 +37,7 @@
             <div class="cards">
                 <template v-for="zone in zones">
                     <div class="card-generic">
-                        <a href="/admin/manage-zone.html">
+                        <router-link :to="{ name: 'zone.view', params: {id: zone.id } }">
                             <div class="text">
                                 <h4>{{ zone.name }} (ID <span>{{ zone.id }}</span>)</h4>
                                 <p>County: <span>{{ zone.county_code }}</span></p>
@@ -46,7 +46,7 @@
                                 <p>Timezone: <span>{{ zone.timezone }}</span></p>
                                 <p class="txt-sm">Added on: <span>{{ zone.timestamp }}</span></p>
                             </div>
-                        </a>
+                        </router-link>
                     </div>
                 </template>
             </div>

@@ -1,12 +1,12 @@
 <template>
     <div class="modal" id="modal" ref="modalRef">
         <div class="modal-header">
-            <h2>Add zone</h2>
+            <h2>Edit zone</h2>
             <button @click="operateModal(modalRef)" id="modalHeaderClose" class="btn-link btn-close"><i class="fas fa-times"></i></button>
         </div>
         <div class="modal-content">
             <div class="category">
-                <form @submit.prevent="createZone(request, zone)" id="formCreateZone">
+                <form @submit.prevent="updateZone(request, zone)" id="formCreateZone">
                     <div class="form-group" id="grpName">
                         <label for="name">Zone name*</label>
                         <input v-model="zone.name" type="text" name="name">
@@ -67,7 +67,7 @@
                     <button :disabled="isLoading" class="btn-submit" type="submit">
                         <div v-show="isLoading" class="lds-dual-ring"></div>
                         <span v-if="isLoading">Loading...</span>
-                        <span v-else>Create zone</span>
+                        <span v-else>Update zone</span>
                     </button>
                 </form>
             </div>
@@ -80,19 +80,29 @@
 
 <script setup>
 import operateModal from '../../composables/modal'
-import { onMounted, ref, onBeforeUnmount } from 'vue';
+import { onMounted, ref } from 'vue';
 import zonesMaster from '../../composables/zones';
 
 const modalRef = ref(null)
-const request = ref('/api/zones')
 
-const { zone, createZone, validationErrors, getCounties, counties } = zonesMaster()
+const {
+    zone, 
+    updateZone, 
+    validationErrors, 
+    getCounties, 
+    counties, 
+    getZone, 
+    route,
+} = zonesMaster()
+
+const request = ref('/api/zones/' + route.params.id)
 
 function openModal() {
     operateModal(modalRef.value)
 }
 
 onMounted(() => {
+    getZone('/api/zones/' + route.params.id)
     openModal()
     getCounties()
 })

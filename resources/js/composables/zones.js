@@ -35,7 +35,7 @@ export default function zonesMaster() {
         if (isLoading.value) return
         isLoading.value = true
 
-        axios.get('api/zones/countries')
+        axios.get('/api/zones/countries')
             .then(response => countries.value = response.data.data)
             .catch(error => console.log(error))
             .finally(isLoading.value = false)
@@ -45,7 +45,7 @@ export default function zonesMaster() {
         if (isLoading.value) return
         isLoading.value = true
 
-        axios.get('api/zones/counties')
+        axios.get('/api/zones/counties')
             .then(response => counties.value = response.data.data)
             .catch(error => console.log(error))
             .finally(isLoading.value = false)
@@ -81,14 +81,96 @@ export default function zonesMaster() {
             .finally(isLoading.value = false)
     }
 
+    const getZone = (request) => {
+        if (isLoading.value) return
+        isLoading.value = true
+        validationErrors.value = ''
+
+        axios.get(request)
+            .then(response => zone.value = response.data.data)
+            .catch(error => console.log(error))
+            .finally(isLoading.value = false)
+    }
+
+    const updateZone = (request, data) => {
+        if (isLoading.value) return
+        isLoading.value = true
+        validationErrors.value = ''
+
+        axios.patch(request, data)
+            .then(response => {
+                swal({
+                    icon: 'success',
+                    title: 'Zone updated.',
+                    didClose: () => {
+                        router.go(0)
+                    }
+                })
+            })
+            .catch(error => {
+                if (error.response?.data) {
+                    validationErrors.value = error.response.data.errors
+                } else {
+                    swal({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'An error occured. Please try again.',
+                        // text: error.response.data.message,
+                    })
+                }
+            })
+            .finally(isLoading.value = false)
+    }
+
+    const deleteZone = (request) => {
+        if (isLoading.value) { return }
+
+        swal.fire({
+            title: 'Are you sure?',
+            text: "This zone, as well as all related sub-zones, will be erased from the system.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: 'rgb(207, 95, 50)',
+            cancelButtonColor: 'rgb(238, 14, 14)',
+            confirmButtonText: 'Confirm'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                isLoading.value = true
+                axios.delete(request)
+                    .then(response => {
+                        swal({
+                            icon: 'success',
+                            title: 'Zone deleted.',
+                            didClose: () => {
+                                router.push({ name: 'zones.index' })
+                            }
+                        })
+                    })
+                    .catch(error => {
+                        swal({
+                            icon: 'error',
+                            title: 'Something went wrong, please try again.'
+                        })
+                    })
+                    .finally(() => isLoading.value = false)
+            } else {
+                isLoading.value = false
+            }
+        })
+    }
+
     return {
         zones,
         zone,
+        route,
         counties,
         countries,
         isLoading,
         getZones,
         createZone,
+        getZone,
+        updateZone,
+        deleteZone,
         getCounties,
         getCountries,
         validationErrors,
