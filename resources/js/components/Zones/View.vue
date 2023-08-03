@@ -23,15 +23,15 @@
                         </div>
                         <div class="data">
                             <ul>
-                                <li>Zone name (ID <span>000</span>)</li>
-                                <li>Country: <span> KE</span></li>
-                                <li>County: <span>county name</span></li>
-                                <li>Coordinates: <span>0.000, 0.000</span></li>
-                                <li>Zone radius: <span>0 km</span></li>
-                                <li>Timezone: <span>GMT +3</span></li>
-                                <li>Added on: <span>01-01-2021 00:00:00</span></li>
+                                <li>{{ zone.name }} (ID <span>{{ zone.id }}</span>)</li>
+                                <li>County: <span>{{ zone.county.name }}</span></li>
+                                <li>Coordinates: <span>{{ zone.lat }}, {{ zone.lng }}</span></li>
+                                <li>Zone radius: <span>{{ zone.radius }} km</span></li>
+                                <li>Timezone: <span>{{ zone.timezone }}</span></li>
+                                <li>Added on: <span>{{ zone.timestamp }}</span></li>
                                 <li>Sub-zones: <span>0</span></li>
                                 <li>Listings: <span>0</span></li>
+                                <li v-if="zone.description">Description: <span>{{ zone.description }}</span></li>
                             </ul>
                         </div>
                     </div>
@@ -143,7 +143,7 @@ import operateModal from '../../composables/modal';
 import EditZone from '../Modals/EditZone.vue'
 
 const childComponentRef = ref(null);
-const { zone, getZone, route } = zonesMaster()
+const { zone, getZone, route, getCounties, counties } = zonesMaster()
 
 function click() {
     childComponentRef.value.openModal();
@@ -152,5 +152,6 @@ function click() {
 onMounted(() => {
     getZone('/api/zones/' + route.params.id)
     operateModal(document.querySelector('#modal'))
+    getCounties
 })
 </script>

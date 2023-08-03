@@ -24,6 +24,7 @@ class ZonesResource extends JsonResource
             'description' => $this->description,
             'timestamp' => $this->created_at->format('jS F Y'),
             'county_code' => $this->county_code,
+            'county' => new ZoneCountiesResource($this->zoneCounty),
         ];
     }
 }

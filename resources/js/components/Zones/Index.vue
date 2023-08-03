@@ -40,7 +40,7 @@
                         <router-link :to="{ name: 'zone.view', params: {id: zone.id } }">
                             <div class="text">
                                 <h4>{{ zone.name }} (ID <span>{{ zone.id }}</span>)</h4>
-                                <p>County: <span>{{ zone.county_code }}</span></p>
+                                <p>County: <span>{{ zone.county.name }}</span></p>
                                 <p>Coordinates: <span>{{ zone.lat }}, {{ zone.lng }}</span></p>
                                 <p>Radius: <span>{{ zone.radius }} km</span></p>
                                 <p>Timezone: <span>{{ zone.timezone }}</span></p>

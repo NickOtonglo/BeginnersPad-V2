@@ -14,6 +14,10 @@ export default function zonesMaster() {
         timezone: '',
         description: '',
         county_code: '',
+        county: {
+            code: '',
+            name: '',
+        },
     })
     const countries = ref({})
     const counties = ref({})

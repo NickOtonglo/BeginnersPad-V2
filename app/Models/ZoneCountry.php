@@ -10,4 +10,8 @@ class ZoneCountry extends Model
     use HasFactory;
 
     protected $fillable = ['name', 'initials'];
+
+    public function zoneCounties() {
+        return $this->hasMany(ZoneCounty::class);
+    }
 }
