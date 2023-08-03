@@ -19,8 +19,14 @@ class ZonesController extends Controller
      */
     public function index()
     {
-        $zones = ZonesResource::collection(Zone::orderBy('name')->get());
-        return $zones;
+        $zones = Zone::when(request('search_global'), function($query) {
+            $query->where(function($q) {
+                $q->where('name', 'like', '%'.request('search_global').'%')
+                  ->orWhere('id', 'like', '%'.request('search_global').'%')
+                  ->orWhere('county_code', 'like', '%'.request('search_global').'%');
+            });
+        })->orderBy('name')->paginate(15);
+        return ZonesResource::collection($zones);
     }
 
     /**

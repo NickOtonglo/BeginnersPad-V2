@@ -11,12 +11,15 @@
     <h3 class="section-title">Zones</h3>
 
     <!-- Search bar -->
-    <section id="search-bar">
+    <section id="searchBar" ref="header">
         <div class="container">
-            <form class="search-bar">
+            <form @submit.prevent="getPaginationData(1, 'zones')" class="search-bar">
                 <div class="search-bar-grp">
-                    <input type="text" class="search-input" placeholder="search...">
-                    <div class="search-button">
+                    <input v-model="search_global" type="text" class="search-input" placeholder="search...">
+                    <div ref="btnClearSearch" v-show="search_global !== ''" @click="search_global = '', getPaginationData(1, 'zones')" class="search-button">
+                        <i class="fas fa-xmark"></i>
+                    </div>
+                    <div @click="getPaginationData(1, 'zones')" class="search-button">
                         <i class="fas fa-search"></i>
                     </div>
                 </div>
@@ -51,27 +54,53 @@
                 </template>
             </div>
         </div>
+        <Pagination :totalPages="total_pages"
+                        :perPage="per_page"
+                        :currentPage="current_page"
+                        @pagechanged="onPageChange"
+            />
     </section>
 
     <CreateZone ref="childComponentRef" />
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, onBeforeMount, watch } from 'vue';
 import zonesMaster from '../../composables/zones';
 import CreateZone from '../Modals/CreateZone.vue'
 import operateModal from '../../composables/modal'
+import pagination from '../../composables/pagination';
 
 const childComponentRef = ref(null);
+const btnClearSearch = ref(null)
 
-const { zones, getZones, createZone } = zonesMaster()
+const { getZones, createZone } = zonesMaster()
+
+const { 
+    search_global,
+    total_pages,
+    per_page,
+    current_page,
+    zones,
+    isLoading,
+    onPageChange,
+    getPaginationData
+} = pagination()
 
 function click() {
     childComponentRef.value.openModal();
 }
 
+onBeforeMount(() => {
+    getPaginationData(current_page.value, 'zones')
+})
+
 onMounted(() => {
-    getZones('api/zones')
     operateModal(document.querySelector('#modal'))
+})
+
+watch(search_global, (current, previous) => {
+    // To show instant results during search, uncomment the line below
+    // getPaginationData(1, 'zones')
 })
 </script>

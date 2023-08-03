@@ -3,13 +3,13 @@
     <!-- Search bar -->
     <section id="searchBar" ref="header">
         <div class="container">
-            <form @submit.prevent="getPaginationData(1)" class="search-bar">
+            <form @submit.prevent="getPaginationData(1, 'articles')" class="search-bar">
                 <div class="search-bar-grp">
                     <input v-model="search_global" type="text" class="search-input" placeholder="search...">
-                    <div ref="btnClearSearch" v-show="search_global !== ''" @click="search_global = ''" class="search-button">
+                    <div ref="btnClearSearch" v-show="search_global !== ''" @click="search_global = '', getPaginationData(1, 'articles')" class="search-button">
                         <i class="fas fa-xmark"></i>
                     </div>
-                    <div @click="getPaginationData(1)" class="search-button">
+                    <div @click="getPaginationData(1, 'articles')" class="search-button">
                         <i class="fas fa-search"></i>
                     </div>
                 </div>
@@ -75,7 +75,7 @@ function initialiseScroll() {
 }
 
 onBeforeMount(() => {
-    getPaginationData(current_page.value)
+    getPaginationData(current_page.value, 'articles')
 })
 
 onMounted(() => {
@@ -88,7 +88,7 @@ onBeforeUnmount(() => {
 
 watch(search_global, (current, previous) => {
     // To show instant results during search, uncomment the line below
-    // getPaginationData(1)
+    // getPaginationData(1, 'articles')
 })
 </script>
 

@@ -8,8 +8,8 @@ export default function getArticles() {
     if (isLoading.value) return
     isLoading.value = true
 
-    const getData = (route, query) => {
-        axios.get(route + query)
+    const getData = (request) => {
+        axios.get(request)
             .then(response => {
                 articles.value = response.data.data
                 // console.log(articles.value)
