@@ -47,4 +47,7 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::get('zones/{zone}', '\App\Http\Controllers\Api\ZonesController@show');
     Route::patch('zones/{zone}', '\App\Http\Controllers\Api\ZonesController@update');
     Route::delete('zones/{zone}', '\App\Http\Controllers\Api\ZonesController@destroy');
+
+    Route::get('zones/{zone}/sub-zones', '\App\Http\Controllers\Api\SubZoneController@index');
+    
 });

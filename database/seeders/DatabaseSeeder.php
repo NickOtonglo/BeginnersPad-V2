@@ -26,5 +26,7 @@ class DatabaseSeeder extends Seeder
         // $this->call(ZoneCountrySeeder::class);
         // $this->call(ZoneCountySeeder::class);
         // $this->call(ZoneSeeder::class);
+        // $this->call(SubZoneNatureSeeder::class);
+        // $this->call(SubZoneSeeder::class);
     }
 }

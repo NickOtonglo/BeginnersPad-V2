@@ -17,8 +17,6 @@ export default function pagination() {
         isLoading.value = true
         sourceParam = source
 
-        console.log(`/api/${source}?page=${page}&search_global=${search_global.value}`)
-
         axios.get(`/api/${source}?page=${page}&search_global=${search_global.value}`)
             .then(response => {
                 total_pages.value = response.data.meta.last_page
