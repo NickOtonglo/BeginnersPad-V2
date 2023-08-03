@@ -96,9 +96,10 @@ class ZonesController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Zone $zone)
     {
-        //
+        $zone->delete();
+        return response()->noContent();
     }
 
     public function getCountries() {

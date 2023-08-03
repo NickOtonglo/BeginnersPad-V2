@@ -131,7 +131,7 @@ export default function zonesMaster() {
 
         swal.fire({
             title: 'Are you sure?',
-            text: "This zone, as well as all related sub-zones, will be erased from the system.",
+            text: "This zone, as well as all related sub-zones and property listings, will be erased from the system.",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: 'rgb(207, 95, 50)',

@@ -19,6 +19,9 @@
                                 <a @click="click" href="#">
                                     <i class="fas fa-edit"></i>
                                 </a>
+                                <a @click="deleteZone('/api/zones/' + route.params.id)" href="#">
+                                    <i class="fas fa-xmark"></i>
+                                </a>
                             </div>
                         </div>
                         <div class="data">
@@ -143,7 +146,7 @@ import operateModal from '../../composables/modal';
 import EditZone from '../Modals/EditZone.vue'
 
 const childComponentRef = ref(null);
-const { zone, getZone, route, getCounties, counties } = zonesMaster()
+const { zone, getZone, route, getCounties, deleteZone } = zonesMaster()
 
 function click() {
     childComponentRef.value.openModal();
@@ -155,3 +158,11 @@ onMounted(() => {
     getCounties
 })
 </script>
+
+<style scoped>
+.title-grp {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+</style>
