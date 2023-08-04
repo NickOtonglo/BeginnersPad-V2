@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SaveZoneRequest;
+use App\Http\Resources\SubZoneResource;
 use App\Http\Resources\ZoneCountiesResource;
 use App\Http\Resources\ZoneCountriesResource;
 use App\Http\Resources\ZonesResource;
@@ -119,5 +120,10 @@ class ZonesController extends Controller
     public function getCounties() {
         $counties = ZoneCountiesResource::collection(ZoneCounty::orderBy('code')->get());
         return $counties;
+    }
+
+    public function getSubZones(Zone $zone) {
+        $subZones = SubZoneResource::collection($zone->subZones);
+        return $subZones;
     }
 }

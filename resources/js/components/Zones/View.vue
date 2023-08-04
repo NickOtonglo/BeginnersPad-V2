@@ -1,6 +1,6 @@
 <template>
     <div class="fab-container">
-        <button id="modalTrigger" class="fab btn-primary"><i class="fas fa-plus"></i> Add sub-zone</button>
+        <button @click="click(createSubRef)" class="fab btn-primary"><i class="fas fa-plus"></i> Add sub-zone</button>
     </div>
 
     <h3 class="section-title">Zone name</h3>
@@ -16,7 +16,7 @@
                         <div class="title-grp">
                             <h3>Zone details</h3>
                             <div class="info-actions">
-                                <a @click="click" href="#">
+                                <a @click="click(editZoneRef)" href="#">
                                     <i class="fas fa-edit"></i>
                                 </a>
                                 <a @click="deleteZone('/api/zones/' + route.params.id)" href="#">
@@ -58,104 +58,51 @@
                         </select>
                     </div>
                     <div class="cards">
-                        <div class="card-generic">
-                            <a href="/admin/manage-sub-zone.html">
-                                <div class="text">
-                                    <h4>Sub-zone name (ID <span>000</span>)</h4>
-                                    <p>Role/nature: <span>role</span></p>
-                                    <p>Coordinates: <span>0.000, 0.000</span></p>
-                                    <p>Radius: <span>0 km</span></p>
-                                    <p>Timezone: <span>GMT +3</span></p>
-                                    <p class="txt-sm">Added on: <span>01-01-2021 00:00:00</span></p>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="card-generic">
-                            <a href="/admin/manage-sub-zone.html">
-                                <div class="text">
-                                    <h4>Sub-zone name (ID <span>000</span>)</h4>
-                                    <p>Role/nature: <span>role</span></p>
-                                    <p>Coordinates: <span>0.000, 0.000</span></p>
-                                    <p>Radius: <span>0 km</span></p>
-                                    <p>Timezone: <span>GMT +3</span></p>
-                                    <p class="txt-sm">Added on: <span>01-01-2021 00:00:00</span></p>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="card-generic">
-                            <a href="/admin/manage-sub-zone.html">
-                                <div class="text">
-                                    <h4>Sub-zone name (ID <span>000</span>)</h4>
-                                    <p>Role/nature: <span>role</span></p>
-                                    <p>Coordinates: <span>0.000, 0.000</span></p>
-                                    <p>Radius: <span>0 km</span></p>
-                                    <p>Timezone: <span>GMT +3</span></p>
-                                    <p class="txt-sm">Added on: <span>01-01-2021 00:00:00</span></p>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="card-generic">
-                            <a href="/admin/manage-sub-zone.html">
-                                <div class="text">
-                                    <h4>Sub-zone name (ID <span>000</span>)</h4>
-                                    <p>Role/nature: <span>role</span></p>
-                                    <p>Coordinates: <span>0.000, 0.000</span></p>
-                                    <p>Radius: <span>0 km</span></p>
-                                    <p>Timezone: <span>GMT +3</span></p>
-                                    <p class="txt-sm">Added on: <span>01-01-2021 00:00:00</span></p>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="card-generic">
-                            <a href="/admin/manage-sub-zone.html">
-                                <div class="text">
-                                    <h4>Sub-zone name (ID <span>000</span>)</h4>
-                                    <p>Role/nature: <span>role</span></p>
-                                    <p>Coordinates: <span>0.000, 0.000</span></p>
-                                    <p>Radius: <span>0 km</span></p>
-                                    <p>Timezone: <span>GMT +3</span></p>
-                                    <p class="txt-sm">Added on: <span>01-01-2021 00:00:00</span></p>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="card-generic">
-                            <a href="/admin/manage-sub-zone.html">
-                                <div class="text">
-                                    <h4>Sub-zone name (ID <span>000</span>)</h4>
-                                    <p>Role/nature: <span>role</span></p>
-                                    <p>Coordinates: <span>0.000, 0.000</span></p>
-                                    <p>Radius: <span>0 km</span></p>
-                                    <p>Timezone: <span>GMT +3</span></p>
-                                    <p class="txt-sm">Added on: <span>01-01-2021 00:00:00</span></p>
-                                </div>
-                            </a>
-                        </div>
+                        <template v-for="subZone in subZones">
+                            <div class="card-generic">
+                                <router-link :to="{ name: 'sub-zone.view', params: { zone_id: subZone.zone_id, sub_id: subZone.id } }">
+                                    <div class="text">
+                                        <h4>{{ subZone.name }} (ID <span>{{ subZone.id }}</span>)</h4>
+                                        <p>Role/nature: <span>{{ subZone.nature.category }}</span></p>
+                                        <p>Coordinates: <span>{{ subZone.lat }}, {{ subZone.lng }}</span></p>
+                                        <p>Radius: <span>{{ subZone.radius }} km</span></p>
+                                        <p class="txt-sm">Added on: <span>{{ subZone.timestamp }}</span></p>
+                                    </div>
+                                </router-link>
+                            </div>
+                        </template>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <EditZone ref="childComponentRef" />
+    <EditZone ref="editZoneRef" />
+    <CreateSub ref="createSubRef" />
 </template>
 
 <script setup>
 import { onMounted, ref } from 'vue';
 import zonesMaster from '../../composables/zones';
+import subZonesMaster from '../../composables/subzones';
 import operateModal from '../../composables/modal';
 import EditZone from '../Modals/EditZone.vue'
+import CreateSub from '../Modals/CreateSubZone.vue'
 
-const childComponentRef = ref(null);
+const editZoneRef = ref(null);
+const createSubRef = ref(null)
 const { zone, getZone, route, getCounties, deleteZone } = zonesMaster()
+const { subZones, getSubZones, createSubZone, subZone } = subZonesMaster()
 
-function click() {
-    childComponentRef.value.openModal();
+function click(element) {
+    element.openModal();
 }
 
 onMounted(() => {
     getZone('/api/zones/' + route.params.id)
-    operateModal(document.querySelector('#modal'))
-    getCounties
+    getSubZones('/api/zones/' + route.params.id + '/sub-zones')
+    // operateModal(document.querySelector('#modal'))
+    getCounties()
 })
 </script>
 
@@ -164,5 +111,8 @@ onMounted(() => {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+}
+.card-generic {
+    width: 216px;
 }
 </style>

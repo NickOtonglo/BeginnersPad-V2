@@ -14,4 +14,8 @@ class Zone extends Model
     public function zoneCounty() {
         return $this->belongsTo(ZoneCounty::class, 'county_code', 'code');
     }
+
+    public function subZones() {
+        return $this->hasMany(SubZone::class);
+    }
 }

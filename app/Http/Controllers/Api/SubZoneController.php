@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\SubZoneNatureResource;
 use App\Http\Resources\SubZoneResource;
 use App\Models\SubZone;
+use App\Models\SubZoneNature;
 use Illuminate\Http\Request;
 
 class SubZoneController extends Controller
@@ -64,5 +66,10 @@ class SubZoneController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function getNatures() {
+        $natures = SubZoneNatureResource::collection(SubZoneNature::get());
+        return $natures;
     }
 }
