@@ -6,36 +6,36 @@
         </div>
         <div class="modal-content">
             <div class="category">
-                <form @submit.prevent="createZone(request, zone)" id="formCreateZone">
+                <form @submit.prevent="createSubZone(request, subZone)" id="formCreateZone">
                     <div class="form-group" id="grpName">
-                        <label for="name">Zone name*</label>
-                        <input v-model="zone.name" type="text" name="name">
+                        <label for="name">Sub-zone name*</label>
+                        <input v-model="subZone.name" type="text" name="name">
                         <div v-for="message in validationErrors?.name" class="txt-alert txt-danger">
                             <p>{{ message }}</p>
                         </div>
                     </div>
-                    <div class="form-group" id="grpCounty">
-                        <label for="county">County*</label>
-                        <select v-model="zone.county_code" name="county" id="county">
-                            <option value="" selected>--select county--</option>
-                            <template v-for="county in counties">
-                                <option :value="county.code">{{ county.name }}</option>
+                    <div class="form-group" id="grpRole">
+                        <label for="role">Role/nature of sub-zone*</label>
+                        <select v-model="subZone.nature_id" name="role" id="role">
+                            <option value="" selected>--select role--</option>
+                            <template v-for="nature in natures">
+                                <option :value="nature.id">{{ nature.category }}</option>
                             </template>
                         </select>
-                        <div v-for="message in validationErrors?.county_code" class="txt-alert txt-danger">
+                        <div v-for="message in validationErrors?.nature_id" class="txt-alert txt-danger">
                             <li>{{ message }}</li>
                         </div>
                     </div>
                     <div class="form-group" id="grpLat">
                         <label for="latitude">Latitude*</label>
-                        <input v-model="zone.lat" type="number"  step="any" name="lat">
+                        <input v-model="subZone.lat" type="number"  step="any" name="lat">
                         <div v-for="message in validationErrors?.lat" class="txt-alert txt-danger">
                             <p>{{ message }}</p>
                         </div>
                     </div>
                     <div class="form-group" id="grpLong">
                         <label for="longitude">Longitude*</label>
-                        <input v-model="zone.lng" type="number" step="any" name="lng">
+                        <input v-model="subZone.lng" type="number" step="any" name="lng">
                         <div v-for="message in validationErrors?.lng" class="txt-alert txt-danger">
                             <p>{{ message }}</p>
                         </div>
@@ -45,21 +45,14 @@
                     </div>
                     <div class="form-group" id="grpRadius">
                         <label for="radius">Radius (km)*</label>
-                        <input v-model="zone.radius" type="number" name="radius">
+                        <input v-model="subZone.radius" type="number" step="any" name="radius">
                         <div v-for="message in validationErrors?.radius" class="txt-alert txt-danger">
-                            <p>{{ message }}</p>
-                        </div>
-                    </div>
-                    <div class="form-group" id="grpTimezone">
-                        <label for="timezone">Timezone*</label>
-                        <input v-model="zone.timezone" type="text" name="timezone">
-                        <div v-for="message in validationErrors?.timezone" class="txt-alert txt-danger">
                             <p>{{ message }}</p>
                         </div>
                     </div>
                     <div class="form-group" id="grpDescription">
                         <label for="description">Description</label>
-                        <textarea v-model="zone.description" type="text" name="description" cols="3"></textarea>
+                        <textarea v-model="subZone.description" type="text" name="description" cols="3"></textarea>
                         <div v-for="message in validationErrors?.description" class="txt-alert txt-danger">
                             <p>{{ message }}</p>
                         </div>
@@ -67,7 +60,7 @@
                     <button :disabled="isLoading" class="btn-submit" type="submit">
                         <div v-show="isLoading" class="lds-dual-ring"></div>
                         <span v-if="isLoading">Loading...</span>
-                        <span v-else>Create zone</span>
+                        <span v-else>Create sub-zone</span>
                     </button>
                 </form>
             </div>
@@ -80,13 +73,13 @@
 
 <script setup>
 import operateModal from '../../composables/modal'
-import { onMounted, ref, onBeforeUnmount } from 'vue';
-import zonesMaster from '../../composables/zones';
+import { onMounted, ref } from 'vue';
+import subZonesMaster from '../../composables/subzones';
 
 const modalRef = ref(null)
-const request = ref('/api/zones')
 
-const { zone, createZone, validationErrors, getCounties, counties } = zonesMaster()
+const { subZone, createSubZone, validationErrors, getNatures, natures, route } = subZonesMaster()
+const request = ref(`/api/zones/${route.params.id}/sub-zones`)
 
 function openModal() {
     operateModal(modalRef.value)
@@ -94,7 +87,7 @@ function openModal() {
 
 onMounted(() => {
     openModal()
-    getCounties()
+    getNatures()
 })
 
 defineExpose({

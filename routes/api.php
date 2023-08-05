@@ -50,7 +50,7 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::delete('zones/{zone}', '\App\Http\Controllers\Api\ZonesController@destroy');
     
     Route::get('zones/{zone}/sub-zones', '\App\Http\Controllers\Api\ZonesController@getSubZones');
-    Route::post('zones/{zone}/sub-zones', '\App\Http\Controllers\Api\ZonesController@storeSubZone');
+    Route::post('zones/{zone}/sub-zones', '\App\Http\Controllers\Api\SubZoneController@store');
     Route::get('zones/{zone}/sub-zones/{subZone}', '\App\Http\Controllers\Api\SubZoneController@showSubZone');
     Route::patch('zones/{zone}/sub-zones/{subZone}', '\App\Http\Controllers\Api\SubZoneController@updateSubZone');
     Route::delete('zones/{zone}/sub-zones/{subZone}', '\App\Http\Controllers\Api\SubZoneController@destroySubZone');
