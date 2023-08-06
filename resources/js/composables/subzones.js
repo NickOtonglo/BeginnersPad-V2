@@ -34,6 +34,7 @@ export default function subZonesMaster() {
             },
         },
     })
+    const subZonesCount = ref(0)
     const natures = ref({})
     const isLoading = ref(false)
     const validationErrors = ref('')
@@ -44,7 +45,10 @@ export default function subZonesMaster() {
         isLoading.value = true
 
         axios.get(request)
-            .then(response => subZones.value = response.data.data)
+            .then(response => {
+                subZones.value = response.data.data
+                subZonesCount.value = response.data.meta.total
+            })
             .catch(error => console.log(error))
             .finally(isLoading.value = false)
     }
@@ -175,6 +179,7 @@ export default function subZonesMaster() {
         isLoading,
         getSubZones,
         createSubZone,
+        subZonesCount,
         getSubZone,
         updateSubZone,
         deleteSubZone,

@@ -18,6 +18,7 @@ export default function zonesMaster() {
             code: '',
             name: '',
         },
+        sub_zones: {}
     })
     const countries = ref({})
     const counties = ref({})

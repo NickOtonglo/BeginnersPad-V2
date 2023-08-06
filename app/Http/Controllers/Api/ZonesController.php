@@ -29,7 +29,7 @@ class ZonesController extends Controller
                   ->orWhere('id', 'like', '%'.request('search_global').'%')
                   ->orWhere('county_code', 'like', '%'.request('search_global').'%');
             });
-        })->orderBy('name')->paginate(15);
+        })->withCount('subZones')->orderBy('name')->paginate(15);
         return ZonesResource::collection($zones);
     }
 
@@ -123,7 +123,7 @@ class ZonesController extends Controller
     }
 
     public function getSubZones(Zone $zone) {
-        $subZones = SubZoneResource::collection($zone->subZones);
-        return $subZones;
+        $subZones = $zone->subZones()->paginate(14);
+        return SubZoneResource::collection($subZones);
     }
 }

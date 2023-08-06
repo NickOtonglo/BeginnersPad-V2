@@ -1,6 +1,7 @@
 import { ref } from "vue"
 import getArticles from "./getArticles"
 import zonesMaster from "./zones"
+import subZoneMaster from './subzones'
 
 export default function pagination() {
     const isLoading = ref(false)
@@ -10,7 +11,8 @@ export default function pagination() {
     const search_global = ref('')
     const { getData, articles } = getArticles()
     const { zones, getZones } = zonesMaster()
-    let sourceParam = ''
+    const { subZones, getSubZones, subZonesCount } = subZoneMaster()
+    let sourceParam = '', requestParam = ''
 
     const getPaginationData = (page, source) => {
         if(isLoading.value) {return}
@@ -35,20 +37,50 @@ export default function pagination() {
             })
     }
 
+    const getPaginationDataWithRequest = (page, source, request) => {
+        if(isLoading.value) {return}
+        isLoading.value = true
+        sourceParam = source
+        requestParam = request
+
+        axios.get(`${request}?page=${page}`)
+            .then(response => {
+                total_pages.value = response.data.meta.last_page
+                per_page.value = response.data.meta.per_page
+                current_page.value = response.data.meta.current_page
+            })
+            .catch(error => console.log(error))
+            .finally(() => {
+                isLoading.value = false
+                if (source == 'sub-zones') {
+                    getSubZones(`${request}?page=${page}`)
+                }
+            })
+    }
+
     const onPageChange = (page) => {
         current_page.value = page
-        getPaginationData(page, sourceParam)
+        if (sourceParam == 'sub-zones') {
+            getPaginationDataWithRequest(page, sourceParam, requestParam)    
+        }
+        
+        if (sourceParam == 'articles' || sourceParam == 'zones'){
+            getPaginationData(page, sourceParam)
+        }
     }
 
     return {
         isLoading,
         articles,
         zones,
+        subZones,
         total_pages,
         per_page,
         current_page,
         search_global,
         onPageChange,
-        getPaginationData
+        subZonesCount,
+        getPaginationData,
+        getPaginationDataWithRequest,
     }
 }

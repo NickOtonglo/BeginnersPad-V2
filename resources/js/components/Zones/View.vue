@@ -72,6 +72,16 @@
                             </div>
                         </template>
                     </div>
+                    <template v-if="subZonesCount > 14">
+                        <Pagination :totalPages="total_pages"
+                                    :perPage="per_page"
+                                    :currentPage="current_page"
+                                    @pagechanged="onPageChange"
+                        />
+                    </template>
+                    <template v-if="!subZones.length">
+                        <p style="text-align: center;">-no sub-zones-</p>
+                    </template>
                 </div>
             </div>
         </div>
@@ -84,15 +94,26 @@
 <script setup>
 import { onMounted, ref } from 'vue';
 import zonesMaster from '../../composables/zones';
-import subZonesMaster from '../../composables/subzones';
 import operateModal from '../../composables/modal';
 import EditZone from '../Modals/EditZone.vue'
 import CreateSub from '../Modals/CreateSubZone.vue'
+import Pagination from '../Misc/Pagination.vue'
+import pagination from '../../composables/pagination';
 
 const editZoneRef = ref(null);
 const createSubRef = ref(null)
 const { zone, getZone, route, getCounties, deleteZone } = zonesMaster()
-const { subZones, getSubZones, createSubZone, subZone } = subZonesMaster()
+const subZoneRequest = `/api/zones/${route.params.id}/sub-zones`
+
+const { 
+    total_pages,
+    per_page,
+    current_page,
+    subZones,
+    subZonesCount,
+    onPageChange,
+    getPaginationDataWithRequest
+} = pagination()
 
 function click(element) {
     element.openModal();
@@ -100,7 +121,8 @@ function click(element) {
 
 onMounted(() => {
     getZone('/api/zones/' + route.params.id)
-    getSubZones('/api/zones/' + route.params.id + '/sub-zones')
+    getPaginationDataWithRequest(current_page.value, 'sub-zones', subZoneRequest)
+    // getSubZones('/api/zones/' + route.params.id + '/sub-zones')
     // operateModal(document.querySelector('#modal'))
     getCounties()
 })

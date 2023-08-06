@@ -74,15 +74,12 @@ import pagination from '../../composables/pagination';
 const childComponentRef = ref(null);
 const btnClearSearch = ref(null)
 
-const { getZones, createZone } = zonesMaster()
-
 const { 
     search_global,
     total_pages,
     per_page,
     current_page,
     zones,
-    isLoading,
     onPageChange,
     getPaginationData
 } = pagination()
