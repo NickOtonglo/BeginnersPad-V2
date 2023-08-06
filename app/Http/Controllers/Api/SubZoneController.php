@@ -22,6 +22,12 @@ class SubZoneController extends Controller
         return $subZones;
     }
 
+    
+    public function getZoneSubs(Zone $zone) {
+        $subZones = $zone->subZones()->paginate(14);
+        return SubZoneResource::collection($subZones);
+    }
+
     /**
      * Show the form for creating a new resource.
      */
@@ -55,9 +61,11 @@ class SubZoneController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Zone $zone, SubZone $subZone)
     {
-        //
+        if ($zone->id == $subZone->zone_id) {
+            return new SubZoneResource($subZone);
+        } else return response()->noContent();
     }
 
     /**
@@ -71,9 +79,9 @@ class SubZoneController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Zone $zone, SubZone $subZone, SaveSubZoneRequest $request)
     {
-        //
+        return $request;
     }
 
     /**

@@ -94,7 +94,6 @@
 <script setup>
 import { onMounted, ref } from 'vue';
 import zonesMaster from '../../composables/zones';
-import operateModal from '../../composables/modal';
 import EditZone from '../Modals/EditZone.vue'
 import CreateSub from '../Modals/CreateSubZone.vue'
 import Pagination from '../Misc/Pagination.vue'

@@ -12,23 +12,26 @@
                         <div class="title-grp">
                             <h3>Sub-zone details</h3>
                             <div class="info-actions">
-                                <a href="#">
+                                <a @click="click(editSubZoneRef), console.log(subZone.value)" href="#">
                                     <i class="fas fa-edit"></i>
+                                </a>
+                                <a @click="deleteSubZone(request)" href="#">
+                                    <i class="fas fa-xmark"></i>
                                 </a>
                             </div>
                         </div>
                         <div class="data">
                             <ul>
-                                <li>Sub-zone name (ID <span>000</span>)</li>
-                                <li>County: <span> KE</span></li>
-                                <li>County: <span>county name</span></li>
-                                <li>Zone: <span>zone name (ID 000)</span></li>
-                                <li>Role/nature: <span>role</span></li>
-                                <li>Coordinates: <span>0.000, 0.000</span></li>
-                                <li>Area radius: <span>0 km</span></li>
-                                <li>Timezone: <span>GMT +3</span></li>
-                                <li>Added on: <span>01-01-2021 00:00:00</span></li>
+                                <li>{{ subZone.name }} (ID <span>{{ subZone.id }}</span>)</li>
+                                <li>County: <span>{{ subZone.zone.county.name }}</span></li>
+                                <li>Zone: <span>{{ subZone.zone.name }} (ID {{ subZone.zone.id }})</span></li>
+                                <li>Role/nature: <span>{{ subZone.nature.category }}</span></li>
+                                <li>Coordinates: <span>{{ subZone.lat }}, {{ subZone.lng }}</span></li>
+                                <li>Area radius: <span>{{ subZone.radius }} km</span></li>
+                                <li>Timezone: <span>{{ subZone.zone.timezone }}</span></li>
+                                <li>Added on: <span>{{ subZone.timestamp }}</span></li>
                                 <li>Listings: <span>0</span></li>
+                                <li v-if="subZone.description">Description: <span>{{ subZone.description }}</span></li>
                             </ul>
                         </div>
                     </div>
@@ -274,4 +277,38 @@
             </div>
         </div>
     </section>
+
+    <EditSubZone ref="editSubZoneRef" />
 </template>
+
+<script setup>
+import operateModal from '../../composables/modal';
+import { onMounted, ref } from 'vue';
+import EditSubZone from '../Modals/EditSubZone.vue';
+import subZonesMaster from '../../composables/subzones';
+
+const editSubZoneRef = ref(null)
+const { subZone, getSubZone, route, getNatures, deleteSubZone } = subZonesMaster()
+const request = ref(`/api/zones/${route.params.zone_id}/sub-zones/${route.params.sub_id}`)
+
+function click(element) {
+    element.openModal();
+}
+
+onMounted(() => {
+    getSubZone(request.value)
+    
+    getNatures()
+})
+</script>
+
+<style scoped>
+.title-grp {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.card-generic {
+    width: 216px;
+}
+</style>

@@ -121,9 +121,4 @@ class ZonesController extends Controller
         $counties = ZoneCountiesResource::collection(ZoneCounty::orderBy('code')->get());
         return $counties;
     }
-
-    public function getSubZones(Zone $zone) {
-        $subZones = $zone->subZones()->paginate(14);
-        return SubZoneResource::collection($subZones);
-    }
 }

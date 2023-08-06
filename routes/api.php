@@ -49,10 +49,10 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::patch('zones/{zone}', '\App\Http\Controllers\Api\ZonesController@update');
     Route::delete('zones/{zone}', '\App\Http\Controllers\Api\ZonesController@destroy');
     
-    Route::get('zones/{zone}/sub-zones', '\App\Http\Controllers\Api\ZonesController@getSubZones');
+    Route::get('zones/{zone}/sub-zones', '\App\Http\Controllers\Api\SubZoneController@getZoneSubs');
     Route::post('zones/{zone}/sub-zones', '\App\Http\Controllers\Api\SubZoneController@store');
-    Route::get('zones/{zone}/sub-zones/{subZone}', '\App\Http\Controllers\Api\SubZoneController@showSubZone');
-    Route::patch('zones/{zone}/sub-zones/{subZone}', '\App\Http\Controllers\Api\SubZoneController@updateSubZone');
+    Route::get('zones/{zone}/sub-zones/{subZone}', '\App\Http\Controllers\Api\SubZoneController@show');
+    Route::patch('zones/{zone}/sub-zones/{subZone}', '\App\Http\Controllers\Api\SubZoneController@update');
     Route::delete('zones/{zone}/sub-zones/{subZone}', '\App\Http\Controllers\Api\SubZoneController@destroySubZone');
 
     Route::get('sub-zones', '\App\Http\Controllers\Api\SubZoneController@index');
