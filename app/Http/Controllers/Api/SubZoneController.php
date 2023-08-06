@@ -88,7 +88,10 @@ class SubZoneController extends Controller
         $subZone->description = $request->description;
         $subZone->nature_id = $request->nature_id;
         $subZone->zone_id = $zone->id;
-        $subZone->save();
+
+        if ($zone->id == $subZone->zone_id) {
+            $subZone->save();
+        }
 
         $response = [
             'sub-zone' => $subZone,
@@ -100,9 +103,12 @@ class SubZoneController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Zone $zone, SubZone $subZone)
     {
-        //
+        if ($zone->id == $subZone->zone_id) {
+            $subZone->delete();
+            return response()->noContent();
+        }
     }
 
     public function getNatures() {

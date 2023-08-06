@@ -108,6 +108,7 @@ class ZonesController extends Controller
      */
     public function destroy(Zone $zone)
     {
+        $zone->subZones()->delete();
         $zone->delete();
         return response()->noContent();
     }

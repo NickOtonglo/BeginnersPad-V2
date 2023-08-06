@@ -54,11 +54,13 @@
                 </template>
             </div>
         </div>
-        <Pagination :totalPages="total_pages"
+        <template v-if="zonesCount > 15">
+            <Pagination :totalPages="total_pages"
                         :perPage="per_page"
                         :currentPage="current_page"
                         @pagechanged="onPageChange"
             />
+        </template>
     </section>
 
     <CreateZone ref="childComponentRef" />
@@ -80,6 +82,7 @@ const {
     per_page,
     current_page,
     zones,
+    zonesCount,
     onPageChange,
     getPaginationData
 } = pagination()

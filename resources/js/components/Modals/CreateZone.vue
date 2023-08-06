@@ -45,7 +45,7 @@
                     </div>
                     <div class="form-group" id="grpRadius">
                         <label for="radius">Radius (km)*</label>
-                        <input v-model="zone.radius" type="number" name="radius">
+                        <input v-model="zone.radius" type="number" step="any" name="radius">
                         <div v-for="message in validationErrors?.radius" class="txt-alert txt-danger">
                             <p>{{ message }}</p>
                         </div>

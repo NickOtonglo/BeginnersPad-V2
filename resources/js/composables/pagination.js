@@ -10,7 +10,7 @@ export default function pagination() {
     const current_page = ref(1)
     const search_global = ref('')
     const { getData, articles } = getArticles()
-    const { zones, getZones } = zonesMaster()
+    const { zones, getZones, zonesCount } = zonesMaster()
     const { subZones, getSubZones, subZonesCount } = subZoneMaster()
     let sourceParam = '', requestParam = ''
 
@@ -79,6 +79,7 @@ export default function pagination() {
         current_page,
         search_global,
         onPageChange,
+        zonesCount,
         subZonesCount,
         getPaginationData,
         getPaginationDataWithRequest,

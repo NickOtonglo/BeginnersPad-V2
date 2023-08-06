@@ -154,7 +154,7 @@ export default function subZonesMaster() {
                             icon: 'success',
                             title: 'Sub-zone deleted.',
                             didClose: () => {
-                                router.push({ name: 'zone.view', params: {id: subZone.zone_id } })
+                                router.push({ name: 'zone.view', params: {id: route.params.zone_id } })
                             }
                         })
                     })

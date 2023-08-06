@@ -18,8 +18,8 @@ export default function zonesMaster() {
             code: '',
             name: '',
         },
-        sub_zones: {}
     })
+    const zonesCount = ref(0)
     const countries = ref({})
     const counties = ref({})
     const isLoading = ref(false)
@@ -31,7 +31,10 @@ export default function zonesMaster() {
         isLoading.value = true
 
         axios.get(request)
-            .then(response => zones.value = response.data.data)
+            .then(response => {
+                zones.value = response.data.data
+                zonesCount.value = response.data.meta.total
+            })
             .catch(error => console.log(error))
             .finally(isLoading.value = false)
     }
@@ -174,6 +177,7 @@ export default function zonesMaster() {
         getZones,
         createZone,
         getZone,
+        zonesCount,
         updateZone,
         deleteZone,
         getCounties,
