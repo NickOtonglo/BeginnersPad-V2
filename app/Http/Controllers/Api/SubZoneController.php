@@ -53,7 +53,7 @@ class SubZoneController extends Controller
 
         $response = [
             'sub-zone' => $subZone,
-            'message' => "New zone '".$subZone->name."' created successfully.",
+            'message' => "New sub-zone '".$subZone->name."' created successfully.",
         ];
         return response($response, 201);
     }
@@ -81,7 +81,20 @@ class SubZoneController extends Controller
      */
     public function update(Zone $zone, SubZone $subZone, SaveSubZoneRequest $request)
     {
-        return $request;
+        $subZone->name = $request->name;
+        $subZone->lat = $request->lat;
+        $subZone->lng = $request->lng;
+        $subZone->radius = $request->radius*1000;
+        $subZone->description = $request->description;
+        $subZone->nature_id = $request->nature_id;
+        $subZone->zone_id = $zone->id;
+        $subZone->save();
+
+        $response = [
+            'sub-zone' => $subZone,
+            'message' => "Sub-zone '".$subZone->name."' updated successfully.",
+        ];
+        return response($response, 201);
     }
 
     /**

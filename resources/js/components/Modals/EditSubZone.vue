@@ -78,14 +78,24 @@ import subZonesMaster from '../../composables/subzones';
 
 const modalRef = ref(null)
 
-const { subZone, updateSubZone, validationErrors, getNatures, natures, route } = subZonesMaster()
-const request = ref(`/api/zones/${subZone.value.zone_id}/sub-zones/${route.params.id}`)
+const { 
+    subZone, 
+    updateSubZone, 
+    validationErrors, 
+    getNatures, 
+    natures, 
+    route, 
+    getSubZone 
+} = subZonesMaster()
+
+const request = ref(`/api/zones/${route.params.zone_id}/sub-zones/${route.params.sub_id}`)
 
 function openModal() {
     operateModal(modalRef.value)
 }
 
 onMounted(() => {
+    getSubZone(request.value)
     openModal()
     getNatures()
 })

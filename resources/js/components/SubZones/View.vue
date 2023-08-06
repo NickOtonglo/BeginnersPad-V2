@@ -12,7 +12,7 @@
                         <div class="title-grp">
                             <h3>Sub-zone details</h3>
                             <div class="info-actions">
-                                <a @click="click(editSubZoneRef), console.log(subZone.value)" href="#">
+                                <a @click="click(editSubZoneRef)" href="#">
                                     <i class="fas fa-edit"></i>
                                 </a>
                                 <a @click="deleteSubZone(request)" href="#">
@@ -36,7 +36,7 @@
                         </div>
                     </div>
                     <div class="section-more">
-                        <a href="/admin/manage-zone.html"><i class="fas fa-chevron-left"></i> View zone</a>
+                        <router-link :to="{ name: 'zone.view', params: {id: route.params.zone_id } }"><i class="fas fa-chevron-left"></i> View zone</router-link>
                     </div>
                     <div class="charts">
                         <h3>Relative occupancy chart</h3>
