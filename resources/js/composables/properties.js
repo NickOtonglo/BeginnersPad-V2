@@ -1,82 +1,48 @@
-import axios from "axios";
-import { ref, inject } from "vue";
-import { useRoute, useRouter } from "vue-router";
+import { inject, ref } from "vue"
+import { useRoute, useRouter } from "vue-router"
 
-export default function subZonesMaster() {
+export default function propertiesMaster() {
     const route = useRoute()
     const router = useRouter()
-    const subZones = ref({})
-    const subZonesAll = ref({})
-    const subZone = ref({
-        name: '',
-        lat: null,
-        lng: null,
-        radius: null,
-        description: '',
-        timestamp: '',
-        nature_id: '',
-        zone_id: '',
-        nature: {
-            id: '',
-            category: '',
-            description: '',
-        },
-        zone: {
-            name: '',
-            lat: null,
-            lng: null,
-            radius: null,
-            timezone: '',
-            description: '',
-            county_code: '',
-            county: {
-                code: '',
-                name: '',
-            },
-        },
-    })
-    const subZonesCount = ref(0)
-    const natures = ref({})
     const isLoading = ref(false)
     const validationErrors = ref('')
     const swal = inject('$swal')
+    const properties = ref({})
+    const property = ref({
+        name: '',
+        lat: '',
+        lng: '',
+        status: '',
+        verified: '',
+        description: '',
+        thumbnail: '',
+        timestamp: '',
+        time_ago: '',
+        user_id: '',
+        sub_zone_id: '',
+    })
 
-    const getAllSubZones = () => {
-        if (isLoading.value) return
-        isLoading.value = true
-
-        axios.get('/api/sub-zones')
-            .then(response => {
-                subZonesAll.value = response.data.data
-            })
-            .catch(error => console.log(error))
-            .finally(isLoading.value = false)
-    }
-
-    const getSubZones = (request) => {
+    const getProperties = (request) => {
         if (isLoading.value) return
         isLoading.value = true
 
         axios.get(request)
-            .then(response => {
-                subZones.value = response.data.data
-                subZonesCount.value = response.data.meta.total
-            })
+            .then(response => properties.value = response.data.data)
             .catch(error => console.log(error))
             .finally(isLoading.value = false)
     }
 
-    const getNatures = () => {
+    const getProperty = (request) => {
         if (isLoading.value) return
         isLoading.value = true
 
-        axios.get('/api/zones/sub/roles')
-            .then(response => natures.value = response.data.data)
+        axios.get(request)
+            .then(response => property.value = response.data.data)
             .catch(error => console.log(error))
             .finally(isLoading.value = false)
     }
 
-    const createSubZone = (request, data) => {
+    const createProperty = (request, data) => {
         if (isLoading.value) return
         isLoading.value = true
         validationErrors.value = ''
@@ -85,7 +51,7 @@ export default function subZonesMaster() {
             .then(response => {
                 swal({
                     icon: 'success',
-                    title: 'Sub-zone created.',
+                    title: 'Property created.',
                     didClose: () => {
                         router.go(0)
                     }
@@ -106,18 +72,7 @@ export default function subZonesMaster() {
             .finally(isLoading.value = false)
     }
 
-    const getSubZone = (request) => {
-        if (isLoading.value) return
-        isLoading.value = true
-        validationErrors.value = ''
-
-        axios.get(request)
-            .then(response => subZone.value = response.data.data)
-            .catch(error => console.log(error))
-            .finally(isLoading.value = false)
-    }
-
-    const updateSubZone = (request, data) => {
+    const updateProperty = (request, data) => {
         if (isLoading.value) return
         isLoading.value = true
         validationErrors.value = ''
@@ -126,7 +81,7 @@ export default function subZonesMaster() {
             .then(response => {
                 swal({
                     icon: 'success',
-                    title: 'Sub-zone updated.',
+                    title: 'Property updated.',
                     didClose: () => {
                         router.go(0)
                     }
@@ -147,12 +102,12 @@ export default function subZonesMaster() {
             .finally(isLoading.value = false)
     }
 
-    const deleteSubZone = (request) => {
+    const deleteProperty = (request) => {
         if (isLoading.value) { return }
 
         swal.fire({
             title: 'Are you sure?',
-            text: "This sub-zone, as well as all related property listings, will be erased from the system.",
+            text: "This property listing, as well as all units hosted under it, will be erased from the system.",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: 'rgb(207, 95, 50)',
@@ -167,7 +122,7 @@ export default function subZonesMaster() {
                             icon: 'success',
                             title: 'Sub-zone deleted.',
                             didClose: () => {
-                                router.push({ name: 'zone.view', params: {id: route.params.zone_id } })
+                                router.push({ name: 'properties.view' })
                             }
                         })
                     })
@@ -185,19 +140,14 @@ export default function subZonesMaster() {
     }
 
     return {
-        subZonesAll,
-        subZones,
-        subZone,
         route,
-        natures,
-        isLoading,
-        getSubZones,
-        createSubZone,
-        subZonesCount,
-        getSubZone,
-        updateSubZone,
-        deleteSubZone,
-        getNatures,
         validationErrors,
+        properties,
+        property,
+        getProperties,
+        getProperty,
+        createProperty,
+        updateProperty,
+        deleteProperty,
     }
 }

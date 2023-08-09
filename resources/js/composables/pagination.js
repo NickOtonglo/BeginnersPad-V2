@@ -2,6 +2,7 @@ import { ref } from "vue"
 import getArticles from "./getArticles"
 import zonesMaster from "./zones"
 import subZoneMaster from './subzones'
+import propertiesMaster from "./properties"
 
 export default function pagination() {
     const isLoading = ref(false)
@@ -12,6 +13,7 @@ export default function pagination() {
     const { getData, articles } = getArticles()
     const { zones, getZones, zonesCount } = zonesMaster()
     const { subZones, getSubZones, subZonesCount } = subZoneMaster()
+    const { properties, getProperties } = propertiesMaster()
     let sourceParam = '', requestParam = ''
 
     const getPaginationData = (page, source) => {
@@ -43,7 +45,7 @@ export default function pagination() {
         sourceParam = source
         requestParam = request
 
-        axios.get(`${request}?page=${page}`)
+        axios.get(`${request}?page=${page}&search_global=${search_global.value}`)
             .then(response => {
                 total_pages.value = response.data.meta.last_page
                 per_page.value = response.data.meta.per_page
@@ -55,12 +57,15 @@ export default function pagination() {
                 if (source == 'sub-zones') {
                     getSubZones(`${request}?page=${page}`)
                 }
+                if (source == 'properties') {
+                    getProperties(`${request}?page=${page}&search_global=${search_global.value}`)
+                }
             })
     }
 
     const onPageChange = (page) => {
         current_page.value = page
-        if (sourceParam == 'sub-zones') {
+        if (sourceParam == 'sub-zones' || sourceParam == 'properties') {
             getPaginationDataWithRequest(page, sourceParam, requestParam)    
         }
         
@@ -74,6 +79,7 @@ export default function pagination() {
         articles,
         zones,
         subZones,
+        properties,
         total_pages,
         per_page,
         current_page,

@@ -22,7 +22,7 @@ class ArticlesResource extends JsonResource
             'preview' => substr($this->preview, 0, 650),
             'content' => $this->content,
             'thumbnail' => $this->thumbnail,
-            'timestamp' => $this->created_at->format('jS F Y'),
+            'timestamp' => $this->created_at->format('jS F Y, H:m:s'),
         ];
     }
 }

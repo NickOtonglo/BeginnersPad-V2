@@ -56,4 +56,7 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::delete('zones/{zone}/sub-zones/{subZone}', '\App\Http\Controllers\Api\SubZoneController@destroy');
 
     Route::get('sub-zones', '\App\Http\Controllers\Api\SubZoneController@index');
+
+    Route::get('listings', '\App\Http\Controllers\Api\PropertiesController@index');
+    
 });

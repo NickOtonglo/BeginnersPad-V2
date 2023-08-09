@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
-use App\Models\ZoneCountry;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -28,5 +27,6 @@ class DatabaseSeeder extends Seeder
         // $this->call(ZoneSeeder::class);
         // $this->call(SubZoneNatureSeeder::class);
         // $this->call(SubZoneSeeder::class);
+        // $this->call(PropertySeeder::class);
     }
 }
