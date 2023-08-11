@@ -44,6 +44,10 @@
                     <option value="">Sort by most rooms</option>
                 </select>
             </div>
+            <div id="isLoading">
+                <div v-show="isLoading" class="lds-dual-ring"></div>
+                <span v-if="isLoading">Loading...</span>
+            </div>
             <div class="cards">
                 <template v-for="property in properties">
                     <div class="card">
@@ -62,6 +66,9 @@
                     </div>
                 </template>
             </div>
+            <template v-if="!properties.length">
+                <p style="text-align: center;">-no listings-</p>
+            </template>
         </div>
         <Pagination :totalPages="total_pages"
                     :perPage="per_page"

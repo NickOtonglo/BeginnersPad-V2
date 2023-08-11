@@ -72,6 +72,9 @@
                             </div>
                         </template>
                     </div>
+                    <template v-if="!subZones.length">
+                        <p style="text-align: center;">-no sub-zones-</p>
+                    </template>
                     <template v-if="subZonesCount > 14">
                         <Pagination :totalPages="total_pages"
                                     :perPage="per_page"

@@ -37,6 +37,10 @@
                     <option value="">Sort by popularity</option>
                 </select>
             </div>
+            <div id="isLoading">
+                <div v-show="isLoading" class="lds-dual-ring"></div>
+                <span v-if="isLoading">Loading...</span>
+            </div>
             <div class="cards">
                 <template v-for="zone in zones">
                     <div class="card-generic">
@@ -53,6 +57,9 @@
                     </div>
                 </template>
             </div>
+            <template v-if="!zones.length">
+                <p style="text-align: center;">-no zones-</p>
+            </template>
         </div>
         <template v-if="zonesCount > 15">
             <Pagination :totalPages="total_pages"
@@ -80,6 +87,7 @@ const {
     search_global,
     total_pages,
     per_page,
+    isLoading,
     current_page,
     zones,
     zonesCount,

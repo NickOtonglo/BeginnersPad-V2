@@ -22,7 +22,7 @@ class PropertiesController extends Controller
                   ->orWhere('name', 'like', '%'.request('search_global').'%')
                   ->orWhere('description', 'like', '%'.request('search_global').'%');
             });
-        })->where('status', 'published')->latest()->paginate(10);
+        })->where('status', 'published')->latest()->paginate(25);
         return PropertyResource::collection($properties);
     }
 
