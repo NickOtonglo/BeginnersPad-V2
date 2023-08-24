@@ -20,7 +20,7 @@ class ArticleFactory extends Factory
      */
     public function definition(): array
     {
-        $title = str_replace(array('.',''), '',strtoupper($this->faker->lexify('???')));
+        $title = str_replace(array('.',''), '',strtoupper(fake()->jobTitle()));
         $slug = Str::slug($title, '-');
         $userID = User::pluck('id');
         // Storage::makeDirectory('public/images/articles/'.Str::slug($title, '-'));

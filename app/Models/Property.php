@@ -9,7 +9,19 @@ class Property extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'slug', 'lat', 'lng', 'user_id', 'sub_zone_id', 'status', 'verified', 'description', 'thumbnail'];
+    protected $fillable = [
+        'name',
+        'slug',
+        'lat',
+        'lng',
+        'status',
+        'verified',
+        'description',
+        'stories',
+        'thumbnail',
+        'user_id',
+        'sub_zone_id',
+    ];
 
     public function getRouteKeyName()
     {

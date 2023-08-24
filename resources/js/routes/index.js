@@ -14,6 +14,8 @@ import ZonesIndex from '../components/Zones/Index.vue'
 import ZoneView from '../components/Zones/View.vue'
 import SubZoneView from '../components/SubZones/View.vue'
 import PropertiesIndex from '../components/Properties/Index.vue'
+import PropertiesMine from '../components/Properties/MyProperties.vue'
+import PropertyManage from '../components/Properties/Manage.vue'
 
 function auth(to, from, next) {
     if (JSON.parse(localStorage.getItem('authenticated'))) {
@@ -101,6 +103,16 @@ const routes = [
         path: '/listings',
         name: 'properties.view',
         component: PropertiesIndex,
+    },
+    {
+        path: '/listings/my-listings',
+        name: 'properties.mine',
+        component: PropertiesMine,
+    },
+    {
+        path: '/listings/my-listings/:slug',
+        name: 'property.manage',
+        component: PropertyManage,
     },
 ]
 

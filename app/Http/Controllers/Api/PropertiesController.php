@@ -3,9 +3,12 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\SavePropertyBasicRequest;
 use App\Http\Resources\PropertyResource;
 use App\Models\Property;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class PropertiesController extends Controller
 {
@@ -37,9 +40,29 @@ class PropertiesController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(SavePropertyBasicRequest $request)
     {
-        //
+        $slug = Str::slug($request->name, '-');
+
+        $data = new Property;
+        $data->name = $request->name;
+        $data->sub_zone_id = $request->sub_zone_id;
+        $data->user_id = auth()->user()->id;
+
+        try {
+            $data->slug = $slug;
+            $data->save();
+        } catch (QueryException $e) {
+            $data->slug = $slug.'-'.time();
+            $data->save();
+        }
+
+        $response = [
+            'property' => $data,
+            'message' => "New property '".$data->name."' created successfully.",
+        ];
+
+        return response($response, 201);
     }
 
     /**
@@ -72,5 +95,16 @@ class PropertiesController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function getMyListings() {
+        $properties = Property::when(request('search_global'), function($query) {
+            $query->where(function($q) {
+                $q->where('slug', 'like', '%'.request('search_global').'%')
+                  ->orWhere('name', 'like', '%'.request('search_global').'%')
+                  ->orWhere('description', 'like', '%'.request('search_global').'%');
+            });
+        })->where('user_id', auth()->user()->id)->latest()->paginate(25);
+        return PropertyResource::collection($properties);
     }
 }

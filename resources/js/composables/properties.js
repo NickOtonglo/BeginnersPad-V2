@@ -54,6 +54,7 @@ export default function propertiesMaster() {
                     title: 'Property created.',
                     didClose: () => {
                         router.go(0)
+                        // router.push({ name: 'property.create', params: { name: data.value.name } })
                     }
                 })
             })
@@ -141,6 +142,7 @@ export default function propertiesMaster() {
 
     return {
         route,
+        router,
         validationErrors,
         properties,
         property,

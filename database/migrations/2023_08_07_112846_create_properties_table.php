@@ -15,12 +15,13 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('slug')->unique();
-            $table->decimal('lat', 10, 8);
-            $table->decimal('lng', 11, 8);
-            $table->string('status');
+            $table->decimal('lat', 10, 8)->nullable();
+            $table->decimal('lng', 11, 8)->nullable();
+            $table->string('status')->default('unpublished'); // unpublished,pending,approved,rejected,suspended
             $table->boolean('verified')->unsigned()->default(false);
             $table->longText('description')->nullable();
-            $table->string('thumbnail');
+            $table->integer('stories')->nullable(); //number of floors
+            $table->string('thumbnail')->nullable();
             $table->integer('user_id');
             $table->integer('sub_zone_id');
             $table->timestamps();

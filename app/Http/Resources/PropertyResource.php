@@ -25,6 +25,7 @@ class PropertyResource extends JsonResource
             'status' => $this->status,
             'verified' => $this->verified,
             'description' => $this->description,
+            'stories' => $this->stories,
             'thumbnail' => $this->thumbnail,
             'timestamp' => $this->created_at->format('jS F Y,  H:m:s'),
             'time_ago' => $this->created_at->diffForHumans(),
