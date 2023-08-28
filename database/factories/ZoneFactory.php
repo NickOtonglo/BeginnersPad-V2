@@ -21,10 +21,10 @@ class ZoneFactory extends Factory
         $countyCode = ZoneCounty::pluck('code');
 
         return [
-            'name' => $name,
+            'name' => fake()->colorName(),
             'lat' => 0.0000,
             'lng' => 0.0000,
-            'radius' => 5000,
+            'radius' => rand(5000,8000),
             'timezone' => 'GMT+3',
             'description' => $this->faker->paragraph(2, true),
             'county_code' => $countyCode->random(),

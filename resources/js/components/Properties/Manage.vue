@@ -67,15 +67,16 @@
             <h3>Primary information</h3>
             <div class="listing-info-main">
                 <div class="info-name">
-                    <h1 class="name">Name</h1>
+                    <h1 class="name">{{ property.name }}</h1>
                     <div class="info-actions">
                         <i id="modalTrigger1" class="fas fa-edit"></i>
                     </div>
                 </div>
-                <p class="location">Location, Location, Location</p>
+                <p class="location">{{ property.sub_zone.name }}, {{ property.sub_zone.zone.name }}, {{ property.sub_zone.zone.county.name }}</p>
             </div>
             <div class="listing-info-description">
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur, assumenda nobis neque recusandae dicta distinctio
+                <p v-if="!property.description"><b>Description goes here...</b></p>
+                <p v-else>Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur, assumenda nobis neque recusandae dicta distinctio
                 libero. Culpa nostrum molestiae fugit explicabo nam, hic qui enim aperiam impedit ad, possimus similique ullam
                 perspiciatis amet mollitia dolore inventore recusandae accusantium nulla, tempora dolorem deleniti reprehenderit. Natus
                 similique, sequi hic quas delectus saepe iste dolores, cupiditate quaerat error ex dolore, et ad quis id facere ipsam ab
@@ -101,98 +102,6 @@
                         <div class="listing-units-grp">
                             <div class="card-sm card-unit">
                                 <a href="/lister/manage-listing-unit.html">
-                                    <div class="details">
-                                        <h2>Unit title</h2>
-                                        <div class="specs">
-                                            <span class="spec">1 bed,</span>
-                                            <span class="spec">2 bath,</span>
-                                            <span class="spec">40sq M</span>
-                                        </div>
-                                        <div class="deposit">
-                                            <span class="label">Initial deposit:</span>
-                                            <span class="data">not required</span>
-                                        </div>
-                                        <div class="price">
-                                            <span class="label">KES</span>
-                                            <span class="data">0.00</span>
-                                        </div>
-                                        <p class="timestamp">Added 5 hours ago</p>
-                                    </div>
-                                    <div class="thumb"></div>
-                                </a>  
-                            </div>
-                            
-                            <div class="card-sm card-unit">
-                                <a href="/lister/manage-listing-unit.html">
-                                    <div class="details">
-                                        <h2>Unit title</h2>
-                                        <div class="specs">
-                                            <span class="spec">1 bed,</span>
-                                            <span class="spec">2 bath,</span>
-                                            <span class="spec">40sq M</span>
-                                        </div>
-                                        <div class="deposit">
-                                            <span class="label">Initial deposit:</span>
-                                            <span class="data">not required</span>
-                                        </div>
-                                        <div class="price">
-                                            <span class="label">KES</span>
-                                            <span class="data">0.00</span>
-                                        </div>
-                                        <p class="timestamp">Added 5 hours ago</p>
-                                    </div>
-                                    <div class="thumb"></div>
-                                </a>  
-                            </div>
-                            
-                            <div class="card-sm card-unit">
-                                <a href="/lister/manage-listing-unit.html">
-                                    <div class="details">
-                                        <h2>Unit title</h2>
-                                        <div class="specs">
-                                            <span class="spec">1 bed,</span>
-                                            <span class="spec">2 bath,</span>
-                                            <span class="spec">40sq M</span>
-                                        </div>
-                                        <div class="deposit">
-                                            <span class="label">Initial deposit:</span>
-                                            <span class="data">not required</span>
-                                        </div>
-                                        <div class="price">
-                                            <span class="label">KES</span>
-                                            <span class="data">0.00</span>
-                                        </div>
-                                        <p class="timestamp">Added 5 hours ago</p>
-                                    </div>
-                                    <div class="thumb"></div>
-                                </a>  
-                            </div>
-                            
-                            <div class="card-sm card-unit">
-                                <a href="/lister/manage-listing-unit.html">
-                                    <div class="details">
-                                        <h2>Unit title</h2>
-                                        <div class="specs">
-                                            <span class="spec">1 bed,</span>
-                                            <span class="spec">2 bath,</span>
-                                            <span class="spec">40sq M</span>
-                                        </div>
-                                        <div class="deposit">
-                                            <span class="label">Initial deposit:</span>
-                                            <span class="data">not required</span>
-                                        </div>
-                                        <div class="price">
-                                            <span class="label">KES</span>
-                                            <span class="data">0.00</span>
-                                        </div>
-                                        <p class="timestamp">Added 5 hours ago</p>
-                                    </div>
-                                    <div class="thumb"></div>
-                                </a>  
-                            </div>
-                            
-                            <div class="card-sm card-unit">
-                                <a href="/lister/manage-unit.html">
                                     <div class="details">
                                         <h2>Unit title</h2>
                                         <div class="specs">
@@ -243,7 +152,7 @@
                     </div>
                 </div>
                 <div class="panel">
-                    <div class="listing-features">
+                    <div v-if="property.features.length" class="listing-features">
                         <div class="title-grp">
                             <h3>Communial features</h3>
                             <div class="info-actions">
@@ -251,15 +160,8 @@
                             </div>
                         </div>
                         <div class="features">
-                            <ul>
-                                <li>24-hour security</li>
-                                <li>CCTV cameras</li>
-                                <li>ample parking</li>
-                                <li>auxilliary water supply</li>
-                                <li>stand-by power generator</li>
-                                <li>solar energy</li>
-                                <li>house cleaning services</li>
-                                <li>laundry services</li>
+                            <ul v-for="feature in property.features">
+                                <li>{{ feature.item }}</li>
                             </ul>
                         </div>
                     </div>
@@ -351,7 +253,15 @@
 
 <script setup>
 import { useRoute } from 'vue-router';
+import propertiesMaster from '../../composables/properties';
+import { onBeforeMount, onMounted } from 'vue';
 
-const route = useRoute()
+const { property, route, getProperty } = propertiesMaster()
+
+onBeforeMount(() => {
+    getProperty(`/api/listings/my-listings/${route.params.slug}`)
+})
+onMounted(() => {
+})
 
 </script>

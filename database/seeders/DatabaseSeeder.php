@@ -28,5 +28,6 @@ class DatabaseSeeder extends Seeder
         // $this->call(SubZoneNatureSeeder::class);
         // $this->call(SubZoneSeeder::class);
         // $this->call(PropertySeeder::class);
+        // $this->call(PropertyFeatureSeeder::class);
     }
 }

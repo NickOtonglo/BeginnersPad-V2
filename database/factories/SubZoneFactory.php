@@ -23,10 +23,10 @@ class SubZoneFactory extends Factory
         $zone = Zone::pluck('id');
 
         return [
-            'name' => $name,
+            'name' => fake()->colorName(),
             'lat' => 0.0000,
             'lng' => 0.0000,
-            'radius' => 1000,
+            'radius' => rand(500,1200),
             'description' => $this->faker->paragraph(2, true),
             'nature_id' => $subZoneNature->random(),
             'zone_id' => $zone->random(),

@@ -59,5 +59,6 @@ Route::middleware('auth:sanctum')->group(function() {
 
     Route::get('listings', '\App\Http\Controllers\Api\PropertiesController@index');
     Route::get('listings/my-listings', '\App\Http\Controllers\Api\PropertiesController@getMyListings');
+    Route::get('listings/my-listings/{property}', '\App\Http\Controllers\Api\PropertiesController@showMyListing');
     Route::post('listings', '\App\Http\Controllers\Api\PropertiesController@store');
 });

@@ -80,6 +80,9 @@
                         </div>
                     </template>
                 </div>
+                <template v-if="!properties.length">
+                    <p style="text-align: center;">-no listings-</p>
+                </template>
             </div>
         </div>
         <Pagination :totalPages="total_pages"

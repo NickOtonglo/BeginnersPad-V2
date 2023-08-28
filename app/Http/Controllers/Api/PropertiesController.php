@@ -68,9 +68,9 @@ class PropertiesController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Property $property)
     {
-        //
+        return new PropertyResource($property);
     }
 
     /**
@@ -106,5 +106,11 @@ class PropertiesController extends Controller
             });
         })->where('user_id', auth()->user()->id)->latest()->paginate(25);
         return PropertyResource::collection($properties);
+    }
+
+    public function showMyListing(Property $property) {
+        if ($property->user_id == auth()->user()->id) {
+            return new PropertyResource($property);
+        } else return response()->noContent();
     }
 }

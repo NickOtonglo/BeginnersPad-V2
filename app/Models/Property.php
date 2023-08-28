@@ -31,4 +31,8 @@ class Property extends Model
     public function subZone() {
         return $this->belongsTo(SubZone::class);
     }
+
+    public function propertyFeature() {
+        return $this->hasMany(PropertyFeature::class);
+    }
 }

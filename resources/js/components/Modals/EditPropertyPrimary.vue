@@ -1,7 +1,7 @@
 <template>
     <div class="modal" id="modal" ref="modalRef">
         <div class="modal-header">
-            <h2>Add listing</h2>
+            <h2>Edit primary information</h2>
             <button @click="operateModal(modalRef)" id="modalHeaderClose" class="btn-link btn-close"><i class="fas fa-times"></i></button>
         </div>
         <div class="modal-content">
@@ -11,6 +11,13 @@
                         <label for="name">Property name*</label>
                         <input v-model="property.name" type="text" name="name">
                         <div v-for="message in validationErrors?.name" class="txt-alert txt-danger">
+                            <p>{{ message }}</p>
+                        </div>
+                    </div>
+                    <div class="form-group" id="grpDescription">
+                        <label for="description">Description</label>
+                        <textarea v-model="property.description" type="text" name="description" cols="3"></textarea>
+                        <div v-for="message in validationErrors?.description" class="txt-alert txt-danger">
                             <p>{{ message }}</p>
                         </div>
                     </div>
@@ -41,7 +48,7 @@
                     <button :disabled="isLoading" class="btn-submit" type="submit">
                         <div v-show="isLoading" class="lds-dual-ring"></div>
                         <span v-if="isLoading">Loading...</span>
-                        <span v-else>Create property</span>
+                        <span v-else>Update primary info</span>
                     </button>
                 </form>
             </div>
