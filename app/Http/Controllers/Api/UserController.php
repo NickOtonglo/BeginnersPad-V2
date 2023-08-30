@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UpdateBrandRequest;
 use App\Http\Requests\UpdateUserPasswordRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Http\Resources\UserResource;
@@ -124,6 +125,80 @@ class UserController extends Controller
         $response = [
             'user' => $user,
             'message' => 'Avatar for @'.$user->username.' removed successfully.',
+        ];
+
+        return response($response, 201);
+    }
+
+    public function updateBrandAvatar(Request $request) {
+        $request->validate([
+            'avatar' => 'required',
+        ]);
+
+        $brand = auth()->user()->brand;
+        $user = auth()->user();
+
+        if ($request->hasFile('avatar')) {
+            $filename = time()
+                        .'_'
+                        .$brand->name
+                        .'.'
+                        .$request->avatar->extension();
+            // $request->file('avatar')->storeAs('public/images/brand/avatar/'.$brand->name, $filename);
+            $request->file('avatar')->storeAs('images/brand/avatar/'.$user->username, $filename, ['disk' => 'public_uploads']);
+
+            // Delete old avatar
+            Storage::disk('public_uploads')->delete('images/brand/avatar/'.$user->username.'/'.$brand->avatar);
+            
+            $brand->avatar = $filename;
+            $brand->save();
+
+            $response = [
+                'brand' => $brand,
+                'message' => 'Avatar for brand, '.$brand->name.', updated successfully.',
+            ];
+    
+            return response($response, 201);
+        }
+
+        return response()->json([
+            'message' => 'An error occured. Please try again.',
+            'errors' => [
+                'avatar' => [
+                    'Avatar missing in request',
+                ]
+            ],
+        ], 422);
+    }
+
+    public function removeBrandAvatar() {
+        $brand = auth()->user()->brand;
+        
+        // Storage::disk('public_uploads')->delete('images/brand/avatar/'.$user->username.'/'.$brand->avatar);
+
+        $brand->avatar = null;
+        $brand->save();
+
+        Storage::disk('public_uploads')->deleteDirectory('images/brand/avatar/'.$brand->name);
+
+        $response = [
+            'brand' => $brand,
+            'message' => 'Avatar for brand, '.$brand->name.', updated successfully.',
+        ];
+
+        return response($response, 201);
+    }
+
+    public function updateBrand(UpdateBrandRequest $request) {
+        $brand = auth()->user()->brand;
+        $brand->name = $request->name;
+        $brand->statement = $request->statement;
+        $brand->user_id = auth()->user()->id;
+        $brand->save();
+
+        $response = [
+            'brand' => $brand,
+            'message' => 'Information for brand, '.$brand->name.', updated successfully.',
         ];
 
         return response($response, 201);

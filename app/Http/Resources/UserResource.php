@@ -27,6 +27,7 @@ class UserResource extends JsonResource
             'password' => $this->password,
             'created_at' => $this->created_at->format('j F Y'),
             'updated_at' => $this->updated_at->format('j F Y'),
+            'brand' => new BrandResource($this->brand),
         ];
     }
 }

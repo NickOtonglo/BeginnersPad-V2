@@ -33,6 +33,7 @@ class PropertyResource extends JsonResource
             'timestamp' => $this->created_at->format('jS F Y,  H:m:s'),
             'time_ago' => $this->created_at->diffForHumans(),
             'features' => PropertyFeaturesResource::collection($features),
+            'brand' => new BrandResource($this->user->brand),
             'sub_zone' => new SubZoneResource($this->subZone),
         ];
     }

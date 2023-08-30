@@ -129,12 +129,12 @@
                         <div class="details">
                             <div class="header">
                                 <div>
-                                    <h2 class="name">Lister name</h2>
-                                    <p class="timestamp">Joined on 01 Jan 2021</p>
+                                    <h2 class="name">{{ property.brand.name }}</h2>
+                                    <p class="timestamp">Joined on {{ property.brand.created_at }}</p>
                                 </div>
-                                <img src="/images/logo.png" alt="">
+                                <img src="/images/static/logo.png" alt="">
                             </div>
-                            <p class="listings-count">6 listings posted</p>
+                            <p class="listings-count">{{ property.brand.properties_count }} listings posted</p>
                             <div class="info-rating-grp">
                                 <p class="rating">Rating: 4.0/5</p>
                                 <div class="stars">
@@ -252,7 +252,6 @@
 </template>
 
 <script setup>
-import { useRoute } from 'vue-router';
 import propertiesMaster from '../../composables/properties';
 import { onBeforeMount, onMounted } from 'vue';
 

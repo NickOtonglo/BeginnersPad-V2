@@ -326,7 +326,7 @@ function removeAvatar() {
 }
 
 onMounted(() => {
-    openModal()
+    // openModal()
     getUserAccount()
 })
 

@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
         // $this->call(RoleSeeder::class);
         // \App\Models\User::factory(10)->create();
         // $this->call(ArticleSeeder::class);
+        // $this->call(BrandSeeder::class);
         // $this->call(ZoneCountrySeeder::class);
         // $this->call(ZoneCountySeeder::class);
         // $this->call(ZoneSeeder::class);

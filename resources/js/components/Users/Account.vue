@@ -23,7 +23,7 @@
                     </div>
                 </div>
                 <div class="action-buttons">
-                    <i @click="click" class="fas fa-edit fa-2x"></i>
+                    <i @click="click(updateFormRef)" class="fas fa-edit fa-2x"></i>
                 </div>
             </div>
         </div>
@@ -36,6 +36,7 @@
                     <div class="panel-item bordered">
                         <div class="data">
                             <ul>
+                                <!-- <li>Account type: {{ user.role }}</li> -->
                                 <li>Email address: {{ user.email }}</li>
                                 <li>Last logged in on: 01-01-2021 00:00:00</li>
                                 <li>Registered on: {{ user.created_at }}</li>
@@ -52,6 +53,41 @@
                                 <li>Last review made on: N/A</li>
                                 <li>Times suspended: 0</li>
                             </ul>
+                        </div>
+                    </div>
+                    <div v-if="user.role == 'Lister'" class="panel-item bordered">
+                        <div class="lister-details">
+                            <div class="title-grp">
+                                <h3>Brand profile</h3>
+                                <div class="info-actions">
+                                    <i @click="click(updateBrandRef)" class="fas fa-edit"></i>
+                                </div>
+                            </div>
+                            <div class="details">
+                                <div class="header">
+                                    <div>
+                                        <h2 class="name">{{ user.brand.name }}</h2>
+                                        <p class="timestamp">{{ user.brand.created_at }}</p>
+                                    </div>
+                                    <template v-if="user.brand.avatar">
+                                        <img :src="'/images/brand/avatar/' + user.username + '/' + user.brand.avatar" alt="">
+                                    </template>
+                                    <template v-else>
+                                        <img src="/images/static/avatar.png" alt="">
+                                    </template>
+                                </div>
+                                <p class="listings-count">{{ user.brand.properties_count }} listings posted</p>
+                                <div class="info-rating-grp">
+                                    <p class="rating">Rating: 4.0/5</p>
+                                    <div class="stars">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="far fa-star"></i>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -170,19 +206,20 @@
         </div>
     </section>
 
-    <UpdateForm ref="childComponentRef"/>
+    <UpdateForm ref="updateFormRef" />
+    <UpdateBrand ref="updateBrandRef" />
 </template>
 
 <script setup>
 import UpdateForm from '../Modals/EditUserAccount.vue'
-import { onMounted } from 'vue';
-import { ref } from 'vue';
-import operateModal from '../../composables/modal'
+import UpdateBrand from '../Modals/EditBrand.vue'
+import { onMounted, ref } from 'vue';
 
 const user = ref({})
 
 const props = defineProps(['modal'])
-const childComponentRef = ref(null);
+const updateFormRef = ref(null);
+const updateBrandRef = ref(null);
 
 function getUserAccount() {
     axios.get('api/user/account')
@@ -196,13 +233,12 @@ function getUserAccount() {
         .catch(error => console.log(error))
 }
 
-function click() {
-    childComponentRef.value.openModal();
+function click(element) {
+    element.openModal();
 }
 
 onMounted(() => {
     getUserAccount()
-    operateModal(document.querySelector('#modal'))
 })
 
 </script>

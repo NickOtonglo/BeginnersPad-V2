@@ -30,6 +30,10 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::delete('user/avatar', '\App\Http\Controllers\Api\UserController@removeAvatar');
     Route::post('user/secret', '\App\Http\Controllers\Api\UserController@updatePassword');
 
+    Route::post('brand/avatar', '\App\Http\Controllers\Api\UserController@updateBrandAvatar');
+    Route::delete('brand/avatar', '\App\Http\Controllers\Api\UserController@removeBrandAvatar');
+    Route::post('brand', '\App\Http\Controllers\Api\UserController@updateBrand');
+
     Route::post('articles', '\App\Http\Controllers\Api\ArticlesController@store');
     Route::patch('articles/{article}/edit', '\App\Http\Controllers\Api\ArticlesController@update');
     Route::delete('articles/{article}', '\App\Http\Controllers\Api\ArticlesController@destroy');

@@ -55,4 +55,12 @@ class User extends Authenticatable
     protected function role() {
         return $this->belongsTo(Role::class);
     }
+
+    protected function brand() {
+        return $this->hasOne(Brand::class);
+    }
+
+    public function properties() {
+        return $this->hasMany(Property::class);
+    }
 }

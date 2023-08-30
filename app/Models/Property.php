@@ -35,4 +35,8 @@ class Property extends Model
     public function propertyFeature() {
         return $this->hasMany(PropertyFeature::class);
     }
+
+    public function user() {
+        return $this->belongsTo(User::class);
+    }
 }

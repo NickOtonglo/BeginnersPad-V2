@@ -20,6 +20,8 @@ export default function propertiesMaster() {
         time_ago: '',
         user_id: '',
         sub_zone_id: '',
+        brand: '',
+        user: '',
     })
 
     const getProperties = (request) => {
