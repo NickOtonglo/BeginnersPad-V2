@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateBrandRequest;
 use App\Http\Requests\UpdateUserPasswordRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Http\Resources\UserResource;
+use App\Models\Brand;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
@@ -141,7 +142,7 @@ class UserController extends Controller
         if ($request->hasFile('avatar')) {
             $filename = time()
                         .'_'
-                        .$brand->name
+                        .$user->username
                         .'.'
                         .$request->avatar->extension();
             // $request->file('avatar')->storeAs('public/images/brand/avatar/'.$brand->name, $filename);
@@ -155,7 +156,7 @@ class UserController extends Controller
 
             $response = [
                 'brand' => $brand,
-                'message' => 'Avatar for brand, '.$brand->name.', updated successfully.',
+                'message' => 'Avatar for brand '.$brand->name.' updated successfully.',
             ];
     
             return response($response, 201);
@@ -179,11 +180,11 @@ class UserController extends Controller
         $brand->avatar = null;
         $brand->save();
 
-        Storage::disk('public_uploads')->deleteDirectory('images/brand/avatar/'.$brand->name);
+        Storage::disk('public_uploads')->deleteDirectory('images/brand/avatar/'.auth()->user()->username);
 
         $response = [
             'brand' => $brand,
-            'message' => 'Avatar for brand, '.$brand->name.', updated successfully.',
+            'message' => 'Avatar for brand '.$brand->name.' removed successfully.',
         ];
 
         return response($response, 201);
@@ -198,9 +199,53 @@ class UserController extends Controller
 
         $response = [
             'brand' => $brand,
-            'message' => 'Information for brand, '.$brand->name.', updated successfully.',
+            'message' => 'Information for brand '.$brand->name.' updated successfully.',
         ];
 
         return response($response, 201);
+    }
+
+    public function saveBrand(Request $request) {
+        $request->validate([
+            'avatar' => 'required',
+            'name' => 'required|min:1|max:50',
+            'statement' => 'required|min:1',
+        ]);
+
+        $user = auth()->user();
+
+        if ($request->hasFile('avatar')) {
+            $filename = time()
+                        .'_'
+                        .$user->username
+                        .'.'
+                        .$request->avatar->extension();
+            // $request->file('avatar')->storeAs('public/images/brand/avatar/'.$brand->name, $filename);
+            $request->file('avatar')->storeAs('images/brand/avatar/'.$user->username, $filename, ['disk' => 'public_uploads']);
+
+            $brand = new Brand;
+            $brand->name = $request->name;
+            $brand->statement = $request->statement;
+            $brand->avatar = $filename;
+            $brand->user_id = auth()->user()->id;
+            $brand->save();
+
+            $response = [
+                'brand' => $brand,
+                'message' => "New brand '".$brand->name."' created successfully.",
+            ];
+    
+            return response($response, 201);
+            // return $data;
+        } else {
+            return response()->json([
+                'message' => 'An error occured. Please try again.',
+                'errors' => [
+                    'avatar' => [
+                        'Avatar missing in request',
+                    ]
+                ],
+            ], 422);
+        }
     }
 }

@@ -60,34 +60,51 @@
                             <div class="title-grp">
                                 <h3>Brand profile</h3>
                                 <div class="info-actions">
-                                    <i @click="click(updateBrandRef)" class="fas fa-edit"></i>
+                                    <i v-if="user.brand" @click="click(updateBrandRef)" class="fas fa-edit"></i>
+                                    <i v-if="!user.brand" @click="click(createBrandRef)" class="fas fa-edit"></i>
                                 </div>
                             </div>
-                            <div class="details">
-                                <div class="header">
-                                    <div>
-                                        <h2 class="name">{{ user.brand.name }}</h2>
-                                        <p class="timestamp">{{ user.brand.created_at }}</p>
+                            <template v-if="user.brand">
+                                <div class="details">
+                                    <div class="header">
+                                        <div>
+                                            <h2 class="name">{{ user.brand.name }}</h2>
+                                            <p class="timestamp">{{ user.brand.created_at }}</p>
+                                        </div>
+                                        <template v-if="user.brand.avatar">
+                                            <img :src="'/images/brand/avatar/' + user.username + '/' + user.brand.avatar" alt="">
+                                        </template>
+                                        <template v-else>
+                                            <img src="/images/static/avatar.png" alt="">
+                                        </template>
                                     </div>
-                                    <template v-if="user.brand.avatar">
-                                        <img :src="'/images/brand/avatar/' + user.username + '/' + user.brand.avatar" alt="">
-                                    </template>
-                                    <template v-else>
+                                    <p class="listings-count">{{ user.brand.properties_count }} listings posted</p>
+                                    <div class="info-rating-grp">
+                                        <p class="rating">Rating: 4.0/5</p>
+                                        <div class="stars">
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="far fa-star"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </template>
+                            <template v-else>
+                                <div class="details">
+                                    <div class="header">
+                                        <div>
+                                            <h2 class="name">-brand name-</h2>
+                                        </div>
                                         <img src="/images/static/avatar.png" alt="">
-                                    </template>
-                                </div>
-                                <p class="listings-count">{{ user.brand.properties_count }} listings posted</p>
-                                <div class="info-rating-grp">
-                                    <p class="rating">Rating: 4.0/5</p>
-                                    <div class="stars">
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="far fa-star"></i>
+                                    </div>
+                                    <p class="listings-count">no listings posted</p>
+                                    <div class="info-rating-grp">
+                                        <p class="rating">Rating: -no rating-</p>
                                     </div>
                                 </div>
-                            </div>
+                            </template>
                         </div>
                     </div>
                 </div>
@@ -208,11 +225,13 @@
 
     <UpdateForm ref="updateFormRef" />
     <UpdateBrand ref="updateBrandRef" />
+    <CreateBrand ref="createBrandRef" />
 </template>
 
 <script setup>
 import UpdateForm from '../Modals/EditUserAccount.vue'
 import UpdateBrand from '../Modals/EditBrand.vue'
+import CreateBrand from '../Modals/CreateBrand.vue'
 import { onMounted, ref } from 'vue';
 
 const user = ref({})
@@ -220,6 +239,7 @@ const user = ref({})
 const props = defineProps(['modal'])
 const updateFormRef = ref(null);
 const updateBrandRef = ref(null);
+const createBrandRef = ref(null)
 
 function getUserAccount() {
     axios.get('api/user/account')

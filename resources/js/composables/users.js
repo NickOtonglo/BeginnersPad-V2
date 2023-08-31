@@ -19,7 +19,7 @@ export default function userMaster() {
             .catch(error => console.log(error))
     }
 
-    const submitAvatar = (formData, request) => {
+    const updateAvatar = (formData, request) => {
         if (isLoading.value) return
     
         isLoading.value = true
@@ -97,13 +97,13 @@ export default function userMaster() {
         })
     }
 
-    const submitForm = (formData, request) => {
+    const updateForm = (formData, request) => {
         if (isLoading.value) return
     
         isLoading.value = true
         validationErrors.value = {}
     
-        axios.post(request, formData)
+        axios.patch(request, formData)
             .then(response => {
                 swal({
                     icon: 'success',
@@ -117,7 +117,45 @@ export default function userMaster() {
                 if (error.response?.data) {
                     validationErrors.value = error.response.data.errors
                 }
-                console.log(error.response.data.errors.name)
+            })
+            .finally(() => isLoading.value = false)
+    }
+
+    const saveBrand = (formData, request) => {
+        if (isLoading.value) return
+    
+        isLoading.value = true
+        validationErrors.value = {}
+
+        let serialisedPost = new FormData()
+        for (let item in formData) {
+            if(formData.hasOwnProperty(item)) {
+                serialisedPost.append(item, formData[item])
+            }
+        }
+        serialisedPost.append('method', '_POST')
+    
+        axios.post(request, serialisedPost)
+            .then(response => {
+                swal({
+                    icon: 'success',
+                    title: 'Brand created',
+                    didClose: () => {
+                        router.go(0)
+                    }
+                })
+            })
+            .catch(error => {
+                if (error.response?.data) {
+                    validationErrors.value = error.response.data.errors
+                }
+                // if (error.response?.data.errors) {
+                //     swal({
+                //         icon: 'error',
+                //         title: 'Error',
+                //         text: error.response.data.message,
+                //     })
+                // }
             })
             .finally(() => isLoading.value = false)
     }
@@ -128,8 +166,9 @@ export default function userMaster() {
         user,
         validationErrors,
         getUserAccount,
-        submitAvatar,
+        updateAvatar,
         removeAvatar,
-        submitForm,
+        updateForm,
+        saveBrand,
     }
 }

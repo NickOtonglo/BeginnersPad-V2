@@ -32,7 +32,8 @@ Route::middleware('auth:sanctum')->group(function() {
 
     Route::post('brand/avatar', '\App\Http\Controllers\Api\UserController@updateBrandAvatar');
     Route::delete('brand/avatar', '\App\Http\Controllers\Api\UserController@removeBrandAvatar');
-    Route::post('brand', '\App\Http\Controllers\Api\UserController@updateBrand');
+    Route::patch('brand', '\App\Http\Controllers\Api\UserController@updateBrand');
+    Route::post('brand', '\App\Http\Controllers\Api\UserController@saveBrand');
 
     Route::post('articles', '\App\Http\Controllers\Api\ArticlesController@store');
     Route::patch('articles/{article}/edit', '\App\Http\Controllers\Api\ArticlesController@update');

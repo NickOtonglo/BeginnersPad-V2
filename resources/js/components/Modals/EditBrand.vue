@@ -6,7 +6,7 @@
         </div>
         <div class="modal-content">
             <div class="category">
-                <form @submit.prevent="submitAvatar(user.brand, formAvatarRequest)">
+                <form @submit.prevent="updateAvatar(user.brand, formAvatarRequest)">
                     <div class="img-grp rounded">
                         <input @change="setAvatar" type="file" name="avatar" ref="avatar">
                         <template v-if="user.brand">
@@ -24,8 +24,8 @@
                                     ref="avatarHolder" 
                                     name="avatarHolder">
                             </template>
+                            <button v-if="user" class="btn-link btn-close" type="button" @click="removeAvatar(formAvatarRequest)"><i class="fas fa-times"></i></button>
                         </template>
-                        <button v-if="user" class="btn-link btn-close" type="button" @click="removeAvatar(formAvatarRequest)"><i class="fas fa-times"></i></button>
                     </div>
                     <p v-show="isLoading" style="text-align: center;"><div v-show="isLoading" class="lds-dual-ring"></div> Loading...</p>
                     <div v-for="message in validationErrors?.avatar" class="txt-alert txt-danger">
@@ -40,7 +40,7 @@
             </div>
             <div class="category">
                 <h3>Brand details</h3>
-                <form @submit.prevent="submitForm(user.brand, formBrandRequest)">
+                <form @submit.prevent="updateForm(user.brand, formBrandRequest)">
                     <template v-if="user.brand">
                         <div class="form-group">
                             <label for="username">Brand/company name</label>
@@ -77,7 +77,7 @@ import operateModal from '../../composables/modal'
 import userMaster from '../../composables/users';
 import { onBeforeMount } from 'vue';
 
-const { user, getUserAccount, submitAvatar, removeAvatar, submitForm, validationErrors } = userMaster()
+const { user, getUserAccount, updateAvatar, removeAvatar, updateForm, validationErrors } = userMaster()
 const modalRef = ref(null)
 const avatar = ref(null)
 const avatarHolder = ref(null)
