@@ -89,7 +89,7 @@ class PropertiesController extends Controller
     {
         $property->name = $request['name'];
         $property->description = $request['description'];
-        $property->sub_zone_id = $request['sub_zone']['id'];
+        $property->sub_zone_id = $request['sub_zone_id'];
         $property->lat = $request['lat'];
         $property->lng = $request['lng'];
         $property->stories = $request['stories'];

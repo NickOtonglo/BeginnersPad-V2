@@ -30,7 +30,7 @@ class SavePropertyBasicRequest extends FormRequest
     public function attributes(): array
     {
         return [
-            'sub_zone_id' => 'sub_zone',
+            'sub_zone_id' => 'sub-zone',
         ];
     }
 }

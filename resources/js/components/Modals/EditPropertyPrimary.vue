@@ -35,7 +35,7 @@
                     </div>
                     <div class="form-group" id="grpSubZone">
                         <label for="sub_zone_id">Sub-zone*</label>
-                        <select v-if="property.sub_zone" v-model="property.sub_zone.id" name="sub_zone_id" id="sub_zone_id">
+                        <select v-if="property.sub_zone" v-model="property.sub_zone_id" name="sub_zone_id" id="sub_zone_id">
                             <option value="" disabled selected>--select sub-zone--</option>
                             <template v-for="subZone in subZones">
                                 <option :value="subZone.id" >{{ subZone.name }}</option>
@@ -44,6 +44,9 @@
                         <div v-for="message in validationErrors?.sub_zone_id" class="txt-alert txt-danger">
                             <li>{{ message }}</li>
                         </div>
+                    </div>
+                    <div class="form-group" id="zoneMap" style="height: 300px;margin: 15px 0;">
+                        <div id="map2" style="height: 100%;"></div>
                     </div>
                     <div class="form-group" id="grpLat">
                         <label for="latitude">Latitude*</label>
@@ -141,6 +144,8 @@ function getSubZones() {
     axios.get(`/api/zones/${selectedValue}/sub-zones`)
         .then(response => {
             subZones.value = response.data.data
+            property.value.sub_zone_id = ''
+            // property.value.sub_zone.id = ''
         })
         .catch(error => console.log(error))
         .finally(isLoading.value = false)
