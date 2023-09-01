@@ -2,12 +2,12 @@
     <!-- Navbar -->
     <nav>
         <h1><router-link :to="{ name: 'app.home' }" href="/">Beginners Pad</router-link></h1>
-        <i id="navToggle" class="fas fa-bars fa-2x toggle"></i>
+        <i @click="toggleHiddenNav" id="navToggle" class="fas fa-bars fa-2x toggle"></i>
         <template v-if="userAuth.isAuthenticated.value">
             <NavbarAuth />
         </template>
         <template v-else>
-            <NavbarGuest />
+            <NavbarGuest ref="navGuestRef" />
         </template>
     </nav>
 
@@ -56,6 +56,7 @@ const user = ref({
     role: '',
 })
 const isUserFetched = ref(false)
+const navGuestRef = ref(null)
 
 function getUserData() {
     if (userAuth.isAuthenticated.value) {
@@ -63,6 +64,14 @@ function getUserData() {
             .then(response => user.value = response.data)
             .catch(error => console.log(error))
             .finally(isUserFetched.value = true)
+    }
+}
+
+function toggleHiddenNav () {
+    if(userAuth.isAuthenticated.value) {
+        console.log('open nav drawer')
+    } else {
+        console.log('unhide menu')
     }
 }
 

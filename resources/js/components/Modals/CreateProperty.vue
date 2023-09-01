@@ -17,9 +17,9 @@
                     <div class="form-group" id="grpZone">
                         <label for="zone">Zone*</label>
                         <select v-model="zone.name" @change="getSubZones(zone.name), console.log(zone.name)" name="zone" id="zone">
-                            <option value="" selected>--select zone--</option>
+                            <option value="" disabled selected>--select zone--</option>
                             <template v-for="zone in zones">
-                                <option :value="zone.id">{{ zone.name }}</option>
+                                <option :value="zone.id">{{ zone.name }} ({{ zone.county.name }})</option>
                             </template>
                         </select>
                         <div v-for="message in validationErrors?.zone" class="txt-alert txt-danger">
@@ -29,7 +29,7 @@
                     <div class="form-group" id="grpSubZone">
                         <label for="sub_zone_id">Sub-zone*</label>
                         <select v-model="property.sub_zone_id" name="sub_zone_id" id="sub_zone_id">
-                            <option value="" selected>--select sub-zone--</option>
+                            <option value="" disabled selected>--select sub-zone--</option>
                             <template v-for="subZone in subZones">
                                 <option :value="subZone.id">{{ subZone.name }}</option>
                             </template>

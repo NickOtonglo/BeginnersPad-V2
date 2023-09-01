@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SavePropertyBasicRequest;
+use App\Http\Requests\UpdatePropertyRequest;
 use App\Http\Resources\PropertyResource;
 use App\Models\Property;
 use Illuminate\Database\QueryException;
@@ -84,9 +85,21 @@ class PropertiesController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdatePropertyRequest $request, Property $property)
     {
-        //
+        $property->name = $request['name'];
+        $property->description = $request['description'];
+        $property->sub_zone_id = $request['sub_zone']['id'];
+        $property->lat = $request['lat'];
+        $property->lng = $request['lng'];
+        $property->stories = $request['stories'];
+        $property->save();
+
+        $response = [
+            'property' => $property,
+            'message' => "Property '".$property->name."' updated successfully.",
+        ];
+        return response($response, 201);
     }
 
     /**

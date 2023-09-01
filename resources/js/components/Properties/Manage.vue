@@ -69,18 +69,14 @@
                 <div class="info-name">
                     <h1 class="name">{{ property.name }}</h1>
                     <div class="info-actions">
-                        <i id="modalTrigger1" class="fas fa-edit"></i>
+                        <i @click="click(editPrimaryRef)" class="fas fa-edit"></i>
                     </div>
                 </div>
-                <p class="location">{{ property.sub_zone.name }}, {{ property.sub_zone.zone.name }}, {{ property.sub_zone.zone.county.name }}</p>
+                <p v-if="property.sub_zone" class="location">{{ property.sub_zone.name }}, {{ property.sub_zone.zone.name }}, {{ property.sub_zone.zone.county.name }}</p>
             </div>
             <div class="listing-info-description">
                 <p v-if="!property.description"><b>Description goes here...</b></p>
-                <p v-else>Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur, assumenda nobis neque recusandae dicta distinctio
-                libero. Culpa nostrum molestiae fugit explicabo nam, hic qui enim aperiam impedit ad, possimus similique ullam
-                perspiciatis amet mollitia dolore inventore recusandae accusantium nulla, tempora dolorem deleniti reprehenderit. Natus
-                similique, sequi hic quas delectus saepe iste dolores, cupiditate quaerat error ex dolore, et ad quis id facere ipsam ab
-                libero voluptatem enim nemo. Dicta, nam?</p>
+                <p v-else>{{ property.description }}</p>
             </div>
         </div>
     </section>
@@ -96,7 +92,7 @@
                                 <!-- <a href="/lister/manage-listing-unit.html">
                                     <i class="fas fa-plus"></i>
                                 </a> -->
-                                <i id="modalTrigger" class="fas fa-plus"></i>
+                                <i @click="click(createUnitRef)" class="fas fa-plus"></i>
                             </div>
                         </div>
                         <div class="listing-units-grp">
@@ -132,7 +128,12 @@
                                     <h2 class="name">{{ property.brand.name }}</h2>
                                     <p class="timestamp">Joined on {{ property.brand.created_at }}</p>
                                 </div>
-                                <img src="/images/static/logo.png" alt="">
+                                <template v-if="property.brand.avatar">
+                                    <img :src="'/images/brand/avatar/' + property.brand.username + '/' + property.brand.avatar" alt="">
+                                </template>
+                                <template v-else>
+                                    <img src="/images/static/avatar.png" alt="">
+                                </template>
                             </div>
                             <p class="listings-count">{{ property.brand.properties_count }} listings posted</p>
                             <div class="info-rating-grp">
@@ -146,17 +147,17 @@
                                 </div>
                             </div>
                             <div class="section-more">
-                                <a href="#">View profile <i class="fas fa-chevron-right"></i></a>
+                                <router-link :to="{ name: 'users.account' }" href="/manage-account">Manage brand <i class="fas fa-chevron-right"></i></router-link>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="panel">
-                    <div v-if="property.features.length" class="listing-features">
+                    <div v-if="property.features && property.features.length" class="listing-features">
                         <div class="title-grp">
                             <h3>Communial features</h3>
                             <div class="info-actions">
-                                <i id="modalTrigger2" class="fas fa-edit"></i>
+                                <i @click="click(editFeaturesRef)" class="fas fa-edit"></i>
                             </div>
                         </div>
                         <div class="features">
@@ -183,83 +184,31 @@
         </div>
     </section>
 
-    <div class="modal" id="modal">
-        <div class="modal-header">
-            <h2>Add unit</h2>
-            <button id="modalHeaderClose" class="btn-link btn-close"><i class="fas fa-times"></i></button>
-        </div>
-        <div class="modal-content">
-            <div class="category">
-                <form id="formCreateUnit">
-                    <div class="form-group" id="grpName2">
-                        <label for="unitName">Unit name*</label>
-                        <input type="text" name="unitName" id="unitName">
-                    </div>
-                    <input id="btnCreateUnit" class="btn btn-submit" type="button" value="Create" onclick="initUnit();">
-                </form>
-            </div>
-        </div>
-        <div class="modal-footer">
-            <button id="modalFooterClose" class="btn btn-link">Close</button>
-        </div>
-    </div>
-
-    <div class="modal" id="modal1">
-        <div class="modal-header">
-            <h2>Edit listing info</h2>
-            <button id="modalHeaderClose1" class="btn-link btn-close"><i class="fas fa-times"></i></button>
-        </div>
-        <div class="modal-content">
-            <div class="category">
-                <form id="formUpdateListing">
-                    <div class="form-group" id="grpName">
-                        <label for="name">Listing name*</label>
-                        <input type="text" name="name" id="name">
-                    </div>
-                    <div class="form-group" id="grpDescription">
-                        <label for="description">Description*</label>
-                        <textarea name="description" id="description" cols="30" rows="10"></textarea>
-                    </div>
-                    <input class="btn btn-submit" type="button" value="Update" onclick="initListing();">
-                </form>
-            </div>
-        </div>
-        <div class="modal-footer">
-            <button id="modalFooterClose1" class="btn btn-link">Close</button>
-        </div>
-    </div>
-
-    <div class="modal" id="modal2">
-        <div class="modal-header">
-            <h2>Communial features</h2>
-            <button id="modalHeaderClose2" class="btn-link btn-close"><i class="fas fa-times"></i></button>
-        </div>
-        <div class="modal-content">
-            <div class="category">
-                <form id="formUpdateListingFeatures">
-                    <div class="form-group" id="grpFeatures">
-                        <label for="features">Features (seperate each item with a semicolon)</label>
-                        <textarea name="features" id="features" cols="30" rows="10"></textarea>
-                    </div>
-                    <input class="btn btn-submit" type="button" value="Update" onclick="initFeatures();">
-                </form>
-            </div>
-        </div>
-        <div class="modal-footer">
-            <button id="modalFooterClose2" class="btn btn-link">Close</button>
-        </div>
-    </div>
+    <CreateUnit ref="createUnitRef" />
+    <EditPropertyPrimary ref="editPrimaryRef"/>
+    <EditPropertyFeatures ref="editFeaturesRef"/>
 </template>
 
 <script setup>
 import propertiesMaster from '../../composables/properties';
-import { onBeforeMount, onMounted } from 'vue';
+import { onBeforeMount, onMounted, ref } from 'vue';
+import CreateUnit from '../Modals/CreateUnit.vue';
+import EditPropertyFeatures from '../Modals/EditPropertyFeatures.vue';
+import EditPropertyPrimary from '../Modals/EditPropertyPrimary.vue'
 
 const { property, route, getProperty } = propertiesMaster()
+const createUnitRef = ref(null)
+const editPrimaryRef = ref(null)
+const editFeaturesRef = ref(null)
 
 onBeforeMount(() => {
     getProperty(`/api/listings/my-listings/${route.params.slug}`)
 })
+
+function click(element) {
+    element.openModal();
+}
+
 onMounted(() => {
 })
 

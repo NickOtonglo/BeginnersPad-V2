@@ -1,7 +1,7 @@
 <template>
     <div class="modal" id="modal" ref="modalRef">
         <div class="modal-header">
-            <h2>Communial features</h2>
+            <h2>Add unit</h2>
             <button @click="operateModal(modalRef)" id="modalHeaderClose" class="btn-link btn-close"><i class="fas fa-times"></i></button>
         </div>
         <div class="modal-content">
@@ -17,7 +17,7 @@
                     <button :disabled="isLoading" class="btn-submit" type="submit">
                         <div v-show="isLoading" class="lds-dual-ring"></div>
                         <span v-if="isLoading">Loading...</span>
-                        <span v-else>Update features</span>
+                        <span v-else>Create unit</span>
                     </button>
                 </form>
             </div>

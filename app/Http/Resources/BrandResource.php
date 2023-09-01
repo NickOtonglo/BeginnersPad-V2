@@ -26,7 +26,7 @@ class BrandResource extends JsonResource
             'avatar' => $this->avatar,
             'created_at' => $this->created_at->format('j F Y'),
             'properties_count' => count($properties),
-            // 'username' => $user->username,
+            'username' => $user->username,
         ];
     }
 }
