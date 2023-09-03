@@ -7,6 +7,7 @@ use App\Http\Requests\SavePropertyBasicRequest;
 use App\Http\Requests\UpdatePropertyRequest;
 use App\Http\Resources\PropertyResource;
 use App\Models\Property;
+use App\Models\PropertyFeature;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -125,5 +126,30 @@ class PropertiesController extends Controller
         if ($property->user_id == auth()->user()->id) {
             return new PropertyResource($property);
         } else return response()->noContent();
+    }
+
+    public function storeFeatures(Property $property, Request $request) {
+        $request->validate([
+            'item' => 'required',
+        ]);
+
+        $featuresRequest = explode(PHP_EOL, $request->item);
+        foreach ($featuresRequest as $item) {
+            $feature = new PropertyFeature;
+            $feature->item = trim($item);
+            $feature->property_id = $property->id;
+            $feature->save();
+        }
+
+        $response = [
+            'property features' => $featuresRequest,
+            'message' => "Property '".$property->name."' updated with new features successfully.",
+        ];
+        return response($response, 201);
+    }
+
+    public function destroyFeature(Property $property, PropertyFeature $feature) {
+        $feature->delete();
+        return response()->noContent();
     }
 }

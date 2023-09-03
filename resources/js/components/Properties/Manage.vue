@@ -162,7 +162,7 @@
                         </div>
                         <div class="features">
                             <ul v-for="feature in property.features">
-                                <li>{{ feature.item }}</li>
+                                <li><span><i @click="removeFeature(`/api/listings/${route.params.slug}/features/${feature.id}`)" id="feature-delete" class="fas fa-times"></i> {{ feature.item }}</span></li>
                             </ul>
                         </div>
                     </div>
@@ -196,10 +196,11 @@ import CreateUnit from '../Modals/CreateUnit.vue';
 import EditPropertyFeatures from '../Modals/EditPropertyFeatures.vue';
 import EditPropertyPrimary from '../Modals/EditPropertyPrimary.vue'
 
-const { property, route, getProperty } = propertiesMaster()
+const { property, route, getProperty, removeFeature } = propertiesMaster()
 const createUnitRef = ref(null)
 const editPrimaryRef = ref(null)
 const editFeaturesRef = ref(null)
+const formDeleteFeatureRef = ref(null)
 
 onBeforeMount(() => {
     getProperty(`/api/listings/my-listings/${route.params.slug}`)
@@ -213,3 +214,29 @@ onMounted(() => {
 })
 
 </script>
+
+<style scoped>
+.features li {
+    margin: 6px 0;
+    list-style-position: inside;
+}
+.features span:hover {
+    border: 2px solid var(--color-font);
+    padding: 2px 4px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+#feature-delete {
+    display: none;
+}
+#feature-delete:hover {
+    color: var(--color-danger);
+}
+.features span:hover #feature-delete {
+    display: inline-block;
+}
+.features form {
+    padding: 0;
+    margin: 0;
+}
+</style>

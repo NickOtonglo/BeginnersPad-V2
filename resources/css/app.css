@@ -698,7 +698,7 @@ nav .nav-menu .badge li.selected a {
     border: 1px solid #666;
     margin: 15px;
     padding: 10px;
-    max-height: 400px;
+    /* max-height: 400px; */
 }
 
 .listing-nearby-places .place:hover {
@@ -868,7 +868,7 @@ nav .nav-menu .badge li.selected a {
     border: 1px solid #666;
     margin: 15px;
     padding: 10px;
-    max-height: 400px;
+    /* max-height: 400px; */
 }
 
 /* see "utilities.css" for buttons */
