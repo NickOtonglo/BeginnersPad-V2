@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use App\Models\PropertyFeature;
+use App\Models\PropertyFile;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -16,6 +17,7 @@ class PropertyResource extends JsonResource
     public function toArray(Request $request): array
     {
         $features = PropertyFeature::where('property_id', $this->id)->get();
+        $files = PropertyFile::where('property_id', $this->id)->get();
 
         return [
             'id' => $this->id,
@@ -33,6 +35,7 @@ class PropertyResource extends JsonResource
             'timestamp' => $this->created_at->format('jS F Y,  H:m:s'),
             'time_ago' => $this->created_at->diffForHumans(),
             'features' => PropertyFeaturesResource::collection($features),
+            'files' => PropertyFilesResource::collection($files),
             'brand' => new BrandResource($this->user->brand),
             'sub_zone' => new SubZoneResource($this->subZone),
         ];

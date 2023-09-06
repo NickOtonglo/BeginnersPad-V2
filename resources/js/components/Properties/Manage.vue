@@ -4,61 +4,48 @@
             <div class="title-grp">
                 <h3>Images</h3>
                 <div class="info-actions">
-                    <i id="btnImgFaux" class="fas fa-plus"></i>
-                    <form action="">
-                        <input class="file-path-wrapper" accept="image/*" name="btn_submit" id="btnImgReal" type="file" style="display: none;"/>
+                    <i @click="triggerFileInput" class="fas fa-plus"></i>
+                    <form @submit.prevent="uploadFiles(formFileRequest, fileInputRef)">
+                        <input @change="setFiles" 
+                                ref="fileInputRef" 
+                                name="files"
+                                accept="image/*" 
+                                type="file" 
+                                :multiple="true" 
+                                :hidden="true" />
+                        <button :disabled="isLoading" class="btn-submit" type="submit" :hidden="true" ref="formFilesSubmit">
+                            <div v-show="isLoading" class="lds-dual-ring"></div>
+                            <span v-if="isLoading">Loading...</span>
+                            <span v-else>Upload</span>
+                        </button>
                     </form>
                 </div>
             </div>
-            <div class="image-grp">
-                <div class="image">
-                    <img src="/images/thumb_default.jpg" alt="">
-                    <button class="btn-link btn-close"><i class="fas fa-times"></i></button>
+            <template v-if="property.files">
+                <div class="image-grp">
+                    <div class="image" v-for="file in property.files">
+                        <img :src="'/images/listings/' + property.slug + '/' + file.name" height="200" alt="">
+                        <button class="btn-link btn-close"><i class="fas fa-times"></i></button>
+                    </div>
                 </div>
-                <div class="image">
-                    <img src="/images/thumb_default.jpg" alt="">
-                    <button class="btn-link btn-close"><i class="fas fa-times"></i></button>
-                </div>
-                <div class="image">
-                    <img src="/images/thumb_default.jpg" alt="">
-                    <button class="btn-link btn-close"><i class="fas fa-times"></i></button>
-                </div>
-                <div class="image">
-                    <img src="/images/thumb_default.jpg" alt="">
-                    <button class="btn-link btn-close"><i class="fas fa-times"></i></button>
-                </div>
-                <div class="image">
-                    <img src="/images/thumb_default.jpg" alt="">
-                    <button class="btn-link btn-close"><i class="fas fa-times"></i></button>
-                </div>
-                <div class="image">
-                    <img src="/images/thumb_default.jpg" alt="">
-                    <button class="btn-link btn-close"><i class="fas fa-times"></i></button>
-                </div>
-                <div class="image">
-                    <img src="/images/thumb_default.jpg" alt="">
-                    <button class="btn-link btn-close"><i class="fas fa-times"></i></button>
-                </div>
-                <div class="image">
-                    <img src="/images/thumb_default.jpg" alt="">
-                    <button class="btn-link btn-close"><i class="fas fa-times"></i></button>
-                </div>
-            </div>
+            </template>
             <div class="title-grp">
                 <h3>Thumbnail</h3>
                 <div class="info-actions">
-                    <i id="btnThumbFaux" class="fas fa-plus"></i>
+                    <i @click="addThumbRef.click" class="fas fa-plus"></i>
                     <form action="">
-                        <input class="file-path-wrapper" accept="image/*" name="btn_submit" id="btnThumbReal" type="file" style="display: none;"/>
+                        <input ref="addThumbRef" class="file-path-wrapper" accept="image/*" name="btn_submit" type="file" :hidden="true"/>
                     </form>
                 </div>
             </div>
-            <div class="image-grp">
-                <div class="image">
-                    <img src="/images/thumb_default.jpg" alt="">
-                    <button class="btn-link btn-close"><i class="fas fa-times"></i></button>
+            <template v-if="property.thumbnail">
+                <div class="image-grp">
+                    <div class="image">
+                        <img :src="'/images/listings/' + property.slug + '/' + property.thumbnail" height="200" alt="">
+                        <button class="btn-link btn-close"><i class="fas fa-times"></i></button>
+                    </div>
                 </div>
-            </div>
+            </template>
         </div>
     </section>
 
@@ -157,7 +144,7 @@
                         <div class="title-grp">
                             <h3>Communial features</h3>
                             <div class="info-actions">
-                                <i @click="click(editFeaturesRef)" class="fas fa-edit"></i>
+                                <i @click="click(editFeaturesRef)" class="fas fa-plus"></i>
                             </div>
                         </div>
                         <div class="features">
@@ -196,11 +183,14 @@ import CreateUnit from '../Modals/CreateUnit.vue';
 import EditPropertyFeatures from '../Modals/EditPropertyFeatures.vue';
 import EditPropertyPrimary from '../Modals/EditPropertyPrimary.vue'
 
-const { property, route, getProperty, removeFeature } = propertiesMaster()
+const { property, route, getProperty, removeFeature, uploadFiles } = propertiesMaster()
 const createUnitRef = ref(null)
 const editPrimaryRef = ref(null)
 const editFeaturesRef = ref(null)
-const formDeleteFeatureRef = ref(null)
+const fileInputRef = ref(null)
+const formFilesSubmit = ref(null)
+const formFileRequest = ref(`/api/listings/${route.params.slug}/files`)
+const files = ref({})
 
 onBeforeMount(() => {
     getProperty(`/api/listings/my-listings/${route.params.slug}`)
@@ -208,6 +198,17 @@ onBeforeMount(() => {
 
 function click(element) {
     element.openModal();
+}
+
+function triggerFileInput() {
+    fileInputRef.value.click()
+}
+
+function setFiles(event) {
+    // var selectedFile = event.target.files
+    var selectedFile = fileInputRef.value.files
+    files.value = selectedFile
+    formFilesSubmit.value.click()
 }
 
 onMounted(() => {

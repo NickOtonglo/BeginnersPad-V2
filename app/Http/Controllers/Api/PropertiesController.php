@@ -8,6 +8,7 @@ use App\Http\Requests\UpdatePropertyRequest;
 use App\Http\Resources\PropertyResource;
 use App\Models\Property;
 use App\Models\PropertyFeature;
+use App\Models\PropertyFile;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -151,5 +152,40 @@ class PropertiesController extends Controller
     public function destroyFeature(Property $property, PropertyFeature $feature) {
         $feature->delete();
         return response()->noContent();
+    }
+
+    public function storeFiles(Request $request, Property $property) {
+        foreach ($request->file('files') as $file) {
+            $filename = time()
+                        .'-'.rand(1,9999)
+                        .'-'.$property->slug.'.'
+                        .$file->extension();
+            // $path = $file->storeAs('images/listings/'.$property->slug, $filename, ['disk' => 'public_uploads']);
+            $file->storeAs('images/listings/'.$property->slug, $filename, ['disk' => 'public_uploads']);
+
+            $post = new PropertyFile;
+            $post->name = $filename;
+            $post->type = $this->getFileType($file);
+            $post->property_id = $property->id;
+            $post->save();
+        }
+        $response = [
+            'property files' => $property->propertyFiles,
+            'message' => "Property '".$property->name."' updated with new images successfully.",
+        ];
+        return response($response, 201);
+    }
+
+    public function destroyFile() {
+
+    }
+
+    public function getFileType($file) {
+        $meta = getimagesize($file);
+        $file_type = $meta[2];
+        
+        if(in_array($file_type , array(IMAGETYPE_GIF, IMAGETYPE_JPEG  ,IMAGETYPE_PNG, IMAGETYPE_BMP))) {
+            return 'image';
+        } return '';
     }
 }

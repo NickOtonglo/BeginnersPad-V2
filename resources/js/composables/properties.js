@@ -208,6 +208,38 @@ export default function propertiesMaster() {
         })
     }
 
+    const uploadFiles = async(request, data) => {
+        if (isLoading.value) return
+        isLoading.value = true
+        validationErrors.value = {}
+    
+        // https://www.npmjs.com/package/axios#formdata
+        await axios.post(request, data.files)
+            .then(response => {
+                swal({
+                    icon: 'success',
+                    title: 'Files uploaded',
+                    didClose: () => {
+                        router.go(0)
+                    }
+                })
+            })
+            .catch(error => {
+                if (error.response?.data.errors) {
+                    swal({
+                        icon: 'error',
+                        title: 'Error',
+                        text: error.response.data.message,
+                    })
+                }
+            })
+            .finally(() => isLoading.value = false)
+    }
+
+    const removeFile = (request) => {
+
+    }
+
     return {
         route,
         router,
@@ -221,5 +253,7 @@ export default function propertiesMaster() {
         deleteProperty,
         saveFeatures,
         removeFeature,
+        uploadFiles,
+        removeFile,
     }
 }

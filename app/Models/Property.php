@@ -32,11 +32,15 @@ class Property extends Model
         return $this->belongsTo(SubZone::class);
     }
 
-    public function propertyFeature() {
+    public function propertyFeatures() {
         return $this->hasMany(PropertyFeature::class);
     }
 
     public function user() {
         return $this->belongsTo(User::class);
+    }
+
+    public function propertyFiles() {
+        return $this->hasMany(PropertyFile::class);
     }
 }

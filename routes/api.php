@@ -70,4 +70,6 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::delete('listings/{property}', '\App\Http\Controllers\Api\PropertiesController@destroy');
     Route::post('listings/{property}/features', '\App\Http\Controllers\Api\PropertiesController@storeFeatures');
     Route::delete('listings/{property}/features/{feature}', '\App\Http\Controllers\Api\PropertiesController@destroyFeature');
+    Route::post('listings/{property}/files', '\App\Http\Controllers\Api\PropertiesController@storeFiles');
+    Route::delete('listings/{property}/files/{file}', '\App\Http\Controllers\Api\PropertiesController@destroyFile');
 });
