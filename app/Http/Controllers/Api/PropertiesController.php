@@ -11,6 +11,7 @@ use App\Models\PropertyFeature;
 use App\Models\PropertyFile;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class PropertiesController extends Controller
@@ -176,8 +177,35 @@ class PropertiesController extends Controller
         return response($response, 201);
     }
 
-    public function destroyFile() {
+    public function destroyFile(Property $property, PropertyFile $file) {
+        // Delete file from storage
+        Storage::disk('public_uploads')->delete('images/listings/'.$property->slug.'/'.$file->name);
 
+        $file->delete();
+        return response()->noContent();
+    }
+
+    public function updateThumbnail(Property $property, Request $request) {
+        if ($request->hasFile('files')) {
+            foreach ($request->file('files') as $file) {
+                $filename = time()
+                            .'-'.$property->slug.'.'
+                            .$file->extension();
+                $file->storeAs('images/listings/'.$property->slug, $filename, ['disk' => 'public_uploads']);
+        
+                // Delete old thumbnail
+                Storage::disk('public_uploads')->delete('images/listings/'.$property->slug.'/'.$property->thumbnail);
+                
+                $property->thumbnail = $filename;
+                $property->save();
+            }
+        }
+
+        $response = [
+            'property thumbnail' => $property,
+            'message' => "Property '".$property->name."' updated with new thumbnail successfully.",
+        ];
+        return response($response, 201);
     }
 
     public function getFileType($file) {

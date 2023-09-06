@@ -4,9 +4,9 @@
             <div class="title-grp">
                 <h3>Images</h3>
                 <div class="info-actions">
-                    <i @click="triggerFileInput" class="fas fa-plus"></i>
+                    <i @click="fileInputRef.click()" class="fas fa-plus"></i>
                     <form @submit.prevent="uploadFiles(formFileRequest, fileInputRef)">
-                        <input @change="setFiles" 
+                        <input @change="setFiles('files')" 
                                 ref="fileInputRef" 
                                 name="files"
                                 accept="image/*" 
@@ -25,16 +25,26 @@
                 <div class="image-grp">
                     <div class="image" v-for="file in property.files">
                         <img :src="'/images/listings/' + property.slug + '/' + file.name" height="200" alt="">
-                        <button class="btn-link btn-close"><i class="fas fa-times"></i></button>
+                        <button @click="removeFile(`/api/listings/${route.params.slug}/files/${file.id}`)" class="btn-link btn-close"><i class="fas fa-times"></i></button>
                     </div>
                 </div>
             </template>
             <div class="title-grp">
                 <h3>Thumbnail</h3>
                 <div class="info-actions">
-                    <i @click="addThumbRef.click" class="fas fa-plus"></i>
-                    <form action="">
-                        <input ref="addThumbRef" class="file-path-wrapper" accept="image/*" name="btn_submit" type="file" :hidden="true"/>
+                    <i @click="thumbInputRef.click()" class="fas fa-plus"></i>
+                    <form @submit.prevent="uploadThumb(formThumbRequest, thumbInputRef)">
+                        <input @change="setFiles('thumb')" 
+                                ref="thumbInputRef" 
+                                name="thumb"
+                                accept="image/*" 
+                                type="file" 
+                                :hidden="true" />
+                        <button :disabled="isLoading" class="btn-submit" type="submit" :hidden="true" ref="formThumbSubmit">
+                            <div v-show="isLoading" class="lds-dual-ring"></div>
+                            <span v-if="isLoading">Loading...</span>
+                            <span v-else>Upload</span>
+                        </button>
                     </form>
                 </div>
             </div>
@@ -42,7 +52,7 @@
                 <div class="image-grp">
                     <div class="image">
                         <img :src="'/images/listings/' + property.slug + '/' + property.thumbnail" height="200" alt="">
-                        <button class="btn-link btn-close"><i class="fas fa-times"></i></button>
+                        <!-- <button class="btn-link btn-close"><i class="fas fa-times"></i></button> -->
                     </div>
                 </div>
             </template>
@@ -183,7 +193,15 @@ import CreateUnit from '../Modals/CreateUnit.vue';
 import EditPropertyFeatures from '../Modals/EditPropertyFeatures.vue';
 import EditPropertyPrimary from '../Modals/EditPropertyPrimary.vue'
 
-const { property, route, getProperty, removeFeature, uploadFiles } = propertiesMaster()
+const { 
+    property, 
+    route, 
+    getProperty, 
+    removeFeature, 
+    uploadFiles, 
+    removeFile, 
+    uploadThumb
+} = propertiesMaster()
 const createUnitRef = ref(null)
 const editPrimaryRef = ref(null)
 const editFeaturesRef = ref(null)
@@ -191,6 +209,10 @@ const fileInputRef = ref(null)
 const formFilesSubmit = ref(null)
 const formFileRequest = ref(`/api/listings/${route.params.slug}/files`)
 const files = ref({})
+const thumbInputRef = ref(null)
+const formThumbSubmit = ref(null)
+const formThumbRequest = ref(`/api/listings/${route.params.slug}/thumbnail`)
+const thumb = ref(null)
 
 onBeforeMount(() => {
     getProperty(`/api/listings/my-listings/${route.params.slug}`)
@@ -200,15 +222,17 @@ function click(element) {
     element.openModal();
 }
 
-function triggerFileInput() {
-    fileInputRef.value.click()
-}
-
-function setFiles(event) {
-    // var selectedFile = event.target.files
-    var selectedFile = fileInputRef.value.files
-    files.value = selectedFile
-    formFilesSubmit.value.click()
+function setFiles(src) {
+    if (src == 'files') {
+        // var selectedFile = event.target.files
+        var selectedFile = fileInputRef.value.files
+        files.value = selectedFile
+        formFilesSubmit.value.click()
+    } else if (src == 'thumb') {
+        var selectedFile = thumbInputRef.value.files
+        thumb.value = selectedFile
+        formThumbSubmit.value.click()
+    }
 }
 
 onMounted(() => {

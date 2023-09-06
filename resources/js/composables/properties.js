@@ -213,12 +213,12 @@ export default function propertiesMaster() {
         isLoading.value = true
         validationErrors.value = {}
     
-        // https://www.npmjs.com/package/axios#formdata
+        https://www.npmjs.com/package/axios#formdata
         await axios.post(request, data.files)
             .then(response => {
                 swal({
                     icon: 'success',
-                    title: 'Files uploaded',
+                    title: 'File(s) added',
                     didClose: () => {
                         router.go(0)
                     }
@@ -237,7 +237,82 @@ export default function propertiesMaster() {
     }
 
     const removeFile = (request) => {
+        if (isLoading.value) { return }
 
+        swal.fire({
+            title: 'Are you sure?',
+            text: "This file will be removed.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: 'rgb(207, 95, 50)',
+            cancelButtonColor: 'rgb(238, 14, 14)',
+            confirmButtonText: 'Confirm'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                isLoading.value = true
+                axios.delete(request)
+                    .then(response => {
+                        swal({
+                            icon: 'success',
+                            title: 'File removed.',
+                            didClose: () => {
+                                router.go(0)
+                            }
+                        })
+                    })
+                    .catch(error => {
+                        swal({
+                            icon: 'error',
+                            title: 'Something went wrong, please try again.'
+                        })
+                    })
+                    .finally(() => isLoading.value = false)
+            } else {
+                isLoading.value = false
+            }
+        })
+    }
+
+    const uploadThumb = (request, data) => {
+        if (isLoading.value) return
+        isLoading.value = true
+        validationErrors.value = {}
+    
+        swal.fire({
+            title: 'Are you sure?',
+            text: "The current thumbnail will be replaced.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: 'rgb(207, 95, 50)',
+            cancelButtonColor: 'rgb(238, 14, 14)',
+            confirmButtonText: 'Confirm'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                isLoading.value = true
+                axios.post(request, data.files)
+                    .then(response => {
+                        swal({
+                            icon: 'success',
+                            title: 'Thumbnail updated',
+                            didClose: () => {
+                                router.go(0)
+                            }
+                        })
+                    })
+                    .catch(error => {
+                        if (error.response?.data.errors) {
+                            swal({
+                                icon: 'error',
+                                title: 'Error',
+                                text: error.response.data.message,
+                            })
+                        }
+                    })
+                    .finally(() => isLoading.value = false)
+            } else {
+                isLoading.value = false
+            }
+        })
     }
 
     return {
@@ -255,5 +330,6 @@ export default function propertiesMaster() {
         removeFeature,
         uploadFiles,
         removeFile,
+        uploadThumb,
     }
 }

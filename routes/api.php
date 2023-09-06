@@ -72,4 +72,5 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::delete('listings/{property}/features/{feature}', '\App\Http\Controllers\Api\PropertiesController@destroyFeature');
     Route::post('listings/{property}/files', '\App\Http\Controllers\Api\PropertiesController@storeFiles');
     Route::delete('listings/{property}/files/{file}', '\App\Http\Controllers\Api\PropertiesController@destroyFile');
+    Route::post('listings/{property}/thumbnail', '\App\Http\Controllers\Api\PropertiesController@updateThumbnail');
 });
