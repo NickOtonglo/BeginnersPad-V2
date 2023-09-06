@@ -216,4 +216,16 @@ class PropertiesController extends Controller
             return 'image';
         } return '';
     }
+
+    public function indexHome()
+    {
+        $properties = Property::when(request('search_global'), function($query) {
+            $query->where(function($q) {
+                $q->where('slug', 'like', '%'.request('search_global').'%')
+                  ->orWhere('name', 'like', '%'.request('search_global').'%')
+                  ->orWhere('description', 'like', '%'.request('search_global').'%');
+            });
+        })->where('status', 'published')->latest()->paginate(9);
+        return PropertyResource::collection($properties);
+    }
 }

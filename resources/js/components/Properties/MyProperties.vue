@@ -57,7 +57,12 @@
                     <template v-for="property in properties">
                         <div class="card-sm card-2">
                             <router-link :to="{ name: 'property.manage', params: {slug: property.slug } }">
-                                <div class="thumb"></div>
+                                <template v-if="property.thumbnail">
+                                    <div class="thumb" :style="{ background: `url(/images/listings/${property.slug}/${property.thumbnail})` }" style="background-size: cover;"></div>
+                                </template>
+                                <template v-else>
+                                    <div class="thumb"></div>
+                                </template>
                                 <div class="details">
                                     <h2>{{ property.name }}</h2>
                                     <div class="location">

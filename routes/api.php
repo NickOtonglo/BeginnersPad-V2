@@ -62,6 +62,7 @@ Route::middleware('auth:sanctum')->group(function() {
 
     Route::get('sub-zones', '\App\Http\Controllers\Api\SubZoneController@index');
 
+    Route::get('listings/home', '\App\Http\Controllers\Api\PropertiesController@indexHome');
     Route::get('listings', '\App\Http\Controllers\Api\PropertiesController@index');
     Route::get('listings/my-listings', '\App\Http\Controllers\Api\PropertiesController@getMyListings');
     Route::get('listings/my-listings/{property}', '\App\Http\Controllers\Api\PropertiesController@showMyListing');

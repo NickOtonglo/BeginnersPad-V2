@@ -101,7 +101,7 @@ const routes = [
     },
     {
         path: '/listings',
-        name: 'properties.view',
+        name: 'properties.index',
         component: PropertiesIndex,
     },
     {

@@ -18,99 +18,45 @@
     <section id="section-listings">
         <div class="container">
             <h3 class="section-title">Newest listings</h3>
-            <div class="cards">
-                <div class="card">
-                    <a href="/view-listing.html">
-                        <div class="image">
-                            <img src="/images/static/logo.png" alt="">
-                        </div>
-                        <div class="card-info txt-single-line">
-                            <h4 class="txt-single-line">Name</h4>
-                            <p class="location txt-single-line">Location</p>
-                            <p class="type">Listing type</p>
-                            <p class="price">KES 1000 - 2000</p>
-                            <p class="timestamp">Added 5 hours ago</p>
-                        </div>
-                    </a>
-                </div>
-
-                <div class="card">
-                    <a href="/view-listing.html">
-                        <div class="image">
-                            <img src="/images/static/logo.png" alt="">
-                        </div>
-                        <div class="card-info txt-single-line">
-                            <h4 class="txt-single-line">Name</h4>
-                            <p class="location txt-single-line">Location</p>
-                            <p class="type">Listing type</p>
-                            <p class="price">KES 1000 - 2000</p>
-                            <p class="timestamp">Added 5 hours ago</p>
-                        </div>
-                    </a>
-                </div>
-
-                <div class="card">
-                    <a href="/view-listing.html">
-                        <div class="image">
-                            <img src="/images/static/logo.png" alt="">
-                        </div>
-                        <div class="card-info txt-single-line">
-                            <h4 class="txt-single-line">Name</h4>
-                            <p class="location txt-single-line">Location</p>
-                            <p class="type">Listing type</p>
-                            <p class="price">KES 1000 - 2000</p>
-                            <p class="timestamp">Added 5 hours ago</p>
-                        </div>
-                    </a>
-                </div>
-
-                <div class="card">
-                    <a href="/view-listing.html">
-                        <div class="image">
-                            <img src="/images/static/logo.png" alt="">
-                        </div>
-                        <div class="card-info txt-single-line">
-                            <h4 class="txt-single-line">Name</h4>
-                            <p class="location txt-single-line">Location</p>
-                            <p class="type">Listing type</p>
-                            <p class="price">KES 1000 - 2000</p>
-                            <p class="timestamp">Added 5 hours ago</p>
-                        </div>
-                    </a>
-                </div>
-
-                <div class="card">
-                    <a href="/view-listing.html">
-                        <div class="image">
-                            <img src="/images/static/logo.png" alt="">
-                        </div>
-                        <div class="card-info txt-single-line">
-                            <h4 class="txt-single-line">Name</h4>
-                            <p class="location txt-single-line">Location</p>
-                            <p class="type">Listing type</p>
-                            <p class="price">KES 1000 - 2000</p>
-                            <p class="timestamp">Added 5 hours ago</p>
-                        </div>
-                    </a>
-                </div>
-
-                <div class="card">
-                    <a href="/view-listing.html">
-                        <div class="image">
-                            <img src="/images/static/logo.png" alt="">
-                        </div>
-                        <div class="card-info txt-single-line">
-                            <h4 class="txt-single-line">Name</h4>
-                            <p class="location txt-single-line">Location</p>
-                            <p class="type">Listing type</p>
-                            <p class="price">KES 1000 - 2000</p>
-                            <p class="timestamp">Added 5 hours ago</p>
-                        </div>
-                    </a>
-                </div>
+            <div id="isLoading">
+                <div v-show="isLoading" class="lds-dual-ring"></div>
+                <span v-if="isLoading">Loading...</span>
             </div>
-            <div class="section-more">
-                <a href="/view-listings.html">View more listings <i class="fas fa-chevron-right"></i></a>
+            <div class="cards">
+                <template v-for="property in properties">
+                    <div class="card">
+                        <a href="/view-listing.html">
+                            <template v-if="property.thumbnail">
+                                <div class="image" :style="{ background: `url(/images/listings/${property.slug}/${property.thumbnail})` }" style="background-size: cover;">
+                                    <template v-if="property.brand && property.brand.avatar">
+                                        <img :src="`/images/brand/avatar/${property.brand.username}/${property.brand.avatar}`" alt="">
+                                    </template>
+                                    <template v-else>
+                                        <img src="/images/static/avatar.png" alt="">
+                                    </template>
+                                </div>
+                            </template>
+                            <template v-else>
+                                <div class="image">
+                                    <img src="/images/static/avatar.png" alt="">
+                                </div>
+                            </template>
+                            <div class="card-info">
+                                <h4>{{ property.name }}</h4>
+                                <p class="location">Location: {{ property.sub_zone.name }} ({{ property.sub_zone.zone.county.name }})</p>
+                                <p class="type">Listing type</p>
+                                <p class="price">KES 1000 - 2000</p>
+                                <p class="timestamp">Added {{ property.time_ago }}</p>
+                            </div>
+                        </a>
+                    </div>
+                </template>
+            </div>
+            <template v-if="!properties.length">
+                <p style="text-align: center;">-no listings-</p>
+            </template>
+            <div v-if="properties.length" class="section-more">
+                <router-link :to="{ name: 'properties.index' }">View more listings <i class="fas fa-chevron-right"></i></router-link>
             </div>
         </div>
     </section>
@@ -159,8 +105,20 @@
     </section>
 </template>
 
-<script>
-export default {
-    name: 'Home',
-}
+<script setup>
+import { ref, onBeforeMount } from 'vue'
+import pagination from '../composables/pagination'
+
+const { 
+    current_page,
+    properties,
+    getPaginationDataWithRequest
+} = pagination()
+const request = ref(`/api/listings/home`)
+
+onBeforeMount(() => {
+    getPaginationDataWithRequest(current_page.value, 'properties', request.value)
+})
+
+
 </script>

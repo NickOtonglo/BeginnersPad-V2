@@ -21,7 +21,7 @@
                     </div>
                     <div class="form-group">
                         <label for="username">Brand/company name</label>
-                        <input v-model="brand.name" type="text" name="name" id="name">
+                        <input v-model="brand.name" type="text" name="name">
                         <div v-for="message in validationErrors?.name" class="txt-alert txt-danger">
                             <li>{{ message }}</li>
                         </div>
