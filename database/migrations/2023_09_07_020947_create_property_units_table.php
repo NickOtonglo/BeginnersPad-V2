@@ -21,6 +21,8 @@ return new class extends Migration
             $table->integer('init_deposit_period')->nullable(); // months
             $table->integer('story')->nullable(); // floor number
             $table->integer('floor_area')->nullable();
+            $table->integer('bathrooms')->nullable();
+            $table->integer('bedrooms')->nullable();
             $table->longText('disclaimer')->nullable();
             $table->string('status')->default('inactive'); // active,inactive,occupied
             $table->string('thumbnail')->nullable();

@@ -31,7 +31,6 @@ class DatabaseSeeder extends Seeder
         // $this->call(PropertySeeder::class);
         // $this->call(PropertyFeatureSeeder::class);
         // $this->call(PropertyUnitSeeder::class);
-        // $this->call(PropertyUnitSeeder::class);
         // $this->call(PropertyUnitFeatureSeeder::class);
     }
 }

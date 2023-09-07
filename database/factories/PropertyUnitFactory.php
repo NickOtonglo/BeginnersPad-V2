@@ -33,6 +33,8 @@ class PropertyUnitFactory extends Factory
             'init_deposit_period' => rand(0, 6),
             'story' => $level,
             'floor_area' => rand(20,200),
+            'bathrooms' => rand(1,2),
+            'bedrooms' => rand(1,2),
             'disclaimer' => $this->faker->text(100),
             // 'status' => 'inactive',
             // 'thumbnail' => '',

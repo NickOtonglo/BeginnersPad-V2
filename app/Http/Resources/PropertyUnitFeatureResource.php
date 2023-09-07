@@ -17,7 +17,7 @@ class PropertyUnitFeatureResource extends JsonResource
         return [
             'id' => $this->id,
             'item' => $this->item,
-            'property_unit_id' => $this->property_id,
+            'property_unit_id' => $this->property_unit_id,
         ];
     }
 }

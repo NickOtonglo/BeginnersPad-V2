@@ -18,11 +18,17 @@ class PropertyUnit extends Model
         'init_deposit_period',
         'story',
         'floor_area',
+        'bathrooms',
+        'bedrooms',
         'disclaimer',
         'status',
         'thumbnail',
         'property_id',
     ];
+
+    public function getRouteKeyName() {
+        return 'slug';
+    }
 
     public function property() {
         return $this->belongsTo(Property::class);

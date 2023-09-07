@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use App\Models\PropertyFeature;
 use App\Models\PropertyFile;
+use App\Models\PropertyUnit;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -18,9 +19,10 @@ class PropertyResource extends JsonResource
     {
         $features = PropertyFeature::where('property_id', $this->id)->get();
         $files = PropertyFile::where('property_id', $this->id)->get();
+        $units = PropertyUnit::where('property_id', $this->id)->get();
 
         return [
-            'id' => $this->id,
+            // 'id' => $this->id,
             'name' => $this->name,
             'slug' => $this->slug,
             'lat' => $this->lat,
@@ -38,6 +40,7 @@ class PropertyResource extends JsonResource
             'files' => PropertyFilesResource::collection($files),
             'brand' => new BrandResource($this->user->brand),
             'sub_zone' => new SubZoneResource($this->subZone),
+            'units' => PropertyUnitLiteResource::collection($units),
         ];
     }
 }

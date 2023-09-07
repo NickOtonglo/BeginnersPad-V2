@@ -52,7 +52,6 @@
                 <div class="image-grp">
                     <div class="image">
                         <img :src="'/images/listings/' + property.slug + '/' + property.thumbnail" height="200" alt="">
-                        <!-- <button class="btn-link btn-close"><i class="fas fa-times"></i></button> -->
                     </div>
                 </div>
             </template>
@@ -86,35 +85,40 @@
                         <div class="title-grp">
                             <h3>Units available</h3>
                             <div class="info-actions">
-                                <!-- <a href="/lister/manage-listing-unit.html">
-                                    <i class="fas fa-plus"></i>
-                                </a> -->
                                 <i @click="click(createUnitRef)" class="fas fa-plus"></i>
                             </div>
                         </div>
                         <div class="listing-units-grp">
-                            <div class="card-sm card-unit">
-                                <a href="/lister/manage-listing-unit.html">
-                                    <div class="details">
-                                        <h2>Unit title</h2>
-                                        <div class="specs">
-                                            <span class="spec">1 bed,</span>
-                                            <span class="spec">2 bath,</span>
-                                            <span class="spec">40sq M</span>
+                            <template v-if="property.units" v-for="unit in property.units">
+                                <div class="card-sm card-unit">
+                                    <router-link :to="{ name: 'unit.manage', params: {slug: property.slug, unit_slug: unit.slug } }">
+                                        <div class="details">
+                                            <h2>{{ unit.name }}</h2>
+                                            <div class="specs">
+                                                <span class="spec">{{ unit.bedrooms }} bed | </span>
+                                                <span class="spec">{{ unit.bathrooms }} bath | </span>
+                                                <span class="spec">{{ unit.floor_area }}sq M</span>
+                                            </div>
+                                            <div class="deposit">
+                                                <span class="label">Initial deposit: </span>
+                                                <span v-if="unit.init_deposit == 0" class="data">not required</span>
+                                                <span v-else class="data">{{ unit.init_deposit }} ({{ unit.init_deposit_period }} months)</span>
+                                            </div>
+                                            <div class="price">
+                                                <span class="label">KES </span>
+                                                <span class="data">{{ unit.price }}</span>
+                                            </div>
+                                            <p class="timestamp">Added {{ unit.time_ago }}</p>
                                         </div>
-                                        <div class="deposit">
-                                            <span class="label">Initial deposit:</span>
-                                            <span class="data">not required</span>
-                                        </div>
-                                        <div class="price">
-                                            <span class="label">KES</span>
-                                            <span class="data">0.00</span>
-                                        </div>
-                                        <p class="timestamp">Added 5 hours ago</p>
-                                    </div>
-                                    <div class="thumb"></div>
-                                </a>  
-                            </div>
+                                        <template v-if="unit.thumbnail">
+                                            <div class="thumb" :style="{ background: `url(/images/listings/${property.slug}/units/${unit.slug}/${unit.thumbnail})` }" style="background-size: cover;"></div>
+                                        </template>
+                                        <template v-else>
+                                            <div class="thumb" :style="{ background: `url(/images/static/thumb_unit.jpg` }" style="background-size: cover;"></div>
+                                        </template>
+                                    </router-link>  
+                                </div>
+                            </template>
                         </div>
                     </div>
                     <div class="lister-details">
