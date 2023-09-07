@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('property_features', function (Blueprint $table) {
+        Schema::create('property_unit_features', function (Blueprint $table) {
             $table->id();
             $table->longText('item');
-            $table->integer('property_id');
+            $table->integer('property_unit_id');
             $table->timestamps();
         });
     }
@@ -24,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('property_features');
+        Schema::dropIfExists('property_unit_features');
     }
 };
