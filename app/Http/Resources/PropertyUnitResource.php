@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\PropertyUnitFeature;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -14,6 +15,9 @@ class PropertyUnitResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $features = PropertyUnitFeature::where('property_unit_id', $this->id)->get();
+        // $files = PropertyFile::where('property_id', $this->id)->get();
+
         return [
             'id' => $this->id,
             'name' => $this->name,
@@ -28,6 +32,8 @@ class PropertyUnitResource extends JsonResource
             'status' => $this->status,
             'thumbnail' => $this->thumbnail,
             'property_id' => $this->property_id,
+            'features' => PropertyUnitFeatureResource::collection($features),
+            'files' => '',
         ];
     }
 }
