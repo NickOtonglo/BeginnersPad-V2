@@ -3,9 +3,13 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\SavePropertyUnitBasicRequest;
 use App\Http\Resources\PropertyUnitResource;
 use App\Models\Property;
+use App\Models\PropertyUnit;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class PropertyUnitsController extends Controller
 {
@@ -14,8 +18,8 @@ class PropertyUnitsController extends Controller
      */
     public function index(Property $property)
     {
-        $units = PropertyUnitResource::collection($property->propertyUnits);
-        return $units;
+        $units = $property->propertyUnits()->paginate(5);
+        return PropertyUnitResource::collection($units);
     }
 
     /**
@@ -29,9 +33,34 @@ class PropertyUnitsController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Property $property, SavePropertyUnitBasicRequest $request)
     {
-        //
+        $slug = Str::slug($request->name, '-');
+
+        $data = new PropertyUnit;
+        $data->name = $request->name;
+        $data->price = $request->price;
+        $data->init_deposit = $request->init_deposit;
+        $data->init_deposit_period = $request->init_deposit_period;
+        $data->floor_area = $request->floor_area;
+        $data->bathrooms = $request->bathrooms;
+        $data->bedrooms = $request->bedrooms;
+        $data->property_id = $property->id;
+
+        try {
+            $data->slug = $slug;
+            $data->save();
+        } catch (QueryException $e) {
+            $data->slug = $slug.'-'.time();
+            $data->save();
+        }
+
+        $response = [
+            'property_unit' => $data,
+            'message' => "New property unit '".$data->name."' created successfully.",
+        ];
+
+        return response($response, 201);
     }
 
     /**

@@ -3,6 +3,7 @@ import getArticles from "./getArticles"
 import zonesMaster from "./zones"
 import subZoneMaster from './subzones'
 import propertiesMaster from "./properties"
+import unitsMaster from "./units"
 
 export default function pagination() {
     const isLoading = ref(false)
@@ -14,6 +15,7 @@ export default function pagination() {
     const { zones, getZones, zonesCount } = zonesMaster()
     const { subZones, getSubZones, subZonesCount } = subZoneMaster()
     const { properties, getProperties } = propertiesMaster()
+    const { units, getUnits, unitsCount } = unitsMaster()
     let sourceParam = '', requestParam = ''
 
     const getPaginationData = (page, source) => {
@@ -60,12 +62,19 @@ export default function pagination() {
                 if (source == 'properties') {
                     getProperties(`${request}?page=${page}&search_global=${search_global.value}`)
                 }
+                if (source == 'property_units') {
+                    getUnits(`${request}?page=${page}`)
+                }
             })
     }
 
     const onPageChange = (page) => {
         current_page.value = page
-        if (sourceParam == 'sub-zones' || sourceParam == 'properties') {
+        if (
+            sourceParam == 'sub-zones' || 
+            sourceParam == 'properties' || 
+            sourceParam == 'property_units'
+        ) {
             getPaginationDataWithRequest(page, sourceParam, requestParam)    
         }
         
@@ -80,6 +89,7 @@ export default function pagination() {
         zones,
         subZones,
         properties,
+        units,
         total_pages,
         per_page,
         current_page,
@@ -87,6 +97,7 @@ export default function pagination() {
         onPageChange,
         zonesCount,
         subZonesCount,
+        unitsCount,
         getPaginationData,
         getPaginationDataWithRequest,
     }

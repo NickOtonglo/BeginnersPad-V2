@@ -1,50 +1,60 @@
 import { inject, ref } from "vue"
 import { useRoute, useRouter } from "vue-router"
 
-export default function propertiesMaster() {
+export default function unitsMaster() {
     const route = useRoute()
     const router = useRouter()
     const isLoading = ref(false)
     const validationErrors = ref('')
     const swal = inject('$swal')
-    const properties = ref({})
-    const property = ref({
+    const units = ref({})
+    const unit = ref({
         name: '',
-        lat: '',
-        lng: '',
-        status: '',
-        verified: '',
+        slug: '',
         description: '',
+        price: '',
+        init_deposit: '',
+        init_deposit_period: '',
+        story: '',
+        floor_area: '',
+        bathrooms: '',
+        bedrooms: '',
+        disclaimer: '',
+        status: '',
         thumbnail: '',
+        property_id: '',
         timestamp: '',
         time_ago: '',
-        user_id: '',
-        sub_zone_id: '',
-        brand: '',
-        user: '',
+        features: '',
+        files: '',
+        property: '',
     })
+    const unitsCount = ref(0)
 
-    const getProperties = (request) => {
+    const getUnits = (request) => {
         if (isLoading.value) return
         isLoading.value = true
 
         axios.get(request)
-            .then(response => properties.value = response.data.data)
+            .then(response => {
+                units.value = response.data.data
+                unitsCount.value = response.data.meta.total
+            })
             .catch(error => console.log(error))
             .finally(isLoading.value = false)
     }
 
-    const getProperty = (request) => {
+    const getUnit = (request) => {
         if (isLoading.value) return
         isLoading.value = true
 
         axios.get(request)
-            .then(response => property.value = response.data.data)
+            .then(response => unit.value = response.data.data)
             .catch(error => console.log(error))
             .finally(isLoading.value = false)
     }
 
-    const createProperty = (request, data) => {
+    const createUnit = (request, data) => {
         if (isLoading.value) return
         isLoading.value = true
         validationErrors.value = ''
@@ -53,10 +63,9 @@ export default function propertiesMaster() {
             .then(response => {
                 swal({
                     icon: 'success',
-                    title: 'Property created.',
+                    title: 'Unit created.',
                     didClose: () => {
                         router.go(0)
-                        // router.push({ name: 'property.create', params: { name: data.value.name } })
                     }
                 })
             })
@@ -68,14 +77,13 @@ export default function propertiesMaster() {
                         icon: 'error',
                         title: 'Error',
                         text: 'An error occured. Please try again.',
-                        // text: error.response.data.message,
                     })
                 }
             })
             .finally(isLoading.value = false)
     }
 
-    const updateProperty = (request, data) => {
+    const updateUnit = (request, data) => {
         if (isLoading.value) return
         isLoading.value = true
         validationErrors.value = ''
@@ -84,7 +92,7 @@ export default function propertiesMaster() {
             .then(response => {
                 swal({
                     icon: 'success',
-                    title: 'Property updated.',
+                    title: 'Unit updated.',
                     didClose: () => {
                         router.go(0)
                     }
@@ -98,19 +106,18 @@ export default function propertiesMaster() {
                         icon: 'error',
                         title: 'Error',
                         text: 'An error occured. Please try again.',
-                        // text: error.response.data.message,
                     })
                 }
             })
             .finally(isLoading.value = false)
     }
 
-    const deleteProperty = (request) => {
+    const deleteUnit = (request) => {
         if (isLoading.value) { return }
 
         swal.fire({
             title: 'Are you sure?',
-            text: "This property listing, as well as all units hosted under it, will be erased from the system.",
+            text: "This property unit will be erased from the system.",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: 'rgb(207, 95, 50)',
@@ -123,9 +130,9 @@ export default function propertiesMaster() {
                     .then(response => {
                         swal({
                             icon: 'success',
-                            title: 'Property deleted.',
+                            title: 'Unit deleted.',
                             didClose: () => {
-                                router.push({ name: 'properties.view' })
+                                router.push({ name: 'property.manage', params: { slug: unit.value.property.slug } })
                             }
                         })
                     })
@@ -319,13 +326,14 @@ export default function propertiesMaster() {
         route,
         router,
         validationErrors,
-        properties,
-        property,
-        getProperties,
-        getProperty,
-        createProperty,
-        updateProperty,
-        deleteProperty,
+        units,
+        unit,
+        unitsCount,
+        getUnits,
+        getUnit,
+        createUnit,
+        updateUnit,
+        deleteUnit,
         saveFeatures,
         removeFeature,
         uploadFiles,

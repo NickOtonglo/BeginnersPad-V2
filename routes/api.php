@@ -76,4 +76,5 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::post('listings/{property}/thumbnail', '\App\Http\Controllers\Api\PropertiesController@updateThumbnail');
 
     Route::get('listings/{property}/units', 'App\Http\Controllers\Api\PropertyUnitsController@index');
+    Route::post('listings/{property}', 'App\Http\Controllers\Api\PropertyUnitsController@store');
 });

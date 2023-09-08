@@ -89,7 +89,7 @@
                             </div>
                         </div>
                         <div class="listing-units-grp">
-                            <template v-if="property.units" v-for="unit in property.units">
+                            <template v-if="units" v-for="unit in units">
                                 <div class="card-sm card-unit">
                                     <router-link :to="{ name: 'unit.manage', params: {slug: property.slug, unit_slug: unit.slug } }">
                                         <div class="details">
@@ -118,6 +118,15 @@
                                         </template>
                                     </router-link>  
                                 </div>
+                            </template>
+                            <template v-if="!units.length">
+                                <p style="text-align: center;">-no units-</p>
+                            </template>
+                            <template v-if="unitsCount > 5">
+                                <Pagination :totalPages="total_pages"
+                                            :perPage="per_page"
+                                            :currentPage="current_page"
+                                            @pagechanged="onPageChange" />
                             </template>
                         </div>
                     </div>
@@ -196,6 +205,8 @@ import { onBeforeMount, onMounted, ref } from 'vue';
 import CreateUnit from '../Modals/CreateUnit.vue';
 import EditPropertyFeatures from '../Modals/EditPropertyFeatures.vue';
 import EditPropertyPrimary from '../Modals/EditPropertyPrimary.vue'
+import Pagination from '../Misc/Pagination.vue'
+import pagination from '../../composables/pagination';
 
 const { 
     property, 
@@ -206,6 +217,17 @@ const {
     removeFile, 
     uploadThumb
 } = propertiesMaster()
+
+const { 
+    total_pages,
+    per_page,
+    current_page,
+    units,
+    unitsCount,
+    onPageChange,
+    getPaginationDataWithRequest
+} = pagination()
+
 const createUnitRef = ref(null)
 const editPrimaryRef = ref(null)
 const editFeaturesRef = ref(null)
@@ -217,9 +239,11 @@ const thumbInputRef = ref(null)
 const formThumbSubmit = ref(null)
 const formThumbRequest = ref(`/api/listings/${route.params.slug}/thumbnail`)
 const thumb = ref(null)
+const unitsRequest = `/api/listings/${route.params.slug}/units`
 
 onBeforeMount(() => {
     getProperty(`/api/listings/my-listings/${route.params.slug}`)
+    getPaginationDataWithRequest(current_page.value, 'property_units', unitsRequest)
 })
 
 function click(element) {
