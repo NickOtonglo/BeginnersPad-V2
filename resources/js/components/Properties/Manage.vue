@@ -263,9 +263,6 @@ function setFiles(src) {
     }
 }
 
-onMounted(() => {
-})
-
 </script>
 
 <style scoped>
@@ -273,11 +270,13 @@ onMounted(() => {
     margin: 6px 0;
     list-style-position: inside;
 }
-.features span:hover {
-    border: 2px solid var(--color-font);
+/* .features span:hover { */
+.features li:hover {
+    /* outline: 2px solid var(--color-font); */
     padding: 2px 4px;
     border-radius: 5px;
     cursor: pointer;
+    opacity: .8;
 }
 #feature-delete {
     display: none;
@@ -285,7 +284,8 @@ onMounted(() => {
 #feature-delete:hover {
     color: var(--color-danger);
 }
-.features span:hover #feature-delete {
+/* .features span:hover #feature-delete { */
+.features li:hover #feature-delete {
     display: inline-block;
 }
 .features form {

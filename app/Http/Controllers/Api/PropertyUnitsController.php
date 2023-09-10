@@ -39,6 +39,7 @@ class PropertyUnitsController extends Controller
 
         $data = new PropertyUnit;
         $data->name = $request->name;
+        $data->story = $request->story;
         $data->price = $request->price;
         $data->init_deposit = $request->init_deposit;
         $data->init_deposit_period = $request->init_deposit_period;
@@ -66,9 +67,10 @@ class PropertyUnitsController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Property $property, PropertyUnit $unit)
     {
-        //
+        return new PropertyUnitResource($unit);
+
     }
 
     /**
@@ -82,9 +84,27 @@ class PropertyUnitsController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Property $property, PropertyUnit $unit, SavePropertyUnitBasicRequest $request)
     {
-        //
+        $data = $unit;
+        $data->name = $request->name;
+        $data->story = $request->story;
+        $data->price = $request->price;
+        $data->init_deposit = $request->init_deposit;
+        $data->init_deposit_period = $request->init_deposit_period;
+        $data->floor_area = $request->floor_area;
+        $data->bathrooms = $request->bathrooms;
+        $data->bedrooms = $request->bedrooms;
+        $data->property_id = $property->id;
+
+        $data->save();
+
+        $response = [
+            'property_unit' => $data,
+            'message' => "Property unit '".$data->name."' updated successfully.",
+        ];
+
+        return response($response, 201);
     }
 
     /**

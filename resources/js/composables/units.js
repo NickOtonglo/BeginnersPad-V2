@@ -322,6 +322,72 @@ export default function unitsMaster() {
         })
     }
 
+    const saveDisclaimers = (request, data) => {
+        if (isLoading.value) return
+        isLoading.value = true
+        validationErrors.value = ''
+
+        axios.post(request, data)
+            .then(response => {
+                swal({
+                    icon: 'success',
+                    title: 'Disclaimer(s) added.',
+                    didClose: () => {
+                        router.go(0)
+                    }
+                })
+            })
+            .catch(error => {
+                if (error.response?.data) {
+                    validationErrors.value = error.response.data.errors
+                } else {
+                    swal({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'An error occured. Please try again.',
+                    })
+                }
+            })
+            .finally(isLoading.value = false)
+    }
+
+    const removeDisclaimer = (request) => {
+        if (isLoading.value) { return }
+
+        swal.fire({
+            title: 'Are you sure?',
+            text: "This Disclaimer will be removed.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: 'rgb(207, 95, 50)',
+            cancelButtonColor: 'rgb(238, 14, 14)',
+            confirmButtonText: 'Confirm'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                isLoading.value = true
+                axios.delete(request)
+                    .then(response => {
+                        swal({
+                            icon: 'success',
+                            title: 'Disclaimer removed.',
+                            didClose: () => {
+                                router.go(0)
+                            }
+                        })
+                    })
+                    .catch(error => {
+                        swal({
+                            icon: 'error',
+                            title: 'Something went wrong, please try again.'
+                        })
+                    })
+                    .finally(() => isLoading.value = false)
+            } else {
+                isLoading.value = false
+            }
+        })
+    }
+
     return {
         route,
         router,
@@ -339,5 +405,7 @@ export default function unitsMaster() {
         uploadFiles,
         removeFile,
         uploadThumb,
+        saveDisclaimers,
+        removeDisclaimer
     }
 }

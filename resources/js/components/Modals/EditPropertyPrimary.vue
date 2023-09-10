@@ -85,11 +85,10 @@
 
 <script setup>
 import operateModal from '../../composables/modal'
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, onBeforeMount } from 'vue';
 import propertiesMaster from '../../composables/properties';
 import zonesMaster from '../../composables/zones';
 import subZonesMaster from '../../composables/subzones';
-import { onBeforeMount } from 'vue';
 
 const { updateProperty, getProperty, route, property, validationErrors } = propertiesMaster()
 
@@ -149,16 +148,6 @@ function getSubZones() {
         })
         .catch(error => console.log(error))
         .finally(isLoading.value = false)
-}
-
-function checkName() {
-    validationErrors.value.name = ''
-    if (property.value.name == '') {
-        validationErrors.value.name = 'The name field is required.'
-    } else {
-        createProperty(request, property)
-        // router.push({ name: 'property.create', params: { name: property.value.name } })
-    }
 }
 
 function openModal() {

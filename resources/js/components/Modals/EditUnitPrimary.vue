@@ -1,16 +1,23 @@
 <template>
     <div class="modal" id="modal" ref="modalRef">
         <div class="modal-header">
-            <h2>Add unit</h2>
+            <h2>Edit primary information</h2>
             <button @click="operateModal(modalRef)" id="modalHeaderClose" class="btn-link btn-close"><i class="fas fa-times"></i></button>
         </div>
         <div class="modal-content">
             <div class="category">
-                <form @submit.prevent="createUnit(formRequest, unit)" novalidate>
+                <form v-if="unit" @submit.prevent="updateUnit(request, unit)">
                     <div class="form-group" id="grpName">
                         <label for="name">Unit name*</label>
                         <input v-model="unit.name" type="text" name="name">
                         <div v-for="message in validationErrors?.name" class="txt-alert txt-danger">
+                            <p>{{ message }}</p>
+                        </div>
+                    </div>
+                    <div class="form-group" id="grpDescription">
+                        <label for="description">Description</label>
+                        <textarea v-model="unit.description" type="text" name="description" rows="6"></textarea>
+                        <div v-for="message in validationErrors?.description" class="txt-alert txt-danger">
                             <p>{{ message }}</p>
                         </div>
                     </div>
@@ -49,7 +56,7 @@
                             <li>{{ message }}</li>
                         </div>
                     </div>
-                    <div class="form-group" ref="initDepositPeriodRef">
+                    <div class="form-group" ref="initDepositPeriodRef" :hidden="unit.init_deposit == 0">
                         <label for="init_deposit_period">Initial deposit period (months)*</label>
                         <input v-model="unit.init_deposit_period" type="number" min="0" name="init_deposit_period">
                         <div v-for="message in validationErrors?.init_deposit_period" class="txt-alert txt-danger">
@@ -66,7 +73,7 @@
                     <button :disabled="isLoading" class="btn-submit" type="submit">
                         <div v-show="isLoading" class="lds-dual-ring"></div>
                         <span v-if="isLoading">Loading...</span>
-                        <span v-else>Create unit</span>
+                        <span v-else>Update primary info</span>
                     </button>
                 </form>
             </div>
@@ -79,23 +86,15 @@
 
 <script setup>
 import operateModal from '../../composables/modal'
-import { ref } from 'vue';
+import { ref, onBeforeMount } from 'vue';
 import unitsMaster from '../../composables/units';
 
-const { 
-    createUnit, 
-    unit, 
-    validationErrors, 
-    isLoading, 
-    route 
-} = unitsMaster()
-
+const modalRef = ref(null)
+const { updateUnit, getUnit, route, unit, validationErrors, isLoading } = unitsMaster()
+// const request = ref(`/api/listings/${route.params.slug}/units/${route.params.unit_slug}`)
+const request = ref(`/api/listings/${route.params.slug}/units/${route.params.unit_slug}`)
 const initDepositRef = ref(null)
 const initDepositPeriodRef = ref(null)
-
-const formRequest = `/api/listings/${route.params.slug}/`
-
-const modalRef = ref(null)
 
 function openModal() {
     operateModal(modalRef.value)
@@ -110,8 +109,11 @@ function toggleInput() {
     }
 }
 
+onBeforeMount(() => {
+    getUnit(request.value)
+})
+
 defineExpose({
     openModal,
 })
-
 </script>

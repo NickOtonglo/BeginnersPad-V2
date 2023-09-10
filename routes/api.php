@@ -22,6 +22,9 @@ Route::get('articles/{article}/tags', '\App\Http\Controllers\Api\ArticlesControl
 Route::get('tags/{tag}', '\App\Http\Controllers\Api\TagsController@show');
 Route::get('tags/{tag}/articles', '\App\Http\Controllers\Api\TagsController@getArticles');
 
+Route::get('listings/home', '\App\Http\Controllers\Api\PropertiesController@indexHome');
+Route::get('listings', '\App\Http\Controllers\Api\PropertiesController@index');
+
 Route::middleware('auth:sanctum')->group(function() {
     Route::get('user', '\App\Http\Controllers\Api\UserController@getAuthenticatedUser');
     Route::get('user/account', '\App\Http\Controllers\Api\UserController@getAuthenticatedUserAccount');
@@ -62,8 +65,6 @@ Route::middleware('auth:sanctum')->group(function() {
 
     Route::get('sub-zones', '\App\Http\Controllers\Api\SubZoneController@index');
 
-    Route::get('listings/home', '\App\Http\Controllers\Api\PropertiesController@indexHome');
-    Route::get('listings', '\App\Http\Controllers\Api\PropertiesController@index');
     Route::get('listings/my-listings', '\App\Http\Controllers\Api\PropertiesController@getMyListings');
     Route::get('listings/my-listings/{property}', '\App\Http\Controllers\Api\PropertiesController@showMyListing');
     Route::post('listings', '\App\Http\Controllers\Api\PropertiesController@store');
@@ -77,4 +78,11 @@ Route::middleware('auth:sanctum')->group(function() {
 
     Route::get('listings/{property}/units', 'App\Http\Controllers\Api\PropertyUnitsController@index');
     Route::post('listings/{property}', 'App\Http\Controllers\Api\PropertyUnitsController@store');
+    Route::get('listings/{property}/units/{unit}', '\App\Http\Controllers\Api\PropertyUnitsController@show');
+    Route::patch('listings/{property}/units/{unit}', 'App\Http\Controllers\Api\PropertyUnitsController@update');
+    Route::post('listings/{property}/units/{unit}/features', 'App\Http\Controllers\Api\PropertyUnitsController@storeFeatures');
+    Route::delete('listings/{property}/units/{unit}/features/{feature}', '\App\Http\Controllers\Api\PropertyUnitsController@destroyFeature');
+    Route::post('listings/{property}/units/{unit}/files', '\App\Http\Controllers\Api\PropertyUnitsController@storeFiles');
+    Route::delete('listings/{property}/units/{unit}/files/{file}', '\App\Http\Controllers\Api\PropertyUnitsController@destroyFile');
+    Route::post('listings/{property}/units/{unit}/thumbnail', '\App\Http\Controllers\Api\PropertyUnitsController@updateThumbnail');
 });
