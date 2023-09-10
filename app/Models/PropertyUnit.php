@@ -37,4 +37,8 @@ class PropertyUnit extends Model
     public function propertyUnitFeatures() {
         return $this->hasMany(PropertyUnitFeature::class);
     }
+
+    public function propertyUnitFiles() {
+        return $this->hasMany(PropertyUnitFile::class);
+    }
 }

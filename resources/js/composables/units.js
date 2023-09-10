@@ -117,7 +117,7 @@ export default function unitsMaster() {
 
         swal.fire({
             title: 'Are you sure?',
-            text: "This property unit will be erased from the system.",
+            text: "This property unit and all its associated files will be erased from the system.",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: 'rgb(207, 95, 50)',
@@ -132,7 +132,7 @@ export default function unitsMaster() {
                             icon: 'success',
                             title: 'Unit deleted.',
                             didClose: () => {
-                                router.push({ name: 'property.manage', params: { slug: unit.value.property.slug } })
+                                router.push({ name: 'property.manage', params: { slug: route.params.slug } })
                             }
                         })
                     })
@@ -327,7 +327,11 @@ export default function unitsMaster() {
         isLoading.value = true
         validationErrors.value = ''
 
-        axios.post(request, data)
+        if(data.disclaimer.length == 0 || data.disclaimer == '') {
+            data.disclaimer = ''
+        }
+
+        axios.patch(request, data)
             .then(response => {
                 swal({
                     icon: 'success',
@@ -406,6 +410,7 @@ export default function unitsMaster() {
         removeFile,
         uploadThumb,
         saveDisclaimers,
-        removeDisclaimer
+        removeDisclaimer,
+        removeUnit,
     }
 }

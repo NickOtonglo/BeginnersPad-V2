@@ -19,6 +19,13 @@ class PropertyUnitResource extends JsonResource
         $features = PropertyUnitFeature::where('property_unit_id', $this->id)->get();
         $files = PropertyUnitFile::where('property_unit_id', $this->id)->get();
 
+        $disclaimer = [];
+        $disclaimerAssorted = explode(' || ', $this->disclaimer);
+        foreach ($disclaimerAssorted as $item) {
+            array_push($disclaimer, $item);
+        }
+        array_shift($disclaimer);
+
         return [
             // 'id' => $this->id,
             'name' => $this->name,
@@ -31,7 +38,7 @@ class PropertyUnitResource extends JsonResource
             'floor_area' => $this->floor_area,
             'bathrooms' => $this->bathrooms,
             'bedrooms' => $this->bedrooms,
-            'disclaimer' => $this->disclaimer,
+            'disclaimer' => $disclaimer,
             'status' => $this->status,
             'thumbnail' => $this->thumbnail,
             'property_id' => $this->property_id,

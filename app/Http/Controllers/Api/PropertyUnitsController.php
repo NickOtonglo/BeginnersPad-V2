@@ -10,6 +10,7 @@ use App\Models\PropertyUnit;
 use App\Models\PropertyUnitFeature;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class PropertyUnitsController extends Controller
@@ -111,9 +112,12 @@ class PropertyUnitsController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Property $property, PropertyUnit $unit)
     {
-        //
+        $unit->propertyUnitFeatures()->delete();
+        $unit->propertyUnitFiles()->delete();
+        $unit->delete();
+        return response()->noContent();
     }
 
     public function storeFeatures(Property $property, PropertyUnit $unit, Request $request) {
@@ -138,6 +142,36 @@ class PropertyUnitsController extends Controller
 
     public function destroyFeature(Property $property, PropertyUnit $unit, PropertyUnitFeature $feature) {
         $feature->delete();
+        return response()->noContent();
+    }
+
+    public function storeDisclaimer(Property $property, PropertyUnit $unit, Request $request) {
+        if (!$request->disclaimer == null) {
+            $unit->disclaimer = '';
+            $disclaimerRequest = explode(PHP_EOL, $request->disclaimer);
+            foreach ($disclaimerRequest as $item) {
+                $unit->disclaimer = $unit->disclaimer.' || '.$item;
+            }
+        } else {
+            $unit->disclaimer = null;
+        }
+
+        $unit->save();
+
+        $response = [
+            'property_unit' => $unit,
+            'message' => "Property unit '".$unit->name."' updated successfully.",
+        ];
+        return response($response, 201);
+    }
+
+    public function destroyUnit(Property $property, PropertyUnit $unit) {
+        // Delete files
+        Storage::disk('public_uploads')->deleteDirectory('images/listings/'.$property->slug.'/'.$unit->slug);
+
+        $unit->propertyUnitFeatures()->delete();
+        $unit->propertyUnitFiles()->delete();
+        $unit->delete();
         return response()->noContent();
     }
 }

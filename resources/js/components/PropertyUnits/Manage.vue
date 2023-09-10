@@ -106,9 +106,9 @@
                                 <i @click="click(editDisclaimersRef)" class="fas fa-edit"></i>
                             </div>
                         </div>
-                        <div v-if="unit.disclaimer" class="features">
+                        <div v-if="unit.disclaimer.length" class="features">
                             <ul v-for="item in unit.disclaimer">
-                                <li><span><i @click="removeDisclaimer(`/api/listings/${unit.property.slug}/units/${unit.slug}/disclaimers`)" id="disclaimer-delete" class="fas fa-times"></i> {{ item }}</span></li>
+                                <li><span>{{ item }}</span></li>
                             </ul>
                         </div>
                     </div>
@@ -150,7 +150,7 @@
                         <div class="btn-grp vertical">
                             <button>Activate</button>
                             <button>Deactivate (hide)</button>
-                            <button>Delete</button>
+                            <button @click="">Delete</button>
                         </div>
                     </div>
                 </div>
@@ -175,6 +175,7 @@ const {
     route, 
     getUnit, 
     removeFeature, 
+    removeUnit,
     uploadFiles, 
     removeFile, 
     uploadThumb
@@ -227,14 +228,13 @@ function setFiles(src) {
     cursor: pointer;
     opacity: .8;
 }
-#feature-delete, #disclaimer-delete {
+#feature-delete {
     display: none;
 }
-#feature-delete:hover, #disclaimer-delete:hover {
+#feature-delete:hover {
     color: var(--color-danger);
 }
-.features li:hover #feature-delete,
-.features li:hover #disclaimer-delete {
+.features li:hover #feature-delete {
     display: inline-block;
 }
 .features form {

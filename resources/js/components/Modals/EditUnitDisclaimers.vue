@@ -6,16 +6,16 @@
         </div>
         <div class="modal-content">
             <div class="category">
-                <form @submit.prevent="saveDisclaimers(request, disclaimer)">
+                <form v-if="unit" @submit.prevent="saveDisclaimers(request, unit)">
                     <div class="form-group">
                         <label for="disclaimer">Add disclaimer (each line represents a different disclaimer)</label>
-                        <textarea v-model="disclaimer.item" type="text" name="disclaimer" rows="5"
+                        <textarea v-model="unit.disclaimer" @click="click" ref="disclaimerRef" type="text" name="disclaimer" rows="5"
                          placeholder="e.g:
 No pets allowed
 Garbage collection day is Tuesday
 ...">
                         </textarea>
-                        <div v-for="message in validationErrors?.item" class="txt-alert txt-danger">
+                        <div v-for="message in validationErrors?.disclaimer" class="txt-alert txt-danger">
                             <p>{{ message }}</p>
                         </div>
                     </div>
@@ -35,17 +35,33 @@ Garbage collection day is Tuesday
 
 <script setup>
 import operateModal from '../../composables/modal'
-import { ref } from 'vue';
+import { ref, onBeforeMount, onMounted } from 'vue';
 import unitsMaster from '../../composables/units';
 
 const modalRef = ref(null)
-const { route, validationErrors, saveDisclaimers } = unitsMaster()
-const request = ref(`/api/listings/${route.params.slug}/units/${route.params.unit_slug}/disclaimers`)
-const disclaimer = ref({})
+const disclaimerRef = ref(null)
+const { route, validationErrors, saveDisclaimers, getUnit, unit } = unitsMaster()
+const request = ref(`/api/listings/${route.params.slug}/units/${route.params.unit_slug}/disclaimer`)
 
 function openModal() {
     operateModal(modalRef.value)
+    if (unit.value) {
+        click()
+    }
 }
+
+ function click() {
+    let arr = unit.value.disclaimer
+    disclaimerRef.value.value = arr.join(`\n`);
+ }
+
+onBeforeMount(() => {
+    getUnit(`/api/listings/${route.params.slug}/units/${route.params.unit_slug}`)
+})
+
+// async onMounted(() => {
+//     await console.log(unit.value)
+// })
 
 defineExpose({
     openModal,
