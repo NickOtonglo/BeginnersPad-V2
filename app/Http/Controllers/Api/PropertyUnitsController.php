@@ -8,6 +8,7 @@ use App\Http\Resources\PropertyUnitResource;
 use App\Models\Property;
 use App\Models\PropertyUnit;
 use App\Models\PropertyUnitFeature;
+use App\Models\PropertyUnitFile;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -114,6 +115,9 @@ class PropertyUnitsController extends Controller
      */
     public function destroy(Property $property, PropertyUnit $unit)
     {
+        // Delete files
+        Storage::disk('public_uploads')->deleteDirectory('images/listings/'.$property->slug.'/'.$unit->slug);
+
         $unit->propertyUnitFeatures()->delete();
         $unit->propertyUnitFiles()->delete();
         $unit->delete();
@@ -165,13 +169,65 @@ class PropertyUnitsController extends Controller
         return response($response, 201);
     }
 
-    public function destroyUnit(Property $property, PropertyUnit $unit) {
-        // Delete files
-        Storage::disk('public_uploads')->deleteDirectory('images/listings/'.$property->slug.'/'.$unit->slug);
+    public function storeFiles(Request $request, Property $property, PropertyUnit $unit) {
+        foreach ($request->file('files') as $file) {
+            $filename = time()
+                        .'-'.rand(1,9999)
+                        .'-'.$unit->slug.'.'
+                        .$file->extension();
+            // $path = $file->storeAs('images/listings/'.$property->slug, $filename, ['disk' => 'public_uploads']);
+            $file->storeAs('images/listings/'.$property->slug.'/'.$unit->slug, $filename, ['disk' => 'public_uploads']);
 
-        $unit->propertyUnitFeatures()->delete();
-        $unit->propertyUnitFiles()->delete();
-        $unit->delete();
+            $post = new PropertyUnitFile;
+            $post->name = $filename;
+            $post->type = $this->getFileType($file);
+            $post->property_unit_id = $unit->id;
+            $post->save();
+        }
+        $response = [
+            'property_unit files' => $unit->propertyUnitFiles,
+            'message' => "Property unit '".$unit->name."' updated with new images successfully.",
+        ];
+        return response($response, 201);
+    }
+
+    public function destroyFile(Property $property, PropertyUnit $unit, PropertyUnitFile $file) {
+        // Delete file from storage
+        Storage::disk('public_uploads')->delete('images/listings/'.$property->slug.'/'.$unit->slug.'/'.$file->name);
+
+        $file->delete();
         return response()->noContent();
+    }
+
+    public function updateThumbnail(Property $property, PropertyUnit $unit, Request $request) {
+        if ($request->hasFile('files')) {
+            foreach ($request->file('files') as $file) {
+                $filename = time()
+                            .'-'.$unit->slug.'.'
+                            .$file->extension();
+                $file->storeAs('images/listings/'.$property->slug.'/'.$unit->slug, $filename, ['disk' => 'public_uploads']);
+        
+                // Delete old thumbnail
+                Storage::disk('public_uploads')->delete('images/listings/'.$property->slug.'/'.$unit->slug.'/'.$unit->thumbnail);
+                
+                $unit->thumbnail = $filename;
+                $unit->save();
+            }
+        }
+
+        $response = [
+            'property_unit files' => $unit->propertyUnitFiles,
+            'message' => "Property unit '".$unit->name."' updated with new thumbnail successfully.",
+        ];
+        return response($response, 201);
+    }
+
+    public function getFileType($file) {
+        $meta = getimagesize($file);
+        $file_type = $meta[2];
+        
+        if(in_array($file_type , array(IMAGETYPE_GIF, IMAGETYPE_JPEG  ,IMAGETYPE_PNG, IMAGETYPE_BMP))) {
+            return 'image';
+        } return '';
     }
 }

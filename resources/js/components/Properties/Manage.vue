@@ -111,7 +111,7 @@
                                             <p class="timestamp">Added {{ unit.time_ago }}</p>
                                         </div>
                                         <template v-if="unit.thumbnail">
-                                            <div class="thumb" :style="{ background: `url(/images/listings/${property.slug}/units/${unit.slug}/${unit.thumbnail})` }" style="background-size: cover;"></div>
+                                            <div class="thumb" :style="{ background: `url(/images/listings/${property.slug}/${unit.slug}/${unit.thumbnail})` }" style="background-size: cover;"></div>
                                         </template>
                                         <template v-else>
                                             <div class="thumb" :style="{ background: `url(/images/static/thumb_unit.jpg` }" style="background-size: cover;"></div>

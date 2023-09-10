@@ -4,61 +4,59 @@
             <div class="title-grp">
                 <h3>Images</h3>
                 <div class="info-actions">
-                    <i id="btnImgFaux" class="fas fa-plus"></i>
-                    <form action="">
-                        <input class="file-path-wrapper" accept="image/*" name="btn_submit" id="btnImgReal" type="file" style="display: none;"/>
+                    <i @click="fileInputRef.click()" class="fas fa-plus"></i>
+                    <form @submit.prevent="uploadFiles(formFileRequest, fileInputRef)">
+                        <input @change="setFiles('files')" 
+                                ref="fileInputRef" 
+                                name="files"
+                                accept="image/*" 
+                                type="file" 
+                                :multiple="true" 
+                                :hidden="true" />
+                        <button :disabled="isLoading" class="btn-submit" type="submit" :hidden="true" ref="formFilesSubmit">
+                            <div v-show="isLoading" class="lds-dual-ring"></div>
+                            <span v-if="isLoading">Loading...</span>
+                            <span v-else>Upload</span>
+                        </button>
                     </form>
                 </div>
             </div>
-            <div class="image-grp">
-                <div class="image">
-                    <img src="/images/thumb_unit.jpg" alt="">
-                    <button class="btn-link btn-close"><i class="fas fa-times"></i></button>
+            <template v-if="unit.files">
+                <div class="image-grp">
+                    <div class="image" v-for="file in unit.files">
+                        <img :src="`/images/listings/${unit.property.slug}/${unit.slug}/${file.name}`" height="200" alt="">
+                        <button @click="removeFile(`/api/listings/${unit.property.slug}/units/${unit.slug}/files/${file.id}`)" class="btn-link btn-close">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
                 </div>
-                <div class="image">
-                    <img src="/images/thumb_unit.jpg" alt="">
-                    <button class="btn-link btn-close"><i class="fas fa-times"></i></button>
-                </div>
-                <div class="image">
-                    <img src="/images/thumb_unit.jpg" alt="">
-                    <button class="btn-link btn-close"><i class="fas fa-times"></i></button>
-                </div>
-                <div class="image">
-                    <img src="/images/thumb_unit.jpg" alt="">
-                    <button class="btn-link btn-close"><i class="fas fa-times"></i></button>
-                </div>
-                <div class="image">
-                    <img src="/images/thumb_unit.jpg" alt="">
-                    <button class="btn-link btn-close"><i class="fas fa-times"></i></button>
-                </div>
-                <div class="image">
-                    <img src="/images/thumb_unit.jpg" alt="">
-                    <button class="btn-link btn-close"><i class="fas fa-times"></i></button>
-                </div>
-                <div class="image">
-                    <img src="/images/thumb_unit.jpg" alt="">
-                    <button class="btn-link btn-close"><i class="fas fa-times"></i></button>
-                </div>
-                <div class="image">
-                    <img src="/images/thumb_unit.jpg" alt="">
-                    <button class="btn-link btn-close"><i class="fas fa-times"></i></button>
-                </div>
-            </div>
+            </template>
             <div class="title-grp">
                 <h3>Thumbnail</h3>
                 <div class="info-actions">
-                    <i id="btnThumbFaux" class="fas fa-plus"></i>
-                    <form action="">
-                        <input class="file-path-wrapper" accept="image/*" name="btn_submit" id="btnThumbReal" type="file" style="display: none;"/>
+                    <i @click="thumbInputRef.click()" class="fas fa-plus"></i>
+                    <form @submit.prevent="uploadThumb(formThumbRequest, thumbInputRef)">
+                        <input @change="setFiles('thumb')" 
+                                ref="thumbInputRef" 
+                                name="thumb"
+                                accept="image/*" 
+                                type="file" 
+                                :hidden="true" />
+                        <button :disabled="isLoading" class="btn-submit" type="submit" :hidden="true" ref="formThumbSubmit">
+                            <div v-show="isLoading" class="lds-dual-ring"></div>
+                            <span v-if="isLoading">Loading...</span>
+                            <span v-else>Upload</span>
+                        </button>
                     </form>
                 </div>
             </div>
-            <div class="image-grp">
-                <div class="image">
-                    <img src="/images/thumb_unit.jpg" alt="">
-                    <button class="btn-link btn-close"><i class="fas fa-times"></i></button>
+            <template v-if="unit.thumbnail">
+                <div class="image-grp">
+                    <div class="image">
+                        <img :src="`/images/listings/${unit.property.slug}/${unit.slug}/${unit.thumbnail}`" height="200" alt="">
+                    </div>
                 </div>
-            </div>
+            </template>
         </div>
     </section>
 
@@ -150,7 +148,7 @@
                         <div class="btn-grp vertical">
                             <button>Activate</button>
                             <button>Deactivate (hide)</button>
-                            <button @click="">Delete</button>
+                            <button @click="deleteUnit(deleteRequest)">Delete</button>
                         </div>
                     </div>
                 </div>
@@ -175,7 +173,7 @@ const {
     route, 
     getUnit, 
     removeFeature, 
-    removeUnit,
+    deleteUnit,
     uploadFiles, 
     removeFile, 
     uploadThumb
@@ -186,12 +184,13 @@ const editFeaturesRef = ref(null)
 const editDisclaimersRef = ref(null)
 const fileInputRef = ref(null)
 const formFilesSubmit = ref(null)
-const formFileRequest = ref(`/api/listings/${route.params.slug}/files`)
+const formFileRequest = ref(`/api/listings/${route.params.slug}/units/${route.params.unit_slug}/files`)
 const files = ref({})
 const thumbInputRef = ref(null)
 const formThumbSubmit = ref(null)
-const formThumbRequest = ref(`/api/listings/${route.params.slug}/thumbnail`)
+const formThumbRequest = ref(`/api/listings/${route.params.slug}/units/${route.params.unit_slug}/thumbnail`)
 const thumb = ref(null)
+const deleteRequest = ref(`/api/listings/${route.params.slug}/units/${route.params.unit_slug}`)
 
 onBeforeMount(() => {
     getUnit(`/api/listings/${route.params.slug}/units/${route.params.unit_slug}`)

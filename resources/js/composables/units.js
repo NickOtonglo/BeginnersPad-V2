@@ -411,6 +411,5 @@ export default function unitsMaster() {
         uploadThumb,
         saveDisclaimers,
         removeDisclaimer,
-        removeUnit,
     }
 }
