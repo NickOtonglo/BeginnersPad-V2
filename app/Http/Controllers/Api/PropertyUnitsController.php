@@ -7,6 +7,7 @@ use App\Http\Requests\SavePropertyUnitBasicRequest;
 use App\Http\Resources\PropertyUnitResource;
 use App\Models\Property;
 use App\Models\PropertyUnit;
+use App\Models\PropertyUnitFeature;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -113,5 +114,30 @@ class PropertyUnitsController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function storeFeatures(Property $property, PropertyUnit $unit, Request $request) {
+        $request->validate([
+            'item' => 'required',
+        ]);
+
+        $featuresRequest = explode(PHP_EOL, $request->item);
+        foreach ($featuresRequest as $item) {
+            $feature = new PropertyUnitFeature;
+            $feature->item = trim($item);
+            $feature->property_unit_id = $unit->id;
+            $feature->save();
+        }
+
+        $response = [
+            'property_unit features' => $featuresRequest,
+            'message' => "Property unit '".$unit->name."' updated with new features successfully.",
+        ];
+        return response($response, 201);
+    }
+
+    public function destroyFeature(Property $property, PropertyUnit $unit, PropertyUnitFeature $feature) {
+        $feature->delete();
+        return response()->noContent();
     }
 }
