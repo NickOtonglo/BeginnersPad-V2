@@ -1,7 +1,7 @@
 <template>
     <div class="modal" id="modal" ref="modalRef">
         <div class="modal-header">
-            <h2>Add disclaimers</h2>
+            <h2>Add features</h2>
             <button @click="operateModal(modalRef)" id="modalHeaderClose" class="btn-link btn-close"><i class="fas fa-times"></i></button>
         </div>
         <div class="modal-content">

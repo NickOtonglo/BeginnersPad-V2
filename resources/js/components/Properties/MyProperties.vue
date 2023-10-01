@@ -56,7 +56,7 @@
                 <div class="listing-units-grp">
                     <template v-for="property in properties">
                         <div class="card-sm card-2">
-                            <router-link :to="{ name: 'property.manage', params: {slug: property.slug } }">
+                            <router-link :to="{ name: 'property.view', params: {slug: property.slug } }">
                                 <template v-if="property.thumbnail">
                                     <div class="thumb" :style="{ background: `url(/images/listings/${property.slug}/${property.thumbnail})` }" style="background-size: cover;"></div>
                                 </template>

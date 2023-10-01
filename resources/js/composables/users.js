@@ -1,5 +1,6 @@
 import { inject, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import checkAuth from '../composables/checkAuth';
 
 export default function userMaster() {
     const route = useRoute()
@@ -7,9 +8,16 @@ export default function userMaster() {
     const isLoading = ref(false)
     const validationErrors = ref('')
     const swal = inject('$swal')
-    const user = ref({
-        
-    })
+    const user = ref({})
+    const userAuth = checkAuth()
+
+    const getUserData = () => {
+        if (userAuth.isAuthenticated.value) {
+            axios.get('/api/user')
+                .then(response => user.value = response.data)
+                .catch(error => console.log(error))
+        }
+    }    
 
     const getUserAccount = () => {
         axios.get('api/user/account')
@@ -166,6 +174,7 @@ export default function userMaster() {
         user,
         validationErrors,
         getUserAccount,
+        getUserData,
         updateAvatar,
         removeAvatar,
         updateForm,

@@ -1,14 +1,14 @@
 <template>
     <div class="modal" id="modal" ref="modalRef">
         <div class="modal-header">
-            <h2>Add features</h2>
+            <h2>Add disclaimers</h2>
             <button @click="operateModal(modalRef)" id="modalHeaderClose" class="btn-link btn-close"><i class="fas fa-times"></i></button>
         </div>
         <div class="modal-content">
             <div class="category">
                 <form v-if="unit" @submit.prevent="saveDisclaimers(request, unit)">
                     <div class="form-group">
-                        <label for="disclaimer">Add disclaimer (each line represents a different disclaimer)</label>
+                        <label for="disclaimer">Edit disclaimers (each line represents a different disclaimer)</label>
                         <textarea v-model="unit.disclaimer" @click="click" ref="disclaimerRef" type="text" name="disclaimer" rows="5"
                          placeholder="e.g:
 No pets allowed

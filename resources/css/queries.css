@@ -158,9 +158,18 @@
     .section-unit-secondary .container {
         width: 100%;
     }
+
+    .info-name {
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+    }
     
     .info-name .name {
         font-size: 1.6rem;
+        align-self: flex-start;
     }
 
     .listing-units-grp {

@@ -16,6 +16,7 @@ import SubZoneView from '../components/SubZones/View.vue'
 import PropertiesIndex from '../components/Properties/Index.vue'
 import PropertiesMine from '../components/Properties/MyProperties.vue'
 import PropertyManage from '../components/Properties/Manage.vue'
+import PropertyView from '../components/Properties/View.vue'
 import PropertyUnitManage from '../components/PropertyUnits/Manage.vue'
 
 function auth(to, from, next) {
@@ -116,10 +117,15 @@ const routes = [
         component: PropertyManage,
     },
     {
+        path: '/listings/:slug',
+        name: 'property.view',
+        component: PropertyView,
+    },
+    {
         path: '/listings/my-listings/:slug/:unit_slug',
         name: 'unit.manage',
         component: PropertyUnitManage,
-    }
+    },
 ]
 
 export default createRouter({

@@ -39,7 +39,10 @@ export default function propertiesMaster() {
         isLoading.value = true
 
         axios.get(request)
-            .then(response => property.value = response.data.data)
+            .then(response => {
+                property.value = response.data.data
+                return property.value
+            })
             .catch(error => console.log(error))
             .finally(isLoading.value = false)
     }
