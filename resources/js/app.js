@@ -13,6 +13,8 @@ import 'sweetalert2/dist/sweetalert2.min.css'
 import { QuillEditor } from '@vueup/vue-quill';
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
 import Pagination from './components/Misc/Pagination.vue'
+import VueViewer from 'v-viewer'
+import 'viewerjs/dist/viewer.css'
 
 const globalOptions = {
     placeholder: 'Your article starts here...',
@@ -24,6 +26,7 @@ const globalOptions = {
 const app = createApp(App)
 app.use(router)
 app.use(VueSweetalert2)
+app.use(VueViewer)
 QuillEditor.props.globalOptions.default = () => globalOptions
 app.component('QuillEditor', QuillEditor)
     .component('Pagination', Pagination)

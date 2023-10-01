@@ -50,10 +50,20 @@
             <template v-else>
                 <div ref="show_8" class="showcase-listing-img-8"></div>
             </template>
-            
-            
         </div>
-        <div class="more-images" id="toggleShowcase">
+
+        <div>
+            <!-- directive -->
+            <div class="images" v-viewer>
+                <img v-for="src in images" :key="src" :src="src">
+            </div>
+            <!-- component -->
+            <viewer :images="images">
+                <img v-for="src in images" :key="src" :src="src">
+            </viewer>
+        </div>
+        <!-- API -->
+        <div @click="openImageBrowser" class="more-images" id="toggleShowcase">
             <i class="fas fa-images"></i>
             <span>View images</span>
         </div>
@@ -382,15 +392,12 @@ import EditPropertyPrimary from '../Modals/EditPropertyPrimary.vue'
 import Pagination from '../Misc/Pagination.vue'
 import pagination from '../../composables/pagination';
 import userMaster from '../../composables/users';
+import { api as viewerApi } from "v-viewer"
 
 const { 
     property, 
     route, 
-    getProperty, 
-    removeFeature, 
-    uploadFiles, 
-    removeFile, 
-    uploadThumb
+    getProperty,
 } = propertiesMaster()
 
 const { 
@@ -406,22 +413,42 @@ const {
 const createUnitRef = ref(null)
 const editPrimaryRef = ref(null)
 const editFeaturesRef = ref(null)
-const fileInputRef = ref(null)
-const formFilesSubmit = ref(null)
-const formFileRequest = ref(`/api/listings/${route.params.slug}/files`)
-const files = ref({})
-const thumbInputRef = ref(null)
-const formThumbSubmit = ref(null)
-const formThumbRequest = ref(`/api/listings/${route.params.slug}/thumbnail`)
-const thumb = ref(null)
 const unitsRequest = `/api/listings/${route.params.slug}/units`
 const { getUserData, user } = userMaster()
+const imagesList = () => {
+    let images = [];
+    for (let i=0; i<property.value.files.length; i++) {
+        images.push(`/images/listings/${property.value.slug}/${property.value.files[i].name}`)
+    }
+    return images
+}
 
 onBeforeMount(() => {
     getProperty(`/api/listings/my-listings/${route.params.slug}`)
     getPaginationDataWithRequest(current_page.value, 'property_units', unitsRequest)
     getUserData()
 })
+
+function openImageBrowser() {
+    viewerApi({
+        images: imagesList(),
+        options: {
+            inline: false, 
+            button: true, 
+            navbar: false, 
+            title: false, 
+            toolbar: true, 
+            tooltip: false, 
+            movable: false, 
+            zoomable: true, 
+            rotatable: true, 
+            scalable: true, 
+            transition: true, 
+            fullscreen: true, 
+            keyboard: true
+        }
+    })
+}
 
 function click(element) {
     element.openModal();
