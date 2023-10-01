@@ -20,7 +20,7 @@ class BrandResource extends JsonResource
         $properties = Property::where('user_id', $this->user_id)->get();
         
         return [
-            'id' => $this->id,
+            // 'id' => $this->id,
             'name' => $this->name,
             'statement' => $this->statement,
             'avatar' => $this->avatar,

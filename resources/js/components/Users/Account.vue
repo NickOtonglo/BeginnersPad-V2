@@ -69,7 +69,7 @@
                                     <div class="header">
                                         <div>
                                             <h2 class="name">{{ user.brand.name }}</h2>
-                                            <p class="timestamp">{{ user.brand.created_at }}</p>
+                                            <p class="timestamp">Created on {{ user.brand.created_at }}</p>
                                         </div>
                                         <template v-if="user.brand.avatar">
                                             <img :src="'/images/brand/avatar/' + user.username + '/' + user.brand.avatar" alt="">

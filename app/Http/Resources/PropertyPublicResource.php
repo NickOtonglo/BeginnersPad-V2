@@ -9,7 +9,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class PropertyResource extends JsonResource
+class PropertyPublicResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -22,6 +22,15 @@ class PropertyResource extends JsonResource
         $files = PropertyFile::where('property_id', $this->id)->get(['name']);
         $units = PropertyUnit::where('property_id', $this->id)->get();
         $user = User::where('id', $this->user_id)->first()->username;
+        $subZone = [
+            'name' => $this->subZone->name,
+            'zone' => [
+                'name' => $this->subZone->zone->name,
+                'county' => [
+                    'name' => $this->subZone->zone->zoneCounty->name
+                ]
+            ]
+        ];
 
         $window = [
             'rent_min' => intval(PropertyUnit::where('property_id', $this->id)->orderBy('price')->first()->price),
@@ -40,7 +49,6 @@ class PropertyResource extends JsonResource
             'lat' => $this->lat,
             'lng' => $this->lng,
             'user_name' => $user,
-            'sub_zone_id' => $this->sub_zone_id,
             'status' => $this->status,
             'verified' => $this->verified,
             'description' => $this->description,
@@ -52,7 +60,7 @@ class PropertyResource extends JsonResource
             'features' => PropertyFeaturesResource::collection($features),
             'files' => PropertyFilesResource::collection($files),
             'brand' => new BrandResource($this->user->brand),
-            'sub_zone' => new SubZoneResource($this->subZone),
+            'sub_zone' => $subZone,
             'units' => PropertyUnitLiteResource::collection($units),
         ];
     }

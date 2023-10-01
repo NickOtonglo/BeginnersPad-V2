@@ -63,7 +63,7 @@
             </viewer>
         </div>
         <!-- API -->
-        <div @click="openImageBrowser" class="more-images" id="toggleShowcase">
+        <div v-if="property.files && property.files[0]" @click="openImageBrowser" class="more-images" id="toggleShowcase">
             <i class="fas fa-images"></i>
             <span>View images</span>
         </div>
@@ -377,18 +377,11 @@
             </div>
         </div>
     </section>
-
-    <CreateUnit ref="createUnitRef" />
-    <EditPropertyPrimary ref="editPrimaryRef"/>
-    <EditPropertyFeatures ref="editFeaturesRef"/>
 </template>
 
 <script setup>
 import propertiesMaster from '../../composables/properties';
 import { onBeforeMount, onMounted, ref } from 'vue';
-import CreateUnit from '../Modals/CreateUnit.vue';
-import EditPropertyFeatures from '../Modals/EditPropertyFeatures.vue';
-import EditPropertyPrimary from '../Modals/EditPropertyPrimary.vue'
 import Pagination from '../Misc/Pagination.vue'
 import pagination from '../../composables/pagination';
 import userMaster from '../../composables/users';
@@ -424,7 +417,7 @@ const imagesList = () => {
 }
 
 onBeforeMount(() => {
-    getProperty(`/api/listings/my-listings/${route.params.slug}`)
+    getProperty(`/api/listings/${route.params.slug}`)
     getPaginationDataWithRequest(current_page.value, 'property_units', unitsRequest)
     getUserData()
 })

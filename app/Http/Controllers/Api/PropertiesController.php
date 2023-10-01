@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SavePropertyBasicRequest;
 use App\Http\Requests\UpdatePropertyRequest;
+use App\Http\Resources\PropertyPublicResource;
 use App\Http\Resources\PropertyResource;
 use App\Models\Property;
 use App\Models\PropertyFeature;
@@ -74,7 +75,7 @@ class PropertiesController extends Controller
      */
     public function show(Property $property)
     {
-        return new PropertyResource($property);
+        return new PropertyPublicResource($property);
     }
 
     /**
