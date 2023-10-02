@@ -42,7 +42,7 @@ class PropertyUnitResource extends JsonResource
             'status' => $this->status,
             'thumbnail' => $this->thumbnail,
             'property_id' => $this->property_id,
-            'timestamp' => $this->created_at->format('jS F Y,  H:m:s'),
+            'timestamp' => $this->created_at->format('jS F Y, H:m:s'),
             'time_ago' => $this->created_at->diffForHumans(),
             'features' => PropertyUnitFeatureResource::collection($features),
             'files' => PropertyUnitFileResource::collection($files),

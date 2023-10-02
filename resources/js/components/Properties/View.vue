@@ -134,7 +134,7 @@
                         <div class="listing-units-grp">
                             <template v-if="units" v-for="unit in units">
                                 <div class="card-sm card-unit">
-                                    <router-link :to="{ name: 'unit.manage', params: {slug: property.slug, unit_slug: unit.slug } }">
+                                    <router-link :to="{ name: 'unit.view', params: {slug: property.slug, unit_slug: unit.slug } }">
                                         <div class="details">
                                             <h2>{{ unit.name }}</h2>
                                             <div class="specs">
@@ -381,7 +381,7 @@
 
 <script setup>
 import propertiesMaster from '../../composables/properties';
-import { onBeforeMount, onMounted, ref } from 'vue';
+import { onBeforeMount } from 'vue';
 import Pagination from '../Misc/Pagination.vue'
 import pagination from '../../composables/pagination';
 import userMaster from '../../composables/users';
@@ -403,9 +403,6 @@ const {
     getPaginationDataWithRequest
 } = pagination()
 
-const createUnitRef = ref(null)
-const editPrimaryRef = ref(null)
-const editFeaturesRef = ref(null)
 const unitsRequest = `/api/listings/${route.params.slug}/units`
 const { getUserData, user } = userMaster()
 const imagesList = () => {

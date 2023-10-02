@@ -54,7 +54,7 @@ class PropertyPublicResource extends JsonResource
             'description' => $this->description,
             'stories' => $this->stories,
             'thumbnail' => $this->thumbnail,
-            'timestamp' => $this->created_at->format('jS F Y,  H:m:s'),
+            'timestamp' => $this->created_at->format('jS F Y, H:m:s'),
             'time_ago' => $this->created_at->diffForHumans(),
             'window' => $window,
             'features' => PropertyFeaturesResource::collection($features),

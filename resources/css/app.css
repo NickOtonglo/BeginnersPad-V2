@@ -296,7 +296,7 @@ nav .nav-menu .badge li.selected a {
 /* Page - / */
 /* Showcase */
 #showcase {
-    background: url(../images/static/city_clipart.png) center center;
+    background: url(/images/static/city_clipart.png) center center;
     filter: opacity(0.9);
     color: #fff;
     min-height: 450px;
@@ -304,7 +304,7 @@ nav .nav-menu .badge li.selected a {
 }
 
 .showcase-small {
-    background: url(../images/static/city_clipart.png) center center;
+    background: url(/images/static/city_clipart.png) center center;
     filter: opacity(0.9);
     color: #fff;
     height: 200px;
@@ -312,7 +312,7 @@ nav .nav-menu .badge li.selected a {
 }
 
 .showcase-avatar {
-    background: url(../images/static/city_clipart.png) center center;
+    background: url(/images/static/city_clipart.png) center center;
     filter: opacity(0.9);
     color: #fff;
     height: 270px;
@@ -517,48 +517,48 @@ nav .nav-menu .badge li.selected a {
 }
 
 .showcase-listing-img-1 {
-    background: url('../images/static/thumb_default.jpg') no-repeat;
+    background: url('/images/static/thumb_default.jpg') no-repeat;
     background-size: cover;
     grid-column: 1 / span 3;
     grid-row: 1 / span 3;
 }
 
 .showcase-listing-img-2 {
-    background: url('../images/static/thumb_default.jpg') no-repeat;
+    background: url('/images/static/thumb_default.jpg') no-repeat;
     background-size: cover;
     grid-column: 4 / span 2;
     grid-row: 1 / span 2;
 }
 
 .showcase-listing-img-3 {
-    background: url('../images/static/thumb_default.jpg') no-repeat;
+    background: url('/images/static/thumb_default.jpg') no-repeat;
     background-size: cover;
 }
 
 .showcase-listing-img-4 {
-    background: url('../images/static/thumb_default.jpg') no-repeat;
+    background: url('/images/static/thumb_default.jpg') no-repeat;
     background-size: cover;
 }
 
 .showcase-listing-img-5 {
-    background: url('../images/static/thumb_default.jpg') no-repeat;
+    background: url('/images/static/thumb_default.jpg') no-repeat;
     background-size: cover;
 }
 
 .showcase-listing-img-6 {
-    background: url('../images/static/thumb_default.jpg') no-repeat;
+    background: url('/images/static/thumb_default.jpg') no-repeat;
     background-size: cover;
 }
 
 .showcase-listing-img-7 {
-    background: url('../images/static/thumb_default.jpg') right center no-repeat;
+    background: url('/images/static/thumb_default.jpg') right center no-repeat;
     background-size: cover;
     grid-column: 4 / span 3;
     grid-row: 3;
 }
 
 .showcase-listing-img-8 {
-    background: url('../images/static/thumb_default.jpg') no-repeat;
+    background: url('/images/static/thumb_default.jpg') no-repeat;
     background-size: cover;
     grid-column: 7 / span 2;
     grid-row: 2 / span 2;
@@ -797,17 +797,18 @@ nav .nav-menu .badge li.selected a {
 
 .section-unit-main .container .main-img .img:first-child {
     height: 300px;
-    background: url('../images/static/thumb_unit.jpg');
+    background: url('/images/static/thumb_unit.jpg');
     grid-column: 1 / span 3;
     grid-row: 1 / span 1;
     position: relative;
+    background-size: cover;
 }
 
 .section-unit-main .container .main-img .img:nth-child(2),
 .section-unit-main .container .main-img .img:nth-child(3),
 .section-unit-main .container .main-img .img:last-child {
     height: 150px;
-    background: url('../images/static/thumb_unit.jpg');
+    background: url('/images/static/thumb_unit.jpg');
     background-size: cover;
 }
 
@@ -921,7 +922,7 @@ nav .nav-menu .badge li.selected a {
 .section-listing-info-header .header-grp .thumb {
     width: 220px;
     height: inherit;
-    background: url('../images/static/thumb_default.jpg') no-repeat;
+    background: url('/images/static/thumb_default.jpg') no-repeat;
     background-size: cover;
     display: inline-block;
 }
@@ -1098,11 +1099,11 @@ nav .nav-menu .badge li.selected a {
 }
 
 .favourites-grp .fav.listing .thumb {
-    background: url('../images/static/thumb_default.jpg') no-repeat center;
+    background: url('/images/static/thumb_default.jpg') no-repeat center;
 }
 
 .favourites-grp .fav.unit .thumb {
-    background: url('../images/static/thumb_unit.jpg') no-repeat;
+    background: url('/images/static/thumb_unit.jpg') no-repeat;
 }
 
 /* Page - /beginner/property-history.html */

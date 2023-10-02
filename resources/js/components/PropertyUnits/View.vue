@@ -1,0 +1,161 @@
+<template>
+    <section class="section-unit-main">
+        <div class="container">
+            <div class="main-img">
+                <!-- Images -->
+                <template v-if="unit.files && unit.files[0]">
+                    <div class="img" :style="{ background: `url(/images/listings/${route.params.slug}/${route.params.unit_slug}/${unit.files[0].name})` }" style="background-size: cover;">
+                        <div class="more-images" id="toggleUnitImg">
+                            <i class="fas fa-images"></i>
+                            <span>All images</span>
+                        </div>
+                    </div>
+                </template>
+                <template v-else>
+                    <div class="img">
+                        <div class="more-images" id="toggleUnitImg">
+                            <i class="fas fa-images"></i>
+                            <span>All images</span>
+                        </div>
+                    </div>
+                </template>
+                <template v-if="unit.files && unit.files[1]">
+                    <div class="img" :style="{ background: `url(/images/listings/${route.params.slug}/${route.params.unit_slug}/${unit.files[1].name})` }" style="background-size: cover;"></div>
+                </template>
+                <template v-else>
+                    <div class="img"></div>
+                </template>
+                <template v-if="unit.files && unit.files[2]">
+                    <div class="img" :style="{ background: `url(/images/listings/${route.params.slug}/${route.params.unit_slug}/${unit.files[2].name})` }" style="background-size: cover;"></div>
+                </template>
+                <template v-else>
+                    <div class="img"></div>
+                </template>
+                <template v-if="unit.files && unit.files[3]">
+                    <div class="img" :style="{ background: `url(/images/listings/${route.params.slug}/${route.params.unit_slug}/${unit.files[3].name})` }" style="background-size: cover;"></div>
+                </template>
+                <template v-else>
+                    <div class="img"></div>
+                </template>
+            </div>
+            <!-- Info -->
+            <div class="main-info">
+                <div class="info-name">
+                    <div class="info-actions">
+                        <div><i class="fas fa-share-alt" id="modalTrigger"></i></div>
+                        <div><i class="fas fa-heart"></i></div>
+                        <router-link v-if="user.username === unit.property.user_name" :to="{ name: 'unit.manage', params: { slug: route.params.slug, unit_slug: route.params.unit_slug } }"><i class="fas fa-edit"></i></router-link>
+                    </div>
+                </div>
+                <h2>{{ unit.name }}</h2>
+                <p class="price">KES {{ unit.price }}</p>
+                <p v-if="unit.init_deposit == 0" class="deposit">Initial deposit: not required</p>
+                <p v-else class="deposit">Initial deposit: {{ unit.init_deposit }} (for {{ unit.init_deposit_period }} months)</p>
+                <p class="floor">Floor/story: {{ unit.story }}</p>
+                <p class="timestamp">Added on {{ unit.timestamp }}</p>
+                <p class="description">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Totam quae explicabo numquam soluta in
+                    repellat, consectetur iure officiis beatae alias quibusdam sit saepe, quam pariatur.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-unit-secondary">
+        <div class="container">
+            <div class="panel-grp">
+                <div class="panel">
+                    <div class="listing-features">
+                        <div class="title-grp">
+                            <h3>Unit features</h3>
+                        </div>
+                        <div v-if="unit.features.length" class="features">
+                            <ul v-for="feature in unit.features">
+                                <li><span>{{ feature.item }}</span></li>
+                            </ul>
+                        </div>
+                        <template v-else>
+                            <p style="text-align: center;">-no features-</p>
+                        </template>
+                    </div>
+                    <div class="unit-disclaimer">
+                        <div class="title-grp">
+                            <h3>Disclaimer (important)</h3>
+                        </div>
+                        <div v-if="unit.disclaimer.length" class="features">
+                            <ul v-for="item in unit.disclaimer">
+                                <li><span>{{ item }}</span></li>
+                            </ul>
+                        </div>
+                        <template v-else>
+                            <p style="text-align: center;">-no disclaimer-</p>
+                        </template>
+                    </div>
+                </div>
+                <div class="panel">
+                    <div class="listing-units-list">
+                        <h3>Property</h3>
+                        <div class="card-sm card-2" v-if="unit && unit.property">
+                            <router-link :to="{ name: 'property.view', params: {slug: unit.property.slug } }">
+                                <template v-if="unit.property.thumbnail">
+                                    <div class="thumb" :style="{ background: `url(/images/listings/${unit.property.slug}/${unit.property.thumbnail})` }" style="background-size: cover;"></div>
+                                </template>
+                                <template v-else>
+                                    <div class="thumb"></div>
+                                </template>
+                                <div class="details">
+                                    <h2>{{ unit.property.name }}</h2>
+                                    <div class="location">
+                                        <span class="spec">{{ unit.property.sub_zone.name }}, </span>
+                                        <span class="spec">{{ unit.property.sub_zone.zone.county.name }}</span>
+                                    </div>
+                                    <p class="timestamp">Added {{ unit.property.time_ago }}</p>
+                                    <div class="info-rating-grp">
+                                        <p class="rating">Rating: 4.0/5</p>
+                                        <div class="stars">
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="far fa-star"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </router-link>  
+                        </div>
+                    </div>
+                    <div class="listing-actions">
+                        <h3>Actions</h3>
+                        <div class="btn-grp vertical">
+                            <button>Activate</button>
+                            <button>Deactivate (hide)</button>
+                            <button>Delete</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</template>
+
+<script setup>
+import unitsMaster from '../../composables/units';
+import { onBeforeMount } from 'vue';
+import userMaster from '../../composables/users';
+
+const { 
+    unit, 
+    route, 
+    getUnit, 
+} = unitsMaster()
+
+const { getUserData, user } = userMaster()
+
+onBeforeMount(() => {
+    getUnit(`/api/listings/${route.params.slug}/units/${route.params.unit_slug}`)
+    getUserData()
+})
+
+function click(element) {
+    element.openModal();
+}
+
+</script>

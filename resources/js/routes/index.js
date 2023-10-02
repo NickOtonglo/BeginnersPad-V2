@@ -18,6 +18,7 @@ import PropertiesMine from '../components/Properties/MyProperties.vue'
 import PropertyManage from '../components/Properties/Manage.vue'
 import PropertyView from '../components/Properties/View.vue'
 import PropertyUnitManage from '../components/PropertyUnits/Manage.vue'
+import PropertyUnitView from '../components/PropertyUnits/View.vue'
 
 function auth(to, from, next) {
     if (JSON.parse(localStorage.getItem('authenticated'))) {
@@ -125,6 +126,11 @@ const routes = [
         path: '/listings/my-listings/:slug/:unit_slug',
         name: 'unit.manage',
         component: PropertyUnitManage,
+    },
+    {
+        path: '/listings/:slug/:unit_slug',
+        name: 'unit.view',
+        component: PropertyUnitView,
     },
 ]
 
