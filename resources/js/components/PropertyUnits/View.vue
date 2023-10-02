@@ -5,19 +5,15 @@
                 <!-- Images -->
                 <template v-if="unit.files && unit.files[0]">
                     <div class="img" :style="{ background: `url(/images/listings/${route.params.slug}/${route.params.unit_slug}/${unit.files[0].name})` }" style="background-size: cover;">
-                        <div class="more-images" id="toggleUnitImg">
+                        <!-- API -->
+                        <div v-if="unit.files && unit.files[0]" @click="openImageBrowser" class="more-images" id="toggleUnitImg">
                             <i class="fas fa-images"></i>
-                            <span>All images</span>
+                            <span> All images ({{ unit.files.length }})</span>
                         </div>
                     </div>
                 </template>
                 <template v-else>
-                    <div class="img">
-                        <div class="more-images" id="toggleUnitImg">
-                            <i class="fas fa-images"></i>
-                            <span>All images</span>
-                        </div>
-                    </div>
+                    <div class="img"></div>
                 </template>
                 <template v-if="unit.files && unit.files[1]">
                     <div class="img" :style="{ background: `url(/images/listings/${route.params.slug}/${route.params.unit_slug}/${unit.files[1].name})` }" style="background-size: cover;"></div>
@@ -50,11 +46,22 @@
                 <h2>{{ unit.name }}</h2>
                 <p class="price">KES {{ unit.price }}</p>
                 <p v-if="unit.init_deposit == 0" class="deposit">Initial deposit: not required</p>
-                <p v-else class="deposit">Initial deposit: {{ unit.init_deposit }} (for {{ unit.init_deposit_period }} months)</p>
+                <p v-else class="deposit">Initial deposit: KES {{ unit.init_deposit }} (for {{ unit.init_deposit_period }} months)</p>
                 <p class="floor">Floor/story: {{ unit.story }}</p>
                 <p class="timestamp">Added on {{ unit.timestamp }}</p>
                 <p class="description">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Totam quae explicabo numquam soluta in
                     repellat, consectetur iure officiis beatae alias quibusdam sit saepe, quam pariatur.</p>
+            </div>
+            
+            <div>
+                <!-- directive -->
+                <div class="images" v-viewer>
+                    <img v-for="src in images" :key="src" :src="src">
+                </div>
+                <!-- component -->
+                <viewer :images="images">
+                    <img v-for="src in images" :key="src" :src="src">
+                </viewer>
             </div>
         </div>
     </section>
@@ -140,6 +147,7 @@
 import unitsMaster from '../../composables/units';
 import { onBeforeMount } from 'vue';
 import userMaster from '../../composables/users';
+import { api as viewerApi } from "v-viewer"
 
 const { 
     unit, 
@@ -148,6 +156,34 @@ const {
 } = unitsMaster()
 
 const { getUserData, user } = userMaster()
+const imagesList = () => {
+    let images = [];
+    for (let i=0; i<unit.value.files.length; i++) {
+        images.push(`/images/listings/${unit.value.property.slug}/${unit.value.slug}/${unit.value.files[i].name}`)
+    }
+    return images
+}
+
+function openImageBrowser() {
+    viewerApi({
+        images: imagesList(),
+        options: {
+            inline: false, 
+            button: true, 
+            navbar: false, 
+            title: false, 
+            toolbar: true, 
+            tooltip: false, 
+            movable: false, 
+            zoomable: true, 
+            rotatable: true, 
+            scalable: true, 
+            transition: true, 
+            fullscreen: true, 
+            keyboard: true
+        }
+    })
+}
 
 onBeforeMount(() => {
     getUnit(`/api/listings/${route.params.slug}/units/${route.params.unit_slug}`)

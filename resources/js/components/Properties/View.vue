@@ -65,7 +65,7 @@
         <!-- API -->
         <div v-if="property.files && property.files[0]" @click="openImageBrowser" class="more-images" id="toggleShowcase">
             <i class="fas fa-images"></i>
-            <span>View images</span>
+            <span> View images ({{ property.files.length }})</span>
         </div>
     </section>
 
@@ -145,7 +145,7 @@
                                             <div class="deposit">
                                                 <span class="label">Initial deposit: </span>
                                                 <span v-if="unit.init_deposit == 0" class="data">not required</span>
-                                                <span v-else class="data">{{ unit.init_deposit }} ({{ unit.init_deposit_period }} months)</span>
+                                                <span v-else class="data">KES {{ unit.init_deposit }} ({{ unit.init_deposit_period }} months)</span>
                                             </div>
                                             <div class="price">
                                                 <span class="label">KES </span>
