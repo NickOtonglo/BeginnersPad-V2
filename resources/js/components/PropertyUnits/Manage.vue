@@ -91,9 +91,14 @@
                                 <i @click="click(editFeaturesRef)" class="fas fa-edit"></i>
                             </div>
                         </div>
-                        <div v-if="unit.features.length" class="features">
-                            <ul v-for="feature in unit.features">
-                                <li><span><i @click="removeFeature(`/api/listings/${unit.property.slug}/units/${unit.slug}/features/${feature.id}`)" id="feature-delete" class="fas fa-times"></i> {{ feature.item }}</span></li>
+                        <div class="features">
+                            <ul>
+                                <li><span>{{ unit.bathrooms }} bathrooms</span></li>
+                                <li><span>{{ unit.bedrooms }} bedrooms</span></li>
+                                <li><span>{{ unit.floor_area }} sq M floor area</span></li>
+                                <template v-if="unit.features.length" v-for="feature in unit.features">
+                                    <li><span><i @click="removeFeature(`/api/listings/${unit.property.slug}/units/${unit.slug}/features/${feature.id}`)" id="feature-delete" class="fas fa-times"></i> {{ feature.item }}</span></li>
+                                </template>
                             </ul>
                         </div>
                     </div>

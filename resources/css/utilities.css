@@ -210,7 +210,7 @@ button, .btn {
 
 .card .image {
     position: relative;
-    background: url(../images/static/thumb_default.jpg) center center;
+    background: url(/images/static/thumb_default.jpg) center center;
     height: 225px;
     border-radius: 20px 20px 0 0;
 }
@@ -296,12 +296,12 @@ button, .btn {
 }
 
 .card-unit .thumb {
-    background: url('../images/static/thumb_unit.jpg') no-repeat;
+    background: url('/images/static/thumb_unit.jpg') no-repeat;
     border-radius: 0 7px 7px 0;
 }
 
 .card-2 .thumb {
-    background: url('../images/static/thumb_default.jpg') no-repeat center;
+    background: url('/images/static/thumb_default.jpg') no-repeat center;
     border-radius: 7px 0 0 7px;
 }
 

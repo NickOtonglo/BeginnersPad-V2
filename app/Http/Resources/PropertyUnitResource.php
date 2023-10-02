@@ -46,7 +46,7 @@ class PropertyUnitResource extends JsonResource
             'time_ago' => $this->created_at->diffForHumans(),
             'features' => PropertyUnitFeatureResource::collection($features),
             'files' => PropertyUnitFileResource::collection($files),
-            'property' => new PropertyResource($this->property),
+            'property' => new PropertyPublicResource($this->property),
         ];
     }
 }
