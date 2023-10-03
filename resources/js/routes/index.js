@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import PageNotFound from '../components/Misc/PageNotFound.vue'
 import Home from '../components/Home.vue'
 import Login from '../components/Auth/Login.vue'
 import Register from '../components/Auth/Register.vue'
@@ -35,6 +36,16 @@ function checkLoginGuest(to, from, next) {
 }
 
 const routes = [
+    {
+        path: '/404',
+        name: 'app.404',
+        component: PageNotFound
+    },
+    {
+        path: '/:catchAll(.*)',
+        redirect: '/404'
+    },
+    //
     {
         path: '/',
         name: 'app.home',

@@ -84,21 +84,6 @@
                                 </template>
                             </ul>
                         </div>
-                        <!-- <div v-if="unit.features.length" class="features">
-                            <template>
-                                <ul>
-                                    <li><span>{{ unit.bathrooms }} bathrooms</span></li>
-                                    <li><span>{{ unit.bedrooms }} bedrooms</span></li>
-                                    <li><span>{{ unit.floor_area }} sq M</span></li>
-                                </ul>
-                            </template>
-                            <ul v-for="feature in unit.features">
-                                <li><span>{{ feature.item }}</span></li>
-                            </ul>
-                        </div> -->
-                        <!-- <template v-else>
-                            <p style="text-align: center;">-no features-</p>
-                        </template> -->
                     </div>
                     <div class="unit-disclaimer">
                         <div class="title-grp">

@@ -43,7 +43,10 @@ export default function propertiesMaster() {
                 property.value = response.data.data
                 return property.value
             })
-            .catch(error => console.log(error))
+            .catch(error => {
+                // console.log(error)
+                router.push({ name: 'app.404' })
+            })
             .finally(isLoading.value = false)
     }
 
