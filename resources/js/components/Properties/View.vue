@@ -190,14 +190,8 @@
                             </div>
                             <p class="listings-count">{{ property.brand.properties_count }} listings posted</p>
                             <div class="info-rating-grp">
-                                <p class="rating">Rating: 4.0/5</p>
-                                <div class="stars">
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="far fa-star"></i>
-                                </div>
+                                <p class="rating">Rating: {{ property.rating }}/5</p>
+                                <ComponentRatingStars v-if="property.rating" :rating="property.rating" />
                             </div>
                             <div class="section-more">
                                 <router-link v-if="user.username === property.user_name" :to="{ name: 'users.account' }" href="/manage-account">Manage brand <i class="fas fa-chevron-right"></i></router-link>
@@ -311,76 +305,13 @@
                         </div>
                     </div>
                     <div class="listing-reviews" id="listing-reviews">
-                        <h3>Reviews (Rating: {{ property.rating }}/5)</h3>
-                        <div v-if="reviews && reviews[0]" class="reviews-list">
-                            <div class="review-item">
-                                <div class="stars">
-                                    <template v-if="reviews[0].rating >= 1">
-                                        <i class="fas fa-star"></i>
-                                    </template>
-                                    <template v-else>
-                                        <i class="far fa-star"></i>
-                                    </template>
-
-                                    <template v-if="reviews[0].rating >= 2">
-                                        <i class="fas fa-star"></i>
-                                    </template>
-                                    <template v-else>
-                                        <i class="far fa-star"></i>
-                                    </template>
-
-                                    <template v-if="reviews[0].rating >= 3">
-                                        <i class="fas fa-star"></i>
-                                    </template>
-                                    <template v-else>
-                                        <i class="far fa-star"></i>
-                                    </template>
-
-                                    <template v-if="reviews[0].rating >= 4">
-                                        <i class="fas fa-star"></i>
-                                    </template>
-                                    <template v-else>
-                                        <i class="far fa-star"></i>
-                                    </template>
-
-                                    <template v-if="reviews[0].rating >= 5">
-                                        <i class="fas fa-star"></i>
-                                    </template>
-                                    <template v-else>
-                                        <i class="far fa-star"></i>
-                                    </template>
-                                </div>
-                                <p class="time">{{ reviews[0].time_ago }}</p>
+                        <h3>Reviews</h3>
+                        <div v-for="(review, index) in reviews" class="reviews-list">
+                            <div v-if="index <= 2" class="review-item">
+                                <ComponentRatingStars :rating="review.rating" />
+                                <p class="time">{{ review.time_ago }}</p>
                                 <h3 class="occupant">Verified occupant</h3>
-                                <p class="review txt-triple-line">{{ reviews[0].review }}</p>
-                            </div>
-                        </div>
-                        <div v-if="reviews && reviews[1]" class="reviews-list">
-                            <div class="review-item">
-                                <div class="stars">
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star-half-alt"></i>
-                                </div>
-                                <p class="time">{{ reviews[1].time_ago }}</p>
-                                <h3 class="occupant">Verified occupant</h3>
-                                <p class="review txt-triple-line">{{ reviews[1].review }}</p>
-                            </div>
-                        </div>
-                        <div v-if="reviews && reviews[2]" class="reviews-list">
-                            <div class="review-item">
-                                <div class="stars">
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star-half-alt"></i>
-                                </div>
-                                <p class="time">{{ reviews[2].time_ago }}</p>
-                                <h3 class="occupant">Verified occupant</h3>
-                                <p class="review txt-triple-line">{{ reviews[2].review }}</p>
+                                <p class="review txt-triple-line">{{ review.review }}</p>
                             </div>
                         </div>
                         <div class="section-more">
@@ -400,6 +331,7 @@ import Pagination from '../Misc/Pagination.vue'
 import pagination from '../../composables/pagination';
 import userMaster from '../../composables/users';
 import propertyReviewsMaster from '../../composables/property_reviews'
+import ComponentRatingStars from '../Misc/RatingStars.vue'
 import { api as viewerApi } from "v-viewer"
 
 const { 
