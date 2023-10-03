@@ -88,4 +88,6 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::delete('listings/{property}/units/{unit}/files/{file}', '\App\Http\Controllers\Api\PropertyUnitsController@destroyFile');
     Route::post('listings/{property}/units/{unit}/thumbnail', '\App\Http\Controllers\Api\PropertyUnitsController@updateThumbnail');
     Route::patch('listings/{property}/units/{unit}/disclaimer', '\App\Http\Controllers\Api\PropertyUnitsController@storeDisclaimer');
+
+    Route::get('listings/{property}/reviews', 'App\Http\Controllers\Api\PropertyReviewsController@index');
 });

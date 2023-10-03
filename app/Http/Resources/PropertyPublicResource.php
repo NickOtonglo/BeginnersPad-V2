@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use App\Models\PropertyFeature;
 use App\Models\PropertyFile;
+use App\Models\PropertyReview;
 use App\Models\PropertyUnit;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -31,6 +32,7 @@ class PropertyPublicResource extends JsonResource
                 ]
             ]
         ];
+        $rating = PropertyReview::where('property_id', $this->id)->avg('rating');
 
         $window = [
             'rent_min' => intval(PropertyUnit::where('property_id', $this->id)->orderBy('price')->first()->price),
@@ -57,6 +59,7 @@ class PropertyPublicResource extends JsonResource
             'timestamp' => $this->created_at->format('jS F Y, H:m:s'),
             'time_ago' => $this->created_at->diffForHumans(),
             'window' => $window,
+            'rating' => number_format($rating, 1),
             'features' => PropertyFeaturesResource::collection($features),
             'files' => PropertyFilesResource::collection($files),
             'brand' => new BrandResource($this->user->brand),

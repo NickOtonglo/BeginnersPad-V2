@@ -47,4 +47,8 @@ class Property extends Model
     public function propertyUnits() {
         return $this->hasMany(PropertyUnit::class);
     }
+
+    public function propertyReviews() {
+        return $this->hasMany(PropertyReview::class);
+    }
 }

@@ -311,22 +311,51 @@
                         </div>
                     </div>
                     <div class="listing-reviews" id="listing-reviews">
-                        <h3>Reviews</h3>
-                        <div class="reviews-list">
+                        <h3>Reviews (Rating: {{ property.rating }}/5)</h3>
+                        <div v-if="reviews && reviews[0]" class="reviews-list">
                             <div class="review-item">
                                 <div class="stars">
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star-half-alt"></i>
+                                    <template v-if="reviews[0].rating >= 1">
+                                        <i class="fas fa-star"></i>
+                                    </template>
+                                    <template v-else>
+                                        <i class="far fa-star"></i>
+                                    </template>
+
+                                    <template v-if="reviews[0].rating >= 2">
+                                        <i class="fas fa-star"></i>
+                                    </template>
+                                    <template v-else>
+                                        <i class="far fa-star"></i>
+                                    </template>
+
+                                    <template v-if="reviews[0].rating >= 3">
+                                        <i class="fas fa-star"></i>
+                                    </template>
+                                    <template v-else>
+                                        <i class="far fa-star"></i>
+                                    </template>
+
+                                    <template v-if="reviews[0].rating >= 4">
+                                        <i class="fas fa-star"></i>
+                                    </template>
+                                    <template v-else>
+                                        <i class="far fa-star"></i>
+                                    </template>
+
+                                    <template v-if="reviews[0].rating >= 5">
+                                        <i class="fas fa-star"></i>
+                                    </template>
+                                    <template v-else>
+                                        <i class="far fa-star"></i>
+                                    </template>
                                 </div>
-                                <p class="time">4 hours ago</p>
+                                <p class="time">{{ reviews[0].time_ago }}</p>
                                 <h3 class="occupant">Verified occupant</h3>
-                                <p class="reveiw txt-triple-line">Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci officiis unde amet nobis consectetur velit, eius
-                                quaerat! Adipisci non alias expedita suscipit!</p>
+                                <p class="review txt-triple-line">{{ reviews[0].review }}</p>
                             </div>
-                            
+                        </div>
+                        <div v-if="reviews && reviews[1]" class="reviews-list">
                             <div class="review-item">
                                 <div class="stars">
                                     <i class="fas fa-star"></i>
@@ -335,12 +364,12 @@
                                     <i class="fas fa-star"></i>
                                     <i class="fas fa-star-half-alt"></i>
                                 </div>
-                                <p class="time">4 hours ago</p>
+                                <p class="time">{{ reviews[1].time_ago }}</p>
                                 <h3 class="occupant">Verified occupant</h3>
-                                <p class="reveiw txt-triple-line">Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci officiis unde amet nobis consectetur velit, eius
-                                quaerat! Adipisci non alias expedita suscipit!</p>
+                                <p class="review txt-triple-line">{{ reviews[1].review }}</p>
                             </div>
-                            
+                        </div>
+                        <div v-if="reviews && reviews[2]" class="reviews-list">
                             <div class="review-item">
                                 <div class="stars">
                                     <i class="fas fa-star"></i>
@@ -349,24 +378,9 @@
                                     <i class="fas fa-star"></i>
                                     <i class="fas fa-star-half-alt"></i>
                                 </div>
-                                <p class="time">4 hours ago</p>
+                                <p class="time">{{ reviews[2].time_ago }}</p>
                                 <h3 class="occupant">Verified occupant</h3>
-                                <p class="reveiw txt-triple-line">Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci officiis unde amet nobis consectetur velit, eius
-                                quaerat! Adipisci non alias expedita suscipit!</p>
-                            </div>
-                            
-                            <div class="review-item">
-                                <div class="stars">
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star-half-alt"></i>
-                                </div>
-                                <p class="time">4 hours ago</p>
-                                <h3 class="occupant">Verified occupant</h3>
-                                <p class="reveiw txt-triple-line">Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci officiis unde amet nobis consectetur velit, eius
-                                quaerat! Adipisci non alias expedita suscipit!</p>
+                                <p class="review txt-triple-line">{{ reviews[2].review }}</p>
                             </div>
                         </div>
                         <div class="section-more">
@@ -385,6 +399,7 @@ import { onBeforeMount } from 'vue';
 import Pagination from '../Misc/Pagination.vue'
 import pagination from '../../composables/pagination';
 import userMaster from '../../composables/users';
+import propertyReviewsMaster from '../../composables/property_reviews'
 import { api as viewerApi } from "v-viewer"
 
 const { 
@@ -402,9 +417,10 @@ const {
     onPageChange,
     getPaginationDataWithRequest
 } = pagination()
+const { getUserData, user } = userMaster()
+const { getReviews, reviews } = propertyReviewsMaster()
 
 const unitsRequest = `/api/listings/${route.params.slug}/units`
-const { getUserData, user } = userMaster()
 const imagesList = () => {
     let images = [];
     for (let i=0; i<property.value.files.length; i++) {
@@ -417,6 +433,7 @@ onBeforeMount(() => {
     getProperty(`/api/listings/${route.params.slug}`)
     getPaginationDataWithRequest(current_page.value, 'property_units', unitsRequest)
     getUserData()
+    getReviews(`/api/listings/${route.params.slug}/reviews`)
 })
 
 function openImageBrowser() {
