@@ -18,6 +18,11 @@ class BrandResource extends JsonResource
     {
         $user = User::where('id', $this->user_id)->first();
         $properties = Property::where('user_id', $this->user_id)->get();
+        $ratingCollection = [];
+        foreach ($properties as $property) {
+            array_push($ratingCollection, $property->propertyReviews()->avg('rating'));
+        }
+        $ratingAverage = array_sum($ratingCollection)/count($ratingCollection);
         
         return [
             // 'id' => $this->id,
@@ -27,6 +32,7 @@ class BrandResource extends JsonResource
             'created_at' => $this->created_at->format('j F Y'),
             'properties_count' => count($properties),
             'username' => $user->username,
+            'rating' => number_format($ratingAverage, 1),
         ];
     }
 }

@@ -20,6 +20,7 @@ import PropertyManage from '../components/Properties/Manage.vue'
 import PropertyView from '../components/Properties/View.vue'
 import PropertyUnitManage from '../components/PropertyUnits/Manage.vue'
 import PropertyUnitView from '../components/PropertyUnits/View.vue'
+import PropertyReviewsIndex from '../components/PropertyReviews/Index.vue'
 
 function auth(to, from, next) {
     if (JSON.parse(localStorage.getItem('authenticated'))) {
@@ -142,6 +143,11 @@ const routes = [
         path: '/listings/:slug/:unit_slug',
         name: 'unit.view',
         component: PropertyUnitView,
+    },
+    {
+        path: '/listings/:slug/reviews',
+        name: 'reviews.index',
+        component: PropertyReviewsIndex
     },
 ]
 

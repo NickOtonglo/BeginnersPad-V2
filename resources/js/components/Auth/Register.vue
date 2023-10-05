@@ -31,7 +31,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="telephone">Phone number (+254xxxxxxxxx)</label>
+                        <label for="telephone">Phone number (254xxxxxxxxx)</label>
                         <input v-model="credentials.telephone" type="tel" name="telephone" id="telephone">
                         <div v-for="message in validationErrors?.telephone" class="txt-alert txt-danger">
                             <li>{{ message }}</li>

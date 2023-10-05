@@ -80,7 +80,7 @@
 
 <script setup>
 import operateModal from '../../composables/modal'
-import { onMounted, ref, onBeforeUnmount } from 'vue';
+import { onMounted, ref } from 'vue';
 import zonesMaster from '../../composables/zones';
 
 const modalRef = ref(null)

@@ -90,4 +90,8 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::patch('listings/{property}/units/{unit}/disclaimer', '\App\Http\Controllers\Api\PropertyUnitsController@storeDisclaimer');
 
     Route::get('listings/{property}/reviews', 'App\Http\Controllers\Api\PropertyReviewsController@index');
+    Route::post('listings/{property}/reviews', 'App\Http\Controllers\Api\PropertyReviewsController@store');
+    Route::patch('listings/{property}/reviews', 'App\Http\Controllers\Api\PropertyReviewsController@show');
+    Route::patch('listings/{property}/reviews/{review}', 'App\Http\Controllers\Api\PropertyReviewsController@update');
+    Route::delete('listings/{property}/reviews/{review}', 'App\Http\Controllers\Api\PropertyReviewsController@destroy');
 });

@@ -595,6 +595,10 @@ nav .nav-menu .badge li.selected a {
     color: var(--color-primary);
 }
 
+.listing-info-main .rating {
+    display: inline-block;
+}
+
 .listing-info-main .location {
     font-size: 1.2rem;
 }

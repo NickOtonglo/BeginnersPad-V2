@@ -96,6 +96,10 @@
                         <router-link v-if="user.username === property.user_name" :to="{ name: 'property.manage', params: {slug: property.slug } }"><i class="fas fa-edit"></i></router-link>
                     </div>
                 </div>
+                <h1 class="info-rating-grp">
+                    <ComponentRatingStars v-if="property.rating" :rating="property.rating" />
+                    <p class="rating">({{ property.rating }})</p>
+                </h1>
                 <p v-if="property.sub_zone" class="location">{{ property.sub_zone.name }}, {{ property.sub_zone.zone.name }}, {{ property.sub_zone.zone.county.name }}</p>
             </div>
             <div class="listing-info-aux" v-if="property.window">
@@ -173,7 +177,7 @@
                             </template>
                         </div>
                     </div>
-                    <div class="lister-details" id="lister-details">
+                    <div class="lister-details" id="lister-details" v-if="property.brand">
                         <h3>Lister information</h3>
                         <div class="details">
                             <div class="header">
@@ -190,8 +194,8 @@
                             </div>
                             <p class="listings-count">{{ property.brand.properties_count }} listings posted</p>
                             <div class="info-rating-grp">
-                                <p class="rating">Rating: {{ property.rating }}/5</p>
-                                <ComponentRatingStars v-if="property.rating" :rating="property.rating" />
+                                <p class="rating">Rating: {{ property.brand.rating }}/5</p>
+                                <ComponentRatingStars v-if="property.brand.rating" :rating="property.brand.rating" />
                             </div>
                             <div class="section-more">
                                 <router-link v-if="user.username === property.user_name" :to="{ name: 'users.account' }" href="/manage-account">Manage brand <i class="fas fa-chevron-right"></i></router-link>
@@ -201,6 +205,7 @@
                     <div class="listing-actions" id="listing-actions">
                         <h3>Listing actions</h3>
                         <div class="btn-grp vertical">
+                            <button v-if="user.role === 'Beginner' && !review" @click="click(addReviewRef)">Add review</button>
                             <button>Make private (hide)</button>
                             <button>Submit for approval</button>
                             <button>Withdraw submission</button>
@@ -306,32 +311,38 @@
                     </div>
                     <div class="listing-reviews" id="listing-reviews">
                         <h3>Reviews</h3>
-                        <div v-for="(review, index) in reviews" class="reviews-list">
+                        <div v-for="(item, index) in reviews" class="reviews-list">
                             <div v-if="index <= 2" class="review-item">
-                                <ComponentRatingStars :rating="review.rating" />
-                                <p class="time">{{ review.time_ago }}</p>
-                                <h3 class="occupant">Verified occupant</h3>
-                                <p class="review txt-triple-line">{{ review.review }}</p>
+                                <ComponentRatingStars :rating="item.rating" />
+                                <p class="time">{{ item.time_ago }}</p>
+                                <h3 v-if="review && item.id == review.id" @click="click(editReviewRef)" class="occupant active">{{ user.username }} (me) - tap to edit</h3>
+                                <h3 v-else class="occupant">Verified occupant</h3>
+                                <p class="review txt-triple-line">{{ item.review }}</p>
                             </div>
                         </div>
                         <div class="section-more">
-                            <a href="/view-listing-reviews.html">View more reviews <i class="fas fa-chevron-right"></i></a>
+                            <router-link :to="{ name: 'reviews.index', params: {slug: property.slug } }">View more reviews <i class="fas fa-chevron-right"></i></router-link>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
+
+    <AddReview ref="addReviewRef" />
+    <EditReview v-if="review" ref="editReviewRef" :review="review" />
 </template>
 
 <script setup>
+import { onBeforeMount, ref } from 'vue';
 import propertiesMaster from '../../composables/properties';
-import { onBeforeMount } from 'vue';
 import Pagination from '../Misc/Pagination.vue'
 import pagination from '../../composables/pagination';
 import userMaster from '../../composables/users';
 import propertyReviewsMaster from '../../composables/property_reviews'
 import ComponentRatingStars from '../Misc/RatingStars.vue'
+import AddReview from '../Modals/AddReview.vue'
+import EditReview from '../Modals/EditReview.vue';
 import { api as viewerApi } from "v-viewer"
 
 const { 
@@ -350,9 +361,11 @@ const {
     getPaginationDataWithRequest
 } = pagination()
 const { getUserData, user } = userMaster()
-const { getReviews, reviews } = propertyReviewsMaster()
+const { getReviews, reviews, getMyReview, review } = propertyReviewsMaster()
 
 const unitsRequest = `/api/listings/${route.params.slug}/units`
+const addReviewRef = ref({})
+const editReviewRef = ref({})
 const imagesList = () => {
     let images = [];
     for (let i=0; i<property.value.files.length; i++) {
@@ -366,6 +379,7 @@ onBeforeMount(() => {
     getPaginationDataWithRequest(current_page.value, 'property_units', unitsRequest)
     getUserData()
     getReviews(`/api/listings/${route.params.slug}/reviews`)
+    getMyReview(`/api/listings/${route.params.slug}/reviews`)
 })
 
 function openImageBrowser() {
@@ -394,3 +408,12 @@ function click(element) {
 }
 
 </script>
+
+<style scoped>
+.occupant.active {
+    cursor: pointer;
+}
+.occupant.active:hover {
+    color: var(--color-primary);
+}
+</style>

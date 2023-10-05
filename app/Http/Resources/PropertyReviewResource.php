@@ -15,6 +15,7 @@ class PropertyReviewResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
+            'id' => $this->id,
             'review' => $this->review, 
             'rating' => $this->rating, 
             'property' => new PropertyPublicResource($this->property),

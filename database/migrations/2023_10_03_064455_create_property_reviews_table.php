@@ -17,6 +17,7 @@ return new class extends Migration
             $table->decimal('rating', 3, 2);
             $table->integer('author_id');
             $table->integer('property_id');
+            $table->unique(['author_id', 'property_id']);
             $table->timestamps();
         });
     }

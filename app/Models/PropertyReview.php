@@ -14,4 +14,8 @@ class PropertyReview extends Model
     public function property() {
         return $this->belongsTo(Property::class);
     }
+
+    public function author() {
+        return $this->belongsTo(User::class);
+    }
 }

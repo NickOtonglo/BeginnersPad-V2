@@ -201,7 +201,7 @@
 
 <script setup>
 import propertiesMaster from '../../composables/properties';
-import { onBeforeMount, onMounted, ref } from 'vue';
+import { onBeforeMount, ref } from 'vue';
 import CreateUnit from '../Modals/CreateUnit.vue';
 import EditPropertyFeatures from '../Modals/EditPropertyFeatures.vue';
 import EditPropertyPrimary from '../Modals/EditPropertyPrimary.vue'

@@ -18,6 +18,21 @@ class PropertyReviewFactory extends Factory
      */
     public function definition(): array
     {
+        // $authors = '';
+        // $authorID = '';
+        // $authors = User::where('role_id', 5)->pluck('id');
+        // do {
+        //     $authorID = $authors->random();
+        // } while(PropertyReview::where('author_id', $authorID)->first());
+        // $randomPropertyId = Property::pluck('id')->random();
+        // $property = Property::where('id', $randomPropertyId)->first();
+        
+        // return [
+        //     'review' => $this->faker->text(rand(100,1000)), 
+        //     'rating' => rand(1, 5), 
+        //     'author_id' => $authorID, 
+        //     'property_id' => $property->id,
+        // ];
 
         $authorID = User::where('role_id', 5)->pluck('id');
         $randomPropertyId = Property::pluck('id')->random();
