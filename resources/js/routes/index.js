@@ -21,6 +21,7 @@ import PropertyView from '../components/Properties/View.vue'
 import PropertyUnitManage from '../components/PropertyUnits/Manage.vue'
 import PropertyUnitView from '../components/PropertyUnits/View.vue'
 import PropertyReviewsIndex from '../components/PropertyReviews/Index.vue'
+import UserFavouritesIndex from '../components/Favourites/Index.vue'
 
 function auth(to, from, next) {
     if (JSON.parse(localStorage.getItem('authenticated'))) {
@@ -148,6 +149,11 @@ const routes = [
         path: '/listings/:slug/reviews',
         name: 'reviews.index',
         component: PropertyReviewsIndex
+    },
+    {
+        path: '/favourites',
+        name: 'favourites.index',
+        component: UserFavouritesIndex
     },
 ]
 

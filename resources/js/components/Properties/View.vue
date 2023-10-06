@@ -92,7 +92,7 @@
                     <h1 class="name">{{ property.name }}</h1>
                     <div class="info-actions">
                         <div><i class="fas fa-share-alt" id="modalTrigger1"></i></div>
-                        <div><i class="fas fa-heart"></i></div>
+                        <div @click="saveFavourite(`/api/favourites`, property, 'Property')"><i class="fas fa-heart" :class="{ active: property.favourite }"></i></div>
                         <router-link v-if="user.username === property.user_name" :to="{ name: 'property.manage', params: {slug: property.slug } }"><i class="fas fa-edit"></i></router-link>
                     </div>
                 </div>
@@ -161,7 +161,7 @@
                                             <div class="thumb" :style="{ background: `url(/images/listings/${property.slug}/${unit.slug}/${unit.thumbnail})` }" style="background-size: cover;"></div>
                                         </template>
                                         <template v-else>
-                                            <div class="thumb" :style="{ background: `url(/images/static/thumb_unit.jpg` }" style="background-size: cover;"></div>
+                                            <div class="thumb" :style="{ background: `url(/images/static/thumb_default.jpg` }" style="background-size: cover;"></div>
                                         </template>
                                     </router-link>  
                                 </div>
@@ -311,13 +311,15 @@
                     </div>
                     <div class="listing-reviews" id="listing-reviews">
                         <h3>Reviews</h3>
-                        <div v-for="(item, index) in reviews" class="reviews-list">
-                            <div v-if="index <= 2" class="review-item">
-                                <ComponentRatingStars :rating="item.rating" />
-                                <p class="time">{{ item.time_ago }}</p>
-                                <h3 v-if="review && item.id == review.id" @click="click(editReviewRef)" class="occupant active">{{ user.username }} (me) - tap to edit</h3>
-                                <h3 v-else class="occupant">Verified occupant</h3>
-                                <p class="review txt-triple-line">{{ item.review }}</p>
+                        <div class="reviews-list">
+                            <div v-for="(item, index) in reviews" class="review-item">
+                                <template v-if="index <= 2">
+                                    <ComponentRatingStars :rating="item.rating" />
+                                    <p class="time">{{ item.time_ago }}</p>
+                                    <h3 v-if="review && item.id == review.id" @click="click(editReviewRef)" class="occupant active">{{ user.username }} (me) - tap to edit</h3>
+                                    <h3 v-else class="occupant">Verified occupant</h3>
+                                    <p class="review txt-triple-line">{{ item.review }}</p>
+                                </template>
                             </div>
                         </div>
                         <div class="section-more">
@@ -340,6 +342,7 @@ import Pagination from '../Misc/Pagination.vue'
 import pagination from '../../composables/pagination';
 import userMaster from '../../composables/users';
 import propertyReviewsMaster from '../../composables/property_reviews'
+import favouriteMaster from '../../composables/favourites';
 import ComponentRatingStars from '../Misc/RatingStars.vue'
 import AddReview from '../Modals/AddReview.vue'
 import EditReview from '../Modals/EditReview.vue';
@@ -362,6 +365,7 @@ const {
 } = pagination()
 const { getUserData, user } = userMaster()
 const { getReviews, reviews, getMyReview, review } = propertyReviewsMaster()
+const { saveFavourite } = favouriteMaster()
 
 const unitsRequest = `/api/listings/${route.params.slug}/units`
 const addReviewRef = ref({})
@@ -415,5 +419,8 @@ function click(element) {
 }
 .occupant.active:hover {
     color: var(--color-primary);
+}
+.info-actions .active {
+    color: var(--color-primary)
 }
 </style>

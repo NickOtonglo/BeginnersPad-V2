@@ -9,7 +9,7 @@ class Article extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title', 'slug', 'preview', 'content', 'thumbnail'];
+    protected $fillable = ['title', 'slug', 'preview', 'content', 'thumbnail', 'user_id'];
 
     public function getRouteKeyName()
     {

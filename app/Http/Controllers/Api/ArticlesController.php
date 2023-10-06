@@ -193,7 +193,7 @@ class ArticlesController extends Controller
         return response()->json([
             'author' => [
                 'name' => $author->username,
-                'id' => $author->id,
+                // 'id' => $author->id,
             ],
         ]);
     }

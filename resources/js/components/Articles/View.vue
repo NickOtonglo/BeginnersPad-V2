@@ -10,7 +10,13 @@
                 <img src="/images/static/thumb_default.jpg" alt="">
             </template>
             <br>
-            <h3>by {{ article.author.name }}</h3>
+            <div class="info-name">
+                <div class="info-actions">
+                    <div><i class="fas fa-share-alt" id="modalTrigger"></i></div>
+                    <div @click="saveFavourite(`/api/favourites`, article, 'Article')"><i class="fas fa-heart" :class="{ active: article.favourite }"></i></div>
+                </div>
+            </div>
+            <h3 v-if="article.author">by {{ article.author.name }}</h3>
             <p>Published on: {{ article.timestamp }}</p>
             <template v-if="isAuthor()">
                 <router-link class="btn btn-primary"
@@ -48,6 +54,8 @@
 <script setup>
 import getArticle from '../../composables/getArticle';
 import { onBeforeMount, ref } from 'vue';
+import favouriteMaster from '../../composables/favourites';
+import userMaster from '../../composables/users';
 
 const {
     getArticleAuthor,
@@ -61,6 +69,8 @@ const {
     route,
     tags,
 } = getArticle()
+const { saveFavourite } = favouriteMaster()
+const { getUserData, user } = userMaster()
 
 const rt = '/api/articles'
 
@@ -82,12 +92,27 @@ function initialiseFunctions() {
 
 onBeforeMount(() => {
     initialiseFunctions().then(isLoading.value = false)
+    getUserData()
 })
 </script>
 
 <style scoped>
 img {
     width: 100%;
+    height: auto;
     max-width: 1920px;
+}
+.info-actions {
+    justify-content: flex-start;
+}
+.info-actions i {
+    padding: 0;
+    margin: 0;
+}
+.info-actions i:first-child {
+    margin-right: 10px;
+}
+.info-actions i:last-child {
+    margin-left: 10px;
 }
 </style>

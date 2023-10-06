@@ -7,6 +7,7 @@ use App\Models\PropertyFile;
 use App\Models\PropertyReview;
 use App\Models\PropertyUnit;
 use App\Models\User;
+use App\Models\UserFavourite;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -33,6 +34,7 @@ class PropertyPublicResource extends JsonResource
             ]
         ];
         $rating = PropertyReview::where('property_id', $this->id)->avg('rating');
+        $favourite = UserFavourite::where('model', 'Property')->where('model_id', $this->id)->where('user_id', auth()->user()->id)->first();
 
         $window = [
             'rent_min' => intval(PropertyUnit::where('property_id', $this->id)->orderBy('price')->first()->price),
@@ -65,6 +67,7 @@ class PropertyPublicResource extends JsonResource
             'brand' => new BrandResource($this->user->brand),
             'sub_zone' => $subZone,
             'units' => PropertyUnitLiteResource::collection($units),
+            'favourite' => new UserFavouriteLiteResource($favourite),
         ];
     }
 }

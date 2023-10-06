@@ -6,7 +6,8 @@
             <li><a href="/beginner/view-listings.html">Listings</a></li>
             <li><a href="/beginner/tour-appointments.html">Tour appointments</a></li>
             <li><a href="/beginner/my-reviews.html">My reviews</a></li>
-            <li><a href="/beginner/favourites.html">Favourites</a></li>
+            <li><a href="/favourites">Favourites</a></li>
+            <!-- <li><router-link :to="{ name: 'favourites.index' }">Favourites</router-link></li> -->
             <li><a href="/beginner/property-history.html">Property history</a></li>
             <li><a href="/beginner/view-tickets.html">My tickets</a></li>
         </ul>

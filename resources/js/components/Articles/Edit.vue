@@ -107,7 +107,7 @@ function updateArticle(article, tags) {
     
     serialisedPost.append('_method', 'PATCH')
 
-    console.log(article.content)
+    // console.log(article.content)
     // console.log(serialisedPost.get('slug'))
 
     /**

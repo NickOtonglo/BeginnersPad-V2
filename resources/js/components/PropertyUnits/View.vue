@@ -39,7 +39,7 @@
                 <div class="info-name">
                     <div class="info-actions">
                         <div><i class="fas fa-share-alt" id="modalTrigger"></i></div>
-                        <div><i class="fas fa-heart"></i></div>
+                        <div @click="saveFavourite(`/api/favourites`, unit, 'PropertyUnit')"><i class="fas fa-heart" :class="{ active: unit.favourite }"></i></div>
                         <router-link v-if="user.username === unit.property.user_name" :to="{ name: 'unit.manage', params: { slug: route.params.slug, unit_slug: route.params.unit_slug } }"><i class="fas fa-edit"></i></router-link>
                     </div>
                 </div>
@@ -149,6 +149,7 @@
 import unitsMaster from '../../composables/units';
 import { onBeforeMount } from 'vue';
 import userMaster from '../../composables/users';
+import favouriteMaster from '../../composables/favourites';
 import { api as viewerApi } from "v-viewer"
 
 const { 
@@ -158,6 +159,8 @@ const {
 } = unitsMaster()
 
 const { getUserData, user } = userMaster()
+const { saveFavourite } = favouriteMaster()
+
 const imagesList = () => {
     let images = [];
     for (let i=0; i<unit.value.files.length; i++) {

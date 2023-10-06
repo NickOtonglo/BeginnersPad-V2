@@ -94,4 +94,8 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::patch('listings/{property}/reviews', 'App\Http\Controllers\Api\PropertyReviewsController@show');
     Route::patch('listings/{property}/reviews/{review}', 'App\Http\Controllers\Api\PropertyReviewsController@update');
     Route::delete('listings/{property}/reviews/{review}', 'App\Http\Controllers\Api\PropertyReviewsController@destroy');
+
+    Route::get('favourites', 'App\Http\Controllers\Api\UserFavouritesController@index');
+    Route::post('favourites', 'App\Http\Controllers\Api\UserFavouritesController@store');
+    Route::delete('favourites/{favourite}', 'App\Http\Controllers\Api\UserFavouritesController@destroy');
 });

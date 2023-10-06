@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use App\Models\PropertyUnitFeature;
 use App\Models\PropertyUnitFile;
+use App\Models\UserFavourite;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -18,6 +19,7 @@ class PropertyUnitResource extends JsonResource
     {
         $features = PropertyUnitFeature::where('property_unit_id', $this->id)->get();
         $files = PropertyUnitFile::where('property_unit_id', $this->id)->get();
+        $favourite = UserFavourite::where('model', 'PropertyUnit')->where('model_id', $this->id)->where('user_id', auth()->user()->id)->first();
 
         $disclaimer = [];
         $disclaimerAssorted = explode(' || ', $this->disclaimer);
@@ -47,6 +49,7 @@ class PropertyUnitResource extends JsonResource
             'features' => PropertyUnitFeatureResource::collection($features),
             'files' => PropertyUnitFileResource::collection($files),
             'property' => new PropertyPublicResource($this->property),
+            'favourite' => new UserFavouriteLiteResource($favourite),
         ];
     }
 }

@@ -80,7 +80,7 @@ export default function getArticle() {
     }
 
     const isAuthor = () => {
-        if (isLoggedIn.value && article.value.author.id == localStorage.getItem('user')) {
+        if (isLoggedIn.value && article.value.author && article.value.author.id == localStorage.getItem('user')) {
             return true
         }
         console.log(
