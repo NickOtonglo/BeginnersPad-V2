@@ -7,25 +7,25 @@ export default function tagsMaster() {
     const isLoading = ref(false)
     const validationErrors = ref({})
     const swal = inject('$swal')
-    const tags = ref ({})
+    const tags = ref ([])
     const tagsList = ref([])
     const tag = ref({})
     
-    const getTagsList = () => {
+    const getTagsList = (request) => {
         if (isLoading.value) return
         isLoading.value = true
 
-        axios.get('/api/tags')
+        axios.get(request)
             .then(response => tagsList.value = response.data.data)
             .catch(error => console.log(error))
             .finally(isLoading.value = false)
     }
 
-    const getArticleTags = (route) => {
+    const getArticleTags = (request) => {
         if (isLoading.value) return
         isLoading.value = true
 
-        axios.get(route)
+        axios.get(request)
             .then(response => tags.value = response.data.data)
             .catch(error => console.log(error))
             .finally(isLoading.value = false)

@@ -61,8 +61,8 @@ import 'vue-multiselect/dist/vue-multiselect.css'
 import articlesMaster from '../../composables/articles';
 import tagsMaster from '../../composables/tags'
 
-const { getArticle, updateArticle, route, article } = articlesMaster()
-const { tagsList, tags, getTagsList } = tagsMaster()
+const { getArticle, updateArticle, route, article, validationErrors } = articlesMaster()
+const { tagsList, tags, getTagsList, getArticleTags } = tagsMaster()
 
 const quillContent = ref('')
 const quillEditor = ref(null)
@@ -94,6 +94,7 @@ onMounted(() => {
     // async-await to set isLoading() to false once the 3 methods have completed
     getArticle(request)
     getTagsList(`/api/tags`)
+    getArticleTags(`${request}/tags`)
 })
 
 onBeforeUpdate(() => {

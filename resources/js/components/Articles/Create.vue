@@ -1,6 +1,6 @@
 <template>
         <div class="container">
-            <form @submit.prevent="storeArticle(article, tags)" ref="form">
+            <form @submit.prevent="createArticle(request, [article, tags, quillEditor.getHTML(), quillEditor.getContents().ops[0].insert])" ref="form">
                 <div class="form-group">
                     <input v-model="article.title" type="text" name="title" placeholder="Title">
                     <div v-for="message in validationErrors?.title" class="txt-alert txt-danger">
@@ -38,6 +38,7 @@
                         placeholder="Select tag(s)"
                         label="name"
                         track-by="name"
+                        @search-change="getTagsList"
                     />
                 </div>
                 <div v-for="message in validationErrors?.tags" class="txt-alert txt-danger">
@@ -57,74 +58,21 @@
 
 <script setup>
 import { inject, ref, onMounted } from 'vue'
-import { useRouter } from 'vue-router';
 import VueMultiselect from 'vue-multiselect'
 import 'vue-multiselect/dist/vue-multiselect.css'
+import articlesMaster from '../../composables/articles';
+import tagsMaster from '../../composables/tags'
+
+const { getArticle, createArticle, route, article, validationErrors } = articlesMaster()
+const { tagsList, tags, getTagsList } = tagsMaster()
 
 const quillContent = ref('')
-const article = ref({
-    title: '',
-    preview: '',
-    content: '',
-    thumbnail: ''
-})
-const router = useRouter()
-const validationErrors = ref('')
-const isLoading = ref(false)
-const swal = inject('$swal')
-const tags = ref('')
-const tagsList = ref([])
 const quillEditor = ref(null)
 const thumbnail = ref(null)
 const thumbHolder = ref(null)
 
-function getTags() {
-    axios.get('/api/tags')
-        .then(response => tagsList.value = response.data.data)
-        .catch(error => console.log(error))
-}
-
-function storeArticle(article, tags) {
-    if (isLoading.value) { return }
-    isLoading.value = true
-    validationErrors.value = ''
-    article.preview = quillEditor.value.getContents().ops[0].insert
-    article.content = quillEditor.value.getHTML()
-
-    let serialisedPost = new FormData()
-    for (let item in article) {
-        if (article.hasOwnProperty(item)) {
-            serialisedPost.append(item, article[item])
-        }
-    }
-
-    let tagsFinal = []
-    for (let item in tags) {
-        if (tags.hasOwnProperty(item)) {
-            tagsFinal.push(tags[item].name)
-        }
-    }
-
-    serialisedPost.append('tags', tagsFinal)
-
-    axios.post('/api/articles', serialisedPost)
-        .then(response => {
-            swal({
-                icon: 'success',
-                title: 'Article published.',
-                didClose: () => {
-                    router.push({ name: 'articles.index' })
-                }
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            if (error.response?.data) {
-                validationErrors.value = error.response.data.errors
-            }
-        })
-        .finally(() => isLoading.value = false)
-}
+const request = `/api/articles`
+// const tags = ref([])
 
 function triggerFileInput() {
     thumbnail.value.click()
@@ -146,7 +94,8 @@ function setThumbnail(event) {
 }
 
 onMounted(() => {
-    getTags()
+    getArticle(request)
+    getTagsList(`/api/tags`)
 })
 
 </script>

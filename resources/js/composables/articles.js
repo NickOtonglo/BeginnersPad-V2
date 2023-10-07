@@ -57,14 +57,33 @@ export default function articlesMaster() {
     // }
 
     const createArticle = (request, data) => {
-        if (isLoading.value) return
+        if (isLoading.value) { return }
         isLoading.value = true
+        validationErrors.value = ''
+        
+        data[0].content = data[2]
+        data[0].preview = data[3]
+        let serialisedPost = new FormData()
+    
+        let tagsFinal = []
+        for (let item in data[1]) {
+            if (data[1].hasOwnProperty(item)) {
+                tagsFinal.push(data[1][item].name)
+            }
+        }
+        serialisedPost.append('tags', tagsFinal)
+    
+        for (let item in data[0]) {
+            if (data[0].hasOwnProperty(item)) {
+                serialisedPost.append(item, data[0][item])
+            }
+        }
 
-        axios.post(request, data)
-            .then(resposne => {
+        axios.post(request, serialisedPost)
+            .then(response => {
                 swal({
                     icon: 'success',
-                    title: 'Article created.',
+                    title: 'Article published.',
                     didClose: () => {
                         router.go(-1)
                     }
@@ -81,7 +100,7 @@ export default function articlesMaster() {
                     })
                 }
             })
-            .finally(isLoading.value = false)
+            .finally(() => isLoading.value = false)
     }
 
     function updateArticle(request, data) {
