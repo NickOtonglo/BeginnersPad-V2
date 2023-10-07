@@ -3,7 +3,6 @@ import { ref, inject } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
 export default function articlesMaster() {
-    const quillEditor = ref(null)
     const route = useRoute()
     const router = useRouter()
     const isLoading = ref(false)

@@ -1,5 +1,5 @@
 import { ref } from "vue"
-import getArticles from "./getArticles"
+import articlesMaster from './articles'
 import zonesMaster from "./zones"
 import subZoneMaster from './subzones'
 import propertiesMaster from "./properties"
@@ -11,7 +11,7 @@ export default function pagination() {
     const per_page = ref(0)
     const current_page = ref(1)
     const search_global = ref('')
-    const { getData, articles } = getArticles()
+    const { getArticles, articles } = articlesMaster()
     const { zones, getZones, zonesCount } = zonesMaster()
     const { subZones, getSubZones, subZonesCount } = subZoneMaster()
     const { properties, getProperties } = propertiesMaster()
@@ -33,7 +33,7 @@ export default function pagination() {
             .finally(() => {
                 isLoading.value = false
                 if (source == 'articles') {
-                    getData(`/api/${source}?page=${page}&search_global=${search_global.value}`)
+                    getArticles(`/api/${source}?page=${page}&search_global=${search_global.value}`)
                 } else if (source == 'zones') {
                     getZones(`/api/${source}?page=${page}&search_global=${search_global.value}`)
                 }

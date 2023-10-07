@@ -26,12 +26,12 @@
 <script setup>
 import SearchBar from '../Search/SearchBar.vue';
 import { onBeforeUnmount, onMounted, ref, onBeforeMount } from 'vue';
-import getArticles from '../../composables/getArticles'
+import articlesMaster from '../../composables/articles'
 import { useRoute } from 'vue-router';
 
 const header = ref(null)
 
-const { getData, isLoading, articles } = getArticles()
+const { getArticles, articles } = articlesMaster()
 const route = useRoute()
 const tag = ref({
     name: route.params.name
@@ -49,7 +49,7 @@ function initialiseScroll() {
 }
 
 onBeforeMount(() => {
-    getData(`/api/tags/${tag.value.name}/articles`, '')
+    getArticles(`/api/tags/${tag.value.name}/articles`, '')
 })
 
 onMounted(() => {
