@@ -107,4 +107,14 @@ class PropertyReviewsController extends Controller
         $review->delete();
         return response()->noContent();
     }
+
+    public function getMyReviews() {
+        $reviews = auth()->user()->propertyReviews;
+        return PropertyReviewResource::collection($reviews);
+    }
+    
+    public function showMyReview(Property $property) {
+        $review = PropertyReview::where('author_id', auth()->user()->id)->where('property_id', $property->id)->first();
+        return new PropertyReviewResource($review);
+    }
 }

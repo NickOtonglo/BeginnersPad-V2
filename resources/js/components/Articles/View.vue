@@ -21,7 +21,7 @@
             <template v-if="user.username === article.author">
                 <router-link class="btn btn-primary"
                     :to="{ name: 'article.edit', params: { slug: article.slug } }">Update</router-link>
-                <button @click.prevent="deleteArticle(rt, article.slug)" :disabled="isLoading" type="submit"
+                <button @click.prevent="deleteArticle(request)" :disabled="isLoading" type="submit"
                     class="btn-danger">
                     <div v-show="isLoading" class="lds-dual-ring"></div>
                     <span v-if="isLoading">Processing...</span>

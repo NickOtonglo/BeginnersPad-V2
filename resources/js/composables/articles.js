@@ -175,7 +175,7 @@ export default function articlesMaster() {
                             icon: 'success',
                             title: 'Article deleted.',
                             didClose: () => {
-                                router.push({ name: 'articles.index' })
+                                router.go(-1)
                             }
                         })
                     })

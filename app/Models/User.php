@@ -64,8 +64,8 @@ class User extends Authenticatable
         return $this->hasMany(Property::class);
     }
 
-    public function propertyReview() {
-        return $this->hasOne(PropertyReview::class);
+    public function propertyReviews() {
+        return $this->hasMany(PropertyReview::class, 'author_id', 'id');
     }
 
     public function userFavourites() {

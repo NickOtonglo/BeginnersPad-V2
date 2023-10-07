@@ -21,6 +21,8 @@ import PropertyView from '../components/Properties/View.vue'
 import PropertyUnitManage from '../components/PropertyUnits/Manage.vue'
 import PropertyUnitView from '../components/PropertyUnits/View.vue'
 import PropertyReviewsIndex from '../components/PropertyReviews/Index.vue'
+import PropertyReviewsMine from '../components/PropertyReviews/MyReviews.vue'
+import PropertyReviewsView from '../components/PropertyReviews/View.vue'
 import UserFavouritesIndex from '../components/Favourites/Index.vue'
 
 function auth(to, from, next) {
@@ -149,6 +151,16 @@ const routes = [
         path: '/listings/:slug/reviews',
         name: 'reviews.index',
         component: PropertyReviewsIndex
+    },
+    {
+        path: '/reviews',
+        name: 'reviews.mine',
+        component: PropertyReviewsMine
+    },
+    {
+        path: '/reviews/:slug',
+        name: 'review.view',
+        component: PropertyReviewsView
     },
     {
         path: '/favourites',

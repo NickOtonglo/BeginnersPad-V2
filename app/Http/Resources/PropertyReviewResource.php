@@ -17,7 +17,7 @@ class PropertyReviewResource extends JsonResource
         return [
             'id' => $this->id,
             'review' => $this->review, 
-            'rating' => $this->rating, 
+            'rating' => number_format($this->rating, 1), 
             'property' => new PropertyPublicResource($this->property),
             'time_ago' => $this->created_at->diffForHumans(),
         ];

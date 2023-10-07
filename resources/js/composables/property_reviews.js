@@ -134,6 +134,7 @@ export default function propertyReviewsMaster() {
     return {
         route,
         router,
+        isLoading,
         validationErrors,
         reviews,
         review,

@@ -23,23 +23,26 @@
         </div>
     </section>
 
-    <section class="section-listing-reviews">
+    <section class="section-listing-reviews" id="sectionMyReview">
         <div class="container">
             <div class="listing-reviews">
-                <h3>Reviews</h3>
-                <div v-for="(item) in reviews" class="reviews-list">
+                <h3>My Review</h3>
+                <div class="reviews-list">
                     <div class="review-item">
-                        <ComponentRatingStars :rating="item.rating" />
-                        <p class="time">{{ item.time_ago }}</p>
-                        <h3 v-if="review && item.id == review.id" @click="click(editReviewRef)" class="occupant active">{{ user.username }} (me) - tap to edit</h3>
-                        <h3 v-else class="occupant">Verified occupant</h3>
-                        <p class="review">{{ item.review }}</p>
+                        <p class="time">{{ review.time_ago }}</p>
+                        <h3 class="occupant">{{ user.username }} (verified occupant)</h3>
+                        <p class="reveiw">{{ review.review }}</p>
+                        <div class="info-rating-grp">
+                            <p class="rating">Your rating: {{ review.rating }}/5</p>
+                            <ComponentRatingStars :rating="review.rating" />
+                        </div>
+                        <button @click="click(editReviewRef)" class="btn-link">Edit this review</button>
                     </div>
                 </div>
             </div>
         </div>
     </section>
-
+    
     <EditReview v-if="review" ref="editReviewRef" :review="review" />
 </template>
 
@@ -57,14 +60,13 @@ const {
     getProperty,
 } = propertiesMaster()
 
-const { reviews, review, getReviews, getMyReview } = propertyReviewsMaster()
+const { review, getMyReview } = propertyReviewsMaster()
 const { getUserData, user } = userMaster()
 
 const editReviewRef = ref(null)
 
 onBeforeMount(() => {
     getProperty(`/api/listings/${route.params.slug}`)
-    getReviews(`/api/listings/${route.params.slug}/reviews`)
     getMyReview(`/api/listings/${route.params.slug}/reviews`)
     getUserData()
 })

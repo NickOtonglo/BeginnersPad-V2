@@ -11,11 +11,11 @@
                         <label for="rating">Rating*</label>
                         <select v-model="review.rating" name="rating">
                             <option value="" disabled>--select rating--</option>
-                            <option value="1.00">1/5</option>
-                            <option value="2.00">2/5</option>
-                            <option value="3.00">3/5</option>
-                            <option value="4.00">4/5</option>
-                            <option value="5.00">5/5</option>
+                            <option value="1.0">1/5</option>
+                            <option value="2.0">2/5</option>
+                            <option value="3.0">3/5</option>
+                            <option value="4.0">4/5</option>
+                            <option value="5.0">5/5</option>
                         </select>
                         <div v-for="message in validationErrors?.rating" class="txt-alert txt-danger">
                             <li>{{ message }}</li>
