@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <form @submit.prevent="updateArticle(article, tags)" ref="form">
+        <form @submit.prevent="updateArticle(request, [article, tags, quillEditor.getHTML(), quillEditor.getContents().ops[0].insert])" ref="form">
             <div class="form-group">
                 <input v-model="article.title" type="text" name="title" placeholder="Title">
                 <div v-for="message in validationErrors?.title" class="txt-alert txt-danger">
@@ -37,8 +37,7 @@
                     :close-on-select="true"
                     placeholder="Select tag(s)"
                     label="name"
-                    track-by="name"
-                />
+                    track-by="name" />
             </div>
             <div v-for="message in validationErrors?.tags" class="txt-alert txt-danger">
                 <p>{{ message }}</p>
@@ -57,78 +56,20 @@
 
 <script setup>
 import { inject, ref, onMounted, onBeforeUpdate } from 'vue'
-import { useRouter } from 'vue-router';
 import VueMultiselect from 'vue-multiselect'
 import 'vue-multiselect/dist/vue-multiselect.css'
-import getArticle from '../../composables/getArticle';
+import articlesMaster from '../../composables/articles';
+import tagsMaster from '../../composables/tags'
 
-const { getArticleData, route, getArticleTags, article, tags } = getArticle()
+const { getArticle, updateArticle, route, article } = articlesMaster()
+const { tagsList, tags, getTagsList } = tagsMaster()
 
 const quillContent = ref('')
-const router = useRouter()
-const validationErrors = ref('')
-const isLoading = ref(false)
-const swal = inject('$swal')
-const tagsList = ref([])
 const quillEditor = ref(null)
 const thumbnail = ref(null)
 const thumbHolder = ref(null)
 
-const rt = '/api/articles'
-
-function getTags() {
-    axios.get('/api/tags')
-        .then(response => tagsList.value = response.data.data)
-        .catch(error => console.log(error))
-}
-
-function updateArticle(article, tags) {
-    if (isLoading.value) { return }
-    isLoading.value = true
-    validationErrors.value = ''
-    article.content = quillEditor.value.getHTML()
-    article.preview = quillEditor.value.getContents().ops[0].insert
-
-    let serialisedPost = new FormData()
-
-    let tagsFinal = []
-    for (let item in tags) {
-        if (tags.hasOwnProperty(item)) {
-            tagsFinal.push(tags[item].name)
-        }
-    }
-    serialisedPost.append('tags', tagsFinal)
-
-    for (let item in article) {
-        if (article.hasOwnProperty(item)) {
-            serialisedPost.append(item, article[item])
-        }
-    }
-    
-    serialisedPost.append('_method', 'PATCH')
-
-    // console.log(article.content)
-    // console.log(serialisedPost.get('slug'))
-
-    /**
-     * Why axios.put() doesn't work (route originally '/api/articles/'+ article.slug):
-     * https://stackoverflow.com/questions/65008650/how-to-use-put-method-in-laravel-api-with-file-upload/65009135#65009135
-    */
-    axios.post('/api/articles/' + article.slug + '/edit', serialisedPost)
-        .then(response => {
-            router.push({ name: 'article.view', params: { slug: article.slug } })
-            swal({
-                icon: 'success',
-                title: 'Article updated.'
-            })
-        })
-        .catch(error => {
-            if (error.response?.data) {
-                validationErrors.value = error.response.data.errors
-            }
-        })
-        .finally(() => isLoading.value = false)
-}
+const request = `/api/articles/${route.params.slug}`
 
 function triggerFileInput() {
     thumbnail.value.click()
@@ -151,9 +92,8 @@ function setThumbnail(event) {
 
 onMounted(() => {
     // async-await to set isLoading() to false once the 3 methods have completed
-    getArticleData(rt, route.params.slug)
-    getTags()
-    getArticleTags(rt, route.params.slug)
+    getArticle(request)
+    getTagsList(`/api/tags`)
 })
 
 onBeforeUpdate(() => {

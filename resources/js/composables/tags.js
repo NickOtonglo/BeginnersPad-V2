@@ -2,13 +2,13 @@ import { ref, inject } from "vue";
 import { useRoute, useRouter } from "vue-router"
 
 export default function tagsMaster() {
-    const tags = ref ({})
-    const tagsList = ref([])
     const route = useRoute()
     const router = useRouter()
     const isLoading = ref(false)
     const validationErrors = ref({})
     const swal = inject('$swal')
+    const tags = ref ({})
+    const tagsList = ref([])
     const tag = ref({})
     
     const getTagsList = () => {
@@ -17,6 +17,16 @@ export default function tagsMaster() {
 
         axios.get('/api/tags')
             .then(response => tagsList.value = response.data.data)
+            .catch(error => console.log(error))
+            .finally(isLoading.value = false)
+    }
+
+    const getArticleTags = (route) => {
+        if (isLoading.value) return
+        isLoading.value = true
+
+        axios.get(route)
+            .then(response => tags.value = response.data.data)
             .catch(error => console.log(error))
             .finally(isLoading.value = false)
     }
@@ -109,6 +119,7 @@ export default function tagsMaster() {
 
     return {
         validationErrors,
+        getArticleTags,
         getTagsList,
         updateTag,
         deleteTag,

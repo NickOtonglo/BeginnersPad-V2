@@ -16,9 +16,9 @@
                     <div @click="saveFavourite(`/api/favourites`, article, 'Article')"><i class="fas fa-heart" :class="{ active: article.favourite }"></i></div>
                 </div>
             </div>
-            <h3 v-if="article.author">by {{ article.author.name }}</h3>
+            <h3 v-if="article.author">by {{ article.author }}</h3>
             <p>Published on: {{ article.timestamp }}</p>
-            <template v-if="isAuthor()">
+            <template v-if="user.username === article.author">
                 <router-link class="btn btn-primary"
                     :to="{ name: 'article.edit', params: { slug: article.slug } }">Update</router-link>
                 <button @click.prevent="deleteArticle(rt, article.slug)" :disabled="isLoading" type="submit"
@@ -30,7 +30,7 @@
                 <br><br>
             </template>
         </div>
-        <div class="categories-grp">
+        <div class="categories-grp" v-if="tags.length">
             <div class="container">
                 <template v-for="tag in tags">
                     <div class="category">
@@ -52,46 +52,39 @@
 </template>
 
 <script setup>
-import getArticle from '../../composables/getArticle';
 import { onBeforeMount, ref } from 'vue';
+import articlesMaster from '../../composables/articles';
+import tagsMaster from '../../composables/tags'
 import favouriteMaster from '../../composables/favourites';
 import userMaster from '../../composables/users';
 
-const {
-    getArticleAuthor,
-    getArticleData,
-    getArticleTags,
-    deleteArticle,
-    isLoggedIn,
-    isLoading,
-    isAuthor,
-    article,
-    route,
-    tags,
-} = getArticle()
+const { deleteArticle, getArticle, article, route } = articlesMaster()
+const { tags, getArticleTags } = tagsMaster()
 const { saveFavourite } = favouriteMaster()
 const { getUserData, user } = userMaster()
 
-const rt = '/api/articles'
+let request = `/api/articles/${route.params.slug}`
 
-function initialiseFunctions() {
-    return new Promise((resolve, reject) => {
-        getArticleData(rt, route.params.slug)
-        getArticleAuthor(rt, route.params.slug)
-        getArticleTags(rt, route.params.slug)
+// function initialiseFunctions() {
+//     return new Promise((resolve, reject) => {
+//         getArticleData(rt, route.params.slug)
+//         getArticleAuthor(rt, route.params.slug)
+//         getArticleTags(rt, route.params.slug)
 
-        const error = false
+//         const error = false
 
-        if (!error) {
-            resolve()
-        } else {
-            reject('Error: Something went wrong.')
-        }
-    })
-}
+//         if (!error) {
+//             resolve()
+//         } else {
+//             reject('Error: Something went wrong.')
+//         }
+//     })
+// }
 
 onBeforeMount(() => {
-    initialiseFunctions().then(isLoading.value = false)
+    // initialiseFunctions().then(isLoading.value = false)
+    getArticle(request)
+    getArticleTags(`${request}/tags`)
     getUserData()
 })
 </script>

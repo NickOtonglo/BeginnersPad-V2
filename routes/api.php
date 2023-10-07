@@ -39,7 +39,7 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::post('brand', '\App\Http\Controllers\Api\UserController@saveBrand');
 
     Route::post('articles', '\App\Http\Controllers\Api\ArticlesController@store');
-    Route::patch('articles/{article}/edit', '\App\Http\Controllers\Api\ArticlesController@update');
+    Route::patch('articles/{article}', '\App\Http\Controllers\Api\ArticlesController@update');
     Route::delete('articles/{article}', '\App\Http\Controllers\Api\ArticlesController@destroy');
 
     Route::get('tags', '\App\Http\Controllers\Api\TagsController@index');
