@@ -1,6 +1,6 @@
 import './bootstrap';
 import '../css/default-theme.css'
-import '../css/photoswipe.css'
+// import '../css/photoswipe.css'
 import '../css/app.css'
 import '../css/utilities.css'
 import '../css/queries.css'

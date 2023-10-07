@@ -29,7 +29,7 @@
                 <div v-for="message in validationErrors?.preview" class="txt-alert txt-danger">
                     <p>{{ message }}</p>
                 </div>
-                <div class="form-group">
+                <div>
                     <VueMultiselect
                         v-model="tags"
                         :options="tagsList"
