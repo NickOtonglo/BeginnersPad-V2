@@ -18,13 +18,13 @@
         </div>
         <div class="categories-grp">
             <div class="category">
-                <button>Listings</button>
+                <button @click="getPaginationDataWithRequest(1, ['favourites', 'Property'], `${request}/category/Property`)">Listings</button>
             </div>
             <div class="category">
-                <button>Listing units</button>
+                <button @click="getPaginationDataWithRequest(1, ['favourites', 'PropertyUnit'], `${request}/category/PropertyUnit`)">Listing units</button>
             </div>
             <div class="category">
-                <button>Topics</button>
+                <button @click="getPaginationDataWithRequest(1, ['favourites', 'Article'], `${request}/category/Article`)">Articles</button>
             </div>
         </div>
     </section>
@@ -88,7 +88,7 @@
                 </template>
             </div>
         </div>
-        <template v-if="!favourites.length">
+        <template v-if="favourites && !favourites.length">
             <p style="text-align: center;">-no sub-zones-</p>
         </template>
         <Pagination v-if="favouritesCount > 40" :totalPages="total_pages"
@@ -99,7 +99,7 @@
 </template>
 
 <script setup>
-import { ref, onBeforeMount, watch } from 'vue'
+import { ref, onBeforeMount, watch, reactive } from 'vue'
 import favouritesMaster from '../../composables/favourites'
 import ComponentRatingStars from '../Misc/RatingStars.vue'
 import pagination from '../../composables/pagination'
@@ -122,5 +122,10 @@ let request = `/api/favourites`
 
 onBeforeMount(() => {
     getPaginationDataWithRequest(current_page.value, 'favourites', request)
+})
+
+watch(search_global, (current, previous) => {
+    // To show instant results during search, uncomment the line below
+    // getPaginationData(1, 'properties')
 })
 </script>

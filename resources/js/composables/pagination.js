@@ -70,6 +70,9 @@ export default function pagination() {
                 if (source == 'favourites') {
                     getFavourites(`${request}?page=${page}&search_global=${search_global.value}`)
                 }
+                if (source[1] == 'Property' || source[1] == 'PropertyUnit' || source[1] == 'Article') {
+                    getFavourites(`${request}?page=${page}&search_global=${search_global.value}`)
+                }
             })
     }
 
@@ -78,8 +81,17 @@ export default function pagination() {
         if (
             sourceParam == 'sub-zones' || 
             sourceParam == 'properties' || 
-            sourceParam == 'property_units' ||
-            sourceParam == 'favourites'
+            sourceParam == 'property_units'
+        ) {
+            getPaginationDataWithRequest(page, sourceParam, requestParam)    
+        }
+
+        if (
+            sourceParam[0] == 'favourites' && (
+                sourceParam[1] == 'Article' ||
+                sourceParam[1] == 'PropertyUnit' ||
+                sourceParam[1] == 'Property'
+            )
         ) {
             getPaginationDataWithRequest(page, sourceParam, requestParam)    
         }

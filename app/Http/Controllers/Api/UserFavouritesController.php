@@ -28,6 +28,17 @@ class UserFavouritesController extends Controller
         return UserFavouriteResource::collection($favourites);
     }
 
+    public function indexWithCategory(string $category)
+    {
+        $favourites = UserFavourite::when(request('search_global'), function($query) {
+            $query->where(function($q) {
+                $q->where('title', 'like', '%'.request('search_global').'%');
+            });
+        })->where('user_id', auth()->user()->id)->where('model', $category)->latest()->paginate(40);
+        // $favourites = auth()->user()->userFavourites()->paginate(3);
+        return UserFavouriteResource::collection($favourites);
+    }
+
     /**
      * Show the form for creating a new resource.
      */
