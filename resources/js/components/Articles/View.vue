@@ -108,4 +108,7 @@ img {
 .info-actions i:last-child {
     margin-left: 10px;
 }
+.info-actions .active {
+    color: var(--color-primary)
+}
 </style>

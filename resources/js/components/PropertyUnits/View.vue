@@ -200,3 +200,9 @@ function click(element) {
 }
 
 </script>
+
+<style scoped>
+.info-actions .active {
+    color: var(--color-primary)
+}
+</style>

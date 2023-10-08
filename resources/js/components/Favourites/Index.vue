@@ -32,7 +32,7 @@
                 <template v-for="fav in favourites">
                     <div v-if="fav.model == 'PropertyUnit'" class="fav unit">
                         <router-link :to="{ name: 'unit.view', params: { slug: fav.data.parent_slug, unit_slug: fav.data.slug } }">
-                            <div v-if="fav.data.thumbnail" class="thumb" :style="{ background: `url(/images/listings/${property.slug}/${unit.slug}/${unit.thumbnail})` }" style="background-size: cover;"></div>
+                            <div v-if="fav.data.thumbnail" class="thumb" :style="{ background: `url(/images/listings/${fav.data.parent_slug}/${fav.data.slug}/${fav.data.thumbnail})` }" style="background-size: cover;"></div>
                             <div v-else class="thumb" style="background-size: cover;"></div>
                             <div class="details">
                                 <h3 class="txt-single-line">{{ fav.data.name }}</h3>
@@ -57,7 +57,8 @@
                     </div>
                     <div v-if="fav.model == 'Property'" class="fav listing">
                         <router-link :to="{ name: 'property.view', params: { slug: fav.data.slug } }">
-                            <div class="thumb"></div>
+                            <div v-if="fav.data.thumbnail" class="thumb" :style="{ background: `url(/images/listings/${fav.data.slug}/${fav.data.thumbnail})` }" style="background-size: cover;"></div>
+                            <div v-else class="thumb" style="background-size: cover;"></div>
                             <div class="details">
                                 <h3 class="txt-single-line">{{ fav.data.name }}</h3>
                                 <div class="location">
