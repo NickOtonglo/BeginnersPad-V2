@@ -82,9 +82,9 @@
                                     @pagechanged="onPageChange"
                         />
                     </template>
-                    <template v-if="!subZones.length">
+                    <!-- <template v-if="!subZones.length">
                         <p style="text-align: center;">-no sub-zones-</p>
-                    </template>
+                    </template> -->
                 </div>
             </div>
         </div>

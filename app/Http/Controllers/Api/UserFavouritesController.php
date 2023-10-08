@@ -19,7 +19,12 @@ class UserFavouritesController extends Controller
      */
     public function index()
     {
-        $favourites = auth()->user()->userFavourites;
+        $favourites = UserFavourite::when(request('search_global'), function($query) {
+            $query->where(function($q) {
+                $q->where('title', 'like', '%'.request('search_global').'%');
+            });
+        })->where('user_id', auth()->user()->id)->latest()->paginate(40);
+        // $favourites = auth()->user()->userFavourites()->paginate(3);
         return UserFavouriteResource::collection($favourites);
     }
 

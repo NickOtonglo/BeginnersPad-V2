@@ -14,13 +14,17 @@ export default function favouriteMaster() {
         model: '',
         user_id: '',
     })
+    const favouritesCount = ref(0)
 
     const getFavourites = (request) => {
         if (isLoading.value) return
         isLoading.value = true
 
         axios.get(request)
-            .then(response => favourites.value = response.data.data)
+            .then(response => {
+                favourites.value = response.data.data
+                favouritesCount.value = response.data.meta.total
+            })
             .catch(error => console.log(error))
             .finally(isLoading.value = false)
     }
@@ -110,6 +114,7 @@ export default function favouriteMaster() {
         router,
         validationErrors,
         favourites,
+        favouritesCount,
         getFavourites,
         saveFavourite,
         deleteFavourite,

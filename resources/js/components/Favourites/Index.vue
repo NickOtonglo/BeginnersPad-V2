@@ -4,10 +4,13 @@
     <!-- Search bar -->
     <section id="search-bar">
         <div class="container">
-            <form class="search-bar">
+            <form @submit.prevent="getPaginationDataWithRequest(1, 'favourites', request)" class="search-bar">
                 <div class="search-bar-grp">
-                    <input type="text" class="search-input" placeholder="search...">
-                    <div class="search-button">
+                    <input v-model="search_global" type="text" class="search-input" placeholder="search...">
+                    <div ref="btnClearSearch" v-show="search_global !== ''" @click="search_global = '', getPaginationDataWithRequest(1, 'favourites', request)" class="search-button">
+                        <i class="fas fa-xmark"></i>
+                    </div>
+                    <div @click="getPaginationDataWithRequest(1, 'favourites', request)" class="search-button">
                         <i class="fas fa-search"></i>
                     </div>
                 </div>
@@ -85,18 +88,39 @@
                 </template>
             </div>
         </div>
+        <template v-if="!favourites.length">
+            <p style="text-align: center;">-no sub-zones-</p>
+        </template>
+        <Pagination v-if="favouritesCount > 40" :totalPages="total_pages"
+                    :perPage="per_page"
+                    :currentPage="current_page"
+                    @pagechanged="onPageChange" />
     </section>
 </template>
 
 <script setup>
-import { ref, onBeforeMount } from 'vue';
+import { ref, onBeforeMount, watch } from 'vue'
 import favouritesMaster from '../../composables/favourites'
 import ComponentRatingStars from '../Misc/RatingStars.vue'
+import pagination from '../../composables/pagination'
 
-const { favourites, getFavourites, deleteFavourite } = favouritesMaster()
+const btnClearSearch = ref(null)
+
+const { 
+    search_global,
+    total_pages,
+    per_page,
+    current_page,
+    favourites,
+    favouritesCount,
+    onPageChange,
+    getPaginationDataWithRequest
+} = pagination()
+
+const { deleteFavourite } = favouritesMaster()
 let request = `/api/favourites`
 
 onBeforeMount(() => {
-    getFavourites(request)
+    getPaginationDataWithRequest(current_page.value, 'favourites', request)
 })
 </script>
