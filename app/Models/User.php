@@ -71,4 +71,12 @@ class User extends Authenticatable
     public function userFavourites() {
         return $this->hasMany(UserFavourite::class);
     }
+
+    public function helpTickets() {
+        return $this->hasMany(HelpTicket::class, 'email');
+    }
+
+    public function assignedHelpTickets() {
+        return $this->hasMany(HelpTicket::class, 'assgned_to', 'id');
+    }
 }

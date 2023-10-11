@@ -25,6 +25,8 @@ Route::get('tags/{tag}/articles', '\App\Http\Controllers\Api\TagsController@getA
 Route::get('listings/home', '\App\Http\Controllers\Api\PropertiesController@indexHome');
 Route::get('listings', '\App\Http\Controllers\Api\PropertiesController@index');
 
+Route::get('help/faq', '\App\Http\Controllers\Api\HelpController@getFaqs');
+
 Route::middleware('auth:sanctum')->group(function() {
     Route::get('user', '\App\Http\Controllers\Api\UserController@getAuthenticatedUser');
     Route::get('user/account', '\App\Http\Controllers\Api\UserController@getAuthenticatedUserAccount');
@@ -32,6 +34,7 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::post('user/avatar', '\App\Http\Controllers\Api\UserController@updateAvatar');
     Route::delete('user/avatar', '\App\Http\Controllers\Api\UserController@removeAvatar');
     Route::post('user/secret', '\App\Http\Controllers\Api\UserController@updatePassword');
+    Route::post('user/view/{user}', '\App\Http\Controllers\Api\UserController@showUser');
 
     Route::post('brand/avatar', '\App\Http\Controllers\Api\UserController@updateBrandAvatar');
     Route::delete('brand/avatar', '\App\Http\Controllers\Api\UserController@removeBrandAvatar');
@@ -101,4 +104,19 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::get('favourites/category/{model}', 'App\Http\Controllers\Api\UserFavouritesController@indexWithCategory');
     Route::post('favourites', 'App\Http\Controllers\Api\UserFavouritesController@store');
     Route::delete('favourites/{favourite}', 'App\Http\Controllers\Api\UserFavouritesController@destroy');
+
+    Route::post('help/faq', '\App\Http\Controllers\Api\HelpController@storeFaqs');
+    Route::get('help/faq/{faq}', '\App\Http\Controllers\Api\HelpController@getFaq');
+    Route::patch('help/faq/{faq}', '\App\Http\Controllers\Api\HelpController@updateFaq');
+    Route::delete('help/faq/{faq}', '\App\Http\Controllers\Api\HelpController@destroyFaq');
+
+    Route::get('help/', '\App\Http\Controllers\Api\HelpController@getUserTickets');
+    Route::post('user/tickets/{user}', '\App\Http\Controllers\Api\UserController@showUserTickets');
+    // authenticated user's tickets
+    Route::get('help/tickets', '\App\Http\Controllers\Api\HelpController@getTickets');
+    Route::post('help/tickets', '\App\Http\Controllers\Api\HelpController@storeTicket');
+    Route::get('help/tickets/{ticket}', '\App\Http\Controllers\Api\HelpController@getTicket');
+    Route::put('help/tickets/{ticket}', '\App\Http\Controllers\Api\HelpController@updateTicket');
+    Route::patch('help/tickets/{ticket}', '\App\Http\Controllers\Api\HelpController@updateTicketStatus');
+    Route::delete('help/tickets/{ticket}', '\App\Http\Controllers\Api\HelpController@destroyTicket');
 });

@@ -24,6 +24,8 @@ import PropertyReviewsIndex from '../components/PropertyReviews/Index.vue'
 import PropertyReviewsMine from '../components/PropertyReviews/MyReviews.vue'
 import PropertyReviewsView from '../components/PropertyReviews/View.vue'
 import UserFavouritesIndex from '../components/Favourites/Index.vue'
+import HelpIndex from '../components/Help/Index.vue'
+import HelpFAQ from '../components/FAQ/Index.vue'
 
 function auth(to, from, next) {
     if (JSON.parse(localStorage.getItem('authenticated'))) {
@@ -166,6 +168,16 @@ const routes = [
         path: '/favourites',
         name: 'favourites.index',
         component: UserFavouritesIndex
+    },
+    {
+        path: '/help',
+        name: 'help.index',
+        component: HelpIndex
+    },
+    {
+        path: '/help/faq',
+        name: 'help.faq',
+        component: HelpFAQ
     },
 ]
 

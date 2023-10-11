@@ -2,7 +2,7 @@
     <ul id="navMenu" class="nav-menu authed">
         <div class="badge">
             <span class="badge-mark"></span>
-            <li><router-link :to="{ name: '' }" href="/help"><i class="fas fa-question-circle"></i> Help</router-link></li>
+            <li><router-link :to="{ name: 'help.index' }"><i class="fas fa-question-circle"></i> Help</router-link></li>
         </div>
         <div class="badge">
             <span class="badge-mark">1</span>
