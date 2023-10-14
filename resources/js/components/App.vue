@@ -20,8 +20,8 @@
             <i id="navDrawerClose" class="fas fa-times fa-2x"></i>
             <div class="nav-drawer-category">
                 <ul>
-                    <li><router-link :to="{ name: 'help.index' }"><i class="fas fa-question-circle"></i> Help</router-link></li>
-                    <li><router-link :to="{ name: 'users.account' }"><i class="fas fa-user-circle"></i> Manage account</router-link></li>
+                    <li><a href="/help"><i class="fas fa-question-circle"></i> Help</a></li>
+                    <li><a  href="/manage-account"><i class="fas fa-user-circle"></i> Manage account</a></li>
                     <li><a href="#" @click="userLogin.logout"><i class="fas fa-sign-out-alt"></i> Sign out</a></li>
                 </ul>
             </div>

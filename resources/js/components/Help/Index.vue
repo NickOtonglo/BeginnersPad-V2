@@ -5,99 +5,91 @@
             <div class="help-links">
                 <div class="help-faqs">
                     <h3 class="section-title">Frequently asked questions</h3>
-                    <div class="link-item">
-                        <h4>What is Beginners Pad?</h4>
-                        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Earum consequatur at iure. Soluta consequatur, earum
-                            voluptates debitis neque similique id voluptatibus natus? Eaque tenetur laborum exercitationem, minus libero,
-                            repellendus rem tempore explicabo voluptate corrupti totam. Quo id provident ullam dolorem nostrum corporis ipsa
-                            eius consequuntur...</p>
-                        <a href="#">See more <i class="fas fa-chevron-right"></i></a>
-                    </div>
-                    <div class="link-item">
-                        <h4>How can I find my next house?</h4>
-                        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Earum consequatur at iure. Soluta consequatur, earum
-                            voluptates debitis neque similique id voluptatibus natus? Eaque tenetur laborum exercitationem, minus libero,
-                            repellendus rem tempore explicabo voluptate corrupti totam. Quo id provident ullam dolorem nostrum corporis ipsa
-                            eius consequuntur...</p>
-                            <a href="#">See more <i class="fas fa-chevron-right"></i></a>
-                    </div>
-                    <div class="link-item">
-                        <h4>How can I list my property?</h4>
-                        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Earum consequatur at iure. Soluta consequatur, earum
-                            voluptates debitis neque similique id voluptatibus natus? Eaque tenetur laborum exercitationem, minus libero,
-                            repellendus rem tempore explicabo voluptate corrupti totam. Quo id provident ullam dolorem nostrum corporis ipsa
-                            eius consequuntur...</p>
-                            <a href="#">See more <i class="fas fa-chevron-right"></i></a>
-                    </div>
+                    <template v-if="faqs" v-for="(item, index) in faqs">
+                        <div v-if="index <= 2" class="link-item">
+                            <h4>{{ item.question }}</h4>
+                            <p class="txt-triple-line">{{ item.answer }}</p>
+                            <router-link :to="{ name: 'help.faq' }">See more <i class="fas fa-chevron-right"></i></router-link>
+                        </div>
+                    </template>
                     <div class="section-more">
                         <router-link :to="{ name: 'help.faq' }">View all FAQs <i class="fas fa-chevron-right"></i></router-link>
                     </div>
                 </div>
                 <div class="help-topics">
-                    <h3 class="section-title">Help topics</h3>
-                    <div class="link-item">
-                        <h4>Listing a property - Get started</h4>
-                        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Earum consequatur at iure. Soluta consequatur, earum
-                            voluptates debitis neque similique id voluptatibus natus? Eaque tenetur laborum exercitationem, minus libero,
-                            repellendus rem tempore explicabo voluptate corrupti totam. Quo id provident ullam dolorem nostrum corporis ipsa
-                            eius consequuntur...</p>
-                        <a href="#">See more <i class="fas fa-chevron-right"></i></a>
-                    </div>
-                    <div class="link-item">
-                        <h4>Choosing a new house - Get started</h4>
-                        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Earum consequatur at iure. Soluta consequatur, earum
-                            voluptates debitis neque similique id voluptatibus natus? Eaque tenetur laborum exercitationem, minus libero,
-                            repellendus rem tempore explicabo voluptate corrupti totam. Quo id provident ullam dolorem nostrum corporis ipsa
-                            eius consequuntur...</p>
-                        <a href="#">See more <i class="fas fa-chevron-right"></i></a>
-                    </div>
-                    <div class="link-item">
-                        <h4>Waiting list - Get started</h4>
-                        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Earum consequatur at iure. Soluta consequatur, earum
-                            voluptates debitis neque similique id voluptatibus natus? Eaque tenetur laborum exercitationem, minus libero,
-                            repellendus rem tempore explicabo voluptate corrupti totam. Quo id provident ullam dolorem nostrum corporis ipsa
-                            eius consequuntur...</p>
-                        <a href="#">See more <i class="fas fa-chevron-right"></i></a>
-                    </div>
+                    <h3 class="section-title">Help articles</h3>
+                    <template v-if="articles" v-for="(item, index) in articles">
+                        <div v-if="index <= 2" class="link-item">
+                            <h4>{{ item.title }}</h4>
+                            <p class="txt-triple-line">{{ item.preview }}</p>
+                            <router-link :to="{ name: 'article.view', params: { slug: item.slug } }">See more <i class="fas fa-chevron-right"></i></router-link>
+                        </div>
+                    </template>
                     <div class="section-more">
-                        <a href="/view-topics.html">View all Help topics <i class="fas fa-chevron-right"></i></a>
+                        <router-link :to="{ name: 'tag.articles', params: { 'name': 'help' } }">View all Help articles <i class="fas fa-chevron-right"></i></router-link>
                     </div>
                 </div>
             </div>
             <!-- Form -->
             <div class="help-form">
                 <h3 class="section-title">Contact representative</h3>
-                <form>
-                    <div class="form-group">
+                <form @submit.prevent="createTicket(ticketRequest, ticket)">
+                    <div v-if="!user.username" class="form-group">
                         <label for="email">Email address*</label>
-                        <input type="email" name="Email address" id="email">
+                        <input v-model="ticket.email" type="email" name="Email address" id="email">
+                        <div v-for="message in validationErrors?.email" class="txt-alert txt-danger">
+                            <li>{{ message }}</li>
+                        </div>
                     </div>
                     <div class="form-group">
-                        <label for="help_category">Help category*</label>
-                        <select name="Help category" id="help_category">
-                            <option value="" selected>--select category--</option>
-                            <option value="billing">Billing</option>
-                            <option value="my_account">My account</option>
-                            <option value="request_account_closure">Request account closure</option>
-                            <option value="unable_to_login">Unable to sign in</option>
-                            <option value="account_suspended">Account suspended</option>
+                        <label for="topic">Help category*</label>
+                        <select v-model="ticket.topic" name="topic" id="topic">
+                            <option value="" disabled>--select category--</option>
+                            <template v-for="item in topics">
+                                <option :value="item.category">{{ item.category }}</option>
+                            </template>
                         </select>
+                        <div v-for="message in validationErrors?.topic" class="txt-alert txt-danger">
+                            <li>{{ message }}</li>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label for="description">Text (describe problem in detail)*</label>
-                        <textarea name="description" id="description" cols="30" rows="10"></textarea>
+                        <textarea v-model="ticket.description" type="text" name="description" rows="10"></textarea>
+                        <div v-for="message in validationErrors?.description" class="txt-alert txt-danger">
+                            <p>{{ message }}</p>
+                        </div>
                     </div>
-                    <input class="btn btn-link btn-submit" type="button" value="Submit">
+                    <button :disabled="isLoading" class="btn-submit" type="submit">
+                        <div v-show="isLoading" class="lds-dual-ring"></div>
+                        <span v-if="isLoading">Loading...</span>
+                        <span v-else>Submit</span>
+                    </button>
                 </form>
-                <div class="section-more">
-                    <a href="/view-tickets-user.html">Sample tickets as user <i class="fas fa-chevron-right"></i></a>
-                </div>
-                <div class="section-more">
-                    <a href="/view-tickets-admin.html">Sample tickets as admin <i class="fas fa-chevron-right"></i></a>
-                </div>
             </div>
         </div>
     </section>
 </template>
 
-<script setup></script>
+<script setup>
+import { onBeforeMount } from 'vue'
+import faqMaster from '../../composables/faqs'
+import articlesMaster from '../../composables/articles'
+import userMaster from '../../composables/users'
+import ticketsMaster from '../../composables/tickets'
+
+const { faqs, getFaqs } = faqMaster()
+const { articles, getArticles } = articlesMaster()
+const { user, getUserData } = userMaster()
+const { topics, getTopics, ticket, createTicket, validationErrors } = ticketsMaster()
+
+let ticketRequest = `/api/help/tickets`
+
+onBeforeMount(() => {
+    getFaqs(`/api/help/faq`)
+    getArticles(`/api/tags/help/articles`)
+    getTopics(`/api/help/topics`)
+    getUserData()
+})
+
+</script>

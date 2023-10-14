@@ -34,10 +34,6 @@ class TagsController extends Controller
      */
     public function store(SaveTagRequest $request)
     {
-        $request->validate([
-            'name' => 'required',
-        ]);
-
         $tagsRequest = explode(',', $request->name);
         $tags = [];
 
@@ -62,6 +58,11 @@ class TagsController extends Controller
         }
 
         return $tags;
+        $response = [
+            'property_review' => $tags,
+            'message' => "New tag(s) ".$tags." added successfully.",
+        ];
+        return response($response, 201);
     }
 
     /**
@@ -106,6 +107,9 @@ class TagsController extends Controller
 
     public function getArticles(Tag $tag) {
         $articles = $tag->articles;
-        return ArticlesResource::collection($articles);
+        if ($articles) {
+            return ArticlesResource::collection($articles);
+        }
+        return response()->noContent();
     }
 }

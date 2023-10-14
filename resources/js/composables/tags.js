@@ -31,17 +31,13 @@ export default function tagsMaster() {
             .finally(isLoading.value = false)
     }
 
-    const storeTags = (tags) => {
+    const storeTags = (request, data) => {
         if (isLoading.value) { return }
         isLoading.value = true
         validationErrors.value = ''
 
-        axios.post('api/tags', tags)
+        axios.post(request, data)
             .then(response => {
-                // swal({
-                //     icon: 'success',
-                //     title: 'Tag added.'
-                // })
                 router.go(0)
             })
             .catch(error => {

@@ -30,24 +30,18 @@
 <script setup>
 import tagsMaster from '../../composables/tags';
 import operateModal from '../../composables/modal'
-import { onMounted, ref, onBeforeUnmount } from 'vue';
+import { ref } from 'vue';
 
-const { getTag, tag, validationErrors, isLoading, updateTag } = tagsMaster()
+const { getTag, validationErrors, isLoading, updateTag } = tagsMaster()
 const modalRef = ref(null)
-// const props = defineProps(['tag'])
+
+const props = defineProps({
+    tag: Object,
+})
 
 function openModal() {
-    getTag(localStorage.getItem('tagName'))
     operateModal(modalRef.value)
 }
-
-onMounted(() => {
-    openModal()
-})
-
-onBeforeUnmount(() => {
-    localStorage.removeItem('tagName')
-})
 
 defineExpose({
     openModal,

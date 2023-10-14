@@ -26,6 +26,7 @@ import PropertyReviewsView from '../components/PropertyReviews/View.vue'
 import UserFavouritesIndex from '../components/Favourites/Index.vue'
 import HelpIndex from '../components/Help/Index.vue'
 import HelpFAQ from '../components/FAQ/Index.vue'
+import TicketView from '../components/HelpTickets/View.vue'
 
 function auth(to, from, next) {
     if (JSON.parse(localStorage.getItem('authenticated'))) {
@@ -178,6 +179,11 @@ const routes = [
         path: '/help/faq',
         name: 'help.faq',
         component: HelpFAQ
+    },
+    {
+        path: '/help/tickets/:id',
+        name: 'ticket.view',
+        component: TicketView
     },
 ]
 

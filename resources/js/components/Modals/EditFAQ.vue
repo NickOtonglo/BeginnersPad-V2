@@ -41,7 +41,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue';
+import { ref } from 'vue';
 import operateModal from '../../composables/modal'
 import faqsMaster from '../../composables/faqs';
 
