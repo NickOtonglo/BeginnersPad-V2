@@ -105,6 +105,16 @@ class HelpController extends Controller
         return response($response, 201);
     }
 
+    public function getTickets() {
+        $tickets = HelpTicket::where('email', auth()->user()->email)->paginate(40);
+        return HelpTicketResource::collection($tickets);
+    }
+
+    public function getTicketsWithStatus(string $status) {
+        $tickets = HelpTicket::where('email', auth()->user()->email)->where('status', $status)->paginate(40);
+        return HelpTicketResource::collection($tickets);
+    }
+
     public function getTicket(HelpTicket $ticket) {
         $ticket = HelpTicket::where('id', $ticket->id)->first();
         return new HelpTicketResource($ticket);

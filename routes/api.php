@@ -116,6 +116,7 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::post('user/tickets/{user}', '\App\Http\Controllers\Api\UserController@showUserTickets');
     // authenticated user's tickets
     Route::get('help/tickets', '\App\Http\Controllers\Api\HelpController@getTickets');
+    Route::get('help/tickets/status/{status}', '\App\Http\Controllers\Api\HelpController@getTicketsWithStatus');
     Route::get('help/tickets/{ticket}', '\App\Http\Controllers\Api\HelpController@getTicket');
     Route::put('help/tickets/{ticket}', '\App\Http\Controllers\Api\HelpController@updateTicket');
     Route::patch('help/tickets/{ticket}', '\App\Http\Controllers\Api\HelpController@updateTicketStatus');

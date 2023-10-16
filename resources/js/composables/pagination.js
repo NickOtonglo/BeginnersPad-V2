@@ -5,6 +5,7 @@ import subZoneMaster from './subzones'
 import propertiesMaster from "./properties"
 import unitsMaster from "./units"
 import favouriteMaster from './favourites'
+import ticketsMaster from "./tickets"
 
 export default function pagination() {
     const isLoading = ref(false)
@@ -18,6 +19,7 @@ export default function pagination() {
     const { properties, getProperties } = propertiesMaster()
     const { units, getUnits, unitsCount } = unitsMaster()
     const { favourites, getFavourites, favouritesCount } = favouriteMaster()
+    const { tickets, getTickets, ticketsCount } = ticketsMaster()
     let sourceParam = '', requestParam = ''
 
     const getPaginationData = (page, source) => {
@@ -73,6 +75,9 @@ export default function pagination() {
                 if (source[1] == 'Property' || source[1] == 'PropertyUnit' || source[1] == 'Article') {
                     getFavourites(`${request}?page=${page}&search_global=${search_global.value}`)
                 }
+                if (source == 'help_tickets') {
+                    getTickets(`${request}?page=${page}`)
+                }
             })
     }
 
@@ -81,7 +86,8 @@ export default function pagination() {
         if (
             sourceParam == 'sub-zones' || 
             sourceParam == 'properties' || 
-            sourceParam == 'property_units'
+            sourceParam == 'property_units' || 
+            sourceParam == 'help_tickets'
         ) {
             getPaginationDataWithRequest(page, sourceParam, requestParam)    
         }
@@ -109,6 +115,7 @@ export default function pagination() {
         properties,
         units,
         favourites,
+        tickets,
         total_pages,
         per_page,
         current_page,
@@ -118,6 +125,7 @@ export default function pagination() {
         subZonesCount,
         unitsCount,
         favouritesCount,
+        ticketsCount,
         getPaginationData,
         getPaginationDataWithRequest,
     }

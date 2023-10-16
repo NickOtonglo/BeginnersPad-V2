@@ -14,6 +14,7 @@ export default function ticketsMaster() {
         topic: '',
     })
     const tickets = ref({})
+    const ticketsCount = ref(0)
     const ticket = ref({
         email: '',
         user: '',
@@ -143,7 +144,10 @@ export default function ticketsMaster() {
         isLoading.value = true
 
         axios.get(request)
-            .then(response => tickets.value = response.data.data)
+            .then(response => {
+                tickets.value = response.data.data
+                ticketsCount.value = response.data.meta.total
+            })
             .catch(error => console.log(error))
             .finally(isLoading.value = false)
     }
@@ -272,6 +276,7 @@ export default function ticketsMaster() {
         createTopic,
         updateTopic,
         deleteTopic,
+        ticketsCount,
         getTickets,
         getTicket,
         createTicket,

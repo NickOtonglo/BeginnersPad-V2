@@ -17,14 +17,14 @@
             </form>
         </div>
         <div class="categories-grp">
-            <div class="category">
-                <button @click="getPaginationDataWithRequest(1, ['favourites', 'Property'], `${request}/category/Property`)">Listings</button>
+            <div class="category" :class="{ 'selected' : selected === 'Property' }">
+                <button @click="selected = 'Property', getPaginationDataWithRequest(1, ['favourites', selected], `${request}/category/Property`)" class="active">Listings</button>
             </div>
-            <div class="category">
-                <button @click="getPaginationDataWithRequest(1, ['favourites', 'PropertyUnit'], `${request}/category/PropertyUnit`)">Listing units</button>
+            <div class="category" :class="{ 'selected' : selected === 'PropertyUnit' }">
+                <button @click="selected = 'PropertyUnit', getPaginationDataWithRequest(1, ['favourites', selected], `${request}/category/PropertyUnit`)">Listing units</button>
             </div>
-            <div class="category">
-                <button @click="getPaginationDataWithRequest(1, ['favourites', 'Article'], `${request}/category/Article`)">Articles</button>
+            <div class="category" :class="{ 'selected' : selected === 'Article' }">
+                <button @click="selected = 'Article', getPaginationDataWithRequest(1, ['favourites', selected], `${request}/category/Article`)">Articles</button>
             </div>
         </div>
     </section>
@@ -89,7 +89,7 @@
             </div>
         </div>
         <template v-if="favourites && !favourites.length">
-            <p style="text-align: center;">-no sub-zones-</p>
+            <p style="text-align: center;">-no favourites-</p>
         </template>
         <Pagination v-if="favouritesCount > 40" :totalPages="total_pages"
                     :perPage="per_page"
@@ -99,12 +99,13 @@
 </template>
 
 <script setup>
-import { ref, onBeforeMount, watch, reactive } from 'vue'
+import { ref, onBeforeMount, watch } from 'vue'
 import favouritesMaster from '../../composables/favourites'
 import ComponentRatingStars from '../Misc/RatingStars.vue'
 import pagination from '../../composables/pagination'
 
 const btnClearSearch = ref(null)
+let selected = ''
 
 const { 
     search_global,

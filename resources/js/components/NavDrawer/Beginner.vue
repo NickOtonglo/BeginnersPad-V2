@@ -9,7 +9,7 @@
             <li><a href="/favourites">Favourites</a></li>
             <!-- <li><router-link :to="{ name: 'favourites.index' }">Favourites</router-link></li> -->
             <li><a href="/beginner/property-history.html">Property history</a></li>
-            <li><a href="/beginner/view-tickets.html">My tickets</a></li>
+            <li><a href="/help/tickets">My tickets</a></li>
         </ul>
     </div>
     <div class="nav-drawer-category">
