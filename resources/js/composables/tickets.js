@@ -24,6 +24,7 @@ export default function ticketsMaster() {
         status: '',
         assigned_to: '',
     })
+    const ticketsRepsList = ref({})
     const { user, getUserData } = userMaster()
 
     const getTopics = (request) => {
@@ -152,6 +153,18 @@ export default function ticketsMaster() {
             .finally(isLoading.value = false)
     }
 
+    const getRepsList = (request) => {
+        if (isLoading.value) return
+        isLoading.value = true
+
+        axios.get(request)
+            .then(response => {
+                ticketsRepsList.value = response.data.data
+            })
+            .catch(error => console.log(error))
+            .finally(isLoading.value = false)
+    }
+
     const getTicket = (request) => {
         if (isLoading.value) return
         isLoading.value = true
@@ -269,6 +282,34 @@ export default function ticketsMaster() {
         })
     }
 
+    const updateTicketStatus = (request, data) => {
+        if (isLoading.value) return
+        isLoading.value = true
+
+        axios.patch(request, data)
+            .then(response => {
+                swal({
+                    icon: 'success',
+                    title: 'Ticket status updated.',
+                    // didClose: () => {
+                    //     router.go(0)
+                    // }
+                })
+            })
+            .catch(error => {
+                if (error.response?.data) {
+                    validationErrors.value = error.response.data.errors
+                } else {
+                    swal({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'An error occured. Please try again.',
+                    })
+                }
+            })
+            .finally(isLoading.value = false)
+    }
+
     return {
         validationErrors,
         getTopics,
@@ -281,7 +322,10 @@ export default function ticketsMaster() {
         getTicket,
         createTicket,
         updateTicket,
+        updateTicketStatus,
         deleteTicket,
+        getRepsList,
+        ticketsRepsList,
         tickets,
         ticket,
         topics,

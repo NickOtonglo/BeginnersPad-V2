@@ -31,7 +31,7 @@
                 </div>
             </div>
             <!-- Form -->
-            <div class="help-form">
+            <div v-if="user.role == 'Lister' || user.role == 'Beginner' || !user.username" class="help-form">
                 <h3 class="section-title">Contact representative</h3>
                 <form @submit.prevent="createTicket(ticketRequest, ticket)">
                     <div v-if="!user.username" class="form-group">
@@ -66,6 +66,12 @@
                         <span v-else>Submit</span>
                     </button>
                 </form>
+            </div>
+            <div v-if="user.role == 'Admin' || user.role == 'Super Admin' || user.role == 'System Admin'" class="help-form">
+                <h3 class="section-title">Manage tickets</h3>
+                <div class="section-more">
+                        <router-link :to="{ name: 'tickets.list' }">Manage tickets <i class="fas fa-chevron-right"></i></router-link>
+                    </div>
             </div>
         </div>
     </section>

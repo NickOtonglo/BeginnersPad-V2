@@ -16,7 +16,7 @@
                     </div>
                     <div class="form-group" id="grpZone">
                         <label for="zone">Zone*</label>
-                        <select v-model="zone.name" @change="getSubZones(zone.name), console.log(zone.name)" name="zone" id="zone">
+                        <select v-model="zone.name" @change="getSubZones(zone.name)" name="zone" id="zone">
                             <option value="" disabled selected>--select zone--</option>
                             <template v-for="zone in zones">
                                 <option :value="zone.id">{{ zone.name }} ({{ zone.county.name }})</option>

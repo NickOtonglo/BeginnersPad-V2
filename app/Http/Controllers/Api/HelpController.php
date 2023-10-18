@@ -9,6 +9,7 @@ use App\Http\Resources\HelpTopicResource;
 use App\Models\FAQ;
 use App\Models\HelpTicket;
 use App\Models\HelpTopic;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class HelpController extends Controller
@@ -115,9 +116,24 @@ class HelpController extends Controller
         return HelpTicketResource::collection($tickets);
     }
 
+    public function getTicketsAll() {
+        $tickets = HelpTicket::latest()->paginate(50);
+        return HelpTicketResource::collection($tickets);
+    }
+
+    public function getTicketsReps() {
+        $repsList = HelpTicket::get()->pluck('assigned_to');
+        return $repsList;
+    }
+
     public function getTicket(HelpTicket $ticket) {
         $ticket = HelpTicket::where('id', $ticket->id)->first();
         return new HelpTicketResource($ticket);
+    }
+
+    public function getRepresentativeTickets(string $username) {
+        $tickets = User::where('username', $username)->first()->assignedHelpTickets()->paginate(40);
+        return HelpTicketResource::collection($tickets);
     }
 
     public function updateTicket(HelpTicket $ticket, Request $request) {
@@ -177,5 +193,32 @@ class HelpController extends Controller
 
         $ticket->delete();
         return response()->noContent();
+    }
+
+    public function updateTicketStatus(HelpTicket $ticket, Request $request) {
+        if ($request->status == 'open') {
+            $ticket->status = 'open';
+            $ticket->assigned_to = null;
+        }
+        if ($request->status == 'pending') {
+            $ticket->status = 'pending';
+            $ticket->assigned_to = auth()->user()->username;
+        }
+        if ($request->status == 'resolved') {
+            $ticket->status = 'resolved';
+            $ticket->assigned_to = auth()->user()->username;
+        }
+        if ($request->status == 'closed') {
+            $ticket->status = 'closed';
+            $ticket->assigned_to = auth()->user()->username;
+        }
+        $ticket->save();
+
+        $response = [
+            'help_ticket' => $ticket,
+            'message' => "Ticket #".$ticket->id." updated successfully.",
+        ];
+        
+        return response($response, 201);
     }
 }

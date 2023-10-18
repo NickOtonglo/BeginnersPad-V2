@@ -26,7 +26,7 @@ import PropertyReviewsView from '../components/PropertyReviews/View.vue'
 import UserFavouritesIndex from '../components/Favourites/Index.vue'
 import HelpIndex from '../components/Help/Index.vue'
 import HelpFAQ from '../components/FAQ/Index.vue'
-import TicketsMine from '../components/HelpTickets/MyTickets.vue'
+import TicketsList from '../components/HelpTickets/List.vue'
 import TicketView from '../components/HelpTickets/View.vue'
 
 function auth(to, from, next) {
@@ -183,8 +183,8 @@ const routes = [
     },
     {
         path: '/help/tickets',
-        name: 'tickets.mine',
-        component: TicketsMine
+        name: 'tickets.list',
+        component: TicketsList
     },
     {
         path: '/help/tickets/:id',

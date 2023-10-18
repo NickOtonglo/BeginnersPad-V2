@@ -25,7 +25,7 @@
                     <li><a href="#" @click="userLogin.logout"><i class="fas fa-sign-out-alt"></i> Sign out</a></li>
                 </ul>
             </div>
-            <NavDrawerAdmin v-if="user.role <= 'Admin'" />
+            <NavDrawerAdmin v-if="user.role == 'Admin' || user.role == 'Super Admin' || user.role == 'System Admin'" />
             <NavDrawerLister v-if="user.role == 'Lister'" />
             <NavDrawerBeginner v-if="user.role == 'Beginner'" />
         </div>

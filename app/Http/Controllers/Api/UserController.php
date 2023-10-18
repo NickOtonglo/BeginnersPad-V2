@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\UpdateBrandRequest;
 use App\Http\Requests\UpdateUserPasswordRequest;
 use App\Http\Requests\UpdateUserRequest;
+use App\Http\Resources\HelpTicketRepResource;
 use App\Http\Resources\UserResource;
 use App\Models\Brand;
 use App\Models\User;
@@ -247,5 +248,12 @@ class UserController extends Controller
                 ],
             ], 422);
         }
+    }
+
+    public function getRepresentativesForTickets() {
+        $user = User::where('username', auth()->user()->username)->get();
+        $reps = User::whereBetween('role_id', [1, 3])->where('username', '!=', auth()->user()->username)->orderBy('username')->get();
+        $combined = $user->merge($reps);
+        return HelpTicketRepResource::collection($combined);
     }
 }

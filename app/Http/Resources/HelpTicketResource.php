@@ -31,6 +31,7 @@ class HelpTicketResource extends JsonResource
                 'status' => $this->status, 
                 'assigned_to' => $this->assigned_to,
                 'timestamp' => $this->created_at->format('jS F Y, H:m:s'),
+                'time_ago' => $this->created_at->diffForHumans(),
             ];
         }
         $isRegistered = false;
@@ -44,6 +45,7 @@ class HelpTicketResource extends JsonResource
             'status' => $this->status, 
             'assigned_to' => $this->assigned_to,
             'timestamp' => $this->created_at->format('jS F Y, H:m:s'),
+            'time_ago' => $this->created_at->diffForHumans(),
         ];  
     }
 }

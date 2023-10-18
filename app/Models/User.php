@@ -77,6 +77,6 @@ class User extends Authenticatable
     }
 
     public function assignedHelpTickets() {
-        return $this->hasMany(HelpTicket::class, 'assgned_to', 'id');
+        return $this->hasMany(HelpTicket::class, 'assigned_to', 'username');
     }
 }

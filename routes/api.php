@@ -121,4 +121,9 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::put('help/tickets/{ticket}', '\App\Http\Controllers\Api\HelpController@updateTicket');
     Route::patch('help/tickets/{ticket}', '\App\Http\Controllers\Api\HelpController@updateTicketStatus');
     Route::delete('help/tickets/{ticket}', '\App\Http\Controllers\Api\HelpController@destroyTicket');
+
+    Route::get('help/tickets/manage/all', '\App\Http\Controllers\Api\HelpController@getTicketsAll');
+    Route::get('help/tickets/manage/reps', '\App\Http\Controllers\Api\UserController@getRepresentativesForTickets');
+    Route::get('help/tickets/manage/reps/{user}', '\App\Http\Controllers\Api\HelpController@getRepresentativeTickets');
+    Route::patch('help/tickets/manage/ticket/{ticket}', '\App\Http\Controllers\Api\HelpController@updateTicketStatus');
 });
