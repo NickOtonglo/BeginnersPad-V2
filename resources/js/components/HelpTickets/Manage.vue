@@ -1,4 +1,7 @@
 <template>
+    <SearchBar 
+        @search-initiated="filterTickets" 
+        @search-cancelled="filterTickets" />
     <section id="sectionTable">
         <div class="container">
             <div class="container-btn-dropdown multi">
@@ -63,8 +66,10 @@ import { onBeforeMount, ref } from 'vue';
 import pagination from '../../composables/pagination'
 import ticketsMaster from '../../composables/tickets';
 import ViewTicketModal from '../Modals/ViewTicket.vue'
+import SearchBar from '../Search/SearchBar.vue';
 
 const {
+    search_global,
     total_pages,
     per_page,
     current_page,
@@ -84,6 +89,15 @@ let request = `/api/help/tickets/manage/all`
 
 function fetchTickets(req) {
     getPaginationDataWithRequest(current_page.value, 'help_tickets', req)
+}
+
+function filterTickets(input) {
+    search_global.value = input
+    if (!input) {
+        search_global.value = ''
+    }
+    representative.value = ``
+    fetchTickets(request)
 }
 
 function click(element) {

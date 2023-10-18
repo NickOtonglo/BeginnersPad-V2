@@ -76,7 +76,7 @@ export default function pagination() {
                     getFavourites(`${request}?page=${page}&search_global=${search_global.value}`)
                 }
                 if (source == 'help_tickets') {
-                    getTickets(`${request}?page=${page}`)
+                    getTickets(`${request}?page=${page}&search_global=${search_global.value}`)
                 }
             })
     }

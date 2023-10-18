@@ -117,7 +117,16 @@ class HelpController extends Controller
     }
 
     public function getTicketsAll() {
-        $tickets = HelpTicket::latest()->paginate(50);
+        $tickets = HelpTicket::when(request('search_global'), function($query) {
+            $query->where(function($q) {
+                $q->where('id', 'like', '%'.request('search_global').'%')
+                  ->orWhere('topic', 'like', '%'.request('search_global').'%')
+                  ->orWhere('description', 'like', '%'.request('search_global').'%')
+                  ->orWhere('status', 'like', '%'.request('search_global').'%');
+            });
+        })->latest()->paginate(150);
+        
+        // $tickets = HelpTicket::latest()->paginate(50);
         return HelpTicketResource::collection($tickets);
     }
 
@@ -132,7 +141,8 @@ class HelpController extends Controller
     }
 
     public function getRepresentativeTickets(string $username) {
-        $tickets = User::where('username', $username)->first()->assignedHelpTickets()->paginate(40);
+        
+        $tickets = User::where('username', $username)->first()->assignedHelpTickets()->paginate(150);
         return HelpTicketResource::collection($tickets);
     }
 
