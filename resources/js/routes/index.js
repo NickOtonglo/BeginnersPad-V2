@@ -102,9 +102,9 @@ const routes = [
         component: TagsIndex,
     },
     {
-        path: '/tags/:name/articles',
+        path: '/articles/tags/:name',
         name: 'tag.articles',
-        component: TagArticles,
+        component: ArticlesIndex,
     },
     {
         path: '/zones',

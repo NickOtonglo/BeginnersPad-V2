@@ -17,8 +17,8 @@ class TagsController extends Controller
      */
     public function index()
     {
-        $tags = TagsResource::collection(Tag::latest()->get());
-        return $tags;
+        $tags = Tag::orderBy('name', 'ASC')->get();
+        return TagsResource::collection($tags);
     }
 
     /**
@@ -106,10 +106,19 @@ class TagsController extends Controller
     }
 
     public function getArticles(Tag $tag) {
-        $articles = $tag->articles;
-        if ($articles) {
-            return ArticlesResource::collection($articles);
-        }
-        return response()->noContent();
+        $articles = $tag->articles()->when(request('search_global'), function($query) {
+            $query->where(function($q) {
+                $q->where('slug', 'like', '%'.request('search_global').'%')
+                  ->orWhere('title', 'like', '%'.request('search_global').'%')
+                  ->orWhere('content', 'like', '%'.request('search_global').'%');
+            });
+        })->latest()->paginate(10);
+        return ArticlesResource::collection($articles);
+        
+        // $articles = $tag->articles;
+        // if ($articles) {
+        //     return ArticlesResource::collection($articles);
+        // }
+        // return response()->noContent();
     }
 }

@@ -21,13 +21,25 @@ class ArticlesController extends Controller
      */
     public function index()
     {
+        $request = '';
+        $request = request('sort');
+        if (!request('sort')) {
+            $request = 'DESC';
+        }
+        // $articles = Article::when(request('search_global'), function($query) {
+        //     $query->where(function($q) {
+        //         $q->where('slug', 'like', '%'.request('search_global').'%')
+        //           ->orWhere('title', 'like', '%'.request('search_global').'%')
+        //           ->orWhere('content', 'like', '%'.request('search_global').'%');
+        //     });
+        // })->latest()->paginate(10);
         $articles = Article::when(request('search_global'), function($query) {
             $query->where(function($q) {
                 $q->where('slug', 'like', '%'.request('search_global').'%')
                   ->orWhere('title', 'like', '%'.request('search_global').'%')
                   ->orWhere('content', 'like', '%'.request('search_global').'%');
             });
-        })->latest()->paginate(10);
+        })->orderBy('created_at', $request)->paginate(10);
         return ArticlesResource::collection($articles);
     }
 

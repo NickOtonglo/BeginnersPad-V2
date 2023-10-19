@@ -13,6 +13,7 @@ export default function pagination() {
     const per_page = ref(0)
     const current_page = ref(1)
     const search_global = ref('')
+    const filter_sort = ref('DESC')
     const { getArticles, articles } = articlesMaster()
     const { zones, getZones, zonesCount } = zonesMaster()
     const { subZones, getSubZones, subZonesCount } = subZoneMaster()
@@ -37,7 +38,7 @@ export default function pagination() {
             .finally(() => {
                 isLoading.value = false
                 if (source == 'articles') {
-                    getArticles(`/api/${source}?page=${page}&search_global=${search_global.value}`)
+                    getArticles(`/api/${source}?page=${page}&search_global=${search_global.value}&sort=${filter_sort.value}`)
                 } else if (source == 'zones') {
                     getZones(`/api/${source}?page=${page}&search_global=${search_global.value}`)
                 }
@@ -78,6 +79,9 @@ export default function pagination() {
                 if (source == 'help_tickets') {
                     getTickets(`${request}?page=${page}&search_global=${search_global.value}`)
                 }
+                if (source == 'articles') {
+                    getArticles(`${request}?page=${page}&search_global=${search_global.value}&sort=${filter_sort.value}`)
+                }
             })
     }
 
@@ -104,6 +108,12 @@ export default function pagination() {
         
         if (sourceParam == 'articles' || sourceParam == 'zones'){
             getPaginationData(page, sourceParam)
+            // if (requestParam) {
+            //     console.log('requestParam', requestParam)
+            //     getPaginationDataWithRequest(page, sourceParam, requestParam)
+            // } else {
+            //     console.log('no requestParam')
+            // }
         }
     }
 
@@ -120,6 +130,7 @@ export default function pagination() {
         per_page,
         current_page,
         search_global,
+        filter_sort,
         onPageChange,
         zonesCount,
         subZonesCount,
