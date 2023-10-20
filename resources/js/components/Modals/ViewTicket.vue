@@ -50,7 +50,7 @@
         <div class="modal-footer">
             <a class="btn btn-link" href="/admin/manage-user.html">View user</a>
             <a class="btn btn-link" href="#">View user's ticket</a>
-            <a class="btn btn-link" href="/admin/view-ticket.html">Go to ticket</a>
+            <router-link v-if="ticket.id" :to="{ name: 'ticket.view', params: { id: ticket.id } }" @click="operateModal(modalRef)" class="btn btn-link">Go to ticket</router-link>
             <button @click="operateModal(modalRef)" id="modalFooterClose" class="btn btn-link">Close</button>
         </div>
     </div>

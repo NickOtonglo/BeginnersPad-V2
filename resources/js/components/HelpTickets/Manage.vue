@@ -5,7 +5,7 @@
     <section id="sectionTable">
         <div class="container">
             <div class="container-btn-dropdown multi">
-                <a class="btn btn-link" href="/admin/manage-topics.html">Help topics</a>
+                <router-link :to="{ name: 'tag.articles', params: { name: `help` } }" class="btn btn-link">Help articles</router-link>
                 <select v-model="representative" @change="fetchTickets(`/api/help/tickets/manage${representative}`)" ref="repListRef" class="btn-dropdown">
                     <option value="" disabled>-- asigned to --</option>
                     <option value="/all">All</option>
