@@ -51,44 +51,24 @@
                 <table>
                     <tr>
                         <th>#</th>
-                        <th>Prior status</th>
-                        <th>Action</th>
-                        <th>Action by</th>
-                        <th>New status</th>
+                        <th>Status</th>
+                        <th>Handled by</th>
+                        <th>Comments</th>
                         <th>Timestamp</th>
                     </tr>
-                    <tr>
-                        <td>0</td>
-                        <td>open</td>
-                        <td>assigned</td>
-                        <td>admin</td>
-                        <td>pending</td>
-                        <td>01-01-2021 00:00:00</td>
-                    </tr>
-                    <tr>
-                        <td>0</td>
-                        <td>open</td>
-                        <td>assigned</td>
-                        <td>admin</td>
-                        <td>pending</td>
-                        <td>01-01-2021 00:00:00</td>
-                    </tr>
-                    <tr>
-                        <td>0</td>
-                        <td>open</td>
-                        <td>assigned</td>
-                        <td>admin</td>
-                        <td>pending</td>
-                        <td>01-01-2021 00:00:00</td>
-                    </tr>
-                    <tr>
-                        <td>0</td>
-                        <td>open</td>
-                        <td>assigned</td>
-                        <td>admin</td>
-                        <td>pending</td>
-                        <td>01-01-2021 00:00:00</td>
-                    </tr>
+                    <template v-for="(item, index) in ticket.logs">
+                        <tr>
+                            <td>{{ item.id }}</td>
+                            <td>{{ item.status }}</td>
+                            <!-- <td>{{ ticket.logs_parent[index].email }}</td> -->
+                            <td>@{{ item.action_by }}</td>
+                            <td>{{ item.comment }}</td>
+                            <td>{{ item.time_ago }}</td>
+                        </tr>
+                    </template>
+                    <template v-if="!ticket.logs">
+                        <tr style="text-align: center;">-no logs-</tr>
+                    </template>
                 </table>
             </div>
         </div>

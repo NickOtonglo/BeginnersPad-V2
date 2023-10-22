@@ -18,4 +18,8 @@ class HelpTicket extends Model
     public function admin() {
         return $this->belongsTo(User::class, 'assigned_to', 'id');
     }
+
+    public function logsParent() {
+        return $this->hasMany(UserActivityLog::class, 'model_id');
+    }
 }

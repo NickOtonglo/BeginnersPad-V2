@@ -33,6 +33,8 @@ class HelpController extends Controller
         
         $response = [
             'property' => $data,
+            'model' => 'FAQ',
+            'key' => $data->id,
             'message' => "New FAQ added successfully.",
         ];
         
@@ -56,6 +58,8 @@ class HelpController extends Controller
         
         $response = [
             'property' => $data,
+            'model' => 'FAQ',
+            'key' => $data->id,
             'message' => "FAQ updated successfully.",
         ];
         
@@ -63,8 +67,16 @@ class HelpController extends Controller
     }
 
     public function destroyFaq(FAQ $faq) {
+        $faqId = FAQ::find($faq->id)->id;
         $faq->delete();
-        return response()->noContent();
+        $response = [
+            'property' => response()->noContent(),
+            'model' => 'FAQ',
+            'key' => $faqId,
+            'message' => "FAQ deleted successfully.",
+        ];
+        
+        return response($response, 201);
     }
 
     public function getTopics() {
@@ -100,6 +112,8 @@ class HelpController extends Controller
 
         $response = [
             'help_ticket' => $data,
+            'model' => 'HelpTicket',
+            'key' => $data->id,
             'message' => "Ticket #".$data->id." created successfully.",
         ];
         
@@ -183,6 +197,8 @@ class HelpController extends Controller
 
         $response = [
             'help_ticket' => $data,
+            'model' => 'HelpTicket',
+            'key' => $data->id,
             'message' => "Ticket #".$data->id." updated successfully.",
         ];
         
@@ -200,9 +216,17 @@ class HelpController extends Controller
                 ],
             ], 422);
         }
-
+        $ticketId = $ticket->id;
         $ticket->delete();
-        return response()->noContent();
+
+        $response = [
+            'help_ticket' => response()->noContent(),
+            'model' => 'HelpTicket',
+            'key' => $ticketId,
+            'message' => "Ticket #".$ticketId." deleted successfully.",
+        ];
+
+        return response($response, 201);
     }
 
     public function updateTicketStatus(HelpTicket $ticket, Request $request) {
@@ -226,6 +250,8 @@ class HelpController extends Controller
 
         $response = [
             'help_ticket' => $ticket,
+            'model' => 'HelpTicket',
+            'key' => $ticket->id,
             'message' => "Ticket #".$ticket->id." updated successfully.",
         ];
         

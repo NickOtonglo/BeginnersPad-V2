@@ -189,7 +189,7 @@ export default function ticketsMaster() {
                         title: 'Your ticket has been submitted!',
                         text: 'A representative will get in touch with you soon. Kindly check your email inbox for any new messages from our team.',
                         didClose: () => {
-                            router.push({ name: 'ticket.view', params: { id: response.data.help_ticket.id } })
+                            router.go({ name: 'ticket.view', params: { id: response.data.help_ticket.id } })
                         }
                     })
                 } else {
