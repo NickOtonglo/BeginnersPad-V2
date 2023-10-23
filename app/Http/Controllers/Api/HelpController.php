@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\FAQResource;
+use App\Http\Resources\HelpTicketAdminResource;
 use App\Http\Resources\HelpTicketResource;
 use App\Http\Resources\HelpTopicResource;
 use App\Models\FAQ;
@@ -151,7 +152,11 @@ class HelpController extends Controller
 
     public function getTicket(HelpTicket $ticket) {
         $ticket = HelpTicket::where('id', $ticket->id)->first();
-        return new HelpTicketResource($ticket);
+        if (auth()->user()->role_id > 3) {
+            return new HelpTicketResource($ticket);
+        } else if (auth()->user()->role_id <= 3 && auth()->user()->role_id >= 1) {
+            return new HelpTicketAdminResource($ticket);
+        }
     }
 
     public function getRepresentativeTickets(string $username) {

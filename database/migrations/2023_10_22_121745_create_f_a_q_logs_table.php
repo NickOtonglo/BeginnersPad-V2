@@ -16,6 +16,7 @@ return new class extends Migration
             $table->longText('question')->nullable();
             $table->longText('answer')->nullable();
             $table->string('topic')->nullable();
+            $table->longText('comment')->nullable();
             $table->integer('parent_id');
             $table->timestamps();
         });

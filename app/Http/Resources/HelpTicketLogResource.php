@@ -29,6 +29,7 @@ class HelpTicketLogResource extends JsonResource
             'assigned_to' => $this->assigned_to, 
             'parent_id' => $this->parent_id, 
             'action_by' => $user, 
+            'comment' => $this->comment,
             'time_ago' => $this->created_at->diffForHumans(),
         ];
     }

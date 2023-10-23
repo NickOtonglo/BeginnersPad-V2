@@ -23,6 +23,7 @@ export default function ticketsMaster() {
         description: '',
         status: '',
         assigned_to: '',
+        logs: {},
     })
     const ticketsRepsList = ref({})
     const { user, getUserData } = userMaster()

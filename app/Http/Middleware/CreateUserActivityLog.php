@@ -46,7 +46,8 @@ class CreateUserActivityLog
                             $data->assigned_to = $request->assigned_to;
                         }
                     }
-    
+                    $data->comment = $response->original['model'].' #'.$response->original['key'].': '.$request->method().', status set to '.$request->status;
+
                     break;
     
                 case 'FAQ':
@@ -60,7 +61,8 @@ class CreateUserActivityLog
                     }
                     $data->question = $request->question;
                     $data->answer = $request->answer;
-    
+                    $data->comment = $response->original['model'].' #'.$response->original['key'].': '.$request->method();
+
                     break;
                     
                 default:

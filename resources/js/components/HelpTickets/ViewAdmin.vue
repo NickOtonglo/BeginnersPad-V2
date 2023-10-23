@@ -54,11 +54,11 @@
                         <th>Status</th>
                         <th>Handled by</th>
                         <th>Comments</th>
-                        <th>Timestamp</th>
+                        <th>Time</th>
                     </tr>
                     <template v-for="(item, index) in ticket.logs">
                         <tr>
-                            <td>{{ item.id }}</td>
+                            <td>{{ index+1 }}</td>
                             <td>{{ item.status }}</td>
                             <!-- <td>{{ ticket.logs_parent[index].email }}</td> -->
                             <td>@{{ item.action_by }}</td>
@@ -66,7 +66,7 @@
                             <td>{{ item.time_ago }}</td>
                         </tr>
                     </template>
-                    <template v-if="!ticket.logs">
+                    <template v-if="!ticket.logs.length">
                         <tr style="text-align: center;">-no logs-</tr>
                     </template>
                 </table>
@@ -191,5 +191,10 @@ form > *,
 form input {
     height: 0px;
     display: none;
+}
+.table-grp table td {
+    overflow: auto;
+    text-overflow: unset;
+    max-width: unset;
 }
 </style>

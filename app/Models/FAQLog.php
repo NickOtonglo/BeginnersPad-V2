@@ -15,6 +15,7 @@ class FAQLog extends Model
         'answer', 
         'topic', 
         'parent_id', 
+        'comment', 
     ];
 
     public function userActivityLog() {

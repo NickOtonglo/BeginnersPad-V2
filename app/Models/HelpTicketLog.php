@@ -16,6 +16,7 @@ class HelpTicketLog extends Model
         'status', 
         'assigned_to', 
         'parent_id', 
+        'comment', 
     ];
 
     public function userActivityLog() {

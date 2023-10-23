@@ -17,6 +17,7 @@ return new class extends Migration
             $table->longText('description')->nullable();
             $table->string('status')->nullable();
             $table->string('assigned_to')->nullable();
+            $table->longText('comment')->nullable();
             $table->integer('parent_id');
             $table->timestamps();
         });

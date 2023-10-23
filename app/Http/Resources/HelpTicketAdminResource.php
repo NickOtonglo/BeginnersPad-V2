@@ -6,7 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class HelpTicketResource extends JsonResource
+class HelpTicketAdminResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -15,6 +15,16 @@ class HelpTicketResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $logs = [];
+        foreach ($this->logsParent as $item) {
+            array_push($logs, $item->helpTicketLog);
+        }
+
+        $logsParent = [];
+        foreach ($this->logsParent as $item) {
+            array_push($logsParent, $item);
+        }
+
         $user = User::where('email', $this->email)->first();
         // $responder = User::where('username', $this->assigned_to)->first();
         $isRegistered = '';
@@ -32,6 +42,8 @@ class HelpTicketResource extends JsonResource
                 'assigned_to' => $this->assigned_to,
                 'timestamp' => $this->created_at->format('jS F Y, H:m:s'),
                 'time_ago' => $this->created_at->diffForHumans(),
+                'logs_parent' => $logsParent,
+                'logs' => HelpTicketLogResource::collection($logs),
             ];
         }
         $isRegistered = false;
@@ -46,6 +58,8 @@ class HelpTicketResource extends JsonResource
             'assigned_to' => $this->assigned_to,
             'timestamp' => $this->created_at->format('jS F Y, H:m:s'),
             'time_ago' => $this->created_at->diffForHumans(),
+            'logs_parent' => $logsParent,
+            'logs' => HelpTicketLogResource::collection($logs),
         ];  
     }
 }
