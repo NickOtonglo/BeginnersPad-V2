@@ -28,6 +28,9 @@ import HelpIndex from '../components/Help/Index.vue'
 import HelpFAQ from '../components/FAQ/Index.vue'
 import TicketsList from '../components/HelpTickets/List.vue'
 import TicketView from '../components/HelpTickets/View.vue'
+import UsersIndex from '../components/Users/Index.vue'
+import UsersLogs from '../components/Users/Logs.vue'
+import UserManage from '../components/Users/Manage.vue'
 
 function auth(to, from, next) {
     if (JSON.parse(localStorage.getItem('authenticated'))) {
@@ -190,6 +193,21 @@ const routes = [
         path: '/help/tickets/:id',
         name: 'ticket.view',
         component: TicketView
+    },
+    {
+        path: '/users',
+        name: 'users.index',
+        component: UsersIndex
+    },
+    {
+        path: '/users/logs',
+        name: 'users.logs',
+        component: UsersLogs
+    },
+    {
+        path: '/users/profile/:username',
+        name: 'user.manage',
+        component: UserManage
     },
 ]
 

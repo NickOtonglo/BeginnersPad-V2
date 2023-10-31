@@ -19,10 +19,15 @@ class BrandResource extends JsonResource
         $user = User::where('id', $this->user_id)->first();
         $properties = Property::where('user_id', $this->user_id)->get();
         $ratingCollection = [];
+        $ratingAverage = 0;
         foreach ($properties as $property) {
             array_push($ratingCollection, $property->propertyReviews()->avg('rating'));
         }
-        $ratingAverage = array_sum($ratingCollection)/count($ratingCollection);
+        try {
+            $ratingAverage = array_sum($ratingCollection)/count($ratingCollection);
+        } catch (\Throwable $th) {
+            $ratingAverage = 0;
+        }
         
         return [
             // 'id' => $this->id,

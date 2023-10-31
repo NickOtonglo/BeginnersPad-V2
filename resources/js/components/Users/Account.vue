@@ -4,23 +4,7 @@
         <div class="showcase-overlay warning">
             <div class="container">
                 <div class="card-wrapper">
-                    <div class="card-user">
-                        <h4 class="title">User profile</h4>
-                        <div class="details">
-                            <template v-if="user.avatar">
-                                <img :src="'/images/user/avatar/' + user.username + '/' + user.avatar" alt="">
-                            </template>
-                            <template v-else>
-                                <img src="/images/static/avatar.png" alt="">
-                            </template>
-                            <div class="text">
-                                <h3 class="name">{{ user.firstname }} {{ user.lastname }}</h3>
-                                <h4 class="username">@{{ user.username }}</h4>
-                                <p class="account">User type: <span>{{ user.role }}</span></p>
-                                <p class="time">Account status: <span>active</span></p>
-                            </div>
-                        </div>
-                    </div>
+                    <CardUser :user="user" />
                 </div>
                 <div class="action-buttons">
                     <i @click="click(updateFormRef)" class="fas fa-edit fa-2x"></i>
@@ -232,6 +216,7 @@
 import UpdateForm from '../Modals/EditUserAccount.vue'
 import UpdateBrand from '../Modals/EditBrand.vue'
 import CreateBrand from '../Modals/CreateBrand.vue'
+import CardUser from '../Cards/User1.vue';
 import { onMounted, ref } from 'vue';
 
 const user = ref({})

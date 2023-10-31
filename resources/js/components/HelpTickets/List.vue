@@ -1,5 +1,5 @@
 <template>
-    <MyTickets v-if="user.role == 'Beginner' || user.role == 'Lister'" />
+    <MyTickets v-if="user.role == 'Beginner' || user.role == 'Lister' || user.role == 'Unset'" />
     <Manage v-if="user.role == 'Admin' || user.role == 'Super Admin' || user.role == 'System Admin'" :user="user" />
 </template>
 

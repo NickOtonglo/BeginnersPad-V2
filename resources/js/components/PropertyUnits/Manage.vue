@@ -119,34 +119,7 @@
                 <div class="panel">
                     <div class="listing-units-list">
                         <h3>Property</h3>
-                        <div class="card-sm card-2" v-if="unit && unit.property">
-                            <router-link :to="{ name: 'property.manage', params: {slug: unit.property.slug } }">
-                                <template v-if="unit.property.thumbnail">
-                                    <div class="thumb" :style="{ background: `url(/images/listings/${unit.property.slug}/${unit.property.thumbnail})` }" style="background-size: cover;"></div>
-                                </template>
-                                <template v-else>
-                                    <div class="thumb"></div>
-                                </template>
-                                <div class="details">
-                                    <h2>{{ unit.property.name }}</h2>
-                                    <div class="location">
-                                        <span class="spec">{{ unit.property.sub_zone.name }}, </span>
-                                        <span class="spec">{{ unit.property.sub_zone.zone.county.name }}</span>
-                                    </div>
-                                    <p class="timestamp">Added {{ unit.property.time_ago }}</p>
-                                    <div class="info-rating-grp">
-                                        <p class="rating">Rating: 4.0/5</p>
-                                        <div class="stars">
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                            <i class="far fa-star"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </router-link>  
-                        </div>
+                        <CardProperty :property="unit.property" />
                     </div>
                     <div class="listing-actions">
                         <h3>Actions</h3>
@@ -172,6 +145,7 @@ import { onBeforeMount, ref } from 'vue';
 import EditUnitPrimary from '../Modals/EditUnitPrimary.vue';
 import EditUnitFeatures from '../Modals/EditUnitFeatures.vue';
 import EditUnitDisclaimers from '../Modals/EditUnitDisclaimers.vue'
+import CardProperty from '../Cards/Property2.vue';
 
 const { 
     unit, 

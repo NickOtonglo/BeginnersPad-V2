@@ -12,7 +12,8 @@
                     </div>
                     <p class="timestamp">Added on {{ property.timestamp }}</p>
                     <div class="info-rating-grp">
-                        <p class="rating">Rating: {{ property.rating }}/5</p>
+                        <p v-if="property.rating != 0" class="rating">Rating: {{ property.rating }}/5</p>
+                        <p v-else class="rating">Rating: not rated</p>
                         <ComponentRatingStars :rating="property.rating" />
                     </div>
                     <div class="section-more">
@@ -36,6 +37,7 @@
                         <p class="review">{{ item.review }}</p>
                     </div>
                 </div>
+                <p v-if="!reviews.length" style="text-align: center;">- no reviews -</p>
             </div>
         </div>
     </section>

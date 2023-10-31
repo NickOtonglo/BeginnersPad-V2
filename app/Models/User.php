@@ -26,6 +26,7 @@ class User extends Authenticatable
         'role_id',
         'password',
         'avatar',
+        'status',
     ];
 
     /**
@@ -49,7 +50,7 @@ class User extends Authenticatable
 
     
     public function articles() {
-        return $this->hasMany(Articles::class);
+        return $this->hasMany(Article::class);
     }
 
     protected function role() {
@@ -73,10 +74,14 @@ class User extends Authenticatable
     }
 
     public function helpTickets() {
-        return $this->hasMany(HelpTicket::class, 'email');
+        return $this->hasMany(HelpTicket::class, 'email', 'email');
     }
 
     public function assignedHelpTickets() {
         return $this->hasMany(HelpTicket::class, 'assigned_to', 'username');
+    }
+
+    public function logsParent() {
+        return $this->hasMany(UserActivityLog::class, 'model_id', 'username');
     }
 }

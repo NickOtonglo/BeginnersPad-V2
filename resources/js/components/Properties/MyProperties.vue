@@ -55,34 +55,7 @@
             <div class="listing-units-list">
                 <div class="listing-units-grp">
                     <template v-for="property in properties">
-                        <div class="card-sm card-2">
-                            <router-link :to="{ name: 'property.view', params: {slug: property.slug } }">
-                                <template v-if="property.thumbnail">
-                                    <div class="thumb" :style="{ background: `url(/images/listings/${property.slug}/${property.thumbnail})` }" style="background-size: cover;"></div>
-                                </template>
-                                <template v-else>
-                                    <div class="thumb"></div>
-                                </template>
-                                <div class="details">
-                                    <h2>{{ property.name }}</h2>
-                                    <div class="location">
-                                        <span class="spec">{{ property.sub_zone.name }}, </span>
-                                        <span class="spec">{{ property.sub_zone.zone.county.name }}</span>
-                                    </div>
-                                    <p class="timestamp">Added {{ property.time_ago }}</p>
-                                    <div class="info-rating-grp">
-                                        <p class="rating">Rating: 4.0/5</p>
-                                        <div class="stars">
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                            <i class="far fa-star"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </router-link>  
-                        </div>
+                        <CardProperty :property="property" />
                     </template>
                 </div>
                 <template v-if="!properties.length">
@@ -104,6 +77,7 @@ import { ref, onBeforeMount, watch, onMounted } from 'vue'
 import pagination from '../../composables/pagination'
 import CreateProperty from '../Modals/CreateProperty.vue';
 import operateModal from '../../composables/modal'
+import CardProperty from '../Cards/Property2.vue';
 
 const btnClearSearch = ref(null)
 const childComponentRef = ref(null);

@@ -112,8 +112,7 @@ Route::middleware(['auth:sanctum', 'logs.user'])->group(function() {
     Route::patch('help/faq/{faq}', '\App\Http\Controllers\Api\HelpController@updateFaq');
     Route::delete('help/faq/{faq}', '\App\Http\Controllers\Api\HelpController@destroyFaq');
 
-    Route::get('help/', '\App\Http\Controllers\Api\HelpController@getUserTickets');
-    Route::post('user/tickets/{user}', '\App\Http\Controllers\Api\UserController@showUserTickets');
+    Route::get('help', '\App\Http\Controllers\Api\HelpController@getUserTickets');
     // authenticated user's tickets
     Route::get('help/tickets', '\App\Http\Controllers\Api\HelpController@getTickets');
     Route::get('help/tickets/status/{status}', '\App\Http\Controllers\Api\HelpController@getTicketsWithStatus');
@@ -125,6 +124,13 @@ Route::middleware(['auth:sanctum', 'logs.user'])->group(function() {
     Route::get('help/tickets/manage/all', '\App\Http\Controllers\Api\HelpController@getTicketsAll');
     Route::get('help/tickets/manage/reps', '\App\Http\Controllers\Api\UserController@getRepresentativesForTickets');
     Route::get('help/tickets/manage/reps/{user}', '\App\Http\Controllers\Api\HelpController@getRepresentativeTickets');
-
     Route::patch('help/tickets/manage/ticket/{ticket}', '\App\Http\Controllers\Api\HelpController@updateTicketStatus');
+
+    Route::get('users/roles/all', '\App\Http\Controllers\Api\UserController@getRoles');
+    Route::get('users/logs/all', '\App\Http\Controllers\Api\UserController@getLogs');
+    Route::get('users/{role}', '\App\Http\Controllers\Api\UserController@getUsersByRole');
+    Route::get('users', '\App\Http\Controllers\Api\UserController@getAllUsers');
+    Route::post('users', '\App\Http\Controllers\Api\UserController@saveUser');
+    Route::get('users/profile/{user}', '\App\Http\Controllers\Api\UserController@getUser');
+    Route::patch('users/profile/{user}', '\App\Http\Controllers\Api\UserController@updateUser');
 });

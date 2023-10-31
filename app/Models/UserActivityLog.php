@@ -30,6 +30,10 @@ class UserActivityLog extends Model
     }
 
     public function faqLog() {
-        return $this->hasOne(FAQLog::class, 'parent_id');
+        return $this->hasOne(FAQLog::class, 'parent_id', 'id');
+    }
+
+    public function userLog() {
+        return $this->hasOne(UserLog::class, 'parent_id', 'id');
     }
 }

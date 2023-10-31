@@ -12,6 +12,11 @@ class Role extends Model
     public $timestamps = false;
     protected $fillable = ['title', 'id', 'description'];
 
+    public function getRouteKeyName()
+    {
+        return 'title';
+    }
+
     public function user() {
         return $this->hasMany(User::class);
     }

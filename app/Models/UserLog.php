@@ -5,17 +5,20 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class FAQLog extends Model
+class UserLog extends Model
 {
     use HasFactory;
 
-    public $table = 'logs_user_activity_faq';
+    public $table = 'logs_user_activity_users';
     protected $fillable = [
-        'question', 
-        'answer', 
-        'topic', 
-        'parent_id', 
-        'comment', 
+        'firstname',
+        'lastname',
+        'email',
+        'username',
+        'telephone',
+        'comment',
+        'parent_id',
+        'user_id', 
     ];
 
     public function userActivityLog() {

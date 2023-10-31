@@ -6,7 +6,9 @@ use App\Models\FAQ;
 use App\Models\FAQLog;
 use App\Models\HelpTicket;
 use App\Models\HelpTicketLog;
+use App\Models\User;
 use App\Models\UserActivityLog;
+use App\Models\UserLog;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -65,6 +67,44 @@ class CreateUserActivityLog
 
                     break;
                     
+                case 'User':
+                    $data = new UserLog;
+                    $user = User::where('username', $response->original['key'])->first();
+    
+                    // $data->user_id = $user->id;
+                    // if ($request->status) {
+                    //     $data->firstname = $user->firstname;
+                    //     $data->lastname = $user->lastname;
+                    //     $data->email = $user->email;
+                    //     $data->username = $user->username;
+                    //     $data->telephone = substr($request->telephone, -12);
+                    //     $data->status = $request->status;
+                    //     $data->comment = $response->original['model'].' @'.$response->original['key'].': '.$request->method().', status set to '.$request->status;
+                    // } else {
+                    //     $data->firstname = $request->firstname;
+                    //     $data->lastname = $request->lastname;
+                    //     $data->email = $request->email;
+                    //     $data->username = $request->username;
+                    //     $data->telephone = $request->telephone;
+                    //     $data->status = $user->status;
+                    //     $data->comment = $response->original['model'].' @'.$response->original['key'].': '.$request->method();
+                    // }
+
+                    if (!$user) {
+                        $data->comment = $response->original['model'].' @'.$response->original['key'].': '.$request->method().', status set to deleted';
+                    } else {
+                        $data->user_id = $user->id;
+                        $data->firstname = $user->firstname;
+                        $data->lastname = $user->lastname;
+                        $data->email = $user->email;
+                        $data->username = $user->username;
+                        $data->telephone = $user->telephone;
+                        $data->status = $user->status;
+                        $data->comment = $response->original['model'].' @'.$response->original['key'].': '.$request->method().', status set to '.$user->status;
+                    }
+
+                    break;
+
                 default:
                 # code...
                 break;

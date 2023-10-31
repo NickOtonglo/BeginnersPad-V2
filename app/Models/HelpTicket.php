@@ -12,7 +12,7 @@ class HelpTicket extends Model
     protected $filalble = ['email', 'topic', 'description', 'status', 'assigned_to'];
 
     public function user() {
-        return $this->belongsTo(User::class, 'email');
+        return $this->belongsTo(User::class, 'email', 'email');
     }
 
     public function admin() {

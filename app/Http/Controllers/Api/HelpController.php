@@ -160,7 +160,6 @@ class HelpController extends Controller
     }
 
     public function getRepresentativeTickets(string $username) {
-        
         $tickets = User::where('username', $username)->first()->assignedHelpTickets()->paginate(150);
         return HelpTicketResource::collection($tickets);
     }

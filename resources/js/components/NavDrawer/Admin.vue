@@ -20,35 +20,34 @@
     <div class="nav-drawer-category">
         <p>Users</p>
         <ul>
-            <li><a href="/view-users.html">View all</a></li>
-            <li><a href="/admin/manage-users.html">Manage</a></li>
-            <li><a href="/admin/manage-users-logs.html">Management log</a></li>
+            <li><a href="/users">Manage</a></li>
+            <li><a href="/users/logs">User logs</a></li>
         </ul>
     </div>
     <div class="nav-drawer-category">
         <p>Zones</p>
         <ul>
-            <li><a href="/admin/manage-zones.html">Manage</a></li>
-            <li><a href="/admin/manage-zones-logs.html">Management log</a></li>
+            <li><a href="/zones">Manage</a></li>
+            <li><a href="#">Management logs</a></li>
         </ul>
     </div>
     <div class="nav-drawer-category">
-        <p>Tags & topics</p>
+        <p>Tags & articles</p>
         <ul>
-            <li><a href="/view-topics.html">View topics</a></li>
-            <li><a href="/admin/manage-topics.html">Manage topics</a></li>
-            <li><a href="/admin/manage-topics-logs.html">Topic management log</a></li>
-            <li><a href="/admin/manage-tags.html">Manage tags</a></li>
-            <li><a href="/admin/manage-tags-logs.html">Tag management log</a></li>
+            <li><a href="/articles">View articles</a></li>
+            <li><a href="#">Manage articles</a></li>
+            <li><a href="#">Article management logs</a></li>
+            <li><a href="/tags">Manage tags</a></li>
+            <li><a href="#">Tag management logs</a></li>
         </ul>
     </div>
     <div class="nav-drawer-category">
         <p>Help & tickets</p>
         <ul>
-            <li><a href="/admin/view-tickets.html">View tickets</a></li>
-            <li><a href="/admin/manage-tickets-log.html">Ticket management log</a></li>
-            <li><a href="/admin/manage-help-categories.html">Manage help categories</a></li>
-            <li><a href="/admin/manage-faqs.html">Manage FAQs</a></li>
+            <li><a href="/help/tickets">View tickets</a></li>
+            <li><a href="#">Ticket management logs</a></li>
+            <li><a href="#">Manage help categories</a></li>
+            <li><a href="/help/faq">Manage FAQs</a></li>
         </ul>
     </div>
     <div class="nav-drawer-category">

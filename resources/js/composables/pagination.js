@@ -6,6 +6,7 @@ import propertiesMaster from "./properties"
 import unitsMaster from "./units"
 import favouriteMaster from './favourites'
 import ticketsMaster from "./tickets"
+import userMaster from "./users"
 
 export default function pagination() {
     const isLoading = ref(false)
@@ -13,7 +14,7 @@ export default function pagination() {
     const per_page = ref(0)
     const current_page = ref(1)
     const search_global = ref('')
-    const filter_sort = ref('DESC')
+    const filter_sort = ref('')
     const { getArticles, articles } = articlesMaster()
     const { zones, getZones, zonesCount } = zonesMaster()
     const { subZones, getSubZones, subZonesCount } = subZoneMaster()
@@ -21,6 +22,7 @@ export default function pagination() {
     const { units, getUnits, unitsCount } = unitsMaster()
     const { favourites, getFavourites, favouritesCount } = favouriteMaster()
     const { tickets, getTickets, ticketsCount } = ticketsMaster()
+    const { users, getUsers, usersCount, logs, getLogs } = userMaster()
     let sourceParam = '', requestParam = ''
 
     const getPaginationData = (page, source) => {
@@ -38,6 +40,7 @@ export default function pagination() {
             .finally(() => {
                 isLoading.value = false
                 if (source == 'articles') {
+                    filter_sort.value = 'DESC'
                     getArticles(`/api/${source}?page=${page}&search_global=${search_global.value}&sort=${filter_sort.value}`)
                 } else if (source == 'zones') {
                     getZones(`/api/${source}?page=${page}&search_global=${search_global.value}`)
@@ -80,7 +83,14 @@ export default function pagination() {
                     getTickets(`${request}?page=${page}&search_global=${search_global.value}`)
                 }
                 if (source == 'articles') {
+                    filter_sort.value = 'DESC'
                     getArticles(`${request}?page=${page}&search_global=${search_global.value}&sort=${filter_sort.value}`)
+                }
+                if (source == 'users') {
+                    getUsers(`${request}?page=${page}&search_global=${search_global.value}&sort=${filter_sort.value}`)
+                }
+                if (source == 'user_logs') {
+                    getLogs(`${request}?page=${page}&search_global=${search_global.value}`)
                 }
             })
     }
@@ -91,7 +101,9 @@ export default function pagination() {
             sourceParam == 'sub-zones' || 
             sourceParam == 'properties' || 
             sourceParam == 'property_units' || 
-            sourceParam == 'help_tickets'
+            sourceParam == 'help_tickets' || 
+            sourceParam == 'users' ||
+            sourceParam == 'user_logs'
         ) {
             getPaginationDataWithRequest(page, sourceParam, requestParam)    
         }
@@ -126,6 +138,8 @@ export default function pagination() {
         units,
         favourites,
         tickets,
+        users,
+        logs,
         total_pages,
         per_page,
         current_page,
@@ -137,6 +151,7 @@ export default function pagination() {
         unitsCount,
         favouritesCount,
         ticketsCount,
+        usersCount,
         getPaginationData,
         getPaginationDataWithRequest,
     }

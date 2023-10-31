@@ -60,7 +60,6 @@
                         <tr>
                             <td>{{ index+1 }}</td>
                             <td>{{ item.status }}</td>
-                            <!-- <td>{{ ticket.logs_parent[index].email }}</td> -->
                             <td>@{{ item.action_by }}</td>
                             <td>{{ item.comment }}</td>
                             <td>{{ item.time_ago }}</td>

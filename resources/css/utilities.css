@@ -295,6 +295,10 @@ button, .btn {
     width: 40%;
 }
 
+.card-user {
+    min-width: 303px;
+}
+
 .card-unit .thumb {
     background: url('/images/static/thumb_unit.jpg') no-repeat;
     border-radius: 0 7px 7px 0;

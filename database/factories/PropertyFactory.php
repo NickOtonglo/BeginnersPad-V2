@@ -33,7 +33,8 @@ class PropertyFactory extends Factory
             'verified' => false,
             'description' => $this->faker->text(300),
             'stories' => rand(1,9),
-            'thumbnail' => time().'-'.$slug.'.jpg',
+            // 'thumbnail' => time().'-'.$slug.'.jpg',
+            // 'thumbnail' => null,
             'user_id' => $userID->random(),
             'sub_zone_id' => $subZoneID->random(),
         ];

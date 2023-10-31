@@ -37,7 +37,7 @@ class PropertyUnitFactory extends Factory
             'bedrooms' => rand(1,2),
             'disclaimer' => $this->faker->text(100),
             // 'status' => 'inactive',
-            // 'thumbnail' => '',
+            // 'thumbnail' => null,
             'property_id' => $property->id,
         ];
     }

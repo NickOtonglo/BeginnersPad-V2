@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('telephone');
             $table->integer('role_id')->default(5);
             $table->string('avatar')->nullable();
+            $table->string('status')->default('active'); //preactive, active, inactive, suspended
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();

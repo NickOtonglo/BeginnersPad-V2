@@ -98,7 +98,8 @@
                 </div>
                 <h1 class="info-rating-grp">
                     <ComponentRatingStars v-if="property.rating" :rating="property.rating" />
-                    <p class="rating">({{ property.rating }})</p>
+                    <p v-if="property.rating != 0" class="rating">({{ property.rating }})</p>
+                    <p v-else class="rating">(not rated)</p>
                 </h1>
                 <p v-if="property.sub_zone" class="location">{{ property.sub_zone.name }}, {{ property.sub_zone.zone.name }}, {{ property.sub_zone.zone.county.name }}</p>
             </div>
@@ -137,34 +138,7 @@
                         </div>
                         <div class="listing-units-grp">
                             <template v-if="units" v-for="unit in units">
-                                <div class="card-sm card-unit">
-                                    <router-link :to="{ name: 'unit.view', params: {slug: property.slug, unit_slug: unit.slug } }">
-                                        <div class="details">
-                                            <h2>{{ unit.name }}</h2>
-                                            <div class="specs">
-                                                <span class="spec">{{ unit.bedrooms }} bed | </span>
-                                                <span class="spec">{{ unit.bathrooms }} bath | </span>
-                                                <span class="spec">{{ unit.floor_area }}sq M</span>
-                                            </div>
-                                            <div class="deposit">
-                                                <span class="label">Initial deposit: </span>
-                                                <span v-if="unit.init_deposit == 0" class="data">not required</span>
-                                                <span v-else class="data">KES {{ unit.init_deposit }} ({{ unit.init_deposit_period }} months)</span>
-                                            </div>
-                                            <div class="price">
-                                                <span class="label">KES </span>
-                                                <span class="data">{{ unit.price }}</span>
-                                            </div>
-                                            <p class="timestamp">Added {{ unit.time_ago }}</p>
-                                        </div>
-                                        <template v-if="unit.thumbnail">
-                                            <div class="thumb" :style="{ background: `url(/images/listings/${property.slug}/${unit.slug}/${unit.thumbnail})` }" style="background-size: cover;"></div>
-                                        </template>
-                                        <template v-else>
-                                            <div class="thumb" :style="{ background: `url(/images/static/thumb_default.jpg` }" style="background-size: cover;"></div>
-                                        </template>
-                                    </router-link>  
-                                </div>
+                                <CardPropertyUnit :property="property" :unit="unit" />
                             </template>
                             <template v-if="!units.length">
                                 <p style="text-align: center;">-no units-</p>
@@ -179,28 +153,7 @@
                     </div>
                     <div class="lister-details" id="lister-details" v-if="property.brand">
                         <h3>Lister information</h3>
-                        <div class="details">
-                            <div class="header">
-                                <div>
-                                    <h2 class="name">{{ property.brand.name }}</h2>
-                                    <p class="timestamp">Joined on {{ property.brand.created_at }}</p>
-                                </div>
-                                <template v-if="property.brand.avatar">
-                                    <img :src="'/images/brand/avatar/' + property.brand.username + '/' + property.brand.avatar" alt="">
-                                </template>
-                                <template v-else>
-                                    <img src="/images/static/avatar.png" alt="">
-                                </template>
-                            </div>
-                            <p class="listings-count">{{ property.brand.properties_count }} listings posted</p>
-                            <div class="info-rating-grp">
-                                <p class="rating">Rating: {{ property.brand.rating }}/5</p>
-                                <ComponentRatingStars v-if="property.brand.rating" :rating="property.brand.rating" />
-                            </div>
-                            <div class="section-more">
-                                <router-link v-if="user.username === property.user_name" :to="{ name: 'users.account' }" href="/manage-account">Manage brand <i class="fas fa-chevron-right"></i></router-link>
-                            </div>
-                        </div>
+                        <CardBrand :property="property" :user="user" />
                     </div>
                     <div class="listing-actions" id="listing-actions">
                         <h3>Listing actions</h3>
@@ -344,6 +297,8 @@ import userMaster from '../../composables/users';
 import propertyReviewsMaster from '../../composables/property_reviews'
 import favouriteMaster from '../../composables/favourites';
 import ComponentRatingStars from '../Misc/RatingStars.vue'
+import CardPropertyUnit from '../Cards/PropertyUnit1.vue';
+import CardBrand from '../Cards/Brand1.vue'
 import AddReview from '../Modals/AddReview.vue'
 import EditReview from '../Modals/EditReview.vue';
 import { api as viewerApi } from "v-viewer"

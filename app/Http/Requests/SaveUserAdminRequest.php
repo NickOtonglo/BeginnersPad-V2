@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class SaveUserRequest extends FormRequest
+class SaveUserAdminRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,26 +22,24 @@ class SaveUserRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'fname' => 'required|min:1|max:50',
-            'lname' => 'required|min:1|max:50',
+            'firstname' => 'required|min:1|max:50',
+            'lastname' => 'required|min:1|max:50',
             'email' => 'required|email',
             'telephone' => 'required|regex:/(254)[0-9]{9}/|unique:users,telephone',
             // https://stackoverflow.com/q/4424179/11113076
             'username' => 'required|max:50|unique:users,username|regex:/^[A-Za-z0-9_-]{1,15}$/',
-            'user_type' => 'required|max:50',
-            'password' => 'required|confirmed|min:6',
-            'password_confirmation' => 'required',
-            'terms_agree' => 'required|accepted',
+            'role_id' => 'required|max:50',
+            'password' => 'required|min:6',
         ];
     }
 
     public function attributes()
     {
         return [
-            'fname' => 'first name',
-            'lname' => 'last name',
+            'firstname' => 'first name',
+            'lastname' => 'last name',
             'telephone' => 'phone number',
-            'user_type' => 'account type',
+            'role_id' => 'account type',
             'terms_agree' => 'terms and conditions',
         ];
     }

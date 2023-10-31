@@ -21,6 +21,8 @@ class AuthController extends Controller
 
         $response = [
             'user' => $user,
+            'model' => 'User',
+            'key' => $user->username,
             'message' => 'User @'.$user->username.' created successfully',
         ];
 

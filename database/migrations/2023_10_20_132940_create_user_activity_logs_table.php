@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('method');
             $table->string('client')->nullable();
             $table->string('model')->nullable();
-            $table->integer('model_id')->nullable();
+            $table->string('model_id')->nullable();
             $table->timestamps();
         });
     }
