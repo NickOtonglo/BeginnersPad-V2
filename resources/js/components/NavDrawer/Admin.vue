@@ -9,8 +9,7 @@
     <div class="nav-drawer-category">
         <p>Listings</p>
         <ul>
-            <li><a href="/admin/view-listings.html">View all</a></li>
-            <li><a href="/admin/manage-listings.html">Manage</a></li>
+            <li><a href="/listings">Manage</a></li>
             <li><a href="/admin/manage-listings-logs.html">Listing management log</a></li>
             <li><a href="/admin/manage-listings-reviews.html">Manage reviews</a></li>
             <li><a href="/admin/listing-applications.html">Applications</a></li>

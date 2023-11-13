@@ -30,11 +30,10 @@
     <section class="section-zones">
         <div class="container">
             <div class="container-btn-dropdown">
-                <select class="btn-dropdown" name="listing_sort" id="listing_sort">
-                    <option value="" selected>Sort by newest</option>
-                    <option value="">Sort by oldest</option>
-                    <option value="">Sort by rating</option>
-                    <option value="">Sort by popularity</option>
+                <select v-model="filter_sort" @change="getPaginationData(1, 'zones')" class="btn-dropdown">
+                    <option value="">Sort by default</option>
+                    <option value="desc">Sort by newest</option>
+                    <option value="asc">Sort by oldest</option>
                 </select>
             </div>
             <div id="isLoading">
@@ -61,7 +60,7 @@
                 <p style="text-align: center;">-no zones-</p>
             </template>
         </div>
-        <template v-if="zonesCount > 15">
+        <template v-if="zonesCount > 50">
             <Pagination :totalPages="total_pages"
                         :perPage="per_page"
                         :currentPage="current_page"
@@ -75,7 +74,6 @@
 
 <script setup>
 import { onMounted, ref, onBeforeMount, watch } from 'vue';
-import zonesMaster from '../../composables/zones';
 import CreateZone from '../Modals/CreateZone.vue'
 import operateModal from '../../composables/modal'
 import pagination from '../../composables/pagination';
@@ -85,6 +83,7 @@ const btnClearSearch = ref(null)
 
 const { 
     search_global,
+    filter_sort,
     total_pages,
     per_page,
     isLoading,
@@ -94,6 +93,8 @@ const {
     onPageChange,
     getPaginationData
 } = pagination()
+
+const request = ref(`/api/zones`)
 
 function click() {
     childComponentRef.value.openModal();

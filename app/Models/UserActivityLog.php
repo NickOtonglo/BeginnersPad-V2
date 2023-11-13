@@ -36,4 +36,16 @@ class UserActivityLog extends Model
     public function userLog() {
         return $this->hasOne(UserLog::class, 'parent_id', 'id');
     }
+
+    public function zoneLog() {
+        return $this->hasOne(ZoneLog::class, 'parent_id', 'id');
+    }
+
+    public function subZoneLog() {
+        return $this->hasOne(SubZoneLog::class, 'parent_id', 'id');
+    }
+
+    public function propertyLog() {
+        return $this->hasOne(PropertyLog::class, 'parent_id', 'id');
+    }
 }

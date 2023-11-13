@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SavePropertyBasicRequest;
 use App\Http\Requests\UpdatePropertyRequest;
+use App\Http\Resources\PropertyLiteResource;
 use App\Http\Resources\PropertyPublicResource;
 use App\Http\Resources\PropertyResource;
 use App\Models\Property;
@@ -31,7 +32,7 @@ class PropertiesController extends Controller
                   ->orWhere('description', 'like', '%'.request('search_global').'%');
             });
         })->where('status', 'published')->latest()->paginate(25);
-        return PropertyResource::collection($properties);
+        return PropertyLiteResource::collection($properties);
     }
 
     /**
@@ -64,6 +65,8 @@ class PropertiesController extends Controller
 
         $response = [
             'property' => $data,
+            'model' => 'Property',
+            'key' => $data->slug,
             'message' => "New property '".$data->name."' created successfully.",
         ];
 
@@ -227,6 +230,6 @@ class PropertiesController extends Controller
                   ->orWhere('description', 'like', '%'.request('search_global').'%');
             });
         })->where('status', 'published')->latest()->paginate(9);
-        return PropertyResource::collection($properties);
+        return PropertyLiteResource::collection($properties);
     }
 }

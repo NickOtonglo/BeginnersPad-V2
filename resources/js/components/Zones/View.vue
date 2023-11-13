@@ -3,7 +3,7 @@
         <button @click="click(createSubRef)" class="fab btn-primary"><i class="fas fa-plus"></i> Add sub-zone</button>
     </div>
 
-    <h3 class="section-title">Zone name</h3>
+    <h3 class="section-title">{{ zone.name }}</h3>
 
     <section class="section-zones" id="sectionViewZone">
         <div class="container">
@@ -50,12 +50,11 @@
                 </div>
                 <div class="panel">
                     <div class="container-btn-dropdown">
-                        <select class="btn-dropdown" name="listing_sort" id="listing_sort">
-                            <option value="" selected>Sort by newest</option>
-                            <option value="">Sort by oldest</option>
-                            <option value="">Sort by rating</option>
-                            <option value="">Sort by popularity</option>
-                        </select>
+                        <select v-model="filter_sort" @change="getPaginationDataWithRequest(1, 'sub-zones', request)" class="btn-dropdown">
+                        <option value="">Sort by default</option>
+                        <option value="desc">Sort by newest</option>
+                        <option value="asc">Sort by oldest</option>
+                    </select>
                     </div>
                     <div class="cards">
                         <template v-for="subZone in subZones">
@@ -90,6 +89,45 @@
         </div>
     </section>
 
+    <section id="sectionTable">
+        <div class="container">
+            <div class="table-grp">
+                <h4 class="table-title">Zone log</h4>
+                <table>
+                    <tr>
+                        <th>#</th>
+                        <th>Zone</th>
+                        <th>Action</th>
+                        <th>Performed by</th>
+                        <th>Comments</th>
+                        <th>Time</th>
+                    </tr>
+                    <template v-for="(item, index) in zone.logs">
+                        <tr>
+                            <td>{{ index+1 }}</td>
+                            <td>{{ item.name }}</td>
+                            <template v-if="item.method == 'POST'">
+                                <td>zone created</td>
+                            </template>
+                            <template v-else-if="item.method == 'PATCH' && item.name">
+                                <td>zone updated</td>
+                            </template>
+                            <template v-else-if="item.method == 'DELETE' || (item.method == 'PATCH' && !item.name)">
+                                <td>zone deleted</td>
+                            </template>
+                            <td>@{{ item.action_by }}</td>
+                            <td>{{ item.comment }}</td>
+                            <td>{{ item.time_ago }}</td>
+                        </tr>
+                    </template>
+                    <template v-if="zone.logs && !zone.logs.length">
+                        <tr style="text-align: center;">-no logs-</tr>
+                    </template>
+                </table>
+            </div>
+        </div>
+    </section>
+
     <EditZone ref="editZoneRef" />
     <CreateSub ref="createSubRef" />
 </template>
@@ -105,9 +143,10 @@ import pagination from '../../composables/pagination';
 const editZoneRef = ref(null);
 const createSubRef = ref(null)
 const { zone, getZone, route, getCounties, deleteZone } = zonesMaster()
-const subZoneRequest = `/api/zones/${route.params.id}/sub-zones`
+const request = `/api/zones/${route.params.id}/sub-zones`
 
 const { 
+    filter_sort,
     total_pages,
     per_page,
     current_page,
@@ -123,7 +162,7 @@ function click(element) {
 
 onMounted(() => {
     getZone('/api/zones/' + route.params.id)
-    getPaginationDataWithRequest(current_page.value, 'sub-zones', subZoneRequest)
+    getPaginationDataWithRequest(current_page.value, 'sub-zones', request)
     // getSubZones('/api/zones/' + route.params.id + '/sub-zones')
     // operateModal(document.querySelector('#modal'))
     getCounties()
@@ -138,5 +177,10 @@ onMounted(() => {
 }
 .card-generic {
     width: 216px;
+}
+.table-grp table td {
+    overflow: auto;
+    text-overflow: unset;
+    max-width: unset;
 }
 </style>

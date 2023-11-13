@@ -18,4 +18,8 @@ class Zone extends Model
     public function subZones() {
         return $this->hasMany(SubZone::class);
     }
+
+    public function logsParent() {
+        return $this->hasMany(UserActivityLog::class, 'model_id', 'id');
+    }
 }

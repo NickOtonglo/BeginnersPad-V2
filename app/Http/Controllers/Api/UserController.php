@@ -285,7 +285,6 @@ class UserController extends Controller
     }
 
     public function getAllUsers() {
-        $request = '';
         $request = request('sort');
         
         $users = User::when(request('search_global'), function($query) {

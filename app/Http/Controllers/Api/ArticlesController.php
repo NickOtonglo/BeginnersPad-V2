@@ -22,9 +22,10 @@ class ArticlesController extends Controller
     public function index()
     {
         $request = '';
-        $request = request('sort');
         if (!request('sort')) {
             $request = 'DESC';
+        } else {
+            $request = request('sort');
         }
         // $articles = Article::when(request('search_global'), function($query) {
         //     $query->where(function($q) {

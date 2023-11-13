@@ -19,4 +19,11 @@ class SubZone extends Model
         return $this->belongsTo(SubZoneNature::class, 'nature_id');
     }
 
+    public function properties() {
+        return $this->hasMany(Property::class);
+    }
+
+    public function logsParent() {
+        return $this->hasMany(UserActivityLog::class, 'model_id', 'id');
+    }
 }

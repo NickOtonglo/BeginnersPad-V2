@@ -67,6 +67,7 @@ Route::middleware(['auth:sanctum', 'logs.user'])->group(function() {
     Route::get('zones/{zone}/sub-zones/{subZone}', '\App\Http\Controllers\Api\SubZoneController@show');
     Route::patch('zones/{zone}/sub-zones/{subZone}', '\App\Http\Controllers\Api\SubZoneController@update');
     Route::delete('zones/{zone}/sub-zones/{subZone}', '\App\Http\Controllers\Api\SubZoneController@destroy');
+    Route::get('zones/{zone}/sub-zones/{subZone}/listings', '\App\Http\Controllers\Api\SubZoneController@getListings');
 
     Route::get('sub-zones', '\App\Http\Controllers\Api\SubZoneController@index');
 
@@ -124,6 +125,7 @@ Route::middleware(['auth:sanctum', 'logs.user'])->group(function() {
     Route::get('help/tickets/manage/all', '\App\Http\Controllers\Api\HelpController@getTicketsAll');
     Route::get('help/tickets/manage/reps', '\App\Http\Controllers\Api\UserController@getRepresentativesForTickets');
     Route::get('help/tickets/manage/reps/{user}', '\App\Http\Controllers\Api\HelpController@getRepresentativeTickets');
+    Route::get('help/tickets/manage/user/{user}', '\App\Http\Controllers\Api\HelpController@getTicketsByUser');
     Route::patch('help/tickets/manage/ticket/{ticket}', '\App\Http\Controllers\Api\HelpController@updateTicketStatus');
 
     Route::get('users/roles/all', '\App\Http\Controllers\Api\UserController@getRoles');

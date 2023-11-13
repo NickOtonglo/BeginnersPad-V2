@@ -57,9 +57,8 @@ class TagsController extends Controller
             }
         }
 
-        return $tags;
         $response = [
-            'property_review' => $tags,
+            'tags' => $tags,
             'message' => "New tag(s) ".$tags." added successfully.",
         ];
         return response($response, 201);

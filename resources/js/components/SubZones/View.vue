@@ -1,5 +1,5 @@
 <template>
-    <h3 class="section-title">Sub-zone name</h3>
+    <h3 class="section-title">{{ subZone.name }}</h3>
 
     <section class="section-zones" id="sectionViewZone">
         <div class="container">
@@ -49,231 +49,54 @@
                     <div class="listing-units-list">
                         <h3>Listings in this sub-zone</h3>
                         <div class="listing-units-grp" id="sectionZoneListingUnits">
-                            <div class="card-sm card-2">
-                                <a href="/admin/manage-listing.html">
-                                    <div class="thumb"></div>
-                                    <div class="details">
-                                        <h2>Listing name</h2>
-                                        <div class="location">
-                                            <span class="spec">Location,</span>
-                                            <span class="spec">Location,</span>
-                                            <span class="spec">Location</span>
-                                        </div>
-                                        <p class="timestamp">Added 5 hours ago</p>
-                                        <div class="info-rating-grp">
-                                            <p class="rating">Rating: 4.0/5</p>
-                                            <div class="stars">
-                                                <i class="fas fa-star"></i>
-                                                <i class="fas fa-star"></i>
-                                                <i class="fas fa-star"></i>
-                                                <i class="fas fa-star"></i>
-                                                <i class="far fa-star"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </a>  
-                            </div>
-                            <div class="card-sm card-2">
-                                <a href="/admin/manage-listing.html">
-                                    <div class="thumb"></div>
-                                    <div class="details">
-                                        <h2>Listing name</h2>
-                                        <div class="location">
-                                            <span class="spec">Location,</span>
-                                            <span class="spec">Location,</span>
-                                            <span class="spec">Location</span>
-                                        </div>
-                                        <p class="timestamp">Added 5 hours ago</p>
-                                        <div class="info-rating-grp">
-                                            <p class="rating">Rating: 4.0/5</p>
-                                            <div class="stars">
-                                                <i class="fas fa-star"></i>
-                                                <i class="fas fa-star"></i>
-                                                <i class="fas fa-star"></i>
-                                                <i class="fas fa-star"></i>
-                                                <i class="far fa-star"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </a>  
-                            </div>
-                            <div class="card-sm card-2">
-                                <a href="/admin/manage-listing.html">
-                                    <div class="thumb"></div>
-                                    <div class="details">
-                                        <h2>Listing name</h2>
-                                        <div class="location">
-                                            <span class="spec">Location,</span>
-                                            <span class="spec">Location,</span>
-                                            <span class="spec">Location</span>
-                                        </div>
-                                        <p class="timestamp">Added 5 hours ago</p>
-                                        <div class="info-rating-grp">
-                                            <p class="rating">Rating: not rated</p>
-                                        </div>
-                                    </div>
-                                </a>  
-                            </div>
-                            <div class="card-sm card-2">
-                                <a href="/admin/manage-listing.html">
-                                    <div class="thumb"></div>
-                                    <div class="details">
-                                        <h2>Listing name</h2>
-                                        <div class="location">
-                                            <span class="spec">Location,</span>
-                                            <span class="spec">Location,</span>
-                                            <span class="spec">Location</span>
-                                        </div>
-                                        <p class="timestamp">Added 5 hours ago</p>
-                                        <div class="info-rating-grp">
-                                            <p class="rating">Rating: 4.0/5</p>
-                                            <div class="stars">
-                                                <i class="fas fa-star"></i>
-                                                <i class="fas fa-star"></i>
-                                                <i class="fas fa-star"></i>
-                                                <i class="fas fa-star"></i>
-                                                <i class="far fa-star"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </a>  
-                            </div>
-                            <div class="card-sm card-2">
-                                <a href="/admin/manage-listing.html">
-                                    <div class="thumb"></div>
-                                    <div class="details">
-                                        <h2>Listing name</h2>
-                                        <div class="location">
-                                            <span class="spec">Location,</span>
-                                            <span class="spec">Location,</span>
-                                            <span class="spec">Location</span>
-                                        </div>
-                                        <p class="timestamp">Added 5 hours ago</p>
-                                        <div class="info-rating-grp">
-                                            <p class="rating">Rating: 4.0/5</p>
-                                            <div class="stars">
-                                                <i class="fas fa-star"></i>
-                                                <i class="fas fa-star"></i>
-                                                <i class="fas fa-star"></i>
-                                                <i class="fas fa-star"></i>
-                                                <i class="far fa-star"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </a>  
-                            </div>
-                            <div class="card-sm card-2">
-                                <a href="/admin/manage-listing.html">
-                                    <div class="thumb"></div>
-                                    <div class="details">
-                                        <h2>Listing name</h2>
-                                        <div class="location">
-                                            <span class="spec">Location,</span>
-                                            <span class="spec">Location,</span>
-                                            <span class="spec">Location</span>
-                                        </div>
-                                        <p class="timestamp">Added 5 hours ago</p>
-                                        <div class="info-rating-grp">
-                                            <p class="rating">Rating: not rated</p>
-                                        </div>
-                                    </div>
-                                </a>  
-                            </div>
-                            <div class="card-sm card-2">
-                                <a href="/admin/manage-listing.html">
-                                    <div class="thumb"></div>
-                                    <div class="details">
-                                        <h2>Listing name</h2>
-                                        <div class="location">
-                                            <span class="spec">Location,</span>
-                                            <span class="spec">Location,</span>
-                                            <span class="spec">Location</span>
-                                        </div>
-                                        <p class="timestamp">Added 5 hours ago</p>
-                                        <div class="info-rating-grp">
-                                            <p class="rating">Rating: not rated</p>
-                                        </div>
-                                    </div>
-                                </a>  
-                            </div>
-                            <div class="card-sm card-2">
-                                <a href="/admin/manage-listing.html">
-                                    <div class="thumb"></div>
-                                    <div class="details">
-                                        <h2>Listing name</h2>
-                                        <div class="location">
-                                            <span class="spec">Location,</span>
-                                            <span class="spec">Location,</span>
-                                            <span class="spec">Location</span>
-                                        </div>
-                                        <p class="timestamp">Added 5 hours ago</p>
-                                        <div class="info-rating-grp">
-                                            <p class="rating">Rating: 4.0/5</p>
-                                            <div class="stars">
-                                                <i class="fas fa-star"></i>
-                                                <i class="fas fa-star"></i>
-                                                <i class="fas fa-star"></i>
-                                                <i class="fas fa-star"></i>
-                                                <i class="far fa-star"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </a>  
-                            </div>
-                            <div class="card-sm card-2">
-                                <a href="/admin/manage-listing.html">
-                                    <div class="thumb"></div>
-                                    <div class="details">
-                                        <h2>Listing name</h2>
-                                        <div class="location">
-                                            <span class="spec">Location,</span>
-                                            <span class="spec">Location,</span>
-                                            <span class="spec">Location</span>
-                                        </div>
-                                        <p class="timestamp">Added 5 hours ago</p>
-                                        <div class="info-rating-grp">
-                                            <p class="rating">Rating: 4.0/5</p>
-                                            <div class="stars">
-                                                <i class="fas fa-star"></i>
-                                                <i class="fas fa-star"></i>
-                                                <i class="fas fa-star"></i>
-                                                <i class="fas fa-star"></i>
-                                                <i class="far fa-star"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </a>  
-                            </div>
-                            <div class="card-sm card-2">
-                                <a href="/admin/manage-listing.html">
-                                    <div class="thumb"></div>
-                                    <div class="details">
-                                        <h2>Listing name</h2>
-                                        <div class="location">
-                                            <span class="spec">Location,</span>
-                                            <span class="spec">Location,</span>
-                                            <span class="spec">Location</span>
-                                        </div>
-                                        <p class="timestamp">Added 5 hours ago</p>
-                                        <div class="info-rating-grp">
-                                            <p class="rating">Rating: 4.0/5</p>
-                                            <div class="stars">
-                                                <i class="fas fa-star"></i>
-                                                <i class="fas fa-star"></i>
-                                                <i class="fas fa-star"></i>
-                                                <i class="fas fa-star"></i>
-                                                <i class="far fa-star"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </a>  
-                            </div>
+                            <template v-for="(item, index) in properties">
+                                <CardProperty v-if="index <= 8" :property="item" />
+                            </template>
                         </div>
-                        <div class="section-more">
+                        <div v-if="properties.length > 8" class="section-more">
                             <a href="/admin/listing-applications.html">View more <i class="fas fa-chevron-right"></i></a>
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="sectionTable">
+        <div class="container">
+            <div class="table-grp">
+                <h4 class="table-title">Sub-zone log</h4>
+                <table>
+                    <tr>
+                        <th>#</th>
+                        <th>Sub-zone</th>
+                        <th>Action</th>
+                        <th>Performed by</th>
+                        <th>Comments</th>
+                        <th>Time</th>
+                    </tr>
+                    <template v-for="(item, index) in subZone.logs">
+                        <tr>
+                            <td>{{ index+1 }}</td>
+                            <td>{{ item.name }}</td>
+                            <template v-if="item.method == 'POST'">
+                                <td>sub-zone created</td>
+                            </template>
+                            <template v-else-if="item.method == 'PATCH' && item.name">
+                                <td>sub-zone updated</td>
+                            </template>
+                            <template v-else-if="item.method == 'DELETE' || (item.method == 'PATCH' && !item.name)">
+                                <td>sub-zone deleted</td>
+                            </template>
+                            <td>@{{ item.action_by }}</td>
+                            <td>{{ item.comment }}</td>
+                            <td>{{ item.time_ago }}</td>
+                        </tr>
+                    </template>
+                    <template v-if="subZone.logs && !subZone.logs.length">
+                        <tr style="text-align: center;">-no logs-</tr>
+                    </template>
+                </table>
             </div>
         </div>
     </section>
@@ -285,10 +108,13 @@
 import operateModal from '../../composables/modal';
 import { onMounted, ref } from 'vue';
 import EditSubZone from '../Modals/EditSubZone.vue';
+import CardProperty from '../Cards/Property2.vue'
 import subZonesMaster from '../../composables/subzones';
+import propertiesMaster from '../../composables/properties'
 
 const editSubZoneRef = ref(null)
 const { subZone, getSubZone, route, getNatures, deleteSubZone } = subZonesMaster()
+const { getProperties, properties } = propertiesMaster()
 const request = ref(`/api/zones/${route.params.zone_id}/sub-zones/${route.params.sub_id}`)
 
 function click(element) {
@@ -297,7 +123,7 @@ function click(element) {
 
 onMounted(() => {
     getSubZone(request.value)
-    
+    getProperties(`/api/zones/${route.params.zone_id}/sub-zones/${route.params.sub_id}/listings`)
     getNatures()
 })
 </script>

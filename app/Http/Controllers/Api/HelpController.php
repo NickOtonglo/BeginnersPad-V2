@@ -164,6 +164,11 @@ class HelpController extends Controller
         return HelpTicketResource::collection($tickets);
     }
 
+    public function getTicketsByUser(string $username) {
+        $tickets = User::where('username', $username)->first()->helpTickets()->paginate(150);
+        return HelpTicketResource::collection($tickets);
+    }
+
     public function updateTicket(HelpTicket $ticket, Request $request) {
         $rules = [
             'topic' => 'required',

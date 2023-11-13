@@ -32,6 +32,18 @@ class UserActivityLogResource extends JsonResource
         if ($this->model == 'FAQ') {
             $log['model_collection'] = $this->faqLog;
         }
+        if ($this->model == 'Zone') {
+            $log['model_collection'] = $this->zoneLog;
+        }
+        if ($this->model == 'SubZone') {
+            $log['model_collection'] = $this->subZoneLog;
+        }
+        if ($this->model == 'Property') {
+            $log['model_collection'] = $this->propertyLog;
+        }
+        if ($this->model == 'PropertyUnit') {
+            $log['model_collection'] = $this->propertyUnitLog;
+        }
 
         return $log;
     }

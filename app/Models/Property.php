@@ -51,4 +51,8 @@ class Property extends Model
     public function propertyReviews() {
         return $this->hasMany(PropertyReview::class);
     }
+
+    public function logsParent() {
+        return $this->hasMany(UserActivityLog::class, 'model_id', 'id');
+    }
 }

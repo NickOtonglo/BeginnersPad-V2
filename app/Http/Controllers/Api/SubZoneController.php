@@ -4,8 +4,12 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SaveSubZoneRequest;
+use App\Http\Resources\PropertyLiteResource;
+use App\Http\Resources\PropertyPublicResource;
+use App\Http\Resources\SubZone\SubZoneAdminResource;
 use App\Http\Resources\SubZoneNatureResource;
 use App\Http\Resources\SubZoneResource;
+use App\Models\Property;
 use App\Models\SubZone;
 use App\Models\SubZoneNature;
 use App\Models\Zone;
@@ -24,7 +28,15 @@ class SubZoneController extends Controller
 
     
     public function getZoneSubs(Zone $zone) {
-        $subZones = $zone->subZones()->paginate(14);
+        $request = request()->sort;
+        $subZones = $zone->subZones();
+        if ($request) {
+            if ($request == 'desc' || $request == 'asc') {
+                $subZones = $subZones->orderBy('created_at', $request)->paginate(14);
+            }
+        } else {
+            $subZones = $subZones->orderBy('name')->paginate(14);
+        }
         return SubZoneResource::collection($subZones);
     }
 
@@ -53,6 +65,8 @@ class SubZoneController extends Controller
 
         $response = [
             'sub-zone' => $subZone,
+            'model' => 'SubZone',
+            'key' => $subZone->id,
             'message' => "New sub-zone '".$subZone->name."' created successfully.",
         ];
         return response($response, 201);
@@ -64,7 +78,7 @@ class SubZoneController extends Controller
     public function show(Zone $zone, SubZone $subZone)
     {
         if ($zone->id == $subZone->zone_id) {
-            return new SubZoneResource($subZone);
+            return new SubZoneAdminResource($subZone);
         } else return response()->noContent();
     }
 
@@ -95,6 +109,8 @@ class SubZoneController extends Controller
 
         $response = [
             'sub-zone' => $subZone,
+            'model' => 'SubZone',
+            'key' => $subZone->id,
             'message' => "Sub-zone '".$subZone->name."' updated successfully.",
         ];
         return response($response, 201);
@@ -105,14 +121,28 @@ class SubZoneController extends Controller
      */
     public function destroy(Zone $zone, SubZone $subZone)
     {
+        $subZoneId = $subZone->id;
+        $subZoneName = $subZone->name;
         if ($zone->id == $subZone->zone_id) {
             $subZone->delete();
-            return response()->noContent();
+            return response([
+                'sub-zone' => response()->noContent(),
+                'model' => 'SubZone',
+                'key' => $subZoneId,
+                'message' => "Sub-zone '".$subZoneName."' deleted successfully.",
+            ], 201);
         }
     }
 
     public function getNatures() {
         $natures = SubZoneNatureResource::collection(SubZoneNature::get());
         return $natures;
+    }
+
+    public function getListings(Zone $zone, SubZone $subZone) {
+        if ($zone->id == $subZone->zone_id) {
+            $properties = Property::where('sub_zone_id', $subZone->id)->get();
+            return PropertyLiteResource::collection($properties);
+        } else return response()->noContent();
     }
 }

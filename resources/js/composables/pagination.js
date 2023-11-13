@@ -40,10 +40,12 @@ export default function pagination() {
             .finally(() => {
                 isLoading.value = false
                 if (source == 'articles') {
-                    filter_sort.value = 'DESC'
+                    if (!filter_sort.value) {
+                        filter_sort.value = 'DESC'
+                    }
                     getArticles(`/api/${source}?page=${page}&search_global=${search_global.value}&sort=${filter_sort.value}`)
                 } else if (source == 'zones') {
-                    getZones(`/api/${source}?page=${page}&search_global=${search_global.value}`)
+                    getZones(`/api/${source}?page=${page}&search_global=${search_global.value}&sort=${filter_sort.value}`)
                 }
                 // callback(page, search_global.value)
             })
@@ -65,7 +67,7 @@ export default function pagination() {
             .finally(() => {
                 isLoading.value = false
                 if (source == 'sub-zones') {
-                    getSubZones(`${request}?page=${page}`)
+                    getSubZones(`${request}?page=${page}&sort=${filter_sort.value}`)
                 }
                 if (source == 'properties') {
                     getProperties(`${request}?page=${page}&search_global=${search_global.value}`)

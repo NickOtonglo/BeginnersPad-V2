@@ -6,9 +6,17 @@ use App\Models\FAQ;
 use App\Models\FAQLog;
 use App\Models\HelpTicket;
 use App\Models\HelpTicketLog;
+use App\Models\PropertyLog;
+use App\Models\PropertyUnitLog;
+use App\Models\SubZone;
+use App\Models\SubZoneLog;
+use App\Models\Tag;
+use App\Models\TagLog;
 use App\Models\User;
 use App\Models\UserActivityLog;
 use App\Models\UserLog;
+use App\Models\Zone;
+use App\Models\ZoneLog;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -70,25 +78,6 @@ class CreateUserActivityLog
                 case 'User':
                     $data = new UserLog;
                     $user = User::where('username', $response->original['key'])->first();
-    
-                    // $data->user_id = $user->id;
-                    // if ($request->status) {
-                    //     $data->firstname = $user->firstname;
-                    //     $data->lastname = $user->lastname;
-                    //     $data->email = $user->email;
-                    //     $data->username = $user->username;
-                    //     $data->telephone = substr($request->telephone, -12);
-                    //     $data->status = $request->status;
-                    //     $data->comment = $response->original['model'].' @'.$response->original['key'].': '.$request->method().', status set to '.$request->status;
-                    // } else {
-                    //     $data->firstname = $request->firstname;
-                    //     $data->lastname = $request->lastname;
-                    //     $data->email = $request->email;
-                    //     $data->username = $request->username;
-                    //     $data->telephone = $request->telephone;
-                    //     $data->status = $user->status;
-                    //     $data->comment = $response->original['model'].' @'.$response->original['key'].': '.$request->method();
-                    // }
 
                     if (!$user) {
                         $data->comment = $response->original['model'].' @'.$response->original['key'].': '.$request->method().', status set to deleted';
@@ -102,6 +91,54 @@ class CreateUserActivityLog
                         $data->status = $user->status;
                         $data->comment = $response->original['model'].' @'.$response->original['key'].': '.$request->method().', status set to '.$user->status;
                     }
+
+                    break;
+
+                case 'Zone':
+                    $data = new ZoneLog;
+                    $zone = Zone::find($response->original['key']);
+
+                    if (!$zone) {
+                        $data->comment = $response->original['model'].' #'.$response->original['key'].': '.$request->method().', zone deleted';
+                    } else {
+                        $data->name = $zone->name;
+                        $data->lat = $zone->lat;
+                        $data->lng = $zone->lng;
+                        $data->radius = $zone->radius;
+                        $data->timezone = $zone->timezone;
+                        $data->description = $zone->description;
+                        $data->county_code = $zone->county_code;
+                        $data->comment = $response->original['model'].' #'.$response->original['key'].': '.$request->method();
+                    }
+
+                    break;
+
+                case 'SubZone':
+                    $data = new SubZoneLog;
+                    $subZone = SubZone::find($response->original['key']);
+
+                    if (!$subZone) {
+                        $data->comment = $response->original['model'].' #'.$response->original['key'].': '.$request->method().', sub-zone deleted';
+                    } else {
+                        $data->name = $subZone->name;
+                        $data->lat = $subZone->lat;
+                        $data->lng = $subZone->lng;
+                        $data->radius = $subZone->radius;
+                        $data->description = $subZone->description;
+                        $data->nature_id = $subZone->nature_id;
+                        $data->zone_id = $subZone->zone_id;
+                        $data->comment = $response->original['model'].' #'.$response->original['key'].': '.$request->method();
+                    }
+
+                    break;
+
+                case 'Property':
+                    $data = new PropertyLog;
+
+                    break;
+
+                case 'PropertyUnit':
+                    $data = new PropertyUnitLog;
 
                     break;
 

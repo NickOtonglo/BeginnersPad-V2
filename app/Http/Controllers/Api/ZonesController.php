@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SaveZoneRequest;
+use App\Http\Resources\PropertyPublicResource;
 use App\Http\Resources\SubZoneResource;
+use App\Http\Resources\Zone\ZoneAdminResource;
 use App\Http\Resources\ZoneCountiesResource;
 use App\Http\Resources\ZoneCountriesResource;
 use App\Http\Resources\ZonesResource;
@@ -23,13 +25,28 @@ class ZonesController extends Controller
         // $zones = ZonesResource::collection(Zone::orderBy('name')->get());
         // return $zones;
 
+        $request = request()->sort;
+
         $zones = Zone::when(request('search_global'), function($query) {
             $query->where(function($q) {
                 $q->where('name', 'like', '%'.request('search_global').'%')
                   ->orWhere('id', 'like', '%'.request('search_global').'%')
                   ->orWhere('county_code', 'like', '%'.request('search_global').'%');
             });
-        })->withCount('subZones')->orderBy('name')->paginate(15);
+        })->withCount('subZones');
+
+        if ($request) {
+            if ($request == 'desc' || $request == 'asc') {
+                $zones = $zones->orderBy('created_at', $request)->paginate(50);
+            }
+
+            // if ($request = 'rating') {
+            //     $zones = $zones->orderBy('name')->paginate(15);
+            // }
+        } else {
+            $zones = $zones->orderBy('name')->paginate(50);
+        }
+
         return ZonesResource::collection($zones);
     }
 
@@ -59,6 +76,8 @@ class ZonesController extends Controller
 
         $response = [
             'zone' => $zone,
+            'model' => 'Zone',
+            'key' => $zone->id,
             'message' => "New zone '".$zone->name."' created successfully.",
         ];
         return response($response, 201);
@@ -69,7 +88,7 @@ class ZonesController extends Controller
      */
     public function show(Zone $zone)
     {
-        return new ZonesResource($zone);
+        return new ZoneAdminResource($zone);
     }
 
     /**
@@ -98,6 +117,8 @@ class ZonesController extends Controller
 
         $response = [
             'zone' => $zone,
+            'model' => 'Zone',
+            'key' => $zone->id,
             'message' => "Zone '".$zone->name."' updated successfully.",
         ];
         return response($response, 201);
@@ -108,9 +129,17 @@ class ZonesController extends Controller
      */
     public function destroy(Zone $zone)
     {
+        $zoneId = $zone->id;
+        $zoneName = $zone->name;
         $zone->subZones()->delete();
         $zone->delete();
-        return response()->noContent();
+
+        return response([
+            'zone' => response()->noContent(),
+            'model' => 'Zone',
+            'key' => $zoneId,
+            'message' => "Zone '".$zoneName."' deleted successfully.",
+        ], 201);
     }
 
     public function getCountries() {
@@ -121,5 +150,10 @@ class ZonesController extends Controller
     public function getCounties() {
         $counties = ZoneCountiesResource::collection(ZoneCounty::orderBy('code')->get());
         return $counties;
+    }
+
+    public function getProperties(Zone $zone) {
+        $properties = $zone->subZones->properties;
+        return PropertyPublicResource::collection($properties);
     }
 }

@@ -41,4 +41,8 @@ class PropertyUnit extends Model
     public function propertyUnitFiles() {
         return $this->hasMany(PropertyUnitFile::class);
     }
+
+    public function logsParent() {
+        return $this->hasMany(UserActivityLog::class, 'model_id', 'id');
+    }
 }

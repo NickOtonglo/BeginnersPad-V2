@@ -48,8 +48,9 @@
             </div>
         </div>
         <div class="modal-footer">
-            <a class="btn btn-link" href="/admin/manage-user.html">View user</a>
-            <a class="btn btn-link" href="#">View user's tickets</a>
+            <!-- <router-link v-if="ticket && ticket.user" :to="{ name: 'user.manage', params: { username: ticket.user } }" class="btn btn-link">View user</router-link> -->
+            <a class="btn btn-link" :href="`/users/profile/${ticket.user}`">View user</a>
+            <router-link :to="{ name: 'tickets.list' }" @click="operateModal(modalRef)" class="btn btn-link">View user's tickets</router-link>
             <router-link v-if="ticket.id" :to="{ name: 'ticket.view', params: { id: ticket.id } }" @click="operateModal(modalRef)" class="btn btn-link">Go to ticket</router-link>
             <button @click="operateModal(modalRef)" id="modalFooterClose" class="btn btn-link">Close</button>
         </div>
