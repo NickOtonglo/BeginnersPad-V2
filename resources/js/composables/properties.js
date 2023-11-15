@@ -8,6 +8,7 @@ export default function propertiesMaster() {
     const validationErrors = ref('')
     const swal = inject('$swal')
     const properties = ref({})
+    const propertiesCount = ref(0)
     const property = ref({
         name: '',
         lat: '',
@@ -29,7 +30,10 @@ export default function propertiesMaster() {
         isLoading.value = true
 
         axios.get(request)
-            .then(response => properties.value = response.data.data)
+            .then(response => {
+                properties.value = response.data.data
+                propertiesCount.value = response.data.meta.total
+            })
             .catch(error => console.log(error))
             .finally(isLoading.value = false)
     }
@@ -326,6 +330,7 @@ export default function propertiesMaster() {
         router,
         validationErrors,
         properties,
+        propertiesCount,
         property,
         getProperties,
         getProperty,

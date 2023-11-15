@@ -324,12 +324,12 @@
         justify-content: center;
     }
 
-    .section-listings#sectionMyListings .top-buttons .vertical,
+    .section-listings .top-buttons .vertical,
     .section-users#sectionManageUsers .top-buttons .vertical {
         display: flex;
     }
     
-    .section-listings#sectionMyListings .top-buttons .horizontal,
+    .section-listings .top-buttons .horizontal,
     .section-users#sectionManageUsers .top-buttons .horizontal {
         display: none;
     }

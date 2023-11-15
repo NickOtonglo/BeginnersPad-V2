@@ -82,6 +82,8 @@ Route::middleware(['auth:sanctum', 'logs.user'])->group(function() {
     Route::post('listings/{property}/files', '\App\Http\Controllers\Api\PropertiesController@storeFiles');
     Route::delete('listings/{property}/files/{file}', '\App\Http\Controllers\Api\PropertiesController@destroyFile');
     Route::post('listings/{property}/thumbnail', '\App\Http\Controllers\Api\PropertiesController@updateThumbnail');
+    Route::get('listings/status/{status}', '\App\Http\Controllers\Api\PropertiesController@getPropertiesByStatus');
+    Route::get('listings/sub-zone/{sub_zone}', '\App\Http\Controllers\Api\PropertiesController@getPropertiesBySubZone');
 
     Route::get('listings/{property}/units', 'App\Http\Controllers\Api\PropertyUnitsController@index');
     Route::post('listings/{property}', 'App\Http\Controllers\Api\PropertyUnitsController@store');

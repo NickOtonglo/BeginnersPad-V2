@@ -18,7 +18,7 @@ export default function pagination() {
     const { getArticles, articles } = articlesMaster()
     const { zones, getZones, zonesCount } = zonesMaster()
     const { subZones, getSubZones, subZonesCount } = subZoneMaster()
-    const { properties, getProperties } = propertiesMaster()
+    const { properties, getProperties, propertiesCount } = propertiesMaster()
     const { units, getUnits, unitsCount } = unitsMaster()
     const { favourites, getFavourites, favouritesCount } = favouriteMaster()
     const { tickets, getTickets, ticketsCount } = ticketsMaster()
@@ -70,7 +70,7 @@ export default function pagination() {
                     getSubZones(`${request}?page=${page}&sort=${filter_sort.value}`)
                 }
                 if (source == 'properties') {
-                    getProperties(`${request}?page=${page}&search_global=${search_global.value}`)
+                    getProperties(`${request}?page=${page}&search_global=${search_global.value}&sort=${filter_sort.value}`)
                 }
                 if (source == 'property_units') {
                     getUnits(`${request}?page=${page}`)
@@ -150,6 +150,7 @@ export default function pagination() {
         onPageChange,
         zonesCount,
         subZonesCount,
+        propertiesCount,
         unitsCount,
         favouritesCount,
         ticketsCount,

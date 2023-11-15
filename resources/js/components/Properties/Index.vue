@@ -14,34 +14,74 @@
         
     </section>
 
-    <!-- Search bar -->
-    <section id="searchBar" ref="header">
-        <div class="container">
-            <form @submit.prevent="getPaginationDataWithRequest(1, 'properties', request)" class="search-bar">
-                <div class="search-bar-grp">
-                    <input v-model="search_global" type="text" class="search-input" placeholder="search...">
-                    <div ref="btnClearSearch" v-show="search_global !== ''" @click="search_global = '', getPaginationDataWithRequest(1, 'properties', request)" class="search-button">
-                        <i class="fas fa-xmark"></i>
-                    </div>
-                    <div @click="getPaginationDataWithRequest(1, 'properties', request)" class="search-button">
-                        <i class="fas fa-search"></i>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </section>
+    <SearchBar 
+        @search-initiated="filterData" 
+        @search-cancelled="filterData" />
 
     <!-- Listings -->
     <section class="section-listings">
         <div class="container">
-            <div class="container-btn-dropdown">
-                <select class="btn-dropdown" name="listing_sort" id="listing_sort">
-                    <option value="" selected>Sort by newest</option>
-                    <option value="">Sort by oldest</option>
-                    <option value="">Sort by cheapest</option>
-                    <option value="">Sort by priciest</option>
-                    <option value="">Sort by largest area</option>
-                    <option value="">Sort by most rooms</option>
+            <div v-if="user.role == 'Admin' || user.role == 'Super Admin' || user.role == 'System Admin'" class="top-buttons">
+                <div class="btn-grp horizontal">
+                    <button 
+                        @click="btnSelected='All', zone.name = '', getPaginationDataWithRequest(1, 'properties', `${request}/status/all`)" 
+                        :class="btnSelected == 'All' ? 'selected' : ''">All</button>
+                    <button 
+                        @click="btnSelected='Pending', zone.name = '', getPaginationDataWithRequest(1, 'properties', `${request}/status/pending`)" 
+                        :class="btnSelected == 'Pending' ? 'selected' : ''">Pending</button>
+                    <button 
+                        @click="btnSelected='Published', zone.name = '', getPaginationDataWithRequest(1, 'properties', `${request}/status/published`)" 
+                        :class="btnSelected == 'Published' ? 'selected' : ''">Published</button>
+                    <button 
+                        @click="btnSelected='Rejected', zone.name = '', getPaginationDataWithRequest(1, 'properties', `${request}/status/rejected`)" 
+                        :class="btnSelected == 'Rejected' ? 'selected' : ''">Rejected</button>
+                    <button 
+                        @click="btnSelected='Suspended', zone.name = '', getPaginationDataWithRequest(1, 'properties', `${request}/status/suspended`)" 
+                        :class="btnSelected == 'Suspended' ? 'selected' : ''">Suspended</button>
+                    <button 
+                        @click="btnSelected='Hidden', zone.name = '', getPaginationDataWithRequest(1, 'properties', `${request}/status/hidden`)" 
+                        :class="btnSelected == 'Hidden' ? 'selected' : ''">Hidden/Private</button>
+                </div>
+                <div class="btn-grp vertical">
+                    <button 
+                        @click="btnSelected='All', zone.name = '', getPaginationDataWithRequest(1, 'properties', `${request}/status/all`)" 
+                        :class="btnSelected == 'All' ? 'selected' : ''">All</button>
+                    <button 
+                        @click="btnSelected='Pending', zone.name = '', getPaginationDataWithRequest(1, 'properties', `${request}/status/pending`)" 
+                        :class="btnSelected == 'Pending' ? 'selected' : ''">Pending</button>
+                    <button 
+                        @click="btnSelected='Published', zone.name = '', getPaginationDataWithRequest(1, 'properties', `${request}/status/published`)" 
+                        :class="btnSelected == 'Published' ? 'selected' : ''">Published</button>
+                    <button 
+                        @click="btnSelected='Rejected', zone.name = '', getPaginationDataWithRequest(1, 'properties', `${request}/status/rejected`)" 
+                        :class="btnSelected == 'Rejected' ? 'selected' : ''">Rejected</button>
+                    <button 
+                        @click="btnSelected='Suspended', zone.name = '', getPaginationDataWithRequest(1, 'properties', `${request}/status/suspended`)" 
+                        :class="btnSelected == 'Suspended' ? 'selected' : ''">Suspended</button>
+                    <button 
+                        @click="btnSelected='Hidden', zone.name = '', getPaginationDataWithRequest(1, 'properties', `${request}/status/hidden`)" 
+                        :class="btnSelected == 'Hidden' ? 'selected' : ''">Hidden/Private</button>
+                </div>
+            </div>
+            <div class="container-btn-dropdown multi">
+                <div class="container-btn-dropdown" id="dropdown-zones">
+                    <select v-model="zone.name" @change="getSubZones(`/api/zones/${zone.name}/sub-zones`)" class="btn-dropdown">
+                        <option value="" disabled>--select zone--</option>
+                        <template v-for="zone in zones">
+                            <option :value="zone.id">{{ zone.name }} ({{ zone.county.name }})</option>
+                        </template>
+                    </select>
+                    <select v-model="subZone.name" :hidden="!zone.name" @change="btnSelected = '', getPaginationDataWithRequest(1, 'properties', `/api/listings/sub-zone/${subZone.name}`)" class="btn-dropdown">
+                        <option value="" disabled>--select sub-zone--</option>
+                        <template v-for="subZone in subZones">
+                            <option :value="subZone.id">{{ subZone.name }}</option>
+                        </template>
+                    </select>
+                </div>
+                <select v-model="filter_sort" @change="btnSelected = '', zone.name = '', getPaginationDataWithRequest(1, 'properties', `${request}`)" class="btn-dropdown">
+                    <option value="">Sort by default</option>
+                    <option value="desc">Sort by newest</option>
+                    <option value="asc">Sort by oldest</option>
                 </select>
             </div>
             <div id="isLoading">
@@ -49,40 +89,15 @@
                 <span v-if="isLoading">Loading...</span>
             </div>
             <div class="cards">
-                <template v-for="property in properties">
-                    <div class="card">
-                        <a href="/view-listing.html">
-                            <template v-if="property.thumbnail">
-                                <div class="image" :style="{ background: `url(/images/listings/${property.slug}/${property.thumbnail})` }" style="background-size: cover;">
-                                    <template v-if="property.brand && property.brand.avatar">
-                                        <img :src="`/images/brand/avatar/${property.brand.username}/${property.brand.avatar}`" alt="">
-                                    </template>
-                                    <template v-else>
-                                        <img src="/images/static/avatar.png" alt="">
-                                    </template>
-                                </div>
-                            </template>
-                            <template v-else>
-                                <div class="image">
-                                    <img src="/images/static/avatar.png" alt="">
-                                </div>
-                            </template>
-                            <div class="card-info">
-                                <h4>{{ property.name }}</h4>
-                                <p class="location">Location: {{ property.sub_zone.name }} ({{ property.sub_zone.zone.county.name }})</p>
-                                <p class="type">Listing type</p>
-                                <p class="price">KES 1000 - 2000</p>
-                                <p class="timestamp">Added {{ property.time_ago }}</p>
-                            </div>
-                        </a>
-                    </div>
+                <template v-for="item in properties">
+                    <CardProperty :property="item" />
                 </template>
             </div>
             <template v-if="!properties.length">
                 <p style="text-align: center;">-no listings-</p>
             </template>
         </div>
-        <Pagination :totalPages="total_pages"
+        <Pagination v-if="propertiesCount > 25" :totalPages="total_pages"
                     :perPage="per_page"
                     :currentPage="current_page"
                     @pagechanged="onPageChange" />
@@ -92,22 +107,51 @@
 <script setup>
 import { ref, onBeforeMount, watch } from 'vue'
 import pagination from '../../composables/pagination'
+import userMaster from '../../composables/users'
+import SearchBar from '../Search/SearchBar.vue'
+import CardProperty from '../Cards/Property1.vue';
+import zonesMaster from '../../composables/zones';
+import subZonesMaster from '../../composables/subzones';
 
-const btnClearSearch = ref(null)
+const request = ref(`/api/listings`)
+// const btnSelected = ref('All')
+const btnSelected = ref('')
 
 const { 
     search_global,
+    filter_sort,
     total_pages,
     per_page,
     current_page,
     properties,
+    propertiesCount,
     onPageChange,
     getPaginationDataWithRequest
 } = pagination()
-const request = ref(`/api/listings`)
+const { user, getUserData } = userMaster() 
+const { getZones, zones, zone } = zonesMaster()
+const { getSubZones, subZones, subZone } = subZonesMaster()
+
+function filterData(input) {
+    zone.value.name = ''
+    if (!input) {
+        search_global.value = ''
+        // btnSelected.value = 'All'
+    } else {
+        search_global.value = input
+        // btnSelected.value = ''
+    }
+    if (user.value.role == 'Admin' || user.value.role == 'Super Admin' || user.value.role == 'System Admin') {
+        getPaginationDataWithRequest(current_page.value, 'properties', `${request.value}/status/all`)
+    } else {
+        getPaginationDataWithRequest(current_page.value, 'properties', `${request.value}`)
+    }
+}
 
 onBeforeMount(() => {
-    getPaginationDataWithRequest(current_page.value, 'properties', request.value)
+    getZones(`/api/zones`)
+    filterData('')
+    getUserData()
 })
 
 watch(search_global, (current, previous) => {
@@ -116,3 +160,11 @@ watch(search_global, (current, previous) => {
 })
 
 </script>
+
+<style scoped>
+.container-btn-dropdown#dropdown-zones {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+}
+</style>

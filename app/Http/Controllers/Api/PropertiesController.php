@@ -11,6 +11,7 @@ use App\Http\Resources\PropertyResource;
 use App\Models\Property;
 use App\Models\PropertyFeature;
 use App\Models\PropertyFile;
+use App\Models\SubZone;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -25,13 +26,32 @@ class PropertiesController extends Controller
     {
         // $properties = PropertyResource::collection(Property::where('status', 'published')->latest()->get());
         // return $properties;
+
+        $request = request()->sort;
+
         $properties = Property::when(request('search_global'), function($query) {
             $query->where(function($q) {
                 $q->where('slug', 'like', '%'.request('search_global').'%')
                   ->orWhere('name', 'like', '%'.request('search_global').'%')
                   ->orWhere('description', 'like', '%'.request('search_global').'%');
             });
-        })->where('status', 'published')->latest()->paginate(25);
+        });
+
+        if ($request) {
+            if ($request == 'desc' || $request == 'asc') {
+                if (auth()->user() && (auth()->user()->role_id <= 3 &&  auth()->user()->role_id >= 1)) {
+                    $properties = $properties->orderBy('created_at', $request)->where('status', '!=', 'unpublished')->paginate(25);
+                } else {
+                    $properties = $properties->orderBy('created_at', $request)->where('status', 'published')->paginate(25);
+                }
+            }
+            if ($request == 'cheap') {}
+            if ($request == 'pricey') {}
+            if ($request == 'area') {}
+            if ($request == 'rooms') {}
+        } else {
+            $properties = $properties->where('status', 'published')->latest()->paginate(25);
+        }
         return PropertyLiteResource::collection($properties);
     }
 
@@ -230,6 +250,42 @@ class PropertiesController extends Controller
                   ->orWhere('description', 'like', '%'.request('search_global').'%');
             });
         })->where('status', 'published')->latest()->paginate(9);
+        return PropertyLiteResource::collection($properties);
+    }
+
+    public function getPropertiesByStatus(string $status) {
+        $request = request()->sort;
+
+        $properties = Property::when(request('search_global'), function($query) {
+            $query->where(function($q) {
+                $q->where('slug', 'like', '%'.request('search_global').'%')
+                  ->orWhere('name', 'like', '%'.request('search_global').'%')
+                  ->orWhere('description', 'like', '%'.request('search_global').'%');
+            });
+        });
+
+        if ($status == 'all') {
+            $properties = $properties->where('status', '!=', 'unpublished');
+        } else {
+            $properties = $properties->where('status', $status);
+        }
+
+        if ($request && ($request == 'desc' || $request == 'asc')) {
+            $properties = $properties->orderBy('created_at', $request)->paginate(25);
+        } else {
+            $properties = $properties->latest()->paginate(25);
+        }
+
+        return PropertyLiteResource::collection($properties);
+    }
+
+    public function getPropertiesBySubZone(SubZone $subZone) {
+        $properties = '';
+        if (auth()->user() && (auth()->user()->role_id <= 3 &&  auth()->user()->role_id >= 1)) {
+            $properties = $subZone->properties()->where('status', '!=' ,'unpublished')->paginate(25);
+        } else {
+            $properties = $subZone->properties()->where('status', 'published')->paginate(25);
+        }
         return PropertyLiteResource::collection($properties);
     }
 }
