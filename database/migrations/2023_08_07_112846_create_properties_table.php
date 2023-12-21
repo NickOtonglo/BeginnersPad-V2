@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('slug')->unique();
             $table->decimal('lat', 10, 8)->nullable();
             $table->decimal('lng', 11, 8)->nullable();
-            $table->string('status')->default('unpublished'); // unpublished,pending,approved,rejected,suspended
+            $table->string('status')->default('unpublished'); // unpublished,pending,published,rejected,suspended,private
             $table->boolean('verified')->unsigned()->default(false);
             $table->longText('description')->nullable();
             $table->integer('stories')->nullable(); //number of floors

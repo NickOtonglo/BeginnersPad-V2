@@ -22,6 +22,34 @@
                             </ul>
                         </div>
                     </div>
+                    <div v-if="user.role == 'Lister'" class="panel-item bordered">
+                        <div class="lister-details">
+                            <div class="title-grp">
+                                <h3>Brand profile</h3>
+                                <div class="info-actions">
+                                    <i v-if="user.brand" @click="click(updateBrandRef)" class="fas fa-edit"></i>
+                                    <i v-if="!user.brand" @click="click(createBrandRef)" class="fas fa-edit"></i>
+                                </div>
+                            </div>
+                            <template v-if="user.brand">
+                                <CardBrand :brand="user.brand" :user="user" />
+                            </template>
+                            <template v-else>
+                                <div class="details">
+                                    <div class="header">
+                                        <div>
+                                            <h2 class="name">-brand name-</h2>
+                                        </div>
+                                        <img src="/images/static/avatar.png" alt="">
+                                    </div>
+                                    <p class="listings-count">no listings posted</p>
+                                    <div class="info-rating-grp">
+                                        <p class="rating">Rating: -no rating-</p>
+                                    </div>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -93,6 +121,7 @@
 import { onBeforeMount, ref } from 'vue';
 import userMaster from '../../composables/users'
 import CardUser from '../Cards/User1.vue';
+import CardBrand from '../Cards/Brand1.vue'
 import ButtonDropdown from '../Misc/ButtonDropdown.vue';
 import checkAuth from '../../composables/checkAuth';
 

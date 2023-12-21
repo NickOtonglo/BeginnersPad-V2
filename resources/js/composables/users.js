@@ -46,7 +46,9 @@ export default function userMaster() {
     const getUserData = () => {
         if (userAuth.isAuthenticated.value) {
             axios.get('/api/user')
-                .then(response => user.value = response.data)
+                .then(response => {
+                    user.value = response.data
+                })
                 .catch(error => console.log(error))
         }
     }    

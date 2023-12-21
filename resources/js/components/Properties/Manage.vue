@@ -25,7 +25,7 @@
                 <div class="image-grp">
                     <div class="image" v-for="file in property.files">
                         <img :src="'/images/listings/' + property.slug + '/' + file.name" height="200" alt="">
-                        <button @click="removeFile(`/api/listings/${route.params.slug}/files/${file.id}`)" class="btn-link btn-close"><i class="fas fa-times"></i></button>
+                        <button @click="removeFile(`/api/listings/${route.params.slug}/files/${file.name}`)" class="btn-link btn-close"><i class="fas fa-times"></i></button>
                     </div>
                 </div>
             </template>
@@ -180,7 +180,7 @@
                         <h3>Location</h3>
                         <div id="map"></div>
                     </div>
-                    <div class="listing-actions">
+                    <!-- <div class="listing-actions">
                         <h3>Actions</h3>
                         <div class="btn-grp vertical">
                             <button>Submit for approval</button>
@@ -188,7 +188,7 @@
                             <button>Hide from public</button>
                             <button>Request removal from system</button>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div>

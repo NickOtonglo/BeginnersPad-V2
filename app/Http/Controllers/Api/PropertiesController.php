@@ -5,12 +5,14 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SavePropertyBasicRequest;
 use App\Http\Requests\UpdatePropertyRequest;
+use App\Http\Resources\Property\PropertyLogResource;
 use App\Http\Resources\PropertyLiteResource;
 use App\Http\Resources\PropertyPublicResource;
 use App\Http\Resources\PropertyResource;
 use App\Models\Property;
 use App\Models\PropertyFeature;
 use App\Models\PropertyFile;
+use App\Models\PropertyLog;
 use App\Models\SubZone;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
@@ -70,6 +72,7 @@ class PropertiesController extends Controller
     {
         $slug = Str::slug($request->name, '-');
 
+        $comment = '';
         $data = new Property;
         $data->name = $request->name;
         $data->sub_zone_id = $request->sub_zone_id;
@@ -87,6 +90,7 @@ class PropertiesController extends Controller
             'property' => $data,
             'model' => 'Property',
             'key' => $data->slug,
+            'comment' => $comment,
             'message' => "New property '".$data->name."' created successfully.",
         ];
 
@@ -114,6 +118,7 @@ class PropertiesController extends Controller
      */
     public function update(UpdatePropertyRequest $request, Property $property)
     {
+        $comment = '';
         $property->name = $request['name'];
         $property->description = $request['description'];
         $property->sub_zone_id = $request['sub_zone_id'];
@@ -124,6 +129,9 @@ class PropertiesController extends Controller
 
         $response = [
             'property' => $property,
+            'model' => 'Property',
+            'key' => $property->slug,
+            'comment' => $comment,
             'message' => "Property '".$property->name."' updated successfully.",
         ];
         return response($response, 201);
@@ -132,9 +140,28 @@ class PropertiesController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Property $property)
     {
-        //
+        foreach($property->propertyUnits as $unit) {
+            app(PropertyUnitsController::class)->destroy($property, $unit);
+        }
+        $comment = '';
+        $propertySlug = $property->slug;
+        $propertyName = $property->name;
+        $property->propertyReviews()->delete();
+        $property->propertyFeatures()->delete();
+        $property->propertyFiles()->delete();
+        Storage::disk('public_uploads')->deleteDirectory('images/listings/'.$property->slug);
+        $property->delete();
+
+        $response = [
+            'property' => response()->noContent(),
+            'model' => 'Property',
+            'key' => $propertySlug,
+            'comment' => $comment,
+            'message' => "Property '".$propertyName."' deleted successfully.",
+        ];
+        return response($response, 201);
     }
 
     public function getMyListings() {
@@ -201,8 +228,9 @@ class PropertiesController extends Controller
         return response($response, 201);
     }
 
-    public function destroyFile(Property $property, PropertyFile $file) {
+    public function destroyFile(Property $property, $filename) {
         // Delete file from storage
+        $file = PropertyFile::where('name', $filename)->first();
         Storage::disk('public_uploads')->delete('images/listings/'.$property->slug.'/'.$file->name);
 
         $file->delete();
@@ -210,6 +238,7 @@ class PropertiesController extends Controller
     }
 
     public function updateThumbnail(Property $property, Request $request) {
+        $comment = '';
         if ($request->hasFile('files')) {
             foreach ($request->file('files') as $file) {
                 $filename = time()
@@ -226,7 +255,10 @@ class PropertiesController extends Controller
         }
 
         $response = [
-            'property thumbnail' => $property,
+            'property' => $property,
+            'model' => 'Property',
+            'key' => $property->slug,
+            'comment' => $comment,
             'message' => "Property '".$property->name."' updated with new thumbnail successfully.",
         ];
         return response($response, 201);
@@ -287,5 +319,44 @@ class PropertiesController extends Controller
             $properties = $subZone->properties()->where('status', 'published')->paginate(25);
         }
         return PropertyLiteResource::collection($properties);
+    }
+
+    public function updateStatus(Property $property, Request $request) {
+        $request->validate([
+            'status' => 'required'
+        ]);
+
+        $comment = '';
+        $property->status = $request->status;
+        $property->save();
+        if ($request->status == 'unpublished') {}
+
+        if ($request->status == 'pending') {}
+
+        if ($request->status == 'published') {}
+
+        if ($request->status == 'rejected') {
+            $comment = $request->comment;
+        }
+        
+        if ($request->status == 'suspended') {
+            $comment = $request->comment;
+        }
+
+        if ($request->status == 'private') {}
+
+        $response = [
+            'property' => $property,
+            'model' => 'Property',
+            'key' => $property->slug,
+            'message' => "Property '".$property->name."' updated successfully.",
+            'comment' => $comment,
+        ];
+        return response($response, 201);
+    }
+
+    public function getLogs(Property $property) {
+        $logs = PropertyLog::where('slug', $property->slug)->get();
+        return PropertyLogResource::collection($logs);
     }
 }

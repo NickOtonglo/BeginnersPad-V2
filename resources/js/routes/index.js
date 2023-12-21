@@ -18,6 +18,7 @@ import PropertiesIndex from '../components/Properties/Index.vue'
 import PropertiesMine from '../components/Properties/MyProperties.vue'
 import PropertyManage from '../components/Properties/Manage.vue'
 import PropertyView from '../components/Properties/View.vue'
+import PropertyLogs from '../components/Properties/Logs.vue'
 import PropertyUnitManage from '../components/PropertyUnits/Manage.vue'
 import PropertyUnitView from '../components/PropertyUnits/View.vue'
 import PropertyReviewsIndex from '../components/PropertyReviews/Index.vue'
@@ -143,6 +144,11 @@ const routes = [
         path: '/listings/:slug',
         name: 'property.view',
         component: PropertyView,
+    },
+    {
+        path: '/listings/:slug/logs',
+        name: 'property.logs',
+        component: PropertyLogs,
     },
     {
         path: '/listings/my-listings/:slug/:unit_slug',

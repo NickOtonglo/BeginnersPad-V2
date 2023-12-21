@@ -49,31 +49,7 @@
                                 </div>
                             </div>
                             <template v-if="user.brand">
-                                <div class="details">
-                                    <div class="header">
-                                        <div>
-                                            <h2 class="name">{{ user.brand.name }}</h2>
-                                            <p class="timestamp">Created on {{ user.brand.created_at }}</p>
-                                        </div>
-                                        <template v-if="user.brand.avatar">
-                                            <img :src="'/images/brand/avatar/' + user.username + '/' + user.brand.avatar" alt="">
-                                        </template>
-                                        <template v-else>
-                                            <img src="/images/static/avatar.png" alt="">
-                                        </template>
-                                    </div>
-                                    <p class="listings-count">{{ user.brand.properties_count }} listings posted</p>
-                                    <div class="info-rating-grp">
-                                        <p class="rating">Rating: 4.0/5</p>
-                                        <div class="stars">
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                            <i class="far fa-star"></i>
-                                        </div>
-                                    </div>
-                                </div>
+                                <CardBrand :brand="user.brand" :user="user" />
                             </template>
                             <template v-else>
                                 <div class="details">
@@ -217,6 +193,7 @@ import UpdateForm from '../Modals/EditUserAccount.vue'
 import UpdateBrand from '../Modals/EditBrand.vue'
 import CreateBrand from '../Modals/CreateBrand.vue'
 import CardUser from '../Cards/User1.vue';
+import CardBrand from '../Cards/Brand1.vue'
 import { onMounted, ref } from 'vue';
 
 const user = ref({})

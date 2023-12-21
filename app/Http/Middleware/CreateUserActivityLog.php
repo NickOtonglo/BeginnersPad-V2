@@ -6,7 +6,9 @@ use App\Models\FAQ;
 use App\Models\FAQLog;
 use App\Models\HelpTicket;
 use App\Models\HelpTicketLog;
+use App\Models\Property;
 use App\Models\PropertyLog;
+use App\Models\PropertyUnit;
 use App\Models\PropertyUnitLog;
 use App\Models\SubZone;
 use App\Models\SubZoneLog;
@@ -134,11 +136,64 @@ class CreateUserActivityLog
 
                 case 'Property':
                     $data = new PropertyLog;
+                    $property = Property::where('slug', $response->original['key'])->first();
+
+                    if (!$property) {
+                        if ($response->original['comment']) {
+                            $data->comment = $response->original['comment'];
+                        } else {
+                            $data->comment = $response->original['model'].' #'.$response->original['key'].': '.$request->method().', status set to deleted';
+                        }
+                    } else {
+                        $data->name = $property->name;
+                        $data->slug = $property->slug;
+                        $data->lat = $property->lat;
+                        $data->lng = $property->lng;
+                        $data->status = $property->status;
+                        $data->verified = $property->verified;
+                        $data->description = $property->description;
+                        $data->stories = $property->stories;
+                        $data->thumbnail = $property->thumbnail;
+                        $data->user_id = $property->user_id;
+                        $data->sub_zone_id = $property->sub_zone_id;
+                        $data->comment = $property->comment;
+                        $data->parent_id = $property->parent_id;
+                        
+                        if ($response->original['comment']) {
+                            $data->comment = $response->original['comment'];
+                        } else {
+                            $data->comment = $response->original['model'].' #'.$response->original['key'].': '.$request->method().', status set to '.$property->status;
+                        }
+                    }
 
                     break;
 
                 case 'PropertyUnit':
                     $data = new PropertyUnitLog;
+                    $unit = PropertyUnit::find($response->original['key']);
+
+                    if (!$unit) {
+                        $data->comment = $response->original['model'].' #'.$response->original['key'].': '.$request->method().', status set to deleted';
+                    } else {
+                        $data->name = $unit->name;
+                        $data->slug = $unit->slug;
+                        $data->description = $unit->description;
+                        $data->price = $unit->price;
+                        $data->init_deposit = $unit->init_deposit;
+                        $data->init_deposit_period = $unit->init_deposit_period;
+                        $data->story = $unit->story;
+                        $data->floor_area = $unit->floor_area;
+                        $data->bathrooms = $unit->bathrooms;
+                        $data->bedrooms = $unit->bedrooms;
+                        $data->disclaimer = $unit->disclaimer;
+                        $data->status = $unit->status;
+                        $data->thumbnail = $unit->thumbnail;
+                        $data->property_id = $unit->property_id;
+                        $data->comment = $unit->comment;
+                        $data->parent_id = $unit->parent_id;                        
+                        
+                        $data->comment = $response->original['model'].' #'.$response->original['key'].': '.$request->method().', status set to '.$unit->status;
+                    }
 
                     break;
 

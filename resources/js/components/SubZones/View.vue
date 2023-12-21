@@ -56,6 +56,9 @@
                         <div v-if="properties.length > 8" class="section-more">
                             <a href="/admin/listing-applications.html">View more <i class="fas fa-chevron-right"></i></a>
                         </div>
+                        <template v-if="!properties.length">
+                            <p style="text-align: center;">-no sub-zones-</p>
+                        </template>
                     </div>
                 </div>
             </div>

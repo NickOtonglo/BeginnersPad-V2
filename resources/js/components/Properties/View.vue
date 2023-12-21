@@ -153,29 +153,61 @@
                     </div>
                     <div class="lister-details" id="lister-details" v-if="property.brand">
                         <h3>Lister information</h3>
-                        <CardBrand :property="property" :user="user" />
+                        <CardBrand :brand="property.brand" :user="user" :sectionMore="true" />
                     </div>
+                    <form @submit.prevent="updatePropertyStatus(`/api/listings/${property.slug}/status`, fauxProperty)" ref="formRef" :hidden="true">
+                        <div class="form-group">
+                            <input v-model="property.status" type="text" name="status" :disabled="true">
+                        </div>
+                        <button :disabled="true" ref="btnSubmitRef" class="btn-submit" type="submit">
+                            <div v-show="isLoading" class="lds-dual-ring"></div>
+                            <span v-if="isLoading">Loading...</span>
+                            <span v-else>Save</span>
+                        </button>
+                    </form>
                     <div class="listing-actions" id="listing-actions">
-                        <h3>Listing actions</h3>
-                        <div class="btn-grp vertical">
+                        <h3 v-if="user.role === 'Admin' 
+                                || user.role === 'Super Admin' 
+                                || user.role === 'System Admin'
+                                || user.role === 'Beginner'
+                                || user.username === property.user_name">Listing actions</h3>
+                        <div v-if="user.role !== 'Admin' 
+                                && user.role !== 'Super Admin' 
+                                && user.role !== 'System Admin'" class="btn-grp vertical">
                             <button v-if="user.role === 'Beginner' && !review" @click="click(addReviewRef)">Add review</button>
-                            <button>Make private (hide)</button>
-                            <button>Submit for approval</button>
-                            <button>Withdraw submission</button>
-                            <button onclick="window.location.href='/lister/manage-listing.html';">Edit listing</button>
-                            <button id="btnAddUnit">Add unit</button>
-                            <button>Delete</button>
+                            <template v-if="user.username === property.user_name">
+                                <button @click="submitForm('private')" v-if="property.status === 'published'">Make private (hide)</button>
+                                <button @click="submitForm('published')" v-if="property.status === 'private'">Make public</button>
+                                <button @click="submitForm('pending')" 
+                                        v-if="property.status === 'unpublished'
+                                           || property.status === 'rejected'">Submit for approval</button>
+                                <button @click="submitForm('unpublished')" v-if="property.status === 'pending'">Withdraw submission</button>
+                                <button @click="deleteProperty(`/api/listings/${route.params.slug}`)" v-if="user.username === property.user_name">Delete</button>
+                            </template>
+                        </div>
+                        <div v-else class="btn-grp vertical">
+                            <button @click="fauxProperty.status = 'suspended', click(submitReasonRef)" v-if="property.status === 'published'">Suspend</button>
+                            <button @click="submitForm('published')" v-if="property.status === 'suspended'">Restore</button>
+                            <button @click="fauxProperty.status = 'rejected', click(submitReasonRef)" v-if="property.status === 'pending'">Reject</button>
+                            <button @click="deleteProperty(`/api/listings/${route.params.slug}`)">Delete</button>
                         </div>
                     </div>
-                    <div class="listing-actions" id="listing-other-actions">
+                    <div v-if="user.username === property.user_name 
+                            || user.role === 'Admin' 
+                            || user.role === 'Super Admin' 
+                            || user.role === 'System Admin'" class="listing-actions" id="listing-other-actions">
                         <h3>Other actions</h3>
                         <div class="btn-grp vertical">
-                            <button>Beginner applications</button>
-                            <button>Tour requests</button>
-                            <button>Occupation log</button>
-                            <button>Management log</button>
-                            <button>Banned users</button>
+                            <button @click="$router.push({ name: 'property.logs', params: {slug: property.slug } })">Management log</button>
+                            <!-- <button>Banned users</button> -->
                         </div>
+                    </div>
+                    <div v-if="user.username === property.user_name 
+                            || user.role === 'Admin' 
+                            || user.role === 'Super Admin' 
+                            || user.role === 'System Admin'" class="listing-stats" id="listing-stats">
+                        <h3>Stats</h3>
+                        <CardStats :property="property" />
                     </div>
                 </div>
                 <div class="panel">
@@ -274,8 +306,11 @@
                                     <p class="review txt-triple-line">{{ item.review }}</p>
                                 </template>
                             </div>
+                            <template v-if="!reviews.length">
+                                <p style="text-align: center;">-no reviews-</p>
+                            </template>
                         </div>
-                        <div class="section-more">
+                        <div v-if="reviews.length" class="section-more">
                             <router-link :to="{ name: 'reviews.index', params: {slug: property.slug } }">View more reviews <i class="fas fa-chevron-right"></i></router-link>
                         </div>
                     </div>
@@ -286,6 +321,7 @@
 
     <AddReview ref="addReviewRef" />
     <EditReview v-if="review" ref="editReviewRef" :review="review" />
+    <SubmitReason ref="submitReasonRef" :action="fauxProperty.status" @reason-submitted="getReason" />
 </template>
 
 <script setup>
@@ -299,14 +335,19 @@ import favouriteMaster from '../../composables/favourites';
 import ComponentRatingStars from '../Misc/RatingStars.vue'
 import CardPropertyUnit from '../Cards/PropertyUnit1.vue';
 import CardBrand from '../Cards/Brand1.vue'
+import CardStats from '../Cards/PropertyStats.vue'
 import AddReview from '../Modals/AddReview.vue'
 import EditReview from '../Modals/EditReview.vue';
+import SubmitReason from '../Modals/SubmitReason.vue';
 import { api as viewerApi } from "v-viewer"
 
 const { 
     property, 
     route, 
     getProperty,
+    deleteProperty,
+    updatePropertyStatus, 
+    isLoading, 
 } = propertiesMaster()
 
 const { 
@@ -318,13 +359,16 @@ const {
     onPageChange,
     getPaginationDataWithRequest
 } = pagination()
-const { getUserData, user } = userMaster()
-const { getReviews, reviews, getMyReview, review } = propertyReviewsMaster()
+const { user, getUserData } = userMaster()
+const { getReviews, reviews, getMyReview, review,  } = propertyReviewsMaster()
 const { saveFavourite } = favouriteMaster()
+const fauxProperty = ref({})
 
 const unitsRequest = `/api/listings/${route.params.slug}/units`
 const addReviewRef = ref({})
 const editReviewRef = ref({})
+const submitReasonRef = ref({})
+const btnSubmitRef = ref(null)
 const imagesList = () => {
     let images = [];
     for (let i=0; i<property.value.files.length; i++) {
@@ -336,9 +380,9 @@ const imagesList = () => {
 onBeforeMount(() => {
     getProperty(`/api/listings/${route.params.slug}`)
     getPaginationDataWithRequest(current_page.value, 'property_units', unitsRequest)
-    getUserData()
     getReviews(`/api/listings/${route.params.slug}/reviews`)
     getMyReview(`/api/listings/${route.params.slug}/reviews`)
+    getUserData()
 })
 
 function openImageBrowser() {
@@ -362,6 +406,18 @@ function openImageBrowser() {
     })
 }
 
+function submitForm(data) {
+    fauxProperty.value.status = data
+    // console.log('fauxProperty', fauxProperty.value)
+    btnSubmitRef.value.disabled = isLoading
+    btnSubmitRef.value.click()
+}
+
+function getReason(reason, action) {
+    fauxProperty.value.comment = reason
+    submitForm(action)
+}
+
 function click(element) {
     element.openModal();
 }
@@ -377,5 +433,11 @@ function click(element) {
 }
 .info-actions .active {
     color: var(--color-primary)
+}
+form, 
+form > *, 
+form input {
+    height: 0px;
+    display: none;
 }
 </style>

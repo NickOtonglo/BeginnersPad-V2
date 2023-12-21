@@ -23,6 +23,16 @@ export default function propertiesMaster() {
         sub_zone_id: '',
         brand: '',
         user: '',
+        files: ref({
+            id: '',
+            name: '',
+            type: '',
+            property_id: '',
+        })
+    })
+    const logs = ref({})
+    const log = ref({
+        comment: '',
     })
 
     const getProperties = (request) => {
@@ -135,7 +145,7 @@ export default function propertiesMaster() {
                             icon: 'success',
                             title: 'Property deleted.',
                             didClose: () => {
-                                router.push({ name: 'properties.view' })
+                                router.go(-1)
                             }
                         })
                     })
@@ -325,6 +335,67 @@ export default function propertiesMaster() {
         })
     }
 
+    const updatePropertyStatus = (request, data) => {
+        if (isLoading.value) { return }
+
+        swal.fire({
+            title: 'Are you sure?',
+            text: `You are about to set this listing's status to '${data.status}'. This action will be logged.`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: 'rgb(207, 95, 50)',
+            cancelButtonColor: 'rgb(238, 14, 14)',
+            confirmButtonText: 'Confirm'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                isLoading.value = true
+                axios.patch(request, data)
+                    .then(response => {
+                        swal({
+                            icon: 'success',
+                            title: `Successfully changed listing's status to '${data.status}'.`,
+                            didClose: () => {
+                                if (data.status == 'Delete') {
+                                    router.go(-1)
+                                } else {
+                                    router.go(0)
+                                }
+                            }
+                        })
+                    })
+                    .catch(error => {
+                        if (error.response?.data.errors.user) {
+                            swal({
+                                icon: 'error',
+                                title: 'Error',
+                                text: error.response?.data.message,
+                            })
+                        } else {
+                            swal({
+                                icon: 'error',
+                                title: 'Something went wrong, please try again.'
+                            })
+                        }
+                    })
+                    .finally(() => isLoading.value = false)
+            } else {
+                isLoading.value = false
+            }
+        })
+    }
+
+    const getLogs = (request) => {
+        if (isLoading.value) return
+        isLoading.value = true
+
+        axios.get(request)
+            .then(response => {
+                logs.value = response.data.data
+            })
+            .catch(error => console.log(error))
+            .finally(isLoading.value = false)
+    }
+
     return {
         route,
         router,
@@ -342,5 +413,9 @@ export default function propertiesMaster() {
         uploadFiles,
         removeFile,
         uploadThumb,
+        updatePropertyStatus,
+        logs,
+        log,
+        getLogs,
     }
 }
