@@ -155,7 +155,7 @@
                         <h3>Lister information</h3>
                         <CardBrand :brand="property.brand" :user="user" :sectionMore="true" />
                     </div>
-                    <form @submit.prevent="updatePropertyStatus(`/api/listings/${property.slug}/status`, fauxProperty)" ref="formRef" :hidden="true">
+                    <form @submit.prevent="updateStatus(`/api/listings/${property.slug}/status`, fauxProperty)" ref="formRef" :hidden="true">
                         <div class="form-group">
                             <input v-model="property.status" type="text" name="status" :disabled="true">
                         </div>
@@ -346,7 +346,7 @@ const {
     route, 
     getProperty,
     deleteProperty,
-    updatePropertyStatus, 
+    updateStatus, 
     isLoading, 
 } = propertiesMaster()
 

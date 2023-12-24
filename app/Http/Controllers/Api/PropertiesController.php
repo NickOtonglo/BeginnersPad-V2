@@ -102,7 +102,17 @@ class PropertiesController extends Controller
      */
     public function show(Property $property)
     {
-        return new PropertyPublicResource($property);
+        if (
+            $property->status == 'public'
+         || auth()->user()->id == $property->user_id
+         || auth()->user()->role_id == 3
+         || auth()->user()->role_id == 2
+         || auth()->user()->role_id == 1
+         ) {
+             return new PropertyPublicResource($property);
+        } else {
+            abort(404);
+        }
     }
 
     /**

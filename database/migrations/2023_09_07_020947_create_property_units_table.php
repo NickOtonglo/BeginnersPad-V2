@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('property_units', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('slug');
+            $table->string('slug')->unique();
             $table->longText('description')->nullable();
             $table->decimal('price', 11, 2)->nullable();
             $table->decimal('init_deposit', 11, 2)->nullable();
@@ -27,6 +27,7 @@ return new class extends Migration
             $table->string('status')->default('inactive'); // active,inactive,occupied
             $table->string('thumbnail')->nullable();
             $table->integer('property_id');
+            // $table->unique(['slug', 'property_id']);
             $table->timestamps();
         });
     }

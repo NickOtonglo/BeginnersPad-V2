@@ -48,6 +48,7 @@
                 <p v-if="unit.init_deposit == 0" class="deposit">Initial deposit: not required</p>
                 <p v-else class="deposit">Initial deposit: KES {{ unit.init_deposit }} (for {{ unit.init_deposit_period }} months)</p>
                 <p class="floor">Floor/story: {{ unit.story }}</p>
+                <p>Status: {{ unit.status }}</p>
                 <p class="timestamp">Added on {{ unit.timestamp }}</p>
                 <p class="description">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Totam quae explicabo numquam soluta in
                     repellat, consectetur iure officiis beatae alias quibusdam sit saepe, quam pariatur.</p>
@@ -104,12 +105,25 @@
                         <h3>Property</h3>
                         <CardProperty :property="unit.property" />
                     </div>
-                    <div class="listing-actions">
+                    <form @submit.prevent="updateStatus(`/api/listings/${unit.property.slug}/units/${unit.slug}/status`, fauxUnit)" ref="formRef" :hidden="true">
+                        <div class="form-group">
+                            <input v-model="unit.status" type="text" name="status" :disabled="true">
+                        </div>
+                        <button :disabled="true" ref="btnSubmitRef" class="btn-submit" type="submit">
+                            <div v-show="isLoading" class="lds-dual-ring"></div>
+                            <span v-if="isLoading">Loading...</span>
+                            <span v-else>Save</span>
+                        </button>
+                    </form>
+                    <div v-if="user.username === unit.property.user_name || user.role === 'Beginner' || !user" class="listing-actions">
                         <h3>Actions</h3>
-                        <div class="btn-grp vertical">
-                            <button>Activate</button>
-                            <button>Deactivate (hide)</button>
-                            <button>Delete</button>
+                        <div v-if="user.username === unit.property.user_name" class="btn-grp vertical">
+                            <button @click="submitForm('active')" v-if="unit.status === 'inactive'">Activate</button>
+                            <button @click="submitForm('inactive')" v-if="unit.status === 'active'">Deactivate (hide)</button>
+                            <button @click="deleteUnit(`/api/listings/${route.params.slug}/units/${route.params.unit_slug}`)">Delete</button>
+                        </div>
+                        <div v-if="user.role === 'Beginner' || !user" class="btn-grp vertical">
+                            <button>Contact lister</button>
                         </div>
                     </div>
                 </div>
@@ -119,8 +133,8 @@
 </template>
 
 <script setup>
+import { ref, onBeforeMount } from 'vue';
 import unitsMaster from '../../composables/units';
-import { onBeforeMount } from 'vue';
 import userMaster from '../../composables/users';
 import favouriteMaster from '../../composables/favourites';
 import { api as viewerApi } from "v-viewer"
@@ -130,10 +144,15 @@ const {
     unit, 
     route, 
     getUnit, 
+    updateStatus, 
+    deleteUnit, 
+    isLoading, 
 } = unitsMaster()
 
 const { getUserData, user } = userMaster()
 const { saveFavourite } = favouriteMaster()
+const fauxUnit = ref({})
+const btnSubmitRef = ref(null)
 
 const imagesList = () => {
     let images = [];
@@ -164,6 +183,12 @@ function openImageBrowser() {
     })
 }
 
+function submitForm(data) {
+    fauxUnit.value.status = data
+    btnSubmitRef.value.disabled = isLoading
+    btnSubmitRef.value.click()
+}
+
 onBeforeMount(() => {
     getUnit(`/api/listings/${route.params.slug}/units/${route.params.unit_slug}`)
     getUserData()
@@ -178,5 +203,11 @@ function click(element) {
 <style scoped>
 .info-actions .active {
     color: var(--color-primary)
+}
+form, 
+form > *, 
+form input {
+    height: 0px;
+    display: none;
 }
 </style>

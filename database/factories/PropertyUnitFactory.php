@@ -3,6 +3,8 @@
 namespace Database\Factories;
 
 use App\Models\Property;
+use App\Models\PropertyUnit;
+use Exception;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
@@ -24,6 +26,10 @@ class PropertyUnitFactory extends Factory
         $name = 'F0'.rand(1, 20).$level;
         $slug = Str::slug($name, '-');
 
+        if (PropertyUnit::where('slug', $slug)->first()) {
+            $slug = Str::slug($name, '-').'-'.time();
+        }
+
         return [
             'name' => $name,
             'slug' => $slug,
@@ -36,7 +42,7 @@ class PropertyUnitFactory extends Factory
             'bathrooms' => rand(1,2),
             'bedrooms' => rand(1,2),
             'disclaimer' => $this->faker->text(100),
-            // 'status' => 'inactive',
+            'status' => 'active',
             // 'thumbnail' => null,
             'property_id' => $property->id,
         ];

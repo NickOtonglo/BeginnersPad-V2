@@ -92,6 +92,7 @@ Route::middleware(['auth:sanctum', 'logs.user'])->group(function() {
     Route::get('listings/{property}/units/{unit}', '\App\Http\Controllers\Api\PropertyUnitsController@show');
     Route::patch('listings/{property}/units/{unit}', 'App\Http\Controllers\Api\PropertyUnitsController@update');
     Route::delete('listings/{property}/units/{unit}', 'App\Http\Controllers\Api\PropertyUnitsController@destroy');
+    Route::patch('listings/{property}/units/{unit}/status', 'App\Http\Controllers\Api\PropertyUnitsController@updateStatus');
     Route::post('listings/{property}/units/{unit}/features', 'App\Http\Controllers\Api\PropertyUnitsController@storeFeatures');
     Route::delete('listings/{property}/units/{unit}/features/{feature}', '\App\Http\Controllers\Api\PropertyUnitsController@destroyFeature');
     Route::post('listings/{property}/units/{unit}/files', '\App\Http\Controllers\Api\PropertyUnitsController@storeFiles');

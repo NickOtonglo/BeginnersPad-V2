@@ -335,7 +335,7 @@ export default function propertiesMaster() {
         })
     }
 
-    const updatePropertyStatus = (request, data) => {
+    const updateStatus = (request, data) => {
         if (isLoading.value) { return }
 
         swal.fire({
@@ -413,7 +413,7 @@ export default function propertiesMaster() {
         uploadFiles,
         removeFile,
         uploadThumb,
-        updatePropertyStatus,
+        updateStatus,
         logs,
         log,
         getLogs,

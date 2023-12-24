@@ -117,7 +117,7 @@ export default function unitsMaster() {
 
         swal.fire({
             title: 'Are you sure?',
-            text: "This property unit and all its associated files will be erased from the system.",
+            text: "This unit and all its associated files will be erased from the system.",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: 'rgb(207, 95, 50)',
@@ -132,7 +132,7 @@ export default function unitsMaster() {
                             icon: 'success',
                             title: 'Unit deleted.',
                             didClose: () => {
-                                router.push({ name: 'property.manage', params: { slug: route.params.slug } })
+                                router.go(-1)
                             }
                         })
                     })
@@ -392,6 +392,55 @@ export default function unitsMaster() {
         })
     }
 
+    const updateStatus = (request, data) => {
+        if (isLoading.value) { return }
+
+        swal.fire({
+            title: 'Are you sure?',
+            text: `You are about to set this unit's status to '${data.status}'. This action will be logged.`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: 'rgb(207, 95, 50)',
+            cancelButtonColor: 'rgb(238, 14, 14)',
+            confirmButtonText: 'Confirm'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                isLoading.value = true
+                axios.patch(request, data)
+                    .then(response => {
+                        swal({
+                            icon: 'success',
+                            title: `Successfully changed unit's status to '${data.status}'.`,
+                            didClose: () => {
+                                if (data.status == 'Delete') {
+                                    router.go(-1)
+                                } else {
+                                    router.go(0)
+                                }
+                            }
+                        })
+                    })
+                    .catch(error => {
+                        if (error.response?.data.errors.user) {
+                            swal({
+                                icon: 'error',
+                                title: 'Error',
+                                text: error.response?.data.message,
+                            })
+                        } else {
+                            swal({
+                                icon: 'error',
+                                title: 'Something went wrong, please try again.'
+                            })
+                        }
+                    })
+                    .finally(() => isLoading.value = false)
+            } else {
+                isLoading.value = false
+            }
+        })
+    }
+
     return {
         route,
         router,
@@ -411,5 +460,6 @@ export default function unitsMaster() {
         uploadThumb,
         saveDisclaimers,
         removeDisclaimer,
+        updateStatus,
     }
 }

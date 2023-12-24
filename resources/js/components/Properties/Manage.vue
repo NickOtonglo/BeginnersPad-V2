@@ -132,34 +132,7 @@
                     </div>
                     <div class="lister-details">
                         <h3>Lister information</h3>
-                        <div class="details">
-                            <div class="header">
-                                <div>
-                                    <h2 class="name">{{ property.brand.name }}</h2>
-                                    <p class="timestamp">Joined on {{ property.brand.created_at }}</p>
-                                </div>
-                                <template v-if="property.brand.avatar">
-                                    <img :src="'/images/brand/avatar/' + property.brand.username + '/' + property.brand.avatar" alt="">
-                                </template>
-                                <template v-else>
-                                    <img src="/images/static/avatar.png" alt="">
-                                </template>
-                            </div>
-                            <p class="listings-count">{{ property.brand.properties_count }} listings posted</p>
-                            <div class="info-rating-grp">
-                                <p class="rating">Rating: 4.0/5</p>
-                                <div class="stars">
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="far fa-star"></i>
-                                </div>
-                            </div>
-                            <div class="section-more">
-                                <router-link :to="{ name: 'users.account' }" href="/manage-account">Manage brand <i class="fas fa-chevron-right"></i></router-link>
-                            </div>
-                        </div>
+                        <CardBrand :brand="property.brand" :user="user" :sectionMore="true" />
                     </div>
                 </div>
                 <div class="panel">
@@ -207,6 +180,8 @@ import EditPropertyFeatures from '../Modals/EditPropertyFeatures.vue';
 import EditPropertyPrimary from '../Modals/EditPropertyPrimary.vue'
 import Pagination from '../Misc/Pagination.vue'
 import pagination from '../../composables/pagination';
+import CardBrand from '../Cards/Brand1.vue'
+import userMaster from '../../composables/users';
 
 const { 
     property, 
@@ -228,6 +203,8 @@ const {
     getPaginationDataWithRequest
 } = pagination()
 
+const { user, getUserData } = userMaster()
+
 const createUnitRef = ref(null)
 const editPrimaryRef = ref(null)
 const editFeaturesRef = ref(null)
@@ -244,6 +221,7 @@ const unitsRequest = `/api/listings/${route.params.slug}/units`
 onBeforeMount(() => {
     getProperty(`/api/listings/my-listings/${route.params.slug}`)
     getPaginationDataWithRequest(current_page.value, 'property_units', unitsRequest)
+    getUserData()
 })
 
 function click(element) {

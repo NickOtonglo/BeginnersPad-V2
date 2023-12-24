@@ -39,7 +39,7 @@
                         @click="btnSelected='Suspended', zone.name = '', getPaginationDataWithRequest(1, 'properties', `${request}/status/suspended`)" 
                         :class="btnSelected == 'Suspended' ? 'selected' : ''">Suspended</button>
                     <button 
-                        @click="btnSelected='Hidden', zone.name = '', getPaginationDataWithRequest(1, 'properties', `${request}/status/hidden`)" 
+                        @click="btnSelected='Hidden', zone.name = '', getPaginationDataWithRequest(1, 'properties', `${request}/status/private`)" 
                         :class="btnSelected == 'Hidden' ? 'selected' : ''">Hidden/Private</button>
                 </div>
                 <div class="btn-grp vertical">
@@ -59,7 +59,7 @@
                         @click="btnSelected='Suspended', zone.name = '', getPaginationDataWithRequest(1, 'properties', `${request}/status/suspended`)" 
                         :class="btnSelected == 'Suspended' ? 'selected' : ''">Suspended</button>
                     <button 
-                        @click="btnSelected='Hidden', zone.name = '', getPaginationDataWithRequest(1, 'properties', `${request}/status/hidden`)" 
+                        @click="btnSelected='Hidden', zone.name = '', getPaginationDataWithRequest(1, 'properties', `${request}/status/private`)" 
                         :class="btnSelected == 'Hidden' ? 'selected' : ''">Hidden/Private</button>
                 </div>
             </div>

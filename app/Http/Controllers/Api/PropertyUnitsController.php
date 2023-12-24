@@ -50,6 +50,8 @@ class PropertyUnitsController extends Controller
         $data->bathrooms = $request->bathrooms;
         $data->bedrooms = $request->bedrooms;
         $data->property_id = $property->id;
+        $data->status = 'active';
+        $comment = '';
 
         try {
             $data->slug = $slug;
@@ -61,6 +63,9 @@ class PropertyUnitsController extends Controller
 
         $response = [
             'property_unit' => $data,
+            'model' => 'PropertyUnit',
+            'key' => $data->slug,
+            'comment' => $comment,
             'message' => "New property unit '".$data->name."' created successfully.",
         ];
 
@@ -99,11 +104,15 @@ class PropertyUnitsController extends Controller
         $data->bathrooms = $request->bathrooms;
         $data->bedrooms = $request->bedrooms;
         $data->property_id = $property->id;
+        $comment = '';
 
         $data->save();
 
         $response = [
             'property_unit' => $data,
+            'model' => 'PropertyUnit',
+            'key' => $data->slug,
+            'comment' => $comment,
             'message' => "Property unit '".$data->name."' updated successfully.",
         ];
 
@@ -118,10 +127,21 @@ class PropertyUnitsController extends Controller
         // Delete files
         Storage::disk('public_uploads')->deleteDirectory('images/listings/'.$property->slug.'/'.$unit->slug);
 
+        $unitName = $unit->name;
+        $unitSlug = $unit->slug;
         $unit->propertyUnitFeatures()->delete();
         $unit->propertyUnitFiles()->delete();
         $unit->delete();
-        return response()->noContent();
+        $comment = '';
+
+        $response = [
+            'property_unit' => response()->noContent(),
+            'model' => 'PropertyUnit',
+            'key' => $unitSlug,
+            'comment' => $comment,
+            'message' => "Property unit '".$unitName."' deleted successfully.",
+        ];
+        return response($response, 201);
     }
 
     public function storeFeatures(Property $property, PropertyUnit $unit, Request $request) {
@@ -136,9 +156,17 @@ class PropertyUnitsController extends Controller
             $feature->property_unit_id = $unit->id;
             $feature->save();
         }
+        $comment = "Feature(s) '".$request->item."' added";
 
+        // $response = [
+        //     'property_unit features' => $featuresRequest,
+        //     'message' => "Property unit '".$unit->name."' updated with new features successfully.",
+        // ];
         $response = [
-            'property_unit features' => $featuresRequest,
+            'property_unit' => $unit,
+            'model' => 'PropertyUnit',
+            'key' => $unit->slug,
+            'comment' => $comment,
             'message' => "Property unit '".$unit->name."' updated with new features successfully.",
         ];
         return response($response, 201);
@@ -146,7 +174,17 @@ class PropertyUnitsController extends Controller
 
     public function destroyFeature(Property $property, PropertyUnit $unit, PropertyUnitFeature $feature) {
         $feature->delete();
-        return response()->noContent();
+        // return response()->noContent();
+        $comment = "Feature '".$feature->item."' deleted";
+
+        $response = [
+            'property_unit' => $unit,
+            'model' => 'PropertyUnit',
+            'key' => $unit->slug,
+            'comment' => $comment,
+            'message' => "Property unit '".$unit->name."' updated with removed feature successfully.",
+        ];
+        return response($response, 201);
     }
 
     public function storeDisclaimer(Property $property, PropertyUnit $unit, Request $request) {
@@ -161,10 +199,18 @@ class PropertyUnitsController extends Controller
         }
 
         $unit->save();
+        $comment = 'Disclaimer saved';
 
+        // $response = [
+        //     'property_unit' => $unit,
+        //     'message' => "Property unit '".$unit->name."' updated successfully.",
+        // ];
         $response = [
             'property_unit' => $unit,
-            'message' => "Property unit '".$unit->name."' updated successfully.",
+            'model' => 'PropertyUnit',
+            'key' => $unit->slug,
+            'comment' => $comment,
+            'message' => "Property unit '".$unit->name."' updated with disclaimer successfully.",
         ];
         return response($response, 201);
     }
@@ -214,9 +260,17 @@ class PropertyUnitsController extends Controller
                 $unit->save();
             }
         }
+        $comment = '';
 
+        // $response = [
+        //     'property_unit files' => $unit->propertyUnitFiles,
+        //     'message' => "Property unit '".$unit->name."' updated with new thumbnail successfully.",
+        // ];
         $response = [
-            'property_unit files' => $unit->propertyUnitFiles,
+            'property_unit' => $unit,
+            'model' => 'PropertyUnit',
+            'key' => $unit->slug,
+            'comment' => $comment,
             'message' => "Property unit '".$unit->name."' updated with new thumbnail successfully.",
         ];
         return response($response, 201);
@@ -229,5 +283,24 @@ class PropertyUnitsController extends Controller
         if(in_array($file_type , array(IMAGETYPE_GIF, IMAGETYPE_JPEG  ,IMAGETYPE_PNG, IMAGETYPE_BMP))) {
             return 'image';
         } return '';
+    }
+
+    public function updateStatus(Property $property, PropertyUnit $unit, Request $request) {
+        $request->validate([
+            'status' => 'required'
+        ]);
+
+        $comment = '';
+        $unit->status = $request->status;
+        $unit->save();
+
+        $response = [
+            'property_unit' => $unit,
+            'model' => 'PropertyUnit',
+            'key' => $unit->slug,
+            'comment' => $comment,
+            'message' => "Property unit '".$unit->name."' updated successfully.",
+        ];
+        return response($response, 201);
     }
 }

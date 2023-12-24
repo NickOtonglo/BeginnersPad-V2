@@ -170,10 +170,14 @@ class CreateUserActivityLog
 
                 case 'PropertyUnit':
                     $data = new PropertyUnitLog;
-                    $unit = PropertyUnit::find($response->original['key']);
+                    $unit = PropertyUnit::where('slug', $response->original['key'])->first();
 
                     if (!$unit) {
-                        $data->comment = $response->original['model'].' #'.$response->original['key'].': '.$request->method().', status set to deleted';
+                        if ($response->original['comment']) {
+                            $data->comment = $response->original['comment'];
+                        } else {
+                            $data->comment = $response->original['model'].' #'.$response->original['key'].': '.$request->method().', status set to deleted';
+                        }
                     } else {
                         $data->name = $unit->name;
                         $data->slug = $unit->slug;
@@ -192,7 +196,11 @@ class CreateUserActivityLog
                         $data->comment = $unit->comment;
                         $data->parent_id = $unit->parent_id;                        
                         
-                        $data->comment = $response->original['model'].' #'.$response->original['key'].': '.$request->method().', status set to '.$unit->status;
+                        if ($response->original['comment']) {
+                            $data->comment = $response->original['comment'];
+                        } else {
+                            $data->comment = $response->original['model'].' #'.$response->original['key'].': '.$request->method().', status set to '.$unit->status;
+                        }
                     }
 
                     break;
