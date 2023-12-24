@@ -175,14 +175,54 @@ class PropertiesController extends Controller
     }
 
     public function getMyListings() {
+        $request = request()->sort;
+
         $properties = Property::when(request('search_global'), function($query) {
             $query->where(function($q) {
                 $q->where('slug', 'like', '%'.request('search_global').'%')
                   ->orWhere('name', 'like', '%'.request('search_global').'%')
                   ->orWhere('description', 'like', '%'.request('search_global').'%');
             });
-        })->where('user_id', auth()->user()->id)->latest()->paginate(25);
+        })->where('user_id', auth()->user()->id);
+
+        if ($request && ($request == 'desc' || $request == 'asc')) {
+            $properties = $properties->orderBy('created_at', $request)->paginate(25);
+        } else {
+            $properties = $properties->latest()->paginate(25);
+        }
+
         return PropertyResource::collection($properties);
+    }
+
+    public function getMyListingsByStatus(string $status) {
+        $request = request()->sort;
+
+        $properties = Property::when(request('search_global'), function($query) {
+            $query->where(function($q) {
+                $q->where('slug', 'like', '%'.request('search_global').'%')
+                  ->orWhere('name', 'like', '%'.request('search_global').'%')
+                  ->orWhere('description', 'like', '%'.request('search_global').'%');
+            });
+        });
+
+        $properties = $properties->where('user_id', auth()->user()->id);
+
+        if ($status !== 'all') {
+            $properties = $properties->where('status', $status);
+        }
+
+        if ($request && ($request == 'desc' || $request == 'asc')) {
+            $properties = $properties->orderBy('created_at', $request)->paginate(25);
+        } else {
+            $properties = $properties->latest()->paginate(25);
+        }
+
+        return PropertyLiteResource::collection($properties);
+    }
+
+    public function getMyListingsBySubZone(SubZone $subZone) {
+        $properties = $subZone->properties()->where('user_id', auth()->user()->id)->paginate(25);
+        return PropertyLiteResource::collection($properties);
     }
 
     public function showMyListing(Property $property) {

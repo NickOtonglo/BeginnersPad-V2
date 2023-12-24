@@ -28,15 +28,34 @@ class PropertyLiteResource extends JsonResource
             ]
         ];
         
+        $rentMin = 0;
+        $rentMax = 0;
+        $floorSizeMin = 0;
+        $floorSizeMax = 0;
+        $bedroomsMin = 0;
+        $bedroomsMax = 0;
+        $bathroomsMin = 0;
+        $bathroomsMax = 0;
+        if (!PropertyUnit::where('property_id', $this->id)->get()->isEmpty()) {
+            $rentMin = intval(PropertyUnit::where('property_id', $this->id)->orderBy('price')->first()->price);
+            $rentMax = intval(PropertyUnit::where('property_id', $this->id)->orderByDesc('price')->first()->price);
+            $floorSizeMin = PropertyUnit::where('property_id', $this->id)->orderBy('floor_area')->first()->floor_area;
+            $floorSizeMax = PropertyUnit::where('property_id', $this->id)->orderByDesc('floor_area')->first()->floor_area;
+            $bedroomsMin = PropertyUnit::where('property_id', $this->id)->orderBy('bedrooms')->first()->bedrooms;
+            $bedroomsMax = PropertyUnit::where('property_id', $this->id)->orderByDesc('bedrooms')->first()->bedrooms;
+            $bathroomsMin = PropertyUnit::where('property_id', $this->id)->orderBy('bathrooms')->first()->bathrooms;
+            $bathroomsMax = PropertyUnit::where('property_id', $this->id)->orderByDesc('bathrooms')->first()->bathrooms;
+        }
+
         $window = [
-            'rent_min' => intval(PropertyUnit::where('property_id', $this->id)->orderBy('price')->first()->price),
-            'rent_max' => intval(PropertyUnit::where('property_id', $this->id)->orderByDesc('price')->first()->price),
-            'floor_size_min' => PropertyUnit::where('property_id', $this->id)->orderBy('floor_area')->first()->floor_area,
-            'floor_size_max' => PropertyUnit::where('property_id', $this->id)->orderByDesc('floor_area')->first()->floor_area,
-            'bedrooms_min' => PropertyUnit::where('property_id', $this->id)->orderBy('bedrooms')->first()->bedrooms,
-            'bedrooms_max' => PropertyUnit::where('property_id', $this->id)->orderByDesc('bedrooms')->first()->bedrooms,
-            'bathrooms_min' => PropertyUnit::where('property_id', $this->id)->orderBy('bathrooms')->first()->bathrooms,
-            'bathrooms_max' => PropertyUnit::where('property_id', $this->id)->orderByDesc('bathrooms')->first()->bathrooms,
+            'rent_min' => $rentMin,
+            'rent_max' => $rentMax,
+            'floor_size_min' => $floorSizeMin,
+            'floor_size_max' => $floorSizeMax,
+            'bedrooms_min' => $bedroomsMin,
+            'bedrooms_max' => $bedroomsMax,
+            'bathrooms_min' => $bathroomsMin,
+            'bathrooms_max' => $bathroomsMax,
         ];
 
         return [
