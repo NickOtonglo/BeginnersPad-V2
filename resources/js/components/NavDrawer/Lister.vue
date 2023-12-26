@@ -7,8 +7,7 @@
             <li><a href="/listings">Listings</a></li>
             <li><a href="/listings/my-listings">My listings</a></li>
             <li><a href="/favourites">Favourites</a></li>
-            <li><a href="/lister/view-beginner-applications.html">Beginner applications</a></li>
-            <li><a href="/lister/view-property-applications.html">My listing applications</a></li>
+            <li><a href="/lister/view-beginner-applications.html">Inquiries</a></li>
             <li><a href="/help/tickets">My tickets</a></li>
             <li><a href="/lister/banned-users.html">Banned users</a></li>
         </ul>

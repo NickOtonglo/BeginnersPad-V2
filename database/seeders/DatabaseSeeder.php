@@ -36,5 +36,8 @@ class DatabaseSeeder extends Seeder
         // $this->call(HelpTopicSeeder::class);
         // $this->call(FAQSeeder::class);
         // $this->call(HelpTicketSeeder::class);
+        // $this->call(ChatSeeder::class);
+        // $this->call(ChatParticipantSeeder::class);
+        $this->call(ChatMessageSeeder::class);
     }
 }
