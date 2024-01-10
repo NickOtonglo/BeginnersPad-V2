@@ -142,4 +142,9 @@ Route::middleware(['auth:sanctum', 'logs.user'])->group(function() {
     Route::post('users', '\App\Http\Controllers\Api\UserController@saveUser');
     Route::get('users/profile/{user}', '\App\Http\Controllers\Api\UserController@getUser');
     Route::patch('users/profile/{user}', '\App\Http\Controllers\Api\UserController@updateUser');
+
+    Route::get('chats', '\App\Http\Controllers\Api\ChatsController@index');
+    Route::get('chats/{chat}', '\App\Http\Controllers\Api\ChatsController@show');
+    Route::delete('chats/{chat}', '\App\Http\Controllers\Api\ChatsController@destroy');
+    Route::post('chats/{chat}', '\App\Http\Controllers\Api\ChatsController@storeMessage');
 });

@@ -121,6 +121,16 @@ footer {
     /* max-width: 1540px; */
 }
 
+.container-chats {
+    position: relative;
+    overflow: hidden;
+}
+
+.container-chat-input {
+  width: 100%;
+  margin: auto;
+}
+
 /* Navbar */
 nav h1 a {
     color: var(--color-primary);
@@ -1463,3 +1473,122 @@ nav .nav-menu .badge li.selected a {
 }
 
 /* Page - /admin/manage-zone.html */
+
+.chats-list .chat-item {
+    display: flex;
+    align-items: center;
+}
+
+.chats-list a.chat-item {
+    text-decoration: none;
+    margin: 15px 0;
+}
+
+.chats-list a.chat-item:hover {
+    font-weight: unset;
+    background-color: #ccc;
+}
+
+.chat-item .img img {
+    margin: 15px;
+    width: 80px;
+    height: 80px;
+    border-radius: 50px;
+}
+
+.chat-item .text span.user {
+    font-size: 1.1rem;
+    font-weight: bolder;
+}
+
+.chats {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+}
+
+.chats .chat {
+    display: flex;
+    flex-direction: column;
+}
+
+.chats .chat:last-child {
+    margin-bottom: 50px;
+}
+
+.chats .chat > .first-person {
+    align-self: flex-end;
+    margin-left: 55px;
+}
+
+.chats .chat > .third-person {
+    align-self: flex-start;
+    margin-right: 55px;
+}
+
+.chat-thread {
+    /* box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.4); */
+    padding: 0 8px;
+}
+
+.chat-thread .thread-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border-bottom: 1px solid #ccc;
+}
+
+.chat-thread .thread-header .img img {
+    margin: 15px;
+    width: 80px;
+    height: 80px;
+    border-radius: 50px;
+}
+
+.chat-thread .thread-header .text span {
+    font-size: 1.4rem;
+    font-weight: bolder;
+}
+
+.chat-thread .thread-messages {
+    padding: 20px 8px 0;
+    height: 76vh;
+    overflow-y: auto;
+}
+
+.chat-thread .thread-messages .chat .timestamp {
+    font-size: .8rem;
+    margin-top: 5px;
+    text-align: right;
+}
+
+.input-fixed-bottom {
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+    display: block;
+    background: var(--color-background-main);
+    border-top: 1px solid var(--color-primary);
+    padding: 6px 0;
+    display: flex;
+    justify-content: center;
+}
+
+.input-fixed-bottom .input-real-hidden {
+    display: none;
+}
+
+.input-fixed-bottom .input-grp {
+    width: 80%;
+    max-width: 1000px;
+    padding: 15px;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: center;
+}
+
+.input-fixed-bottom .input-grp form {
+    padding: 0;
+}

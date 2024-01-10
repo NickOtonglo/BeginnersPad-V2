@@ -38,6 +38,6 @@ class DatabaseSeeder extends Seeder
         // $this->call(HelpTicketSeeder::class);
         // $this->call(ChatSeeder::class);
         // $this->call(ChatParticipantSeeder::class);
-        $this->call(ChatMessageSeeder::class);
+        // $this->call(ChatMessageSeeder::class);
     }
 }

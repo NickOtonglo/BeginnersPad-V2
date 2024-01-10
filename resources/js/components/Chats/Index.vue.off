@@ -1,0 +1,41 @@
+<template>
+    <section>
+        <h3 class="section-title">Chats</h3>
+        <div class="container">
+            <div>
+                <div v-for="item in chats" class="chats-list">
+                    <router-link :to="{ name: 'chat.view', params: { id: item.id } }" class="chat-item">
+                        <div v-if="item.messages[item.messages.length - 1].participant.avatar" class="img">
+                            <img :src="`/images/user/avatar/${item.messages[item.messages.length - 1].participant.participant}/${item.messages[item.messages.length - 1].participant.avatar}`" alt="">
+                        </div>
+                        <div v-else class="img">
+                            <img src="/images/static/avatar.png" alt="">
+                        </div>
+                        <div class="text">
+                            <p class="time">{{item.messages[item.messages.length - 1].time_ago}}</p>
+                            <h3>@{{item.messages[item.messages.length - 1].participant.participant}}</h3>
+                            <p class="txt-triple-line">{{item.messages[item.messages.length - 1].body}}</p>
+                        </div>
+                    </router-link>
+                </div>
+            </div>
+        </div>
+    </section>
+</template>
+
+<script setup>
+import { onBeforeMount } from 'vue';
+import chatsMaster from '../../composables/chats';
+
+const {
+    isLoading, 
+    chats, 
+    getChats, 
+} = chatsMaster()
+
+let request = `/api/chats`
+
+onBeforeMount(() => {
+    getChats(request)
+})
+</script>

@@ -22,6 +22,7 @@
                 <ul>
                     <li><a href="/help"><i class="fas fa-question-circle"></i> Help</a></li>
                     <li><a href="/manage-account"><i class="fas fa-user-circle"></i> Manage account</a></li>
+                    <li><a href="/chats"><i class="fa-solid fa-comments"></i> Conversations</a></li>
                     <li><a href="#" @click="userLogin.logout"><i class="fas fa-sign-out-alt"></i> Sign out</a></li>
                 </ul>
             </div>

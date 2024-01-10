@@ -32,6 +32,8 @@ import TicketView from '../components/HelpTickets/View.vue'
 import UsersIndex from '../components/Users/Index.vue'
 import UsersLogs from '../components/Users/Logs.vue'
 import UserManage from '../components/Users/Manage.vue'
+import ChatsIndex from '../components/Chats/Index.vue'
+import ChatView from '../components/Chats/View.vue'
 
 function auth(to, from, next) {
     if (JSON.parse(localStorage.getItem('authenticated'))) {
@@ -215,6 +217,16 @@ const routes = [
         name: 'user.manage',
         component: UserManage
     },
+    {
+        path: '/chats',
+        name: 'chats.index',
+        component: ChatsIndex,
+    },
+    {
+        path: '/chats/:id',
+        name: 'chat.view',
+        component: ChatView,
+    }
 ]
 
 export default createRouter({
