@@ -76,3 +76,8 @@ window.Echo = new Echo({
     encrypted: true,
     cluster: 'ap2',
 });
+
+// window.Echo.private(`chats.${chatId}`)
+//     .listen('MessageSent', (e) => {
+//         console.log(e);
+//     });

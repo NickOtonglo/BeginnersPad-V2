@@ -61,6 +61,7 @@ import { onBeforeMount, ref } from 'vue';
 import ChatInput from '../Misc/ChatInput.vue';
 import chatsMaster from '../../composables/chats'
 import userMaster from '../../composables/users'
+import broadcastMaster from '../../composables/broadcast';
 
 const {
     isLoading, 
@@ -70,6 +71,7 @@ const {
     saveMessage, 
 } = chatsMaster()
 const { user, getUserData } = userMaster()
+const { chatsBroadcast, test } = broadcastMaster()
 
 const refThread = ref(null)
 
@@ -77,9 +79,17 @@ function getInput(input) {
     saveMessage(`/api/chats/${route.params.id}`, input)
 }
 
+function getNotifications() {
+    window.Echo.private(`chats.${route.params.id}`)
+        .listen('MessageSent', (e) => {
+            console.log('xxx');
+        });
+}
+
 onBeforeMount(() => {
     getChat(`/api/chats/${route.params.id}`)
     getUserData()
+    chatsBroadcast(route.params.id)
     // window.scroll({top: 0, left: 0, behavior: 'smooth' });
     refThread.scrollTop = refThread.scrollHeight;
 })
