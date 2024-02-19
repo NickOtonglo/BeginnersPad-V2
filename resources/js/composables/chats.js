@@ -133,7 +133,17 @@ export default function chatsMaster() {
 
         axios.post(request, data)
             .then(response => {
-                // router.go(0)
+                // getChat(request)
+                // console.log(chat.value)
+                // axios.get(request)
+                //     .then(response => {
+                //         chat.value = response.data.data
+                //         console.log(chat.value)
+                //     })
+                //     .catch(error => console.log(error))
+
+                // console.log(chat.value.messages[chat.value.messages.length - 1])
+                router.go(0)
             })
             .catch(error => {
                 if (error.response?.data) {

@@ -126,11 +126,14 @@ class ChatsController extends Controller
         //     'comment' => $comment,
         //     'message' => "Chat message #'".$data->id."' created successfully.",
         // ];
-        $response = [
-            'chat_message' => $data,
-            'message' => "Chat message #'".$data->id."' created successfully.",
-        ];
-        return response($response, 201);
+
+        // $response = [
+        //     'chat_message' => $data,
+        //     'message' => "Chat message #'".$data->id."' created successfully.",
+        // ];
+        // return response($response, 201);
+
+        return new ChatResource($chat);
 
         /**https://stackoverflow.com/questions/3411495/php-get-a-single-key-from-object*/
         // return key((array)$request->all());

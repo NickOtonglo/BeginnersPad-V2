@@ -36,7 +36,19 @@
             <div v-if="chat.messages.length" class="thread-messages" ref="refThread">
                 <div class="chats">
                     <template v-for="(item, index) in chat.messages">
-                        <div class="chat">
+                        <div v-if="index == chat.messages.length-1" class="chat">
+                            <div class="card card-chat" :class="item.participant.participant == user.username ? 'first-person' : 'third-person'" ref="refLast" id="chatLast">
+                                <template v-if="item.participant.participant == user.username">
+                                    <h4>Me</h4>
+                                </template>
+                                <template v-else>
+                                    <h4>@{{ item.participant.participant }}</h4>
+                                </template>
+                                <span v-html="item.body"></span>
+                                <p class="timestamp">{{ item.time_ago }}</p>
+                            </div>
+                        </div>
+                        <div v-else class="chat">
                             <div class="card card-chat" :class="item.participant.participant == user.username ? 'first-person' : 'third-person'">
                                 <template v-if="item.participant.participant == user.username">
                                     <h4>Me</h4>
@@ -57,11 +69,12 @@
 </template>
 
 <script setup>
-import { onBeforeMount, ref } from 'vue';
+import { onBeforeMount, ref, watch, reactive } from 'vue';
 import ChatInput from '../Misc/ChatInput.vue';
 import chatsMaster from '../../composables/chats'
 import userMaster from '../../composables/users'
 import broadcastMaster from '../../composables/broadcast';
+import axios from 'axios';
 
 const {
     isLoading, 
@@ -71,20 +84,29 @@ const {
     saveMessage, 
 } = chatsMaster()
 const { user, getUserData } = userMaster()
-const { chatsBroadcast, test } = broadcastMaster()
+const { chatsBroadcast } = broadcastMaster()
 
 const refThread = ref(null)
+const refLast = ref(null)
 
 function getInput(input) {
     saveMessage(`/api/chats/${route.params.id}`, input)
 }
 
-function getNotifications() {
-    window.Echo.private(`chats.${route.params.id}`)
-        .listen('MessageSent', (e) => {
-            console.log('xxx');
-        });
-}
+// function getNotifications() {
+//     window.Echo.private(`chats.${route.params.id}`)
+//         .listen('MessageSent', (e) => {
+//             console.log('xxx');
+//             getChat(`/api/chats/${route.params.id}`)
+//         });
+// }
+
+watch(chat, (newChat, oldChat) => {
+    setTimeout(() => {
+        const element = document.querySelector("#chatLast");
+        element.scrollIntoView({behavior: 'smooth'});
+    }, 1000)
+})
 
 onBeforeMount(() => {
     getChat(`/api/chats/${route.params.id}`)
