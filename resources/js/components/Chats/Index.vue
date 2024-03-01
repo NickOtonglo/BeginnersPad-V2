@@ -5,6 +5,9 @@
             <div>
                 <div v-for="chat in chats" class="chats-list">
                     <router-link :to="{ name: 'chat.view', params: { id: chat.id } }" class="chat-item">
+                        <div v-if="chat.badges > 0" class="badge">
+                            <span class="badge-mark">{{ chat.badges }}</span>
+                        </div>
                         <template v-if="chat.participants.length > 2">
                             <div class="img">
                                 <img src="/images/static/avatar.png" alt="">

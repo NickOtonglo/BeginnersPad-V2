@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Events\NotificationSent;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Notification\NotificationResource;
 use App\Models\ChatMessage;
 use App\Models\ChatParticipant;
 use App\Models\Notification;
@@ -17,12 +19,46 @@ class NotificationsController extends Controller
         $receiverId = ChatParticipant::where('chat_id', $message->chat_id)->where('user_id', '!=', auth()->user()->id)->first()->user_id;
         $receiver = User::find($receiverId);
 
-        $notification = new Notification();
-        $notification->title = "New message from @".$sender->username;
-        $notification->body = "You have received a new message. Click here to open your chats.";
-        $notification->model = "Chat";
-        $notification->model_id = $message->chat_id;
-        $notification->user_id = $receiver->id;
-        $notification->save();
+        $data = new Notification();
+        $data->title = "New message from @".$sender->username;
+        $data->body = "You have received a new message. Click here to open your chats.";
+        $data->model = "Chat";
+        $data->model_id = $message->chat_id;
+        $data->user_id = $receiver->id;
+
+        $data->save();
+        
+        // dd(Notification::where('user_id', auth()->user()->id)->latest()->first()); 
+        NotificationSent::dispatch($data);
+    }
+
+    public function index() {
+        $notifications = auth()->user()->notifications;
+        return NotificationResource::collection($notifications);
+    }
+
+    public function destroy(string $model, int $modelId) {
+        $notifications = auth()->user()->notifications()
+                            ->where('model', $model)
+                            ->where('model_id', $modelId)
+                            ->where('read', boolval(0))
+                            ->delete();
+
+        // $notifications->delete();
+        
+        return response()->noContent();
+    }
+
+    public function getBadges() {
+        // $notifications = auth()->user()->notifications;
+        $help = auth()->user()->notifications()->where('Model', 'HelpTicket')->where('read', boolval(0))->count();
+        $account = auth()->user()->notifications()->where('Model', 'User')->where('read', boolval(0))->count();
+        $chat = auth()->user()->notifications()->where('Model', 'Chat')->where('read', boolval(0))->count();
+
+        return response()->json([
+            'help' => $help, 
+            'account' => $account, 
+            'chat' => $chat, 
+        ]);
     }
 }

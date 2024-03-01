@@ -186,7 +186,7 @@ nav .nav-menu .badge li.selected a {
 }
 
 /* Badge */
-.badge {
+.badge, .chat-item .badge {
     position: relative;
 }
 
@@ -1499,6 +1499,17 @@ nav .nav-menu .badge li.selected a {
 .chat-item .text span.user {
     font-size: 1.1rem;
     font-weight: bolder;
+}
+
+.chat-item .badge-mark {
+    position: absolute;
+    background: var(--color-danger);
+    opacity: 0.9;
+    color: #fff;
+    padding: 0 5px;
+    font-size: .9rem;
+    border-radius: 25px;
+    cursor: pointer;
 }
 
 .chats {

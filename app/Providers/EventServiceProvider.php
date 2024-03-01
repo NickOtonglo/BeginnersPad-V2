@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use App\Events\MessageSent;
+use App\Events\NotificationSent;
+use App\Listeners\NotifyUser;
 use App\Listeners\SendMessageNotification;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -22,6 +24,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         MessageSent::class => [
             SendMessageNotification::class,
+        ],
+        NotificationSent::class => [
+            NotifyUser::class,
         ],
     ];
 

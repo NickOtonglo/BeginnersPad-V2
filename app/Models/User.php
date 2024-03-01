@@ -84,4 +84,8 @@ class User extends Authenticatable
     public function logsParent() {
         return $this->hasMany(UserActivityLog::class, 'model_id', 'username');
     }
+
+    public function notifications() {
+        return $this->hasMany(Notification::class);
+    }
 }

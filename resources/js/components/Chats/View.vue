@@ -69,12 +69,13 @@
 </template>
 
 <script setup>
+import axios from 'axios';
 import { onBeforeMount, ref, watch, reactive } from 'vue';
 import ChatInput from '../Misc/ChatInput.vue';
 import chatsMaster from '../../composables/chats'
 import userMaster from '../../composables/users'
 import broadcastMaster from '../../composables/broadcast';
-import axios from 'axios';
+import notificationsMaster from '../../composables/notifications';
 
 const {
     isLoading, 
@@ -84,7 +85,8 @@ const {
     saveMessage, 
 } = chatsMaster()
 const { user, getUserData } = userMaster()
-const { chatsBroadcast } = broadcastMaster()
+const { broadcastChats } = broadcastMaster()
+const { deleteNotifications } = notificationsMaster()
 
 const refThread = ref(null)
 const refLast = ref(null)
@@ -111,7 +113,8 @@ watch(chat, (newChat, oldChat) => {
 onBeforeMount(() => {
     getChat(`/api/chats/${route.params.id}`)
     getUserData()
-    chatsBroadcast(route.params.id)
+    deleteNotifications(`/api/notifications/chat/${route.params.id}`)
+    broadcastChats(route.params.id)
     // window.scroll({top: 0, left: 0, behavior: 'smooth' });
     refThread.scrollTop = refThread.scrollHeight;
 })

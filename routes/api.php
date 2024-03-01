@@ -147,4 +147,8 @@ Route::middleware(['auth:sanctum', 'logs.user'])->group(function() {
     Route::get('chats/{chat}', '\App\Http\Controllers\Api\ChatsController@show');
     Route::delete('chats/{chat}', '\App\Http\Controllers\Api\ChatsController@destroy');
     Route::post('chats/{chat}', '\App\Http\Controllers\Api\ChatsController@storeMessage');
+
+    Route::get('notifications', '\App\Http\Controllers\Api\NotificationsController@index');
+    Route::get('notifications/badges', '\App\Http\Controllers\Api\NotificationsController@getBadges');
+    Route::delete('notifications/{model}/{model_id}', '\App\Http\Controllers\Api\NotificationsController@destroy');
 });

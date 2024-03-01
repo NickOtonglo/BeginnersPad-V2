@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Chat;
 
+use App\Models\Notification;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -37,6 +38,12 @@ class ChatResource extends JsonResource
         if ($authParticipant) {
             array_push($list, $authParticipant);
         }
+
+        $badges = auth()->user()->notifications()
+                        ->where('model', 'Chat')
+                        ->where('model_id', $this->id)
+                        ->where('read', boolval(0))
+                        ->count();
         
         return [
             'id' => $this->id, 
@@ -45,6 +52,7 @@ class ChatResource extends JsonResource
             'can_respond' => $canRespond, 
             'participants' => ChatParticipantResource::collection($list), 
             'messages' => ChatMessageResource::collection($this->chatMessages), 
+            'badges' => $badges, 
         ];
     }
 }
