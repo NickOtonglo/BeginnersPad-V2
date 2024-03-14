@@ -1,3 +1,4 @@
+import axios from "axios"
 import { inject, ref } from "vue"
 import { useRoute, useRouter } from "vue-router"
 
@@ -396,6 +397,56 @@ export default function propertiesMaster() {
             .finally(isLoading.value = false)
     }
 
+    const contactLister = (request, data) => {
+        if (isLoading.value) return
+        isLoading.value = false
+
+        let serialisedPost = new FormData()
+        serialisedPost.append('body', `Hi, I would like to get in touch with you regarding your listing '${data.value.name}'.`)
+
+        swal.fire({
+            title: 'Send enquiry?',
+            text: "A message will be sent to the property lister expressing your interest in this listing.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: 'rgb(207, 95, 50)',
+            cancelButtonColor: 'rgb(238, 14, 14)',
+            confirmButtonText: 'Confirm'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                isLoading.value = true
+                axios.post(request, serialisedPost)
+                .then(response => {
+                        console.log(response)
+                    
+                        swal.fire({
+                            icon: 'success',
+                            title: "Message sent",
+                            text: "Enquiry sent to lister. Expect a response soon.",
+                            showCancelButton: true,
+                            confirmButtonColor: 'rgb(13, 180, 138)',
+                            // cancelButtonColor: 'rgb(238, 14, 14)',
+                            confirmButtonText: 'Go to chats',
+                            cancelButtonText: 'Close',
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                router.push({ name: 'chats.index' })
+                            }
+                        })
+                    })
+                    .catch(error => {
+                        swal({
+                            icon: 'error',
+                            title: 'Something went wrong, please try again.'
+                        })
+                    })
+                    .finally(() => isLoading.value = false)
+            } else {
+                isLoading.value = false
+            }
+        })
+    }
+
     return {
         route,
         router,
@@ -417,5 +468,6 @@ export default function propertiesMaster() {
         logs,
         log,
         getLogs,
+        contactLister, 
     }
 }

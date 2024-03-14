@@ -8,6 +8,8 @@ use App\Http\Resources\Chat\ChatResource;
 use App\Models\Chat;
 use App\Models\ChatMessage;
 use App\Models\ChatParticipant;
+use App\Models\Property;
+use App\Models\User;
 use Illuminate\Http\Request;
 use stdClass;
 
@@ -135,5 +137,23 @@ class ChatsController extends Controller
 
         /**https://stackoverflow.com/questions/3411495/php-get-a-single-key-from-object*/
         // return key((array)$request->all());
+    }
+
+    public function createChatFromListingEnquiry(User $sender, User $receiver, Property $property, Request $request) {
+        $chat = new Chat;
+        $chat->subject = "Enquiry on listing - ".$property->name;
+        $chat->initiator = $sender->id;
+        $chat->save();
+
+        $this->createParticipant($sender->id, $chat->id);
+        $this->createParticipant($receiver->id, $chat->id);
+        $this->storeMessage($chat, $request);
+    }
+
+    public function createParticipant(int $userId, int $chatId) {
+        $participant = new ChatParticipant;
+        $participant->user_id = $userId;
+        $participant->chat_id = $chatId;
+        $participant->save();
     }
 }

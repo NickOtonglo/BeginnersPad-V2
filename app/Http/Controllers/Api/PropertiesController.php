@@ -103,7 +103,7 @@ class PropertiesController extends Controller
     public function show(Property $property)
     {
         if (
-            $property->status == 'public'
+            $property->status == 'published'
          || auth()->user()->id == $property->user_id
          || auth()->user()->role_id == 3
          || auth()->user()->role_id == 2
@@ -408,5 +408,18 @@ class PropertiesController extends Controller
     public function getLogs(Property $property) {
         $logs = PropertyLog::where('slug', $property->slug)->get();
         return PropertyLogResource::collection($logs);
+    }
+
+    public function sendEnquiry(Property $property, Request $request) {
+        $sender = auth()->user();
+        $receiver = $property->user;
+
+        app(ChatsController::class)->createChatFromListingEnquiry($sender, $receiver, $property, $request);
+
+        $response = [
+            // 'property' => $property,
+            'message' => "Enquiry sent for property '".$property->name."'.",
+        ];
+        return response($response, 201);
     }
 }

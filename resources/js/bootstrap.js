@@ -32,6 +32,7 @@ window.axios.interceptors.response.use(
             }
             location.assign('/sign-in')
         }
+
         return Promise.reject(error)
     }
 )

@@ -2,12 +2,11 @@
     <div class="nav-drawer-category">
         <p>Menu</p>
         <ul>
-            <li class="selected"><a href="/beginner/dashboard.html">Dashboard</a></li>
-            <li><a href="/beginner/view-listings.html">Listings</a></li>
-            <li><a href="/beginner/tour-appointments.html">Tour appointments</a></li>
+            <li class="selected"><a href="/dashboard">Dashboard</a></li>
+            <li><a href="/listings">Listings</a></li>
+            <li><a href="/tour-appointments">Tour appointments</a></li>
             <li><a href="/reviews">My reviews</a></li>
             <li><a href="/favourites">Favourites</a></li>
-            <!-- <li><router-link :to="{ name: 'favourites.index' }">Favourites</router-link></li> -->
             <li><a href="/beginner/property-history.html">Property history</a></li>
             <li><a href="/help/tickets">My tickets</a></li>
         </ul>

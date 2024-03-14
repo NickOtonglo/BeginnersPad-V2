@@ -174,6 +174,7 @@
                         <div v-if="user.role !== 'Admin' 
                                 && user.role !== 'Super Admin' 
                                 && user.role !== 'System Admin'" class="btn-grp vertical">
+                            <button v-if="user.role === 'Beginner'" @click="makeEnquiry">Make enquiry</button>
                             <button v-if="user.role === 'Beginner' && !review" @click="click(addReviewRef)">Add review</button>
                             <template v-if="user.username === property.user_name">
                                 <button @click="submitForm('private')" v-if="property.status === 'published'">Make private (hide)</button>
@@ -348,6 +349,7 @@ const {
     deleteProperty,
     updateStatus, 
     isLoading, 
+    contactLister, 
 } = propertiesMaster()
 
 const { 
@@ -420,6 +422,10 @@ function getReason(reason, action) {
 
 function click(element) {
     element.openModal();
+}
+
+function makeEnquiry() {
+    contactLister(`/api/listings/${route.params.slug}/enquire`, property)
 }
 
 </script>

@@ -31,11 +31,13 @@ export default function broadcastMaster() {
             .listen('NotificationSent', (e) => {
                 axios.get('/api/notifications')
                     .then(response => {
+                        let data = response.data.data[response.data.data.length - 1]
+                        // console.log(response.data.data.length)
                         // console.log(response.data.data[0])
                         swal.fire({
                             icon: 'info',
-                            title: response.data.data[0].title,
-                            text: response.data.data[0].body,
+                            title: data.title,
+                            text: data.body,
                             showCancelButton: true,
                             confirmButtonColor: 'rgb(13, 180, 138)',
                             // cancelButtonColor: 'rgb(238, 14, 14)',
@@ -43,8 +45,8 @@ export default function broadcastMaster() {
                             cancelButtonText: 'Close',
                         }).then((result) => {
                             if (result.isConfirmed) {
-                                if (response.data.data[0].model == 'Chat') {
-                                    router.push({ name: 'chat.view', params: { id: response.data.data[0].model_id } })
+                                if (data.model == 'Chat') {
+                                    router.push({ name: 'chat.view', params: { id: data.model_id } })
                                 }
                             }
                         })
