@@ -9,6 +9,7 @@ use App\Models\Chat;
 use App\Models\ChatMessage;
 use App\Models\ChatParticipant;
 use App\Models\Property;
+use App\Models\PropertyUnit;
 use App\Models\User;
 use Illuminate\Http\Request;
 use stdClass;
@@ -142,6 +143,17 @@ class ChatsController extends Controller
     public function createChatFromListingEnquiry(User $sender, User $receiver, Property $property, Request $request) {
         $chat = new Chat;
         $chat->subject = "Enquiry on listing - ".$property->name;
+        $chat->initiator = $sender->id;
+        $chat->save();
+
+        $this->createParticipant($sender->id, $chat->id);
+        $this->createParticipant($receiver->id, $chat->id);
+        $this->storeMessage($chat, $request);
+    }
+
+    public function createChatFromListingUnitEnquiry(User $sender, User $receiver, PropertyUnit $unit, Request $request) {
+        $chat = new Chat;
+        $chat->subject = "Enquiry on listing - ".$unit->property->name.", unit - ".$unit->name;
         $chat->initiator = $sender->id;
         $chat->save();
 

@@ -123,7 +123,7 @@
                             <button @click="deleteUnit(`/api/listings/${route.params.slug}/units/${route.params.unit_slug}`)">Delete</button>
                         </div>
                         <div v-if="user.role === 'Beginner' || !user" class="btn-grp vertical">
-                            <button>Contact lister</button>
+                            <button @click="makeEnquiry">Make enquiry</button>
                         </div>
                     </div>
                 </div>
@@ -135,6 +135,7 @@
 <script setup>
 import { ref, onBeforeMount } from 'vue';
 import unitsMaster from '../../composables/units';
+import propertiesMaster from '../../composables/properties';
 import userMaster from '../../composables/users';
 import favouriteMaster from '../../composables/favourites';
 import { api as viewerApi } from "v-viewer"
@@ -148,6 +149,7 @@ const {
     deleteUnit, 
     isLoading, 
 } = unitsMaster()
+const { contactLister } = propertiesMaster()
 
 const { getUserData, user } = userMaster()
 const { saveFavourite } = favouriteMaster()
@@ -196,6 +198,10 @@ onBeforeMount(() => {
 
 function click(element) {
     element.openModal();
+}
+
+function makeEnquiry() {
+    contactLister(`/api/listings/${route.params.slug}/units/${route.params.unit_slug}/enquire`, unit)
 }
 
 </script>

@@ -102,6 +102,7 @@ Route::middleware(['auth:sanctum', 'logs.user'])->group(function() {
     Route::delete('listings/{property}/units/{unit}/files/{file}', '\App\Http\Controllers\Api\PropertyUnitsController@destroyFile');
     Route::post('listings/{property}/units/{unit}/thumbnail', '\App\Http\Controllers\Api\PropertyUnitsController@updateThumbnail');
     Route::patch('listings/{property}/units/{unit}/disclaimer', '\App\Http\Controllers\Api\PropertyUnitsController@storeDisclaimer');
+    Route::post('listings/{property}/units/{unit}/enquire', '\App\Http\Controllers\Api\PropertyUnitsController@sendEnquiry');
 
     Route::get('reviews', 'App\Http\Controllers\Api\PropertyReviewsController@getMyReviews');
     Route::get('reviews/{property}', 'App\Http\Controllers\Api\PropertyReviewsController@showMyReview');

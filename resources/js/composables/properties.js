@@ -417,8 +417,7 @@ export default function propertiesMaster() {
                 isLoading.value = true
                 axios.post(request, serialisedPost)
                 .then(response => {
-                        console.log(response)
-                    
+                        // console.log(response)
                         swal.fire({
                             icon: 'success',
                             title: "Message sent",

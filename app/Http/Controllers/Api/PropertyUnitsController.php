@@ -303,4 +303,17 @@ class PropertyUnitsController extends Controller
         ];
         return response($response, 201);
     }
+
+    public function sendEnquiry(Property $property, PropertyUnit $unit, Request $request) {
+        $sender = auth()->user();
+        $receiver = $unit->property->user;
+
+        app(ChatsController::class)->createChatFromListingUnitEnquiry($sender, $receiver, $unit, $request);
+
+        $response = [
+            // 'property_unit' => $unit,
+            'message' => "Enquiry sent for unit '".$unit->name."' in property '".$unit->property->name."'.",
+        ];
+        return response($response, 201);
+    }
 }
