@@ -30,6 +30,7 @@ export default function unitsMaster() {
         property: '',
     })
     const unitsCount = ref(0)
+    const search_global = ref('')
 
     const getUnits = (request) => {
         if (isLoading.value) return
@@ -441,6 +442,19 @@ export default function unitsMaster() {
         })
     }
 
+    const filterUnits = (request, data) => {
+        if (isLoading.value) return
+        isLoading.value = true
+
+        axios.get(`${request}&bed=${data[0][1]}&bath=${data[1][1]}&area=${data[2][1]}&pmin=${data[3][1]}&pmax=${data[4][1]}`)
+            .then(response => {
+                units.value = response.data[0]
+                // unitsCount.value = response.data.meta.total
+            })
+            .catch(error => console.log(error))
+            .finally(isLoading.value = false)
+    }
+
     return {
         route,
         router,
@@ -461,5 +475,6 @@ export default function unitsMaster() {
         saveDisclaimers,
         removeDisclaimer,
         updateStatus,
+        filterUnits, 
     }
 }

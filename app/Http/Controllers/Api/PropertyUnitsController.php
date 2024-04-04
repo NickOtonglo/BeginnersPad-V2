@@ -4,11 +4,14 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SavePropertyUnitBasicRequest;
+use App\Http\Resources\PropertyUnit\PropertyUnitLiteWithPropertyLiteResource;
+use App\Http\Resources\PropertyUnitLiteResource;
 use App\Http\Resources\PropertyUnitResource;
 use App\Models\Property;
 use App\Models\PropertyUnit;
 use App\Models\PropertyUnitFeature;
 use App\Models\PropertyUnitFile;
+use App\Models\SubZone;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -316,4 +319,146 @@ class PropertyUnitsController extends Controller
         ];
         return response($response, 201);
     }
+
+    public function getUnitsQuery() {
+        $units = [];
+        $request = request()->sort;
+
+        $properties = Property::when(request('search_global'), function($query) {
+            $query->where(function($q) {
+                $q->where('slug', 'like', '%'.request('search_global').'%')
+                  ->orWhere('name', 'like', '%'.request('search_global').'%')
+                  ->orWhere('description', 'like', '%'.request('search_global').'%');
+            });
+        });
+
+        if ($request) {
+            if ($request == 'desc' || $request == 'asc') {
+                if (auth()->user() && (auth()->user()->role_id <= 3 &&  auth()->user()->role_id >= 1)) {
+                    $properties = $properties->orderBy('created_at', $request)->where('status', '!=', 'unpublished')->get();
+                    foreach($properties as $property) {
+                        foreach($property->propertyUnits as $unit) {
+                            if ($unit->status == 'active') {
+                                array_push($units, $unit);
+                            }
+                        }
+                    }
+                } else {
+                    $properties = $properties->orderBy('created_at', $request)->where('status', 'published')->get();
+                    foreach($properties as $property) {
+                        foreach($property->propertyUnits as $unit) {
+                            if ($unit->status == 'active') {
+                                array_push($units, $unit);
+                            }
+                        }
+                    }
+                }
+            }
+            if ($request == 'cheap') {}
+            if ($request == 'pricey') {}
+            if ($request == 'area') {}
+            if ($request == 'rooms') {}
+        } else {
+            $properties = $properties->where('status', 'published')->latest()->get();
+            foreach($properties as $property) {
+                foreach($property->propertyUnits as $unit) {
+                    array_push($units, $unit);
+                }
+            }
+        }
+
+        $filteredUnits = [];
+        foreach($units as $unit) {
+            if (
+                (request('bed') != 0 && $unit->bedrooms != request('bed')) || 
+                (request('bath') != 0 && $unit->bathrooms != request('bath')) ||
+                (request('area') != 0 && ($unit->floor_area < request('area')-15 || $unit->floor_area > request('area')+15)) || 
+                (request('pmin') != 0 && $unit->price < request('pmin')) || 
+                (request('pmax') != 0 && $unit->price > request('pmax'))
+            ) {
+                // dd('xxx');
+            } else {
+                array_push($filteredUnits, $unit);
+            }
+        }
+
+        if (count($filteredUnits) > 0) {
+            $units = $filteredUnits;
+        }
+        return PropertyUnitLiteWithPropertyLiteResource::collection(collect($units))->chunk(25);
+    }
+
+    public function getUnitsBySubZone(SubZone $subZone) {
+        $units = [];
+        $request = request()->sort;
+
+        $properties = Property::when(request('search_global'), function($query) {
+            $query->where(function($q) {
+                $q->where('slug', 'like', '%'.request('search_global').'%')
+                  ->orWhere('name', 'like', '%'.request('search_global').'%')
+                  ->orWhere('description', 'like', '%'.request('search_global').'%');
+            });
+        });
+
+        if ($request) {
+            if ($request == 'desc' || $request == 'asc') {
+                if (auth()->user() && (auth()->user()->role_id <= 3 &&  auth()->user()->role_id >= 1)) {
+                    $properties = $properties->orderBy('created_at', $request)->where('status', '!=', 'unpublished')->get();
+                    foreach($properties as $property) {
+                        foreach($property->propertyUnits as $unit) {
+                            if ($unit->status == 'active') {
+                                array_push($units, $unit);
+                            }
+                        }
+                    }
+                } else {
+                    $properties = $properties->orderBy('created_at', $request)->where('status', 'published')->get();
+                    foreach($properties as $property) {
+                        foreach($property->propertyUnits as $unit) {
+                            if ($unit->status == 'active') {
+                                array_push($units, $unit);
+                            }
+                        }
+                    }
+                }
+            }
+            if ($request == 'cheap') {}
+            if ($request == 'pricey') {}
+            if ($request == 'area') {}
+            if ($request == 'rooms') {}
+        } else {
+            if ($subZone) {
+                $properties = $properties->where('status', 'published')->where('sub_zone_id', $subZone->id)->latest()->get();
+            } else {
+                $properties = $properties->where('status', 'published')->latest()->get();
+            }
+            foreach($properties as $property) {
+                foreach($property->propertyUnits as $unit) {
+                    array_push($units, $unit);
+                }
+            }
+        }
+
+        $filteredUnits = [];
+        foreach($units as $unit) {
+            if (
+                (request('bed') != 0 && $unit->bedrooms != request('bed')) || 
+                (request('bath') != 0 && $unit->bathrooms != request('bath')) ||
+                (request('area') != 0 && ($unit->floor_area < request('area')-15 || $unit->floor_area > request('area')+15)) || 
+                (request('pmin') != 0 && $unit->price < request('pmin')) || 
+                (request('pmax') != 0 && $unit->price > request('pmax'))
+            ) {
+                // dd('xxx');
+            } else {
+                array_push($filteredUnits, $unit);
+            }
+        }
+
+        if (count($filteredUnits) > 0) {
+            $units = $filteredUnits;
+        }
+        
+        return PropertyUnitLiteWithPropertyLiteResource::collection(collect($units))->chunk(25);
+    }
+
 }

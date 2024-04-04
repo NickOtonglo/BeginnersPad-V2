@@ -25,6 +25,9 @@ Route::get('tags/{tag}/articles', '\App\Http\Controllers\Api\TagsController@getA
 Route::get('listings/home', '\App\Http\Controllers\Api\PropertiesController@indexHome');
 Route::get('listings', '\App\Http\Controllers\Api\PropertiesController@index');
 
+Route::get('listings/units/all', 'App\Http\Controllers\Api\PropertyUnitsController@getUnitsQuery');
+Route::get('listings/units/sub-zone/{sub_zone}', 'App\Http\Controllers\Api\PropertyUnitsController@getUnitsBySubZone');
+
 Route::get('help/faq', '\App\Http\Controllers\Api\HelpController@getFaqs');
 Route::get('help/topics', '\App\Http\Controllers\Api\HelpController@getTopics');
 Route::post('help/tickets', '\App\Http\Controllers\Api\HelpController@storeTicket')->middleware('logs.user');

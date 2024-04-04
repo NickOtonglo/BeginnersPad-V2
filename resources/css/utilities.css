@@ -431,6 +431,16 @@ form .btn-submit:hover {
     font-family: inherit;
 }
 
+.form-group .input-horizontal {
+    display: flex;
+    flex-direction: row;
+    margin: 10px 0;
+}
+
+.form-group .input-horizontal .collection {
+    margin: 0 10px;
+}
+
 .form-group input, .form-group select, .form-group textarea {
     background: transparent;
     border-radius: 3px;

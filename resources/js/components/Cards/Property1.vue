@@ -13,7 +13,12 @@
             </template>
             <template v-else>
                 <div class="image">
-                    <img src="/images/static/avatar.png" alt="">
+                    <template v-if="property.brand && property.brand.avatar">
+                        <img :src="`/images/brand/avatar/${property.brand.username}/${property.brand.avatar}`" alt="">
+                    </template>
+                    <template v-else>
+                        <img src="/images/static/avatar.png" alt="">
+                    </template>
                 </div>
             </template>
             <div class="card-info">
