@@ -26,8 +26,8 @@ class PropertyLogResource extends JsonResource
         return [
             'name' => $this->name,
             'slug' => $this->slug,
-            'lat' => $this->lat,
-            'lng' => $this->lng,
+            'lat' => (float) $this->lat,
+            'lng' => (float) $this->lng,
             'status' => $this->status,
             'verified' => $this->verified,
             'description' => $this->description,

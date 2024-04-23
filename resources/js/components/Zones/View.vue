@@ -9,8 +9,8 @@
         <div class="container">
             <div class="panel-grp">
                 <div class="panel">
-                    <div class="zone-map">
-                        <div id="map"></div>
+                    <div v-if="zone" class="zone-map">
+                        <Map :zone="zone" :subZones="subZones" />
                     </div>
                     <div class="panel-item bordered">
                         <div class="title-grp">
@@ -32,14 +32,14 @@
                                 <li>Zone radius: <span>{{ zone.radius }} km</span></li>
                                 <li>Timezone: <span>{{ zone.timezone }}</span></li>
                                 <li>Added on: <span>{{ zone.timestamp }}</span></li>
-                                <li>Sub-zones: <span>0</span></li>
-                                <li>Listings: <span>0</span></li>
+                                <li>Sub-zones: <span>{{ zone.sub_zone_count }}</span></li>
+                                <li>Properties: <span>{{ zone.property_count }}</span></li>
                                 <li v-if="zone.description">Description: <span>{{ zone.description }}</span></li>
                             </ul>
                         </div>
                     </div>
                     <div class="section-more">
-                        <a href="/admin/listing-applications.html">View listings in this zone <i class="fas fa-chevron-right"></i></a>
+                        <a href="#">View listings in this zone <i class="fas fa-chevron-right"></i></a>
                     </div>
                     <div class="charts">
                         <h3>Relative occupancy chart</h3>
@@ -139,6 +139,7 @@ import EditZone from '../Modals/EditZone.vue'
 import CreateSub from '../Modals/CreateSubZone.vue'
 import Pagination from '../Misc/Pagination.vue'
 import pagination from '../../composables/pagination';
+import Map from '../Maps/ZoneView.vue'
 
 const editZoneRef = ref(null);
 const createSubRef = ref(null)

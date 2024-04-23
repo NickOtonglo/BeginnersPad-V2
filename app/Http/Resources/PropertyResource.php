@@ -58,8 +58,8 @@ class PropertyResource extends JsonResource
         return [
             'name' => $this->name,
             'slug' => $this->slug,
-            'lat' => $this->lat,
-            'lng' => $this->lng,
+            'lat' => (float) $this->lat,
+            'lng' => (float) $this->lng,
             'user_name' => $user,
             'sub_zone_id' => $this->sub_zone_id,
             'status' => $this->status,

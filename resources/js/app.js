@@ -15,6 +15,7 @@ import '@vueup/vue-quill/dist/vue-quill.snow.css'
 import Pagination from './components/Misc/Pagination.vue'
 import VueViewer from 'v-viewer'
 import 'viewerjs/dist/viewer.css'
+import VueGoogleMaps from '@fawmi/vue-google-maps'
 
 const globalOptions = {
     placeholder: 'Your article starts here...',
@@ -30,4 +31,9 @@ app.use(VueViewer)
 QuillEditor.props.globalOptions.default = () => globalOptions
 app.component('QuillEditor', QuillEditor)
     .component('Pagination', Pagination)
+app.use(VueGoogleMaps, {
+    load: {
+        key: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
+    },
+})
 app.mount('#app')

@@ -141,7 +141,7 @@ class SubZoneController extends Controller
 
     public function getListings(Zone $zone, SubZone $subZone) {
         if ($zone->id == $subZone->zone_id) {
-            $properties = Property::where('sub_zone_id', $subZone->id)->paginate(8);
+            $properties = Property::where('sub_zone_id', $subZone->id)->where('status', '!=', 'unpublished')->paginate(8);
             return PropertyLiteResource::collection($properties);
         } else return response()->noContent();
     }

@@ -34,7 +34,7 @@
         <p>Tags & articles</p>
         <ul>
             <li><a href="/articles">View articles</a></li>
-            <li><a href="#">Manage articles</a></li>
+            <li><a href="/articles/my-articles/manage">Manage articles</a></li>
             <li><a href="#">Article management logs</a></li>
             <li><a href="/tags">Manage tags</a></li>
             <li><a href="#">Tag management logs</a></li>

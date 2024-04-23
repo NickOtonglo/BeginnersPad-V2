@@ -69,8 +69,8 @@ class PropertyPublicResource extends JsonResource
         return [
             'name' => $this->name,
             'slug' => $this->slug,
-            'lat' => $this->lat,
-            'lng' => $this->lng,
+            'lat' => (float) $this->lat,
+            'lng' => (float) $this->lng,
             'user_name' => $user,
             'status' => $this->status,
             'verified' => $this->verified,

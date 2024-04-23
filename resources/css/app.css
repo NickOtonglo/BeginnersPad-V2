@@ -185,6 +185,11 @@ nav .nav-menu .badge li.selected a {
     color: var(--color-primary);
 }
 
+/* Maps API */
+gmp-map {
+    height: 100%;
+}
+
 /* Badge */
 .badge, .chat-item .badge {
     position: relative;

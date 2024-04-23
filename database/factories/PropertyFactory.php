@@ -27,6 +27,7 @@ class PropertyFactory extends Factory
         return [
             'name' => $name,
             'slug' => $slug,
+            'address' => fake()->address(),
             'lat' => 1.00000001,
             'lng' => 1.00000001,
             'status' => 'unpublished',

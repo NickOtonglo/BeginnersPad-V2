@@ -5,7 +5,7 @@
 
     <div class="section-showcase-map">
         <!-- https://developers.google.com/maps/documentation/javascript/examples/polygon-simple#maps_polygon_simple-css -->
-        <div id="map"></div>
+        <Map />
     </div>
 
     <h3 class="section-title">Zones</h3>
@@ -77,6 +77,7 @@ import { onMounted, ref, onBeforeMount, watch } from 'vue';
 import CreateZone from '../Modals/CreateZone.vue'
 import operateModal from '../../composables/modal'
 import pagination from '../../composables/pagination';
+import Map from '../Maps/ZonesIndex.vue'
 
 const childComponentRef = ref(null);
 const btnClearSearch = ref(null)

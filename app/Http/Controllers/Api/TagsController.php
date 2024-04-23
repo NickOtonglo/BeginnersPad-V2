@@ -59,7 +59,8 @@ class TagsController extends Controller
 
         $response = [
             'tags' => $tags,
-            'message' => "New tag(s) ".$tags." added successfully.",
+            // 'message' => "New tag(s) ".$tags." added successfully.",
+            'message' => "New tag(s) added successfully.",
         ];
         return response($response, 201);
     }

@@ -49,6 +49,7 @@ Route::middleware(['auth:sanctum', 'logs.user'])->group(function() {
     Route::post('articles', '\App\Http\Controllers\Api\ArticlesController@store');
     Route::patch('articles/{article}', '\App\Http\Controllers\Api\ArticlesController@update');
     Route::delete('articles/{article}', '\App\Http\Controllers\Api\ArticlesController@destroy');
+    Route::get('articles/my-articles/manage', '\App\Http\Controllers\Api\ArticlesController@getMyArticles');
 
     Route::get('tags', '\App\Http\Controllers\Api\TagsController@index');
     Route::post('tags', '\App\Http\Controllers\Api\TagsController@store');

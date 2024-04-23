@@ -210,4 +210,21 @@ class ArticlesController extends Controller
             ],
         ]);
     }
+
+    public function getMyArticles() {
+        $request = '';
+        if (!request('sort')) {
+            $request = 'DESC';
+        } else {
+            $request = request('sort');
+        }
+        $articles = Article::when(request('search_global'), function($query) {
+            $query->where(function($q) {
+                $q->where('slug', 'like', '%'.request('search_global').'%')
+                  ->orWhere('title', 'like', '%'.request('search_global').'%')
+                  ->orWhere('content', 'like', '%'.request('search_global').'%');
+            });
+        })->where('user_id', auth()->user()->id)->orderBy('created_at', $request)->paginate(10);
+        return ArticlesResource::collection($articles);
+    }
 }

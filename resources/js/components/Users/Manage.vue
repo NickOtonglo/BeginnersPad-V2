@@ -26,10 +26,6 @@
                         <div class="lister-details">
                             <div class="title-grp">
                                 <h3>Brand profile</h3>
-                                <div class="info-actions">
-                                    <i v-if="user.brand" @click="click(updateBrandRef)" class="fas fa-edit"></i>
-                                    <i v-if="!user.brand" @click="click(createBrandRef)" class="fas fa-edit"></i>
-                                </div>
                             </div>
                             <template v-if="user.brand">
                                 <CardBrand :brand="user.brand" :user="user" />

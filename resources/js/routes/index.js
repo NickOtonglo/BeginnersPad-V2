@@ -5,6 +5,7 @@ import Login from '../components/Auth/Login.vue'
 import Register from '../components/Auth/Register.vue'
 import UserAccount from '../components/Users/Account.vue'
 import ArticlesIndex from '../components/Articles/Index.vue'
+import ArticlesMine from '../components/Articles/MyArticles.vue'
 import ArticleView from '../components/Articles/View.vue'
 import ArticleCreate from '../components/Articles/Create.vue'
 import ArticleEdit from '../components/Articles/Edit.vue'
@@ -86,6 +87,11 @@ const routes = [
         path: '/articles',
         name: 'articles.index',
         component: ArticlesIndex
+    },
+    {
+        path: '/articles/my-articles/manage',
+        name: 'articles.mine',
+        component: ArticlesMine
     },
     {
         path: '/articles/new',

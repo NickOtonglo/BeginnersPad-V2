@@ -102,12 +102,26 @@ class PropertiesController extends Controller
      */
     public function show(Property $property)
     {
+        // if (
+        //     $property->status == 'published'
+        //  || auth()->user()->id == $property->user_id
+        //  || auth()->user()->role_id == 3
+        //  || auth()->user()->role_id == 2
+        //  || auth()->user()->role_id == 1
+        //  ) {
+        //      return new PropertyPublicResource($property);
+        // } else {
+        //     abort(404);
+        // }
+
         if (
-            $property->status == 'published'
-         || auth()->user()->id == $property->user_id
-         || auth()->user()->role_id == 3
-         || auth()->user()->role_id == 2
-         || auth()->user()->role_id == 1
+            ($property->status == 'published') || 
+            ($property->status == 'unpublished' && auth()->user()->id == $property->user_id) || 
+            ($property->status != 'unpublished' && 
+                (auth()->user()->role_id == 3 || 
+                 auth()->user()->role_id == 2 || 
+                 auth()->user()->role_id == 1)
+            )
          ) {
              return new PropertyPublicResource($property);
         } else {

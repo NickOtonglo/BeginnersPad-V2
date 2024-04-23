@@ -30,8 +30,8 @@ class SubZoneAdminResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'lat' => $this->lat,
-            'lng' => $this->lng,
+            'lat' => (float) $this->lat,
+            'lng' => (float) $this->lng,
             'radius' => $this->radius*0.001,
             'description' => $this->description,
             'timestamp' => $this->created_at->format('jS F Y'),

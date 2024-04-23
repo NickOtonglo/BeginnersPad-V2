@@ -10,4 +10,10 @@ export default defineConfig({
             refresh: true,
         }),
     ],
+    optimizeDeps: {
+        include: [
+            "@fawmi/vue-google-maps",
+            "fast-deep-equal",
+        ],
+    },
 });

@@ -5,8 +5,8 @@
         <div class="container">
             <div class="panel-grp">
                 <div class="panel">
-                    <div class="zone-map">
-                        <div id="map"></div>
+                    <div v-if="subZone && properties" class="zone-map">
+                        <Map :subZone="subZone" :properties="properties" />
                     </div>
                     <div class="panel-item bordered">
                         <div class="title-grp">
@@ -114,6 +114,7 @@ import EditSubZone from '../Modals/EditSubZone.vue';
 import CardProperty from '../Cards/Property2.vue'
 import subZonesMaster from '../../composables/subzones';
 import propertiesMaster from '../../composables/properties'
+import Map from '../Maps/SubZoneView.vue'
 
 const editSubZoneRef = ref(null)
 const { subZone, getSubZone, route, getNatures, deleteSubZone } = subZonesMaster()

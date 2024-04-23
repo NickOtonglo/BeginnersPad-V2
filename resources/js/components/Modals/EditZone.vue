@@ -41,7 +41,7 @@
                         </div>
                     </div>
                     <div class="form-group" id="zoneMap" style="height: 300px;margin: 15px 0;">
-                        <div id="map2" style="height: 100%;"></div>
+                        <Map :lat="zone.lat" :lng="zone.lng" :zoom="12" :circle="true" :circleRadius="zone.radius" />
                     </div>
                     <div class="form-group" id="grpRadius">
                         <label for="radius">Radius (km)*</label>
@@ -82,6 +82,7 @@
 import operateModal from '../../composables/modal'
 import { onMounted, ref } from 'vue';
 import zonesMaster from '../../composables/zones';
+import Map from '../Maps/Form.vue'
 
 const modalRef = ref(null)
 

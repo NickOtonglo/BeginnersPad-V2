@@ -84,7 +84,7 @@ export default function articlesMaster() {
                     icon: 'success',
                     title: 'Article published.',
                     didClose: () => {
-                        router.go(-1)
+                        router.go(-2)
                     }
                 })
             })
@@ -137,7 +137,7 @@ export default function articlesMaster() {
                     icon: 'success',
                     title: 'Article updated.',
                     didClose: () => {
-                        router.go(-1)
+                        router.go(-2)
                     }
                 })
             })

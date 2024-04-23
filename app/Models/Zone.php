@@ -22,4 +22,8 @@ class Zone extends Model
     public function logsParent() {
         return $this->hasMany(UserActivityLog::class, 'model_id', 'id');
     }
+
+    public function properties() {
+        return $this->hasManyThrough(Property::class, SubZone::class);
+    }
 }

@@ -46,7 +46,7 @@
                         </div>
                     </div>
                     <div class="form-group" id="zoneMap" style="height: 300px;margin: 15px 0;">
-                        <div id="map2" style="height: 100%;"></div>
+                        <Map :lat="property.lat" :lng="property.lng" :zoom="17" :marker="true" />
                     </div>
                     <div class="form-group" id="grpLat">
                         <label for="latitude">Latitude*</label>
@@ -89,6 +89,7 @@ import { onMounted, ref, onBeforeMount } from 'vue';
 import propertiesMaster from '../../composables/properties';
 import zonesMaster from '../../composables/zones';
 import subZonesMaster from '../../composables/subzones';
+import Map from '../Maps/Form.vue'
 
 const { updateProperty, getProperty, route, property, validationErrors } = propertiesMaster()
 
