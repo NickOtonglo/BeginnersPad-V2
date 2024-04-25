@@ -9,7 +9,11 @@
             v-for="property in properties"
             :key="property.slug"
             :position="{ lat: property.lat, lng: property.lng }"
-            @click="goToProperty(property.slug)" />
+            @click="goToProperty(property.slug)">
+            <GMapInfoWindow>
+                <p>{{ property.name }}</p>
+            </GMapInfoWindow>
+        </GMapMarker>
     </GMapMap>
 </template>
 

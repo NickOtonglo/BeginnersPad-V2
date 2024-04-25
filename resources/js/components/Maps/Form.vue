@@ -8,7 +8,8 @@
         style="width: 100%; height: 300px" >
         <GMapMarker
             v-if="marker"
-            :position="{ lat: lat, lng: lng }" />
+            :position="{ lat: lat, lng: lng }"
+            :opened="true" />
         <GMapCircle
             v-if="circle"
             :radius="circleRadius*1000"

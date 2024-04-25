@@ -341,6 +341,7 @@ import AddReview from '../Modals/AddReview.vue'
 import EditReview from '../Modals/EditReview.vue';
 import SubmitReason from '../Modals/SubmitReason.vue';
 import { api as viewerApi } from "v-viewer"
+import mapsMaster from '../../composables/maps';
 
 const { 
     property, 
@@ -378,6 +379,7 @@ const imagesList = () => {
     }
     return images
 }
+const { nearbySearch } = mapsMaster()
 
 onBeforeMount(() => {
     getProperty(`/api/listings/${route.params.slug}`)
@@ -385,6 +387,9 @@ onBeforeMount(() => {
     getReviews(`/api/listings/${route.params.slug}/reviews`)
     getMyReview(`/api/listings/${route.params.slug}/reviews`)
     getUserData()
+    if (property.value) {
+        nearbySearch(property.value.lat, property.value.lng, `schools`)
+    }
 })
 
 function openImageBrowser() {

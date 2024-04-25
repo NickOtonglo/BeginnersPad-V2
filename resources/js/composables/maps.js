@@ -1,12 +1,26 @@
-let map;
+import { ref } from "vue"
 
-async function initMap() {
-    const { Map } = await google.maps.importLibrary("maps");
+export default function mapsMaster(){
+    const isLoading = ref(false)
 
-    map = new Map(document.getElementById("map"), {
-        center: { lat: 0.241829, lng: 37.815589 },
-        zoom: 8,
-    });
+    const nearbySearch = (lat, lng, type) => {
+        console.log(import.meta.env.VITE_GOOGLE_MAPS_API_KEY)
+
+        if (isLoading.value) return
+        isLoading.value = true
+        
+        const request = ref(`https://maps.googleapis.com/maps/api/place/nearbysearch/json?keyword=cruise&location=${lat}${lng}&radius=1500&type=${type}&key=${import.meta.env.VITE_GOOGLE_MAPS_API_KEY}`)
+
+        axios.get(request.value)
+        .then(response => {
+            console.log(response.data)
+        })
+        .catch(error => console.log(error))
+        .finally(isLoading.value = false)
+    }
+
+    return {
+        isLoading, 
+        nearbySearch, 
+    }
 }
-
-initMap();
