@@ -240,13 +240,13 @@
                         </div>
                     </div>
                     <div class="listing-nearby-places">
-                        <h3>Nearby markets</h3>
+                        <h3>Nearby supermarkets</h3>
                         <div class="places-list">
-                            <div v-for="place in placesArray.market" class="place" id="mkt1">
+                            <div v-for="place in placesArray.supermarket" class="place" id="mkt1">
                                 <h3 class="title">{{ place.displayName }}</h3>
                                 <p class="description">{{ place.editorialSummary }}</p>
                                 <p class="location">{{ place.formattedAddress }}</p>
-                                <template v-for="distance in distancesArray.market">
+                                <template v-for="distance in distancesArray.supermarket">
                                     <p v-if="distance[0] == place.displayName" class="distance">{{ distance[1] }}</p>
                                 </template>
                             </div>

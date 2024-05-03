@@ -4,12 +4,12 @@ export default function mapsMaster(){
     const isLoading = ref(false)
     const placesArray = ref({
         school: [],
-        market: [],
+        supermarket: [],
         bus_stop: [],
     })
     const distancesArray = ref({
         school: [],
-        market: [],
+        supermarket: [],
         bus_stop: [],
     })
     let map;
@@ -54,7 +54,7 @@ export default function mapsMaster(){
 
         if (maParams.places.enabled) {
             nearbySearch(maParams.map.position, ["school"])
-            nearbySearch(maParams.map.position, ["market"])
+            nearbySearch(maParams.map.position, ["supermarket"])
             nearbySearch(maParams.map.position, ["bus_stop"])
         }
     }
@@ -95,7 +95,7 @@ export default function mapsMaster(){
                 radius: 1500,
             },
 
-            // includedPrimaryTypes: ["school", "market", "bus_stop"],
+            // includedPrimaryTypes: ["school", "supermarket", "bus_stop"],
             includedPrimaryTypes: primaryTypes,
             maxResultCount: 3,
             rankPreference: SearchNearbyRankPreference.POPULARITY,
@@ -126,10 +126,10 @@ export default function mapsMaster(){
                         nearbySearchDistances(position, place.location, 'school', place.displayName)
                     }
                 }
-                if (primaryTypes.includes('market')) {
-                    if (place.types.includes('market') && placesArray.value.market.length < 3) {
-                        placesArray.value.market.push(place)
-                        nearbySearchDistances(position, place.location, 'market', place.displayName)
+                if (primaryTypes.includes('supermarket')) {
+                    if (place.types.includes('supermarket') && placesArray.value.supermarket.length < 3) {
+                        placesArray.value.supermarket.push(place)
+                        nearbySearchDistances(position, place.location, 'supermarket', place.displayName)
                     }
                 }
                 if (primaryTypes.includes('bus_stop')) {
@@ -141,7 +141,7 @@ export default function mapsMaster(){
             });
             map.fitBounds(bounds);
         } else {
-            console.log("No results");
+            // console.log("No results");
         }
     }
 
@@ -165,8 +165,8 @@ export default function mapsMaster(){
                             if (type == 'school') {
                                 distancesArray.value.school.push([place, element.distance.text])
                             }
-                            if (type == 'market') {
-                                distancesArray.value.market.push([place, element.distance.text])
+                            if (type == 'supermarket') {
+                                distancesArray.value.supermarket.push([place, element.distance.text])
                             }
                             if (type == 'bus_stop') {
                                 distancesArray.value.bus_stop.push([place, element.distance.text])
