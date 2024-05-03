@@ -229,69 +229,39 @@
                     <div class="listing-nearby-places" id="nearby-places">
                         <h3>Nearby schools</h3>
                         <div class="places-list">
-                            <div class="place" id="sch1">
-                                <h3 class="title" id="sch1-title">Place name</h3>
-                                <p class="description">Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero, assumenda.</p>
-                                <p class="location">Location, Location, Location</p>
-                                <p class="distance">0 km</p>
-                            </div>
-                            <div class="place" id="sch2">
-                                <h3 class="title" id="sch2-title">Place name</h3>
-                                <p class="description">Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero, assumenda.</p>
-                                <p class="location">Location, Location, Location</p>
-                                <p class="distance">0 km</p>
-                            </div>
-                            <div class="place" id="sch3">
-                                <h3 class="title" id="sch3-title">Place name</h3>
-                                <p class="description">Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero, assumenda.</p>
-                                <p class="location">Location, Location, Location</p>
-                                <p class="distance">0 km</p>
+                            <div v-for="place in placesArray.school" class="place">
+                                <h3 class="title">{{ place.displayName }}</h3>
+                                <p class="description">{{ place.editorialSummary }}</p>
+                                <p class="location">{{ place.formattedAddress }}</p>
+                                <template v-for="distance in distancesArray.school">
+                                    <p v-if="distance[0] == place.displayName" class="distance">{{ distance[1] }}</p>
+                                </template>
                             </div>
                         </div>
                     </div>
                     <div class="listing-nearby-places">
                         <h3>Nearby markets</h3>
                         <div class="places-list">
-                            <div class="place" id="mkt1">
-                                <h3 class="title">Place name</h3>
-                                <p class="description">Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero, assumenda.</p>
-                                <p class="location">Location, Location, Location</p>
-                                <p class="distance">0 km</p>
-                            </div>
-                            <div class="place" id="mkt2">
-                                <h3 class="title">Place name</h3>
-                                <p class="description">Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero, assumenda.</p>
-                                <p class="location">Location, Location, Location</p>
-                                <p class="distance">0 km</p>
-                            </div>
-                            <div class="place" id="mkt3">
-                                <h3 class="title">Place name</h3>
-                                <p class="description">Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero, assumenda.</p>
-                                <p class="location">Location, Location, Location</p>
-                                <p class="distance">0 km</p>
+                            <div v-for="place in placesArray.market" class="place" id="mkt1">
+                                <h3 class="title">{{ place.displayName }}</h3>
+                                <p class="description">{{ place.editorialSummary }}</p>
+                                <p class="location">{{ place.formattedAddress }}</p>
+                                <template v-for="distance in distancesArray.market">
+                                    <p v-if="distance[0] == place.displayName" class="distance">{{ distance[1] }}</p>
+                                </template>
                             </div>
                         </div>
                     </div>
                     <div class="listing-nearby-places">
                         <h3>Nearby bus stops</h3>
-                        <div class="places-list">
+                        <div v-for="place in placesArray.bus_stop" class="places-list">
                             <div class="place" id="bus1">
-                                <h3 class="title">Place name</h3>
-                                <p class="description">Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero, assumenda.</p>
-                                <p class="location">Location, Location, Location</p>
-                                <p class="distance">0 km</p>
-                            </div>
-                            <div class="place" id="bus2">
-                                <h3 class="title">Place name</h3>
-                                <p class="description">Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero, assumenda.</p>
-                                <p class="location">Location, Location, Location</p>
-                                <p class="distance">0 km</p>
-                            </div>
-                            <div class="place" id="bus3">
-                                <h3 class="title">Place name</h3>
-                                <p class="description">Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero, assumenda.</p>
-                                <p class="location">Location, Location, Location</p>
-                                <p class="distance">0 km</p>
+                                <h3 class="title">{{ place.displayName }}</h3>
+                                <p class="description">{{ place.editorialSummary }}</p>
+                                <p class="location">{{ place.formattedAddress }}</p>
+                                <template v-for="distance in distancesArray.bus_stop">
+                                    <p v-if="distance[0] == place.displayName" class="distance">{{ distance[1] }}</p>
+                                </template>
                             </div>
                         </div>
                     </div>
@@ -326,7 +296,7 @@
 </template>
 
 <script setup>
-import { onBeforeMount, ref } from 'vue';
+import { onBeforeMount, onUpdated, ref } from 'vue';
 import propertiesMaster from '../../composables/properties';
 import Pagination from '../Misc/Pagination.vue'
 import pagination from '../../composables/pagination';
@@ -363,7 +333,7 @@ const {
     getPaginationDataWithRequest
 } = pagination()
 const { user, getUserData } = userMaster()
-const { getReviews, reviews, getMyReview, review,  } = propertyReviewsMaster()
+const { getReviews, reviews, getMyReview, review } = propertyReviewsMaster()
 const { saveFavourite } = favouriteMaster()
 const fauxProperty = ref({})
 
@@ -379,7 +349,7 @@ const imagesList = () => {
     }
     return images
 }
-const { nearbySearch } = mapsMaster()
+const { initMap, map, placesArray, distancesArray } = mapsMaster()
 
 onBeforeMount(() => {
     getProperty(`/api/listings/${route.params.slug}`)
@@ -387,9 +357,29 @@ onBeforeMount(() => {
     getReviews(`/api/listings/${route.params.slug}/reviews`)
     getMyReview(`/api/listings/${route.params.slug}/reviews`)
     getUserData()
-    if (property.value) {
-        nearbySearch(property.value.lat, property.value.lng, `schools`)
-    }
+    // if (property.value.lat) {
+        // nearbySearch(property.value.lat, property.value.lng, `schools`)
+    // }
+})
+
+onUpdated(() => {
+    initMap({
+        map: { 
+            position: {
+                lat: +property.value.lat, 
+                lng: +property.value.lng,
+            },
+            zoom: 16,
+        }, 
+        marker: { 
+            enabled: true,
+            targetFunction: `setBigMarker`, 
+            title: property.value.name
+        },
+        places: {
+            enabled: true,
+        } 
+    })
 })
 
 function openImageBrowser() {

@@ -31,10 +31,10 @@ app.use(VueViewer)
 QuillEditor.props.globalOptions.default = () => globalOptions
 app.component('QuillEditor', QuillEditor)
     .component('Pagination', Pagination)
-app.use(VueGoogleMaps, {
-    load: {
-        key: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
-        libraries: "places",
-    },
-})
+// app.use(VueGoogleMaps, {
+//     load: {
+//         key: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
+//         libraries: "places",
+//     },
+// })
 app.mount('#app')
