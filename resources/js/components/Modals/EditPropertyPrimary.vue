@@ -45,7 +45,7 @@
                             <li>{{ message }}</li>
                         </div>
                     </div>
-                    <div class="form-group" id="zoneMap" style="height: 300px;margin: 15px 0;">
+                    <div class="form-group" id="zoneMap">
                         <Map :lat="property.lat" :lng="property.lng" :zoom="17" :marker="true" />
                     </div>
                     <div class="form-group" id="grpLat">

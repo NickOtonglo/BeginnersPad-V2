@@ -13,6 +13,7 @@ export default function mapsMaster(){
         bus_stop: [],
     })
     let map;
+    let mMarkers = [];
 
     // const nearbySearch = (lat, lng, type) => {
     //     console.log(import.meta.env.VITE_GOOGLE_MAPS_API_KEY)
@@ -36,23 +37,28 @@ export default function mapsMaster(){
 
         // let position = { lat: +lat, lng: +lng }
 
-        map = new Map(document.getElementById("map"), {
+        map = new Map(document.getElementById(maParams.map.id), {
             center: maParams.map.position,
             zoom: maParams.map.zoom,
             title: maParams.marker.title,
             mapId: "map_default",
         });
 
-        if (maParams.marker.enabled) {
+        if (maParams.marker && maParams.marker.enabled) {
             if (maParams.marker.targetFunction == `setMarker`) {
                 setMarker(maParams.map.position, map)
             }
             if (maParams.marker.targetFunction == `setBigMarker`) {
                 setBigMarker(maParams.map.position, map)
             }
+            if (maParams.marker.targetFunction == `setSingleMarker`) {
+                map.addListener("click", (e) => {
+                    setSingleMarker(e.latLng, map)
+                });
+            }
         }
 
-        if (maParams.places.enabled) {
+        if (maParams.places && maParams.places.enabled) {
             nearbySearch(maParams.map.position, ["school"])
             nearbySearch(maParams.map.position, ["supermarket"])
             nearbySearch(maParams.map.position, ["bus_stop"])
@@ -79,6 +85,29 @@ export default function mapsMaster(){
                 borderColor: "#a058f1",
             }).element
         });
+    }
+
+    async function setSingleMarker(position, map) {
+        // https://developers.google.com/maps/documentation/javascript/examples/marker-remove
+        // hideMarkers();
+        const { AdvancedMarkerElement, PinElement } = await google.maps.importLibrary("marker");
+        const marker = new AdvancedMarkerElement({
+            map: map,
+            position: position,
+            content: new PinElement({
+                glyphColor: "#362c41",
+                background: "#703680",
+                borderColor: "#a058f1",
+            }).element
+        });
+        mMarkers.push(marker)
+        console.log(mMarkers)
+    }
+
+    async function setmMarkers(map) {
+        for (let i = 0; i < mMarkers.length; i++) {
+            mMarkers[i].setMap(map)
+        }
     }
 
     async function nearbySearch(position, primaryTypes) {

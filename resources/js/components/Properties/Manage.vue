@@ -174,7 +174,7 @@
 
 <script setup>
 import propertiesMaster from '../../composables/properties';
-import { onBeforeMount, ref } from 'vue';
+import { onBeforeMount, ref, onUpdated } from 'vue';
 import CreateUnit from '../Modals/CreateUnit.vue';
 import EditPropertyFeatures from '../Modals/EditPropertyFeatures.vue';
 import EditPropertyPrimary from '../Modals/EditPropertyPrimary.vue'
@@ -182,6 +182,7 @@ import Pagination from '../Misc/Pagination.vue'
 import pagination from '../../composables/pagination';
 import CardBrand from '../Cards/Brand1.vue'
 import userMaster from '../../composables/users';
+import mapsMaster from '../../composables/maps';
 
 const { 
     property, 
@@ -204,6 +205,7 @@ const {
 } = pagination()
 
 const { user, getUserData } = userMaster()
+const { initMap, map, placesArray, distancesArray } = mapsMaster()
 
 const createUnitRef = ref(null)
 const editPrimaryRef = ref(null)
@@ -222,6 +224,27 @@ onBeforeMount(() => {
     getProperty(`/api/listings/my-listings/${route.params.slug}`)
     getPaginationDataWithRequest(current_page.value, 'property_units', unitsRequest)
     getUserData()
+})
+
+onUpdated(() => {
+    initMap({
+        map: { 
+            id: 'map',
+            position: {
+                lat: +property.value.lat, 
+                lng: +property.value.lng,
+            },
+            zoom: 16,
+        }, 
+        marker: { 
+            enabled: true,
+            targetFunction: `setBigMarker`, 
+            title: property.value.name
+        },
+        places: {
+            enabled: false,
+        } 
+    })
 })
 
 function click(element) {

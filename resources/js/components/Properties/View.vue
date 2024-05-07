@@ -365,6 +365,7 @@ onBeforeMount(() => {
 onUpdated(() => {
     initMap({
         map: { 
+            id: 'map',
             position: {
                 lat: +property.value.lat, 
                 lng: +property.value.lng,
