@@ -116,8 +116,8 @@ class PropertiesController extends Controller
 
         if (
             ($property->status == 'published') || 
-            ($property->status == 'unpublished' && auth()->user()->id == $property->user_id) || 
-            ($property->status != 'unpublished' && 
+            (auth()->user()->id == $property->user_id) || 
+            (($property->status != 'unpublished' && $property->status != 'private') && 
                 (auth()->user()->role_id == 3 || 
                  auth()->user()->role_id == 2 || 
                  auth()->user()->role_id == 1)
