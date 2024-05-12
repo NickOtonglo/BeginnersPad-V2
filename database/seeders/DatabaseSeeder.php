@@ -19,10 +19,11 @@ class DatabaseSeeder extends Seeder
             //     'email' => 'test@example.com',
             // ]);
             
-        // $this->call(RoleSeeder::class);
-        // \App\Models\User::factory(20)->create();
-        // $this->call(ArticleSeeder::class);
-        // $this->call(BrandSeeder::class);
+            // $this->call(RoleSeeder::class);
+            // \App\Models\User::factory(20)->create();
+        // $this->call(PropertyReviewRemovalReasonSeeder::class);
+            // $this->call(ArticleSeeder::class);
+            // $this->call(BrandSeeder::class);
         // $this->call(ZoneCountrySeeder::class);
         // $this->call(ZoneCountySeeder::class);
         // $this->call(ZoneSeeder::class);

@@ -8,6 +8,7 @@ use App\Models\HelpTicket;
 use App\Models\HelpTicketLog;
 use App\Models\Property;
 use App\Models\PropertyLog;
+use App\Models\PropertyReviewRemovalLog;
 use App\Models\PropertyUnit;
 use App\Models\PropertyUnitLog;
 use App\Models\SubZone;
@@ -201,6 +202,26 @@ class CreateUserActivityLog
                         } else {
                             $data->comment = $response->original['model'].' #'.$response->original['key'].': '.$request->method().', status set to '.$unit->status;
                         }
+                    }
+
+                    break;
+
+                case 'PropertyReviewRemovalReason':
+                    $data = new PropertyReviewRemovalLog;
+
+                    $log = $response->original['property_review_removal_reason'];
+
+                    $data->review = $log->review;
+                    $data->rating = $log->rating;
+                    $data->author_id = $log->author_id;
+                    $data->property_id = $log->property_id;
+                    $data->removal_reason = $log->removal_reason;
+                    $data->reason_details = $log->reason_details;
+
+                    if ($response->original['comment']) {
+                        $data->comment = $response->original['comment'];
+                    } else {
+                        $data->comment = $response->original['model'].' #'.$response->original['key'].': '.$request->method();
                     }
 
                     break;

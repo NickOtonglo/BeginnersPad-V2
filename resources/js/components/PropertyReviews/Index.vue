@@ -2,7 +2,8 @@
     <section class="section-listing-info-header">
         <div class="container">
             <div class="header-grp">
-                <div :style="{ background: `url(/images/listings/${property.slug}/${property.thumbnail})` }" style="background-size: cover;" class="thumb"></div>
+                <div :style="{ background: `url(/images/listings/${property.slug}/${property.thumbnail})` }"
+                    style="background-size: cover;" class="thumb"></div>
                 <div class="details">
                     <h3 class="txt-single-line">{{ property.name }}</h3>
                     <div v-if="property.sub_zone" class="location txt-single-line">
@@ -17,7 +18,8 @@
                         <ComponentRatingStars :rating="property.rating" />
                     </div>
                     <div class="section-more">
-                        <router-link :to="{ name: 'property.view', params: { slug: property.slug } }"><i class="fas fa-chevron-left"></i> View listing</router-link>
+                        <router-link :to="{ name: 'property.view', params: { slug: property.slug } }"><i
+                                class="fas fa-chevron-left"></i> View listing</router-link>
                     </div>
                 </div>
             </div>
@@ -32,9 +34,14 @@
                     <div class="review-item">
                         <ComponentRatingStars :rating="item.rating" />
                         <p class="time">{{ item.time_ago }}</p>
-                        <h3 v-if="review && item.id == review.id" @click="click(editReviewRef)" class="occupant active">{{ user.username }} (me) - tap to edit</h3>
+                        <h3 v-if="review && item.id == review.id" @click="click(editReviewRef)" class="occupant active">
+                            {{ user.username }} (me) - tap to edit</h3>
                         <h3 v-else class="occupant">Verified occupant</h3>
                         <p class="review">{{ item.review }}</p>
+                        <div v-if="user.role === 'Admin' || user.role === 'Super Admin' || user.role === 'System Admin'"
+                            class="remove-review">
+                            <span @click="review = item, click(removeReviewRef)">Remove <i class="fas fa-chevron-right"></i></span>
+                        </div>
                     </div>
                 </div>
                 <p v-if="!reviews.length" style="text-align: center;">- no reviews -</p>
@@ -43,6 +50,7 @@
     </section>
 
     <EditReview v-if="review" ref="editReviewRef" :review="review" />
+    <RemoveReview :review="review" ref="removeReviewRef" />
 </template>
 
 <script setup>
@@ -51,6 +59,7 @@ import propertiesMaster from '../../composables/properties';
 import propertyReviewsMaster from '../../composables/property_reviews';
 import userMaster from '../../composables/users'
 import EditReview from '../Modals/EditReview.vue';
+import RemoveReview from '../Modals/RemoveReview.vue';
 import ComponentRatingStars from '../Misc/RatingStars.vue'
 
 const { 
@@ -63,6 +72,7 @@ const { reviews, review, getReviews, getMyReview } = propertyReviewsMaster()
 const { getUserData, user } = userMaster()
 
 const editReviewRef = ref(null)
+const removeReviewRef = ref(null)
 
 onBeforeMount(() => {
     getProperty(`/api/listings/${route.params.slug}`)
@@ -89,5 +99,17 @@ function click(element) {
 }
 .occupant.active:hover {
     color: var(--color-primary);
+}
+.remove-review {
+    text-align: right;
+}
+
+.remove-review span {
+    cursor: pointer;
+}
+
+.remove-review span:hover {
+    font-weight: bold;
+    text-decoration: underline;
 }
 </style>

@@ -3,10 +3,13 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\PropertyReview\PropertyReviewRemovalReasonResource;
 use App\Http\Resources\PropertyReviewResource;
 use App\Models\Property;
 use App\Models\PropertyReview;
+use App\Models\PropertyReviewRemovalReason;
 use Illuminate\Http\Request;
+use stdClass;
 
 class PropertyReviewsController extends Controller
 {
@@ -116,5 +119,37 @@ class PropertyReviewsController extends Controller
     public function showMyReview(Property $property) {
         $review = PropertyReview::where('author_id', auth()->user()->id)->where('property_id', $property->id)->first();
         return new PropertyReviewResource($review);
+    }
+
+    public function getRemovalReasons() {
+        return PropertyReviewRemovalReasonResource::collection(PropertyReviewRemovalReason::get());
+    }
+
+    public function removeReview(Property $property, PropertyReview $review, Request $request)
+    {
+        $request->validate([
+            'removal_reason' => 'required',
+        ]);
+
+        $reviewId = $review->id;
+        $data = new stdClass();
+        $data->review = $review->review;
+        $data->rating = $review->rating;
+        $data->author_id = $review->author_id;
+        $data->property_id = $review->property_id;
+        $data->removal_reason = $request->removal_reason;
+        $data->reason_details = $request->reason_details;
+        // $comment = 'Review removed due to reason: '.$data->reason_reason;
+        $comment = '';
+        
+        $review->delete();
+        $response = [
+            'property_review_removal_reason' => $data,
+            'model' => 'PropertyReviewRemovalReason',
+            'key' => $reviewId,
+            'comment' => $comment,
+            'message' => "Review removed by administrator.",
+        ];
+        return response($response, 201);
     }
 }

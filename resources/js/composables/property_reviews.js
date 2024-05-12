@@ -1,3 +1,4 @@
+import axios from "axios"
 import { inject, ref } from "vue"
 import { useRoute, useRouter } from "vue-router"
 
@@ -14,6 +15,19 @@ export default function propertyReviewsMaster() {
         rating: '',
         review: '',
         time_ago: '',
+    })
+    const removalReasons = ref({})
+    const removalLogs = ref({})
+    const removalLog = ref({
+        id: '',
+        review: '', 
+        rating: '', 
+        author_id: '', 
+        property_id: '', 
+        removal_reason: '', 
+        reason_details: '', 
+        comment: '',
+        parent_id: '',
     })
 
     const getReviews = (request) => {
@@ -131,6 +145,67 @@ export default function propertyReviewsMaster() {
         })
     }
 
+    const getRemovalReasons = (request) => {
+        if (isLoading.value) return
+        isLoading.value = true
+
+        axios.get(request)
+            .then(response => removalReasons.value = response.data.data)
+            .catch(error => console.log(error))
+            .finally(isLoading.value = false)
+    }
+
+    const removeReview = (request, data) => {
+        if (isLoading.value) { return }
+
+        swal.fire({
+            title: 'Are you sure?',
+            text: "This review will be removed. The author will be notified and the removal will be logged",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: 'rgb(207, 95, 50)',
+            cancelButtonColor: 'rgb(238, 14, 14)',
+            confirmButtonText: 'Confirm'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                isLoading.value = true
+                axios.post(request, data)
+                    .then(response => {
+                        swal({
+                            icon: 'success',
+                            title: 'Review removed.',
+                            didClose: () => {
+                                router.go(0)
+                            }
+                        })
+                    })
+                    .catch(error => {
+                        if (error.response?.data) {
+                            validationErrors.value = error.response.data.errors
+                        } else {
+                            swal({
+                                icon: 'error',
+                                title: 'Something went wrong, please try again.'
+                            })
+                        }
+                    })
+                    .finally(() => isLoading.value = false)
+            } else {
+                isLoading.value = false
+            }
+        })
+    }
+
+    const getRemovalLogs = (request) => {
+        if (isLoading.value) return
+        isLoading.value = true
+
+        axios.get(request)
+            .then(response => removalLogs.value = response.data.data)
+            .catch(error => console.log(error))
+            .finally(isLoading.value = false)
+    }
+
     return {
         route,
         router,
@@ -138,10 +213,16 @@ export default function propertyReviewsMaster() {
         validationErrors,
         reviews,
         review,
+        removalReasons,
+        removalLogs,
+        removalLog,
         getReviews,
         getMyReview,
         createReview,
         updateReview,
         deleteReview,
+        getRemovalReasons,
+        getRemovalLogs,
+        removeReview, 
     }
 }

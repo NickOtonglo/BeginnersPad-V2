@@ -110,11 +110,13 @@ Route::middleware(['auth:sanctum', 'logs.user'])->group(function() {
 
     Route::get('reviews', 'App\Http\Controllers\Api\PropertyReviewsController@getMyReviews');
     Route::get('reviews/{property}', 'App\Http\Controllers\Api\PropertyReviewsController@showMyReview');
+    Route::get('reviews/removal/reasons', 'App\Http\Controllers\Api\PropertyReviewsController@getRemovalReasons');
     Route::get('listings/{property}/reviews', 'App\Http\Controllers\Api\PropertyReviewsController@index');
     Route::post('listings/{property}/reviews', 'App\Http\Controllers\Api\PropertyReviewsController@store');
     Route::patch('listings/{property}/reviews', 'App\Http\Controllers\Api\PropertyReviewsController@show');
     Route::patch('listings/{property}/reviews/{review}', 'App\Http\Controllers\Api\PropertyReviewsController@update');
     Route::delete('listings/{property}/reviews/{review}', 'App\Http\Controllers\Api\PropertyReviewsController@destroy');
+    Route::post('listings/{property}/reviews/{review}', 'App\Http\Controllers\Api\PropertyReviewsController@removeReview');
 
     Route::get('favourites', 'App\Http\Controllers\Api\UserFavouritesController@index');
     Route::get('favourites/category/{model}', 'App\Http\Controllers\Api\UserFavouritesController@indexWithCategory');
