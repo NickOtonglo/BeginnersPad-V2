@@ -4,6 +4,7 @@ import Home from '../components/Home.vue'
 import Login from '../components/Auth/Login.vue'
 import Register from '../components/Auth/Register.vue'
 import UserAccount from '../components/Users/Account.vue'
+import UserNotifications from '../components/Users/Notifications.vue'
 import ArticlesIndex from '../components/Articles/Index.vue'
 import ArticlesMine from '../components/Articles/MyArticles.vue'
 import ArticleView from '../components/Articles/View.vue'
@@ -35,6 +36,7 @@ import UsersLogs from '../components/Users/Logs.vue'
 import UserManage from '../components/Users/Manage.vue'
 import ChatsIndex from '../components/Chats/Index.vue'
 import ChatView from '../components/Chats/View.vue'
+import { component } from 'v-viewer'
 
 function auth(to, from, next) {
     if (JSON.parse(localStorage.getItem('authenticated'))) {
@@ -82,6 +84,11 @@ const routes = [
         name: 'users.account',
         beforeEnter: auth,
         component: UserAccount
+    },
+    {
+        path: '/notifications',
+        name: 'user.notifications',
+        component: UserNotifications
     },
     {
         path: '/articles',

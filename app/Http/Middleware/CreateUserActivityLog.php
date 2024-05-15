@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Http\Controllers\Api\NotificationsController;
 use App\Models\FAQ;
 use App\Models\FAQLog;
 use App\Models\HelpTicket;
@@ -249,6 +250,10 @@ class CreateUserActivityLog
             $data->parent_id = UserActivityLog::create($log)->id;
             
             $data->save();
+
+            if ($response->original['property_review_removal_reason']) {
+                app(NotificationsController::class)->sendReviewRemovedNotification($data);
+            }
         }
             
         return $response;

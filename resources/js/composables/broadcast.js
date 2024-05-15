@@ -34,22 +34,39 @@ export default function broadcastMaster() {
                         let data = response.data.data[response.data.data.length - 1]
                         // console.log(response.data.data.length)
                         // console.log(response.data.data[0])
-                        swal.fire({
-                            icon: 'info',
-                            title: data.title,
-                            text: data.body,
-                            showCancelButton: true,
-                            confirmButtonColor: 'rgb(13, 180, 138)',
-                            // cancelButtonColor: 'rgb(238, 14, 14)',
-                            confirmButtonText: 'Open',
-                            cancelButtonText: 'Close',
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                if (data.model == 'Chat') {
-                                    router.push({ name: 'chat.view', params: { id: data.model_id } })
+                        if (!data.model) {
+                            swal.fire({
+                                icon: 'info',
+                                title: data.title,
+                                text: data.body,
+                                showCancelButton: true,
+                                confirmButtonColor: 'rgb(13, 180, 138)',
+                                // cancelButtonColor: 'rgb(238, 14, 14)',
+                                confirmButtonText: 'View all notifications',
+                                cancelButtonText: 'Close',
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    router.push({ name: 'user.notifications' })
                                 }
-                            }
-                        })
+                            })
+                        } else { 
+                            swal.fire({
+                                icon: 'info',
+                                title: data.title,
+                                text: data.body,
+                                showCancelButton: true,
+                                confirmButtonColor: 'rgb(13, 180, 138)',
+                                // cancelButtonColor: 'rgb(238, 14, 14)',
+                                confirmButtonText: 'Open',
+                                cancelButtonText: 'Close',
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    if (data.model == 'Chat') {
+                                        router.push({ name: 'chat.view', params: { id: data.model_id } })
+                                    }
+                                }
+                            })
+                        }
                     })
                     .catch(error => console.log(error))
             })

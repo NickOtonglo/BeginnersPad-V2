@@ -8,6 +8,8 @@ use App\Http\Resources\Notification\NotificationResource;
 use App\Models\ChatMessage;
 use App\Models\ChatParticipant;
 use App\Models\Notification;
+use App\Models\Property;
+use App\Models\PropertyReviewRemovalLog;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -29,6 +31,33 @@ class NotificationsController extends Controller
         $data->save();
         
         // dd(Notification::where('user_id', auth()->user()->id)->latest()->first()); 
+        NotificationSent::dispatch($data);
+    }
+
+    public function sendReviewRemovedNotification(PropertyReviewRemovalLog $log) {
+        $property = Property::find($log->property_id);
+        $title = "";
+        $body = "Hello there! Your review was removed due to the following reason: ".$log->removal_reason.", which is a violation of our 'Terms of Service'.";
+        if ($property) {
+            $title = "Your review for listing '".$property->name."' was removed.";
+        } else {
+            $title = "Your review for a listing was removed.";
+        }
+
+        if ($log->reason_details) {
+            $body = $body." The following comment was given in relation to the removal: \r\n".$log->reason_details;
+        }
+        $body = $body."\r\nYour review read as follows:\r\n - ".$log->review." -\r\n If you have any questions or concerns, please contact support.";
+
+        $data = new Notification();
+        $data->title = $title;
+        $data->body = $body;
+        // $data->model = "";
+        // $data->model_id = "";
+        $data->user_id = $log->author_id;
+
+        $data->save();
+
         NotificationSent::dispatch($data);
     }
 

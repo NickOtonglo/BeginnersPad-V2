@@ -2,9 +2,16 @@
     <div class="modal" id="modal" ref="modalRef">
         <div class="modal-header">
             <h2>Remove review</h2>
-            <button @click="operateModal(modalRef)" id="modalHeaderClose" class="btn-link btn-close"><i class="fas fa-times"></i></button>
+            <button @click="operateModal(modalRef)" id="modalHeaderClose" class="btn-link btn-close"><i
+                    class="fas fa-times"></i></button>
         </div>
         <div class="modal-content">
+            <div v-if="review" class="review-item">
+                <ComponentRatingStars :rating="review.rating" />
+                <p class="time">{{ review.time_ago }}</p>
+                <h3 class="occupant">Verified occupant</h3>
+                <p class="review">{{ review.review }}</p>
+            </div>
             <div class="category">
                 <form @submit.prevent="removeReview(`${request}/${review.id}`, removalLog)">
                     <div class="form-group">
@@ -21,7 +28,8 @@
                     </div>
                     <div class="form-group">
                         <label for="review">Detailed reason</label>
-                        <textarea v-model="removalLog.reason_details" type="text" name="reason_details" rows="10"></textarea>
+                        <textarea v-model="removalLog.reason_details" type="text" name="reason_details"
+                            rows="10"></textarea>
                         <div v-for="message in validationErrors?.reason_details" class="txt-alert txt-danger">
                             <li>{{ message }}</li>
                         </div>
@@ -44,6 +52,7 @@
 import { onBeforeMount, ref } from 'vue';
 import operateModal from '../../composables/modal'
 import propertyReviewsMaster from '../../composables/property_reviews';
+import ComponentRatingStars from '../Misc/RatingStars.vue'
 
 const modalRef = ref(null)
 const { 
