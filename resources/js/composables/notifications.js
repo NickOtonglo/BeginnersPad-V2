@@ -37,6 +37,16 @@ export default function notificationsMaster() {
             .finally(isLoading.value = false)
     }
 
+    const setNotificationToRead = (request) => {
+        if (isLoading.value) return
+        isLoading.value = true
+
+        axios.patch(request)
+            .then()
+            .catch(error => console.log(error))
+            .finally(isLoading.value = false)
+    }
+
     return {
         isLoading, 
         badges, 
@@ -44,5 +54,6 @@ export default function notificationsMaster() {
         getNotifications, 
         getBadges, 
         deleteNotifications, 
+        setNotificationToRead, 
     }
 }

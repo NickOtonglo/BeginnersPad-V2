@@ -39,9 +39,9 @@ class NotificationsController extends Controller
         $title = "";
         $body = "Hello there! Your review was removed due to the following reason: ".$log->removal_reason.", which is a violation of our 'Terms of Service'.";
         if ($property) {
-            $title = "Your review for listing '".$property->name."' was removed.";
+            $title = "Your review of listing '".$property->name."' was removed.";
         } else {
-            $title = "Your review for a listing was removed.";
+            $title = "Your review of a listing was removed.";
         }
 
         if ($log->reason_details) {
@@ -62,7 +62,12 @@ class NotificationsController extends Controller
     }
 
     public function index() {
-        $notifications = auth()->user()->notifications;
+        $notifications = auth()->user()->notifications()->latest()->get();
+        return NotificationResource::collection($notifications);
+    }
+
+    public function getUnreadNotifications() {
+        $notifications = auth()->user()->notifications()->where('read', boolval(0))->latest()->get();
         return NotificationResource::collection($notifications);
     }
 
@@ -82,12 +87,29 @@ class NotificationsController extends Controller
         // $notifications = auth()->user()->notifications;
         $help = auth()->user()->notifications()->where('Model', 'HelpTicket')->where('read', boolval(0))->count();
         $account = auth()->user()->notifications()->where('Model', 'User')->where('read', boolval(0))->count();
+        $noModel = auth()->user()->notifications()->where('Model', null)->where('read', boolval(0))->count();
+        $other = auth()->user()->notifications()
+                ->where('Model', '!=', 'HelpTicket')->where('Model', '!=', 'User')->where('Model', '!=', 'Chat')
+                ->where('read', boolval(0))->count();
         $chat = auth()->user()->notifications()->where('Model', 'Chat')->where('read', boolval(0))->count();
 
         return response()->json([
             'help' => $help, 
-            'account' => $account, 
+            'account' => $account+$noModel+$other, 
             'chat' => $chat, 
         ]);
+    }
+
+    public function setToRead(Notification $notification) {
+        if (!$notification->read) {
+            $notification->read = true;
+            $notification->save();
+    
+            $response = [
+                'notification' => $notification,
+                'message' => "Notification read status changed to true.",
+            ];
+            return response($response, 201);
+        }
     }
 }

@@ -28,7 +28,7 @@
                             </ul>
                         </div>
                     </div>
-                    <div class="panel-item bordered">
+                    <!-- <div class="panel-item bordered">
                         <div class="data">
                             <ul>
                                 <li>Count of listings occupied: 0</li>
@@ -38,7 +38,7 @@
                                 <li>Times suspended: 0</li>
                             </ul>
                         </div>
-                    </div>
+                    </div> -->
                     <div v-if="user.role == 'Lister'" class="panel-item bordered">
                         <div class="lister-details">
                             <div class="title-grp">
@@ -69,114 +69,62 @@
                     </div>
                 </div>
                 <div class="panel">
-                    <div class="panel-item">
+                    <div class="panel-item anchor-no-text-decoration">
                         <h3>Recent activity</h3>
-                        <div class="data">
-                            <div class="favourites-grp">
-                                <div class="fav listing">
-                                    <a href="/admin/manage-listing.html">
-                                        <div class="thumb"></div>
-                                        <div class="details">
-                                            <h3 class="txt-single-line">Listing name</h3>
-                                            <div class="location">
-                                                <span class="spec">Location,</span>
-                                                <span class="spec">Location,</span>
-                                                <span class="spec">Location</span>
-                                            </div>
-                                            <p class="timestamp">Added 5 hours ago</p>
-                                            <div class="info-rating-grp">
-                                                <p class="rating">Rating: 4.0/5</p>
-                                                <div class="stars">
-                                                    <i class="fas fa-star"></i>
-                                                    <i class="fas fa-star"></i>
-                                                    <i class="fas fa-star"></i>
-                                                    <i class="fas fa-star"></i>
-                                                    <i class="far fa-star"></i>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </a>
-                                    <button class="btn-link btn-close"><i class="fas fa-times"></i></button>
+                        <template v-for="(notification, index) in notifications">
+                            <template v-if="index <= 7" class="">
+                                <router-link
+                                    @click="setNotificationToRead(`/api/notifications/key/${notification.id}`), notification.read = 1"
+                                    v-if="notification.dest && !isNaN(notification.dest)"
+                                    :to="notification.dest_link ? { name: notification.dest, params: { id: notification.dest_link } } : { name: notification.dest }"
+                                    class="data-2 link" :class="notification.read == 0 ? 'bold' : ''">
+                                    <div class="text">
+                                        <h5>{{ notification.time_ago }}</h5>
+                                        <h4>{{ notification.title }}</h4>
+                                        <p>{{ notification.body }}</p>
+                                    </div>
+                                </router-link>
+                                <router-link
+                                    @click="setNotificationToRead(`/api/notifications/key/${notification.id}`), notification.read = 1"
+                                    v-if="notification.dest && isNaN(notification.dest)"
+                                    :to="notification.dest_link ? { name: notification.dest, params: { slug: notification.dest_link } } : { name: notification.dest }"
+                                    class="data-2 link" :class="notification.read == 0 ? 'bold' : ''">
+                                    <div class="text">
+                                        <h5>{{ notification.time_ago }}</h5>
+                                        <h4>{{ notification.title }}</h4>
+                                        <p>{{ notification.body }}</p>
+                                    </div>
+                                </router-link>
+                                <div @click="setNotificationToRead(`/api/notifications/key/${notification.id}`), notification.read = 1"
+                                    v-else class="data-2 link" :class="notification.read == 0 ? 'bold' : ''">
+                                    <div class="text">
+                                        <h5>{{ notification.time_ago }}</h5>
+                                        <h4>{{ notification.title }}</h4>
+                                        <p class="txt-triple-line">{{ notification.body }}</p>
+                                    </div>
                                 </div>
-                                <div class="fav unit">
-                                    <a href="/admin/manage-listing-unit.html">
-                                        <div class="thumb"></div>
-                                        <div class="details">
-                                            <h3 class="txt-single-line">Unit title</h3>
-                                            <div class="specs">
-                                                <span class="spec">1 bed,</span>
-                                                <span class="spec">2 bath,</span>
-                                                <span class="spec">40sq M</span>
-                                            </div>
-                                            <div class="deposit">
-                                                <span class="label">Initial deposit:</span>
-                                                <span class="data">not required</span>
-                                            </div>
-                                            <div class="price">
-                                                <span class="label">KES</span>
-                                                <span class="data">0.00</span>
-                                            </div>
-                                            <p class="timestamp">Added 5 hours ago</p>
-                                        </div>
-                                    </a>
-                                    <button class="btn-link btn-close"><i class="fas fa-times"></i></button>
-                                </div>
-                                <div class="fav listing">
-                                    <a href="/admin/manage-listing.html">
-                                        <div class="thumb"></div>
-                                        <div class="details">
-                                            <h3 class="txt-single-line">Listing name</h3>
-                                            <div class="location">
-                                                <span class="spec">Location,</span>
-                                                <span class="spec">Location,</span>
-                                                <span class="spec">Location</span>
-                                            </div>
-                                            <p class="timestamp">Added 5 hours ago</p>
-                                            <div class="info-rating-grp">
-                                                <p class="rating">Rating: 4.0/5</p>
-                                                <div class="stars">
-                                                    <i class="fas fa-star"></i>
-                                                    <i class="fas fa-star"></i>
-                                                    <i class="fas fa-star"></i>
-                                                    <i class="fas fa-star"></i>
-                                                    <i class="far fa-star"></i>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </a>
-                                    <button class="btn-link btn-close"><i class="fas fa-times"></i></button>
-                                </div>
-                                <div class="fav topic">
-                                    <a href="../view-topic.html">
-                                        <h3 class="title-main txt-single-line">Listing a property - Get started</h3>
-                                        <p class="text-main txt-six-line">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Non ipsam impedit ut, harum dicta molestiae laudantium et
-                                        totam doloribus molestias cum ducimus fuga. Sunt natus, iste consequuntur eaque officiis ad omnis voluptatem quasi,
-                                        consequatur repudiandae similique, quis nemo eius. Reiciendis voluptates error numquam ipsam adipisci perferendis libero
-                                        aspernatur excepturi eligendi beatae blanditiis asperiores earum, repellendus, sunt voluptatem illo corrupti praesentium
-                                        debitis architecto autem unde, eaque enim fugit deleniti. Nobis repellendus aliquid perspiciatis, dolorum facilis earum
-                                        asperiores quo rerum, quisquam rem facere quos voluptas consequuntur unde ipsum exercitationem ad! Ab delectus
-                                        voluptates fuga amet quia blanditiis numquam. Dolores fugit atque at!</p>
-                                    </a>
-                                    <button class="btn-link btn-close"><i class="fas fa-times"></i></button>
-                                </div>
-                                <div class="fav topic">
-                                    <a href="../view-topic.html">
-                                        <h3 class="title-main txt-single-line">Listing a property - Get started</h3>
-                                        <p class="text-main txt-six-line">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Non ipsam impedit ut, harum dicta molestiae laudantium et
-                                        totam doloribus molestias cum ducimus fuga. Sunt natus, iste consequuntur eaque officiis ad omnis voluptatem quasi,
-                                        consequatur repudiandae similique, quis nemo eius. Reiciendis voluptates error numquam ipsam adipisci perferendis libero
-                                        aspernatur excepturi eligendi beatae blanditiis asperiores earum, repellendus, sunt voluptatem illo corrupti praesentium
-                                        debitis architecto autem unde, eaque enim fugit deleniti. Nobis repellendus aliquid perspiciatis, dolorum facilis earum
-                                        asperiores quo rerum, quisquam rem facere quos voluptas consequuntur unde ipsum exercitationem ad! Ab delectus
-                                        voluptates fuga amet quia blanditiis numquam. Dolores fugit atque at!</p>
-                                    </a>
-                                    <button class="btn-link btn-close"><i class="fas fa-times"></i></button>
-                                </div>
+                            </template>
+                        </template>
+                        <template v-if="!notifications.length">
+                            <p style="text-align: center;">-no new notifications-</p>
+                        </template>
+                        <!-- <div class="data-2 link">
+                            <div class="thumb">
+                                <img src="/images/static/avatar.png" alt="">
                             </div>
-                        </div>
+                            <div class="text">
+                                <h4>Title</h4>
+                                <p class="txt-triple-line">
+                                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Unde repellat laudantium commodi quis asperiores! Hic consequuntur ea reprehenderit earum! Maiores omnis aliquid facere. Excepturi ab cum aliquam amet veritatis blanditiis maxime! Asperiores, suscipit. Laborum in eaque, expedita illo odio nulla, rem fugit error quibusdam ullam libero debitis doloremque magnam? Adipisci, eos ut. Vero, repellendus! Ab magnam eius est tenetur dignissimos ullam totam ex pariatur aliquam porro, officia placeat at, sapiente perspiciatis fugit. Soluta deleniti accusamus quidem. Libero aperiam possimus consequuntur mollitia aliquam aut laboriosam unde eos architecto eius? Voluptas, suscipit hic eveniet id quibusdam ab eum modi consequuntur pariatur dolor iusto deserunt blanditiis asperiores excepturi sapiente quaerat aliquid velit, inventore saepe sit alias enim ea mollitia aspernatur? Voluptate maiores, et itaque aut sunt deserunt exercitationem! Debitis veritatis sint eaque perspiciatis est id. Dolorem delectus illo ipsa officia inventore eaque, placeat, aperiam, ex fugiat consequuntur atque! Cumque error dignissimos inventore ipsum adipisci temporibus quo aut cupiditate sed rem ut doloribus voluptates nihil nesciunt, libero amet accusantium quia sunt eligendi distinctio id. Sed aut suscipit commodi, asperiores rem at laborum voluptatum exercitationem ullam saepe ratione consequuntur impedit. Dolorem unde facere, ipsa fuga corporis fugiat optio. Ullam architecto nemo aut recusandae delectus blanditiis neque corporis eligendi itaque dolorem. Eveniet sequi, corporis molestias autem laboriosam magni sint ut quos magnam quia perferendis labore excepturi recusandae nisi repudiandae harum dicta? Veritatis sapiente error in, odit quis optio quidem saepe voluptatibus officiis odio neque hic ipsam voluptate, mollitia a, deserunt facere sunt aliquam consequuntur dolor illo.
+                                </p>
+                            </div>
+                        </div> -->
                     </div>
                     <div class="section-more">
-                        <a href="/admin/account-activity-log.html">View more <i class="fas fa-chevron-right"></i></a>
+                        <router-link v-if="notifications.length" :to="{ name: 'user.notifications' }">View more <i
+                                class="fas fa-chevron-right"></i></router-link>
+                        <router-link v-else :to="{ name: 'user.notifications' }">View all notifications <i
+                                class="fas fa-chevron-right"></i></router-link>
                     </div>
                 </div>
             </div>
@@ -189,12 +137,13 @@
 </template>
 
 <script setup>
+import { onMounted, ref } from 'vue';
 import UpdateForm from '../Modals/EditUserAccount.vue'
 import UpdateBrand from '../Modals/EditBrand.vue'
 import CreateBrand from '../Modals/CreateBrand.vue'
 import CardUser from '../Cards/User1.vue';
 import CardBrand from '../Cards/Brand1.vue'
-import { onMounted, ref } from 'vue';
+import notificationsMaster from '../../composables/notifications';
 
 const user = ref({})
 
@@ -202,6 +151,11 @@ const props = defineProps(['modal'])
 const updateFormRef = ref(null);
 const updateBrandRef = ref(null);
 const createBrandRef = ref(null)
+const {
+    notifications,
+    getNotifications,
+    setNotificationToRead, 
+} = notificationsMaster()
 
 function getUserAccount() {
     axios.get('api/user/account')
@@ -221,6 +175,7 @@ function click(element) {
 
 onMounted(() => {
     getUserAccount()
+    getNotifications(`/api/notifications/unread`)
 })
 
 </script>

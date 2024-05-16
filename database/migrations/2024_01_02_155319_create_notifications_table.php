@@ -17,7 +17,8 @@ return new class extends Migration
             $table->longText('body');
             $table->string('thumbnail')->nullable();
             $table->string('model')->nullable();
-            $table->unsignedBigInteger('model_id')->nullable();
+            // $table->unsignedBigInteger('model_id')->nullable();
+            $table->string('model_id')->nullable();
             $table->boolean('read')->default(false);
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')
