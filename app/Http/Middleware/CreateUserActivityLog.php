@@ -251,7 +251,7 @@ class CreateUserActivityLog
             
             $data->save();
 
-            if ($response->original['property_review_removal_reason']) {
+            if ($response->original['model'] == 'PropertyReviewRemovalReason') {
                 app(NotificationsController::class)->sendReviewRemovedNotification($data);
             }
         }

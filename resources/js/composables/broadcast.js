@@ -31,9 +31,9 @@ export default function broadcastMaster() {
             .listen('NotificationSent', (e) => {
                 axios.get('/api/notifications')
                     .then(response => {
-                        let data = response.data.data[response.data.data.length - 1]
+                        let data = response.data.data[0]
                         // console.log(response.data.data.length)
-                        // console.log(response.data.data[0])
+                        // console.log(response.data.data[response.data.data.length - 1])
                         if (!data.model) {
                             swal.fire({
                                 icon: 'info',
