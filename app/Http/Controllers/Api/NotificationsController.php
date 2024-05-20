@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\Notification\NotificationResource;
 use App\Models\ChatMessage;
 use App\Models\ChatParticipant;
+use App\Models\HelpTicket;
 use App\Models\Notification;
 use App\Models\Property;
 use App\Models\PropertyLog;
@@ -63,14 +64,12 @@ class NotificationsController extends Controller
     }
 
     public function sendPropertyNotification(Property $property, PropertyLog $log) {
-        $title = "";
+        $title = "Your listing '".$property->name."' was ".$property->status.".";
         $body = "Hello there! Your property '".$property->name."' was ".$property->status.".\r\n" ;
         if ($property->status !== 'published') {
             $body = $body." The following reason was given: ".$log->comment;
         }
         $body = $body."\r\n If you have any questions or concerns, please contact support.";
-        // if you need help managing your property...
-        $title = "Your listing '".$property->name."' was ".$property->status.".";
         
         $data = new Notification();
         $data->title = $title;
@@ -82,6 +81,44 @@ class NotificationsController extends Controller
         $data->save();
         
         NotificationSent::dispatch($data);
+    }
+
+    public function sendHelpNotification(HelpTicket $ticket) {
+        $title = "";
+        $body = "";
+        if ($ticket->status == "pending") {
+            $title = "Ticket #".$ticket->id.": your ticket has been assigned to a member of the support team.";
+        } else if ($ticket->status == "reopened") {
+            $title = "Ticket #".$ticket->id.": your ticket has been reopened.";
+        } else {
+            $title = "Ticket #".$ticket->id.": status set to".$ticket->status.".";
+        }
+        
+        if ($ticket->status == "pending" || $ticket->status == "reopened") {
+            $body = "Hello there! Your ticket #" . $ticket->id . " has been assigned to a member of the support team and is currently being worked on. 
+                    You shall be contacted by our team if any additional information is required from you concerning the ticket. 
+                    Otherwise, you shall be notified if any updates occur.\r\n";
+        } else {
+            $body = "Hello there! Your ticket #" . $ticket->id . " has been ".$ticket->status.". 
+                    You shall be contacted by our team if any additional information is required from you concerning the ticket. 
+                    Otherwise, you shall be notified if any updates occur.\r\n";
+        }
+       
+        $body = $body."\r\n If you have any questions or concerns, please contact support.";
+
+        $user = User::where('email', $ticket->email)->first();
+        if ($user) {
+            $data = new Notification();
+            $data->title = $title;
+            $data->body = $body;
+            $data->model = "HelpTicket";
+            $data->model_id = $ticket->id;
+            $data->user_id = $user->id;
+
+            $data->save();
+
+            NotificationSent::dispatch($data);
+        }
     }
 
     public function index() {

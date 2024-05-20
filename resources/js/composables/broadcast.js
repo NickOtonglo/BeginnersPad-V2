@@ -67,6 +67,9 @@ export default function broadcastMaster() {
                                     if (data.dest == 'property.view') {
                                         router.push({ name: 'property.view', params: { slug: data.dest_link } })
                                     }
+                                    if (data.dest == 'ticket.view') {
+                                        router.push({ name: 'ticket.view', params: { id: data.dest_link } })
+                                    }
                                 }
                             })
                         }

@@ -35,6 +35,8 @@ class CreateUserActivityLog
     public function handle(Request $request, Closure $next): Response
     {
         $response = $next($request);
+        $ticket = "";
+        $property = "";
 
         // Perform action
 
@@ -256,8 +258,12 @@ class CreateUserActivityLog
             }
             if ($response->original['model'] == 'Property') {
                 if ($data->status == 'published' || $data->status == 'rejected' || $data->status == 'suspended') {
-                    $property = Property::where('slug', $data->slug)->first();
                     app(NotificationsController::class)->sendPropertyNotification($property, $data);
+                }
+            }
+            if ($response->original['model'] == 'HelpTicket') {
+                if ($data->status !== 'open') {
+                    app(NotificationsController::class)->sendHelpNotification($ticket);
                 }
             }
         }
