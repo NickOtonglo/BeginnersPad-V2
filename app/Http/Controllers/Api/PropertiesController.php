@@ -420,7 +420,7 @@ class PropertiesController extends Controller
     }
 
     public function getLogs(Property $property) {
-        $logs = PropertyLog::where('slug', $property->slug)->get();
+        $logs = PropertyLog::where('slug', $property->slug)->latest()->get();
         return PropertyLogResource::collection($logs);
     }
 
