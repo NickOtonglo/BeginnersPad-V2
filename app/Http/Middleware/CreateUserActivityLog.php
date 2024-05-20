@@ -254,6 +254,12 @@ class CreateUserActivityLog
             if ($response->original['model'] == 'PropertyReviewRemovalReason') {
                 app(NotificationsController::class)->sendReviewRemovedNotification($data);
             }
+            if ($response->original['model'] == 'Property') {
+                if ($data->status == 'published' || $data->status == 'rejected' || $data->status == 'suspended') {
+                    $property = Property::where('slug', $data->slug)->first();
+                    app(NotificationsController::class)->sendPropertyNotification($property, $data);
+                }
+            }
         }
             
         return $response;

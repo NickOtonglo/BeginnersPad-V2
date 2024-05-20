@@ -34,7 +34,7 @@ export default function broadcastMaster() {
                         let data = response.data.data[0]
                         // console.log(response.data.data.length)
                         // console.log(response.data.data[response.data.data.length - 1])
-                        if (!data.model) {
+                        if (!data.dest) {
                             swal.fire({
                                 icon: 'info',
                                 title: data.title,
@@ -61,8 +61,11 @@ export default function broadcastMaster() {
                                 cancelButtonText: 'Close',
                             }).then((result) => {
                                 if (result.isConfirmed) {
-                                    if (data.model == 'Chat') {
-                                        router.push({ name: 'chat.view', params: { id: data.model_id } })
+                                    if (data.dest == 'chat.view') {
+                                        router.push({ name: 'chat.view', params: { id: data.dest_link } })
+                                    }
+                                    if (data.dest == 'property.view') {
+                                        router.push({ name: 'property.view', params: { slug: data.dest_link } })
                                     }
                                 }
                             })

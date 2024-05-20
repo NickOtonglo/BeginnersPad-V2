@@ -9,6 +9,7 @@ use App\Models\ChatMessage;
 use App\Models\ChatParticipant;
 use App\Models\Notification;
 use App\Models\Property;
+use App\Models\PropertyLog;
 use App\Models\PropertyReviewRemovalLog;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -58,6 +59,28 @@ class NotificationsController extends Controller
 
         $data->save();
 
+        NotificationSent::dispatch($data);
+    }
+
+    public function sendPropertyNotification(Property $property, PropertyLog $log) {
+        $title = "";
+        $body = "Hello there! Your property '".$property->name."' was ".$property->status.".\r\n" ;
+        if ($property->status !== 'published') {
+            $body = $body." The following reason was given: ".$log->comment;
+        }
+        $body = $body."\r\n If you have any questions or concerns, please contact support.";
+        // if you need help managing your property...
+        $title = "Your listing '".$property->name."' was ".$property->status.".";
+        
+        $data = new Notification();
+        $data->title = $title;
+        $data->body = $body;
+        $data->model = "Property";
+        $data->model_id = $property->slug;
+        $data->user_id = $property->user_id;
+
+        $data->save();
+        
         NotificationSent::dispatch($data);
     }
 

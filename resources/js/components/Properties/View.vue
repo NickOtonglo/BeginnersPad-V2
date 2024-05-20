@@ -190,6 +190,7 @@
                             <button @click="fauxProperty.status = 'suspended', click(submitReasonRef)" v-if="property.status === 'published'">Suspend</button>
                             <button @click="submitForm('published')" v-if="property.status === 'suspended'">Restore</button>
                             <button @click="fauxProperty.status = 'rejected', click(submitReasonRef)" v-if="property.status === 'pending'">Reject</button>
+                            <button @click="fauxProperty.status = 'published', click(submitReasonRef)" v-if="property.status === 'pending'">Publish</button>
                             <button @click="deleteProperty(`/api/listings/${route.params.slug}`)">Delete</button>
                         </div>
                     </div>
