@@ -393,6 +393,18 @@ export default function propertiesMaster() {
         axios.get(request)
             .then(response => {
                 propertyLogs.value = response.data.data
+            })
+            .catch(error => console.log(error))
+            .finally(isLoading.value = false)
+    }
+
+    const getAllPropertyLogs = (request) => {
+        if (isLoading.value) return
+        isLoading.value = true
+
+        axios.get(request)
+            .then(response => {
+                propertyLogs.value = response.data.data
                 propertyLogsCount.value = response.data.meta.total
             })
             .catch(error => console.log(error))
@@ -470,6 +482,7 @@ export default function propertiesMaster() {
         propertyLogsCount,
         log,
         getPropertyLogs,
+        getAllPropertyLogs,
         contactLister, 
     }
 }

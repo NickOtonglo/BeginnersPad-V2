@@ -18,16 +18,20 @@ export default function propertyReviewsMaster() {
     })
     const removalReasons = ref({})
     const removalLogs = ref({})
+    const removalLogsCount = ref(0)
     const removalLog = ref({
         id: '',
         review: '', 
         rating: '', 
-        author_id: '', 
-        property_id: '', 
+        author_username: '', 
+        property_name: '', 
+        property_slug: '', 
         removal_reason: '', 
-        reason_details: '', 
+        reason_details: '',
+        action_by: '',
         comment: '',
-        parent_id: '',
+        timestamp: '',
+        time_ago: '',
     })
 
     const getReviews = (request) => {
@@ -201,7 +205,10 @@ export default function propertyReviewsMaster() {
         isLoading.value = true
 
         axios.get(request)
-            .then(response => removalLogs.value = response.data.data)
+            .then(response => {
+                removalLogs.value = response.data.data
+                removalLogsCount.value = response.data.meta.total
+            })
             .catch(error => console.log(error))
             .finally(isLoading.value = false)
     }
@@ -216,6 +223,7 @@ export default function propertyReviewsMaster() {
         removalReasons,
         removalLogs,
         removalLog,
+        removalLogsCount,
         getReviews,
         getMyReview,
         createReview,

@@ -112,6 +112,7 @@ Route::middleware(['auth:sanctum', 'logs.user'])->group(function() {
     Route::get('reviews', 'App\Http\Controllers\Api\PropertyReviewsController@getMyReviews');
     Route::get('reviews/{property}', 'App\Http\Controllers\Api\PropertyReviewsController@showMyReview');
     Route::get('reviews/removal/reasons', 'App\Http\Controllers\Api\PropertyReviewsController@getRemovalReasons');
+    Route::get('reviews/removal/logs', 'App\Http\Controllers\Api\PropertyReviewsController@getRemovalLogs');
     Route::get('listings/{property}/reviews', 'App\Http\Controllers\Api\PropertyReviewsController@index');
     Route::post('listings/{property}/reviews', 'App\Http\Controllers\Api\PropertyReviewsController@store');
     Route::patch('listings/{property}/reviews', 'App\Http\Controllers\Api\PropertyReviewsController@show');

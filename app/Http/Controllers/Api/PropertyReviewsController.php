@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\PropertyReview\PropertyReviewRemovalLogResource;
 use App\Http\Resources\PropertyReview\PropertyReviewRemovalReasonResource;
 use App\Http\Resources\PropertyReviewResource;
 use App\Models\Property;
 use App\Models\PropertyReview;
+use App\Models\PropertyReviewRemovalLog;
 use App\Models\PropertyReviewRemovalReason;
 use Illuminate\Http\Request;
 use stdClass;
@@ -151,5 +153,25 @@ class PropertyReviewsController extends Controller
             'message' => "Review removed by administrator.",
         ];
         return response($response, 201);
+    }
+
+    public function getRemovalLogs() {
+        $request = request()->sort;
+
+        $logs = PropertyReviewRemovalLog::when(request('search_global'), function($query) {
+            $query->where(function($q) {
+                $q->where('review', 'like', '%'.request('search_global').'%')
+                  ->orWhere('rating', 'like', '%'.request('search_global').'%')
+                  ->orWhere('removal_reason', 'like', '%'.request('search_global').'%')
+                  ->orWhere('reason_details', 'like', '%'.request('search_global').'%');
+            });
+        });
+
+        if ($request) {
+            if ($request == 'desc' || $request == 'asc') {
+                $logs = $logs->orderBy('created_at', $request);
+            }
+        }
+        return PropertyReviewRemovalLogResource::collection($logs->paginate(50));
     }
 }

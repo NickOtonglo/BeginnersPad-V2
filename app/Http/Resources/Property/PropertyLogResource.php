@@ -28,6 +28,7 @@ class PropertyLogResource extends JsonResource
         $county = $zone->zoneCounty;
 
         return [
+            'id' => $this->id,
             'name' => $this->name,
             'slug' => $this->slug,
             'lat' => (float) $this->lat,

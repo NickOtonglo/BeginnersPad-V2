@@ -4,6 +4,7 @@ import zonesMaster from "./zones"
 import subZoneMaster from './subzones'
 import propertiesMaster from "./properties"
 import unitsMaster from "./units"
+import propertyReviewsMaster from "./property_reviews"
 import favouriteMaster from './favourites'
 import ticketsMaster from "./tickets"
 import userMaster from "./users"
@@ -18,11 +19,12 @@ export default function pagination() {
     const { getArticles, articles } = articlesMaster()
     const { zones, getZones, zonesCount } = zonesMaster()
     const { subZones, getSubZones, subZonesCount } = subZoneMaster()
-    const { properties, getProperties, propertiesCount, propertyLogs, getPropertyLogs, propertyLogsCount } = propertiesMaster()
+    const { properties, getProperties, propertiesCount, propertyLogs, getAllPropertyLogs, propertyLogsCount } = propertiesMaster()
     const { units, getUnits, unitsCount } = unitsMaster()
     const { favourites, getFavourites, favouritesCount } = favouriteMaster()
     const { tickets, getTickets, ticketsCount } = ticketsMaster()
     const { users, getUsers, usersCount, logs, getLogs } = userMaster()
+    const { removalLogs, getRemovalLogs, removalLogsCount } = propertyReviewsMaster()
     let sourceParam = '', requestParam = ''
 
     const getPaginationData = (page, source) => {
@@ -73,7 +75,7 @@ export default function pagination() {
                     getProperties(`${request}?page=${page}&search_global=${search_global.value}&sort=${filter_sort.value}`)
                 }
                 if (source == 'property_logs') {
-                    getPropertyLogs(`${request}?page=${page}&search_global=${search_global.value}&sort=${filter_sort.value}`)
+                    getAllPropertyLogs(`${request}?page=${page}&search_global=${search_global.value}&sort=${filter_sort.value}`)
                 }
                 if (source == 'property_units') {
                     getUnits(`${request}?page=${page}`)
@@ -97,6 +99,9 @@ export default function pagination() {
                 if (source == 'user_logs') {
                     getLogs(`${request}?page=${page}&search_global=${search_global.value}`)
                 }
+                if (source == 'property_review_removal_logs') {
+                    getRemovalLogs(`${request}?page=${page}&search_global=${search_global.value}&sort=${filter_sort.value}`)
+                }
             })
     }
 
@@ -107,6 +112,7 @@ export default function pagination() {
             sourceParam == 'properties' || 
             sourceParam == 'property_logs' || 
             sourceParam == 'property_units' || 
+            sourceParam == 'property_review_removal_logs' || 
             sourceParam == 'help_tickets' || 
             sourceParam == 'users' ||
             sourceParam == 'user_logs'
@@ -147,6 +153,7 @@ export default function pagination() {
         users,
         logs,
         propertyLogs,
+        removalLogs,
         total_pages,
         per_page,
         current_page,
@@ -157,6 +164,7 @@ export default function pagination() {
         subZonesCount,
         propertiesCount,
         propertyLogsCount,
+        removalLogsCount,
         unitsCount,
         favouritesCount,
         ticketsCount,

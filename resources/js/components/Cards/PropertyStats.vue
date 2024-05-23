@@ -20,12 +20,12 @@
 import { onBeforeMount } from 'vue';
 import propertiesMaster from '../../composables/properties';
 
-const { logs, getLogs, route } = propertiesMaster()
+const { logs, getPropertyLogs, route } = propertiesMaster()
 const props = defineProps({
     property: Object,
 })
 
 onBeforeMount(() => {
-    getLogs(`/api/listings/${route.params.slug}/logs`)
+    getPropertyLogs(`/api/listings/${route.params.slug}/logs`)
 })
 </script>
