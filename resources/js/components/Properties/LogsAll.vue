@@ -1,6 +1,16 @@
 <template>
+    <SearchBar 
+        @search-initiated="filterLogs" 
+        @search-cancelled="filterLogs" />
     <section id="sectionTable">
         <div class="container">
+            <div class="container-btn-dropdown">
+                <select v-model="filter_sort" @change="getPaginationDataWithRequest(1, `property_logs`, `${request}`)"
+                    class="btn-dropdown">
+                    <option value="desc">Sort by newest</option>
+                    <option value="asc">Sort by oldest</option>
+                </select>
+            </div>
             <div class="table-grp">
                 <h4 class="table-title">Property logs</h4>
                 <table>
@@ -10,6 +20,7 @@
                         <th>Status</th>
                         <th>Action</th>
                         <th v-if="user.role === 'Admin' || user.role === 'Super Admin' || user.role === 'System Admin'">Performed by</th>
+                        <th>Location</th>
                         <th>Comments</th>
                         <th>Time</th>
                     </tr>
@@ -28,8 +39,9 @@
                                 <td>property deleted</td>
                             </template>
                             <td v-if="user.role === 'Admin' || user.role === 'Super Admin' || user.role === 'System Admin'">@{{ item.action_by }}</td>
+                            <td>{{ item.sub_zone }}, {{ item.zone }}, {{ item.county }}</td>
                             <td>{{ item.comment }}</td>
-                            <td>{{ item.time_ago }}</td>
+                            <td>{{ item.timestamp }}</td>
                         </tr>
                     </template>
                     <template v-if="propertyLogs && !propertyLogs.length">
@@ -37,25 +49,47 @@
                     </template>
                 </table>
             </div>
+            <Pagination v-if="propertyLogsCount >= 50" :totalPages="total_pages"
+                :perPage="per_page"
+                :currentPage="current_page"
+                @pagechanged="onPageChange" />
         </div>
     </section>
 </template>
 
 <script setup>
 import { onBeforeMount, ref } from 'vue';
-import propertiesMaster from '../../composables/properties';
 import userMaster from '../../composables/users'
+import pagination from '../../composables/pagination'
+import SearchBar from '../Search/SearchBar.vue';
 
 const {
+    search_global,
+    filter_sort, 
+    total_pages,
+    per_page,
+    current_page,
     propertyLogs,
-    getPropertyLogs,
-    isLoading,
-    route,
-} = propertiesMaster()
+    propertyLogsCount,
+    onPageChange,
+    getPaginationDataWithRequest
+} = pagination()
+
 const { user, getUserData } = userMaster()
+const request = ref(`/api/listings/logs/all`)
+
+function filterLogs(input) {
+    if (!input) {
+        search_global.value = ''
+    } else {
+        search_global.value = input
+    }
+    getPaginationDataWithRequest(current_page.value, `property_logs`, request.value)
+}
 
 onBeforeMount(() => {
-    getPropertyLogs(`/api/listings/${route.params.slug}/logs`)
+    getPaginationDataWithRequest(current_page.value, `property_logs`, request.value)
+    filter_sort.value = 'desc'
     getUserData()
 })
 </script>

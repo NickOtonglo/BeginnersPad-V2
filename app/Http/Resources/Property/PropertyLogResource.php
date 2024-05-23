@@ -3,6 +3,7 @@
 namespace App\Http\Resources\Property;
 
 use App\Models\PropertyLog;
+use App\Models\SubZone;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -22,6 +23,9 @@ class PropertyLogResource extends JsonResource
             $username = $query->username;
         }
         $suspended_count = PropertyLog::where('slug', $this->slug)->where('status', 'suspended')->count();
+        $subZone = SubZone::find($this->sub_zone_id);
+        $zone = $subZone->zone;
+        $county = $zone->zoneCounty;
 
         return [
             'name' => $this->name,
@@ -34,9 +38,12 @@ class PropertyLogResource extends JsonResource
             'stories' => $this->stories,
             'thumbnail' => $this->thumbnail,
             'lister' => User::where('id', $this->user_id)->first()->username,
-            'sub_zone_id' => $this->sub_zone_id,
+            'sub_zone' => $subZone->name,
+            'zone' => $zone->name,
+            'county' => $county->name, 
             'action_by' => $username, 
             'comment' => $this->comment,
+            'timestamp' => $this->created_at->format('jS F Y, H:m:s'),
             'time_ago' => $this->created_at->diffForHumans(),
             'method' => $this->userActivityLog->method,
             'suspended_count' => $suspended_count,

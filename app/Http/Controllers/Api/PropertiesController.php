@@ -424,6 +424,27 @@ class PropertiesController extends Controller
         return PropertyLogResource::collection($logs);
     }
 
+    public function getAllLogs() {
+        $request = request()->sort;
+
+        $logs = PropertyLog::when(request('search_global'), function($query) {
+            $query->where(function($q) {
+                $q->where('slug', 'like', '%'.request('search_global').'%')
+                  ->orWhere('name', 'like', '%'.request('search_global').'%')
+                  ->orWhere('status', 'like', '%'.request('search_global').'%')
+                  ->orWhere('description', 'like', '%'.request('search_global').'%')
+                  ->orWhere('comment', 'like', '%'.request('search_global').'%');
+            });
+        });
+
+        if ($request) {
+            if ($request == 'desc' || $request == 'asc') {
+                $logs = $logs->orderBy('created_at', $request);
+            }
+        }
+        return PropertyLogResource::collection($logs->paginate(50));
+    }
+
     public function sendEnquiry(Property $property, Request $request) {
         $sender = auth()->user();
         $receiver = $property->user;

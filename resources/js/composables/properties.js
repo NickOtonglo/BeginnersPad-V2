@@ -31,7 +31,8 @@ export default function propertiesMaster() {
             property_id: '',
         })
     })
-    const logs = ref({})
+    const propertyLogs = ref({})
+    const propertyLogsCount = ref(0)
     const log = ref({
         comment: '',
     })
@@ -385,13 +386,14 @@ export default function propertiesMaster() {
         })
     }
 
-    const getLogs = (request) => {
+    const getPropertyLogs = (request) => {
         if (isLoading.value) return
         isLoading.value = true
 
         axios.get(request)
             .then(response => {
-                logs.value = response.data.data
+                propertyLogs.value = response.data.data
+                propertyLogsCount.value = response.data.meta.total
             })
             .catch(error => console.log(error))
             .finally(isLoading.value = false)
@@ -464,9 +466,10 @@ export default function propertiesMaster() {
         removeFile,
         uploadThumb,
         updateStatus,
-        logs,
+        propertyLogs,
+        propertyLogsCount,
         log,
-        getLogs,
+        getPropertyLogs,
         contactLister, 
     }
 }

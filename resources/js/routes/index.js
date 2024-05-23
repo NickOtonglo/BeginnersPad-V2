@@ -18,6 +18,7 @@ import ZoneView from '../components/Zones/View.vue'
 import SubZoneView from '../components/SubZones/View.vue'
 import PropertiesIndex from '../components/Properties/Index.vue'
 import PropertiesMine from '../components/Properties/MyProperties.vue'
+import PropertiesLogs from '../components/Properties/LogsAll.vue'
 import PropertyManage from '../components/Properties/Manage.vue'
 import PropertyView from '../components/Properties/View.vue'
 import PropertyLogs from '../components/Properties/Logs.vue'
@@ -26,6 +27,7 @@ import PropertyUnitView from '../components/PropertyUnits/View.vue'
 import PropertyReviewsIndex from '../components/PropertyReviews/Index.vue'
 import PropertyReviewsMine from '../components/PropertyReviews/MyReviews.vue'
 import PropertyReviewsView from '../components/PropertyReviews/View.vue'
+import PropertyReviewsLogs from '../components/PropertyReviews/Logs.vue'
 import UserFavouritesIndex from '../components/Favourites/Index.vue'
 import HelpIndex from '../components/Help/Index.vue'
 import HelpFAQ from '../components/FAQ/Index.vue'
@@ -161,6 +163,11 @@ const routes = [
         component: PropertyView,
     },
     {
+        path: '/listings/logs',
+        name: 'properties.logs',
+        component: PropertiesLogs,
+    },
+    {
         path: '/listings/:slug/logs',
         name: 'property.logs',
         component: PropertyLogs,
@@ -184,6 +191,11 @@ const routes = [
         path: '/reviews',
         name: 'reviews.mine',
         component: PropertyReviewsMine
+    },
+    {
+        path: '/reviews/listings/logs',
+        name: 'reviews.logs',
+        component: PropertyReviewsLogs
     },
     {
         path: '/reviews/:slug',
