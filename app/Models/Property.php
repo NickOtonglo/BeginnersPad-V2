@@ -22,6 +22,7 @@ class Property extends Model
         'thumbnail',
         'user_id',
         'sub_zone_id',
+        'published_at'
     ];
 
     public function getRouteKeyName()

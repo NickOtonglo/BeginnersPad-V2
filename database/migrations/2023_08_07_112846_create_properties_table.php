@@ -25,6 +25,7 @@ return new class extends Migration
             $table->string('thumbnail')->nullable();
             $table->integer('user_id');
             $table->integer('sub_zone_id');
+            $table->dateTime('published_at')->nullable()->default(null);
             $table->timestamps();
         });
     }

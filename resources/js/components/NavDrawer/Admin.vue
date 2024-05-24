@@ -10,8 +10,8 @@
         <p>Listings</p>
         <ul>
             <li><a href="/listings">Manage</a></li>
-            <li><a href="/listings/logs">Listing management log</a></li>
-            <li><a href="/reviews/listings/logs">Review removal log</a></li>
+            <li><a href="/listings/logs">Listing management logs</a></li>
+            <li><a href="/reviews/listings/logs">Review removal logs</a></li>
             <!-- <li><a href="/admin/listing-applications.html">Applications</a></li>
             <li><a href="/admin/listing-applications-logs.html">Application management log</a></li> -->
         </ul>
