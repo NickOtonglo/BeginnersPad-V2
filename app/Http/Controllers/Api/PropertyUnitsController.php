@@ -12,6 +12,7 @@ use App\Models\PropertyUnit;
 use App\Models\PropertyUnitFeature;
 use App\Models\PropertyUnitFile;
 use App\Models\SubZone;
+use Carbon\Carbon;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -24,8 +25,12 @@ class PropertyUnitsController extends Controller
      */
     public function index(Property $property)
     {
-        $units = $property->propertyUnits()->paginate(5);
-        return PropertyUnitResource::collection($units);
+        if (app(PropertiesController::class)->isPropertyAccessibleToUser($property)) {
+            $units = $property->propertyUnits()->paginate(5);
+            return PropertyUnitResource::collection($units);
+        } else {
+            abort(404);
+        }
     }
 
     /**
@@ -80,8 +85,11 @@ class PropertyUnitsController extends Controller
      */
     public function show(Property $property, PropertyUnit $unit)
     {
-        return new PropertyUnitResource($unit);
-
+        if (app(PropertiesController::class)->isPropertyAccessibleToUser($property)) {
+            return new PropertyUnitResource($unit);
+        } else {
+            abort(404);
+        }
     }
 
     /**
@@ -344,7 +352,10 @@ class PropertyUnitsController extends Controller
                         }
                     }
                 } else {
-                    $properties = $properties->orderBy('created_at', $request)->where('status', 'published')->get();
+                    $properties = $properties->orderBy('created_at', $request)
+                                    ->where('status', 'published')
+                                    ->where('published_at', '<', Carbon::now()->subHours(48))
+                                    ->get();
                     foreach($properties as $property) {
                         foreach($property->propertyUnits as $unit) {
                             if ($unit->status == 'active') {
@@ -359,7 +370,10 @@ class PropertyUnitsController extends Controller
             if ($request == 'area') {}
             if ($request == 'rooms') {}
         } else {
-            $properties = $properties->where('status', 'published')->latest()->get();
+            $properties = $properties->where('status', 'published')
+                            ->where('published_at', '<', Carbon::now()->subHours(48))
+                            ->latest()
+                            ->get();
             foreach($properties as $property) {
                 foreach($property->propertyUnits as $unit) {
                     array_push($units, $unit);
@@ -412,7 +426,10 @@ class PropertyUnitsController extends Controller
                         }
                     }
                 } else {
-                    $properties = $properties->orderBy('created_at', $request)->where('status', 'published')->get();
+                    $properties = $properties->orderBy('created_at', $request)
+                                    ->where('status', 'published')
+                                    ->where('published_at', '<', Carbon::now()->subHours(48))
+                                    ->get();
                     foreach($properties as $property) {
                         foreach($property->propertyUnits as $unit) {
                             if ($unit->status == 'active') {
@@ -428,9 +445,16 @@ class PropertyUnitsController extends Controller
             if ($request == 'rooms') {}
         } else {
             if ($subZone) {
-                $properties = $properties->where('status', 'published')->where('sub_zone_id', $subZone->id)->latest()->get();
+                $properties = $properties->where('status', 'published')
+                                ->where('sub_zone_id', $subZone->id)
+                                ->where('published_at', '<', Carbon::now()->subHours(48))
+                                ->latest()
+                                ->get();
             } else {
-                $properties = $properties->where('status', 'published')->latest()->get();
+                $properties = $properties->where('status', 'published')
+                                ->where('published_at', '<', Carbon::now()->subHours(48))
+                                ->latest()
+                                ->get();
             }
             foreach($properties as $property) {
                 foreach($property->propertyUnits as $unit) {

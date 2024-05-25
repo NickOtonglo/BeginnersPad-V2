@@ -14,6 +14,7 @@ use App\Models\PropertyFeature;
 use App\Models\PropertyFile;
 use App\Models\PropertyLog;
 use App\Models\SubZone;
+use Carbon\Carbon;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -44,7 +45,9 @@ class PropertiesController extends Controller
                 if (auth()->user() && (auth()->user()->role_id <= 3 &&  auth()->user()->role_id >= 1)) {
                     $properties = $properties->orderBy('created_at', $request)->where('status', '!=', 'unpublished')->paginate(25);
                 } else {
-                    $properties = $properties->orderBy('created_at', $request)->where('status', 'published')->paginate(25);
+                    $properties = $properties->orderBy('created_at', $request)
+                                            ->where('status', 'published')
+                                            ->where('published_at', '<', Carbon::now()->subHours(48))->paginate(25);
                 }
             }
             if ($request == 'cheap') {}
@@ -52,7 +55,9 @@ class PropertiesController extends Controller
             if ($request == 'area') {}
             if ($request == 'rooms') {}
         } else {
-            $properties = $properties->where('status', 'published')->latest()->paginate(25);
+            $properties = $properties->where('status', 'published')
+                                        ->where('published_at', '<', Carbon::now()->subHours(48))
+                                        ->latest()->paginate(25);
         }
         return PropertyLiteResource::collection($properties);
     }
@@ -114,15 +119,7 @@ class PropertiesController extends Controller
         //     abort(404);
         // }
 
-        if (
-            ($property->status == 'published') || 
-            (auth()->user()->id == $property->user_id) || 
-            (($property->status != 'unpublished' && $property->status != 'private') && 
-                (auth()->user()->role_id == 3 || 
-                 auth()->user()->role_id == 2 || 
-                 auth()->user()->role_id == 1)
-            )
-         ) {
+        if ($this->isPropertyAccessibleToUser($property)) {
              return new PropertyPublicResource($property);
         } else {
             abort(404);
@@ -345,7 +342,8 @@ class PropertiesController extends Controller
                   ->orWhere('name', 'like', '%'.request('search_global').'%')
                   ->orWhere('description', 'like', '%'.request('search_global').'%');
             });
-        })->where('status', 'published')->latest()->paginate(9);
+        })->where('status', 'published')
+        ->where('published_at', '<', Carbon::now()->subHours(48))->latest()->paginate(9);
         return PropertyLiteResource::collection($properties);
     }
 
@@ -380,7 +378,10 @@ class PropertiesController extends Controller
         if (auth()->user() && (auth()->user()->role_id <= 3 &&  auth()->user()->role_id >= 1)) {
             $properties = $subZone->properties()->where('status', '!=' ,'unpublished')->paginate(25);
         } else {
-            $properties = $subZone->properties()->where('status', 'published')->paginate(25);
+            $properties = $subZone->properties()
+                            ->where('status', 'published')
+                            ->where('published_at', '<', Carbon::now()->subHours(48))
+                            ->paginate(25);
         }
         return PropertyLiteResource::collection($properties);
     }
@@ -392,13 +393,16 @@ class PropertiesController extends Controller
 
         $comment = '';
         $property->status = $request->status;
-        $property->save();
         if ($request->status == 'unpublished') {}
-
+        
         if ($request->status == 'pending') {}
-
-        if ($request->status == 'published') {}
-
+        
+        if ($request->status == 'published') {
+            if (!$property->published_at) {
+                $property->published_at = Carbon::now()->toDateTimeString();
+            }
+        }
+        
         if ($request->status == 'rejected') {
             $comment = $request->comment;
         }
@@ -406,9 +410,10 @@ class PropertiesController extends Controller
         if ($request->status == 'suspended') {
             $comment = $request->comment;
         }
-
+        
         if ($request->status == 'private') {}
-
+        $property->save();
+        
         $response = [
             'property' => $property,
             'model' => 'Property',
@@ -456,5 +461,21 @@ class PropertiesController extends Controller
             'message' => "Enquiry sent for property '".$property->name."'.",
         ];
         return response($response, 201);
+    }
+
+    public function isPropertyAccessibleToUser(Property $property) {
+        if (
+            ($property->status == 'published' && $property->published_at < Carbon::now()->subHours(48)) || 
+            (auth()->user()->id == $property->user_id) || 
+            (($property->status != 'unpublished' && $property->status != 'private') && 
+                (auth()->user()->role_id == 3 || 
+                 auth()->user()->role_id == 2 || 
+                 auth()->user()->role_id == 1)
+            )
+         ) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

@@ -22,7 +22,7 @@ class ArticleFactory extends Factory
     {
         $title = str_replace(array('.',''), '',strtoupper(fake()->jobTitle()));
         $slug = Str::slug($title, '-');
-        $userID = User::pluck('id');
+        $userID = User::whereBetween('role_id', [1, 3])->pluck('id');
         // Storage::makeDirectory('public/images/articles/'.Str::slug($title, '-'));
 
         return [

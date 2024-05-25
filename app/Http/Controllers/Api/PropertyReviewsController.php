@@ -20,12 +20,16 @@ class PropertyReviewsController extends Controller
      */
     public function index(Property $property)
     {
-        // $reviews = $property->propertyReviews->take(10)->get();
-        $myReview = PropertyReview::where('property_id', $property->id)->where('author_id', auth()->user()->id)->get();
-        $reviews = $property->propertyReviews;
-        $combined = $myReview->merge($reviews);
-        return PropertyReviewResource::collection($combined);
-        // return PropertyReviewResource::collection($reviews->merge($myReview)->reverse());
+        if (app(PropertiesController::class)->isPropertyAccessibleToUser($property)) {
+            // $reviews = $property->propertyReviews->take(10)->get();
+            $myReview = PropertyReview::where('property_id', $property->id)->where('author_id', auth()->user()->id)->get();
+            $reviews = $property->propertyReviews;
+            $combined = $myReview->merge($reviews);
+            return PropertyReviewResource::collection($combined);
+            // return PropertyReviewResource::collection($reviews->merge($myReview)->reverse());
+        } else {
+            abort(404);
+        }
     }
 
     /**
