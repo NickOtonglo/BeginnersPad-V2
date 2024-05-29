@@ -88,4 +88,12 @@ class User extends Authenticatable
     public function notifications() {
         return $this->hasMany(Notification::class);
     }
+
+    public function userCredit() {
+        return $this->hasOne(UserCredit::class);
+    }
+
+    public function premiumSubscribers() {
+        return $this->hasMany(PremiumPlanSubscription::class);
+    }
 }

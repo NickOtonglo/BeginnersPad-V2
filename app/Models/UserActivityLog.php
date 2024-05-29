@@ -48,4 +48,16 @@ class UserActivityLog extends Model
     public function propertyLog() {
         return $this->hasOne(PropertyLog::class, 'parent_id', 'id');
     }
+
+    public function propertyReviewRemovalLog() {
+        return $this->hasMany(propertyReviewRemovalLog::class, 'parent_id', 'id');
+    }
+
+    public function premiumPlanSubscriptionLog() {
+        return $this->hasMany(PremiumPlanSubscriptionLog::class, 'parent_id', 'id');
+    }
+
+    public function transactionLog() {
+        return $this->hasMany(TransactionLog::class, 'parent_id', 'id');
+    }
 }

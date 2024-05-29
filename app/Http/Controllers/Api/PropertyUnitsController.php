@@ -29,6 +29,7 @@ class PropertyUnitsController extends Controller
             $units = $property->propertyUnits()->paginate(5);
             return PropertyUnitResource::collection($units);
         } else {
+            // return redirect()->to('http://heera.it');
             abort(404);
         }
     }
