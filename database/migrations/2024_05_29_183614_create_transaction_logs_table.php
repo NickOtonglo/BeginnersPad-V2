@@ -15,11 +15,10 @@ return new class extends Migration
             $table->id();
             $table->string('confirmation_code')->nullable();
             $table->decimal('amount', 11, 2)->nullable();
-            $table->text('comment')->nullable();
             $table->unsignedBigInteger('user_id')->nullable();
             $table->unsignedBigInteger('payment_gateway_id')->nullable();
             $table->unsignedBigInteger('payment_gateway_name')->nullable();
-            $table->longText('comment')->nullable();
+            $table->text('comment')->nullable();
             $table->integer('parent_id');
             $table->timestamps();
         });
