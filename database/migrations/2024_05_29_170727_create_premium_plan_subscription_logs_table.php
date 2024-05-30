@@ -31,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('premium_plan_subscription_logs');
+        Schema::dropIfExists('logs_user_activity_premium_plan_subscriptions');
     }
 };

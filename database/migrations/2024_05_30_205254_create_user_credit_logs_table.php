@@ -11,16 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('logs_user_activity_property_review_removal', function (Blueprint $table) {
+        Schema::create('logs_user_activity_user_credit', function (Blueprint $table) {
             $table->id();
-            $table->longText('review')->nullable();
-            $table->decimal('rating', 3, 2)->nullable();
-            $table->integer('author_id')->nullable();
-            $table->integer('property_id')->nullable();
-            $table->string('removal_reason')->nullable();
-            $table->longText('reason_details')->nullable();
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->decimal('credit', 11, 2)->nullable();
+            $table->boolean('auto_pay')->nullable();
             $table->longText('comment')->nullable();
             $table->integer('parent_id');
+
             $table->timestamps();
         });
     }
@@ -30,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('logs_user_activity_property_review_removal');
+        Schema::dropIfExists('logs_user_activity_user_credit');
     }
 };
