@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('period')->nullable();
             $table->dateTime('activated_at')->nullable();
+            $table->dateTime('expires_at')->nullable();
             $table->unsignedBigInteger('user_id')->nullable();
             $table->unsignedBigInteger('premium_plan_id')->nullable();
             $table->string('premium_plan_name')->nullable();

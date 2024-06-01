@@ -12,6 +12,7 @@ class PremiumPlanSubscriptionLog extends Model
     protected $fillable = [
         'period',
         'activated_at',
+        'expires_at',
         'user_id',
         'premium_plan_id',
         'premium_plan_name',

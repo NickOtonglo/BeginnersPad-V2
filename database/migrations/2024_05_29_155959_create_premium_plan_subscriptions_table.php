@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('period');
             $table->dateTime('activated_at');
+            $table->dateTime('expires_at');
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('premium_plan_id');
             $table->unique(['user_id', 'premium_plan_id']);
