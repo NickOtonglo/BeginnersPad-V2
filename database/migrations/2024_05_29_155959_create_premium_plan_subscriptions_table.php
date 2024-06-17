@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('premium_plan_subscriptions', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('period');
+            $table->unsignedBigInteger('period'); //days
             $table->dateTime('activated_at');
             $table->dateTime('expires_at');
             $table->unsignedBigInteger('user_id');

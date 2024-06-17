@@ -15,7 +15,7 @@ class PremiumPlanSubscription extends Model
     }
 
     public function waitingLists() {
-        return $this->hasMany(PremiumPlanSubscription::class);
+        return $this->hasMany(PremiumPlanWaitingList::class, 'subscription_id', 'id');
     }
 
     public function user() {

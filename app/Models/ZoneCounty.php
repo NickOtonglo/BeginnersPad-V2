@@ -11,11 +11,15 @@ class ZoneCounty extends Model
 
     protected $fillable = ['name', 'code', 'country_id'];
 
+    public function getRouteKeyName() {
+        return 'code';
+    }
+
     public function zoneCountry() {
         return $this->belongsTo(ZoneCountry::class, 'country_id');
     }
 
-    public function zone() {
+    public function zones() {
         return $this->hasMany(Zone::class, 'county_code');
     }
 }

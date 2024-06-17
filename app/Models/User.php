@@ -93,11 +93,15 @@ class User extends Authenticatable
         return $this->hasOne(UserCredit::class);
     }
 
-    public function premiumPlanSubscriptions() {
+    public function premiumSubscriptions() {
         return $this->hasMany(PremiumPlanSubscription::class);
     }
 
     public function waitingLists() {
-        return $this->hasManyThrough(PremiumPlanWaitingList::class, PremiumPlanWaitingList::class);
+        return $this->hasManyThrough(PremiumPlanWaitingList::class, PremiumPlanSubscription::class);
+    }
+
+    public function transactions() {
+        return $this->hasMany(Transaction::class);
     }
 }

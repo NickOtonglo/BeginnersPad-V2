@@ -70,6 +70,9 @@ export default function broadcastMaster() {
                                     if (data.dest == 'ticket.view') {
                                         router.push({ name: 'ticket.view', params: { id: data.dest_link } })
                                     }
+                                    if (data.dest == 'transactions.mine') {
+                                        router.push({ name: 'transactions.mine', params: { id: data.dest_link } })
+                                    }
                                 }
                             })
                         }

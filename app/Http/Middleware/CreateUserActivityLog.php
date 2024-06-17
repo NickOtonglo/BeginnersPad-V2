@@ -7,6 +7,8 @@ use App\Models\FAQ;
 use App\Models\FAQLog;
 use App\Models\HelpTicket;
 use App\Models\HelpTicketLog;
+use App\Models\PaymentGateway;
+use App\Models\PremiumPlanSubscriptionLog;
 use App\Models\Property;
 use App\Models\PropertyLog;
 use App\Models\PropertyReviewRemovalLog;
@@ -16,8 +18,10 @@ use App\Models\SubZone;
 use App\Models\SubZoneLog;
 use App\Models\Tag;
 use App\Models\TagLog;
+use App\Models\TransactionLog;
 use App\Models\User;
 use App\Models\UserActivityLog;
+use App\Models\UserCreditLog;
 use App\Models\UserLog;
 use App\Models\Zone;
 use App\Models\ZoneLog;
@@ -37,6 +41,7 @@ class CreateUserActivityLog
         $response = $next($request);
         $ticket = "";
         $property = "";
+        $comemnt = "";
 
         // Perform action
 
@@ -161,7 +166,7 @@ class CreateUserActivityLog
                         $data->user_id = $property->user_id;
                         $data->sub_zone_id = $property->sub_zone_id;
                         $data->comment = $property->comment;
-                        $data->parent_id = $property->parent_id;
+                        // $data->parent_id = $property->parent_id;
                         
                         if ($response->original['comment']) {
                             $data->comment = $response->original['comment'];
@@ -198,7 +203,7 @@ class CreateUserActivityLog
                         $data->thumbnail = $unit->thumbnail;
                         $data->property_id = $unit->property_id;
                         $data->comment = $unit->comment;
-                        $data->parent_id = $unit->parent_id;                        
+                        // $data->parent_id = $unit->parent_id;                        
                         
                         if ($response->original['comment']) {
                             $data->comment = $response->original['comment'];
@@ -220,6 +225,62 @@ class CreateUserActivityLog
                     $data->property_id = $log->property_id;
                     $data->removal_reason = $log->removal_reason;
                     $data->reason_details = $log->reason_details;
+
+                    if ($response->original['comment']) {
+                        $data->comment = $response->original['comment'];
+                    } else {
+                        $data->comment = $response->original['model'].' #'.$response->original['key'].': '.$request->method();
+                    }
+
+                    break;
+
+                case 'Transaction':
+                    $data = new TransactionLog();
+                    
+                    $log = $response->original['transaction'];
+                    $transaction = $log;
+                    $gateway = PaymentGateway::find($log->payment_gateway_id);
+
+                    $data->confirmation_code = $log->confirmation_code;
+                    $data->amount = $log->amount;
+                    $data->user_id = $log->user_id;
+                    $data->payment_gateway_id = $log->payment_gateway_id;
+                    $data->payment_gateway_name = $gateway->name;
+                    $data->comment = $log->comment;
+
+                    break;
+
+                case 'UserCredit':
+                    $data = new UserCreditLog();
+                    
+                    $credit = $response->original['user_credit'];
+                    $comment = $response->original['comment'];
+
+                    $data->user_id = $credit->user_id;
+                    $data->credit = $credit->credit;
+                    $data->auto_pay = $credit->auto_pay;
+
+                    if ($response->original['comment']) {
+                        $data->comment = $response->original['comment'];
+                    } else {
+                        $data->comment = $response->original['model'].' #'.$response->original['key'].': '.$request->method();
+                    }
+
+                    break;
+
+                case 'PremiumPlanSubscription':
+                    $data = new PremiumPlanSubscriptionLog();
+                    
+                    $subscription = $response->original['premium_plan_subscription'];
+                    $comment = $response->original['comment'];
+
+                    $data->period = $subscription->period;
+                    $data->activated_at = $subscription->activated_at;
+                    $data->expires_at = $subscription->expires_at;
+                    $data->premium_plan_id = $subscription->premium_plan_id;
+                    $data->premium_plan_name = $subscription->premium_plan_name;
+                    $data->premium_plan_minimum_period = $subscription->premium_plan_minimum_period;
+                    $data->premium_plan_price = $subscription->premium_plan_price;
 
                     if ($response->original['comment']) {
                         $data->comment = $response->original['comment'];
@@ -265,6 +326,12 @@ class CreateUserActivityLog
                 if ($data->status !== 'open') {
                     app(NotificationsController::class)->sendHelpNotification($ticket);
                 }
+            }
+            if ($response->original['model'] == 'Transaction') {
+                app(NotificationsController::class)->sendTransactionNotification($transaction);
+            }
+            if ($response->original['model'] == 'UserCredit') {
+                app(NotificationsController::class)->sendUserCreditNotification($credit, $comment);
             }
         }
             

@@ -148,12 +148,17 @@ class ZonesController extends Controller
     }
 
     public function getCounties() {
-        $counties = ZoneCountiesResource::collection(ZoneCounty::orderBy('code')->get());
+        $counties = ZoneCountiesResource::collection(ZoneCounty::orderBy('name', 'ASC')->get());
         return $counties;
     }
 
     public function getProperties(Zone $zone) {
         $properties = $zone->subZones->properties;
         return PropertyPublicResource::collection($properties);
+    }
+
+    public function getZonesByCounty(ZoneCounty $county) {
+        $zones = $county->zones;
+        return ZonesResource::collection($zones);
     }
 }

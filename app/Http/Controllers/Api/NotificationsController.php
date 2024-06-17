@@ -12,7 +12,9 @@ use App\Models\Notification;
 use App\Models\Property;
 use App\Models\PropertyLog;
 use App\Models\PropertyReviewRemovalLog;
+use App\Models\Transaction;
 use App\Models\User;
+use App\Models\UserCredit;
 use Illuminate\Http\Request;
 
 class NotificationsController extends Controller
@@ -119,6 +121,50 @@ class NotificationsController extends Controller
 
             NotificationSent::dispatch($data);
         }
+    }
+
+    public function sendTransactionNotification(Transaction $transaction) {
+        $title = "Transaction successful!";
+        $body = "A transaction on your account for KES '".$transaction->amount."' was completed successfully on ".$transaction->created_at->format('jS F Y, H:m:s').".";
+        $body = $body."\r\n If you have any questions or concerns, please contact support.";
+        
+        $data = new Notification();
+        $data->title = $title;
+        $data->body = $body;
+        $data->model = "Transaction";
+        $data->model_id = $transaction->id;
+        $data->user_id = $transaction->user_id;
+
+        $data->save();
+        
+        NotificationSent::dispatch($data);
+    }
+
+    public function sendUserCreditNotification(UserCredit $credit, string $comment) {
+        $title = "Your credit account was updated.";
+        $body = "Your credit account was updated on ".$credit->updated_on->format('jS F Y, H:m:s').".";
+
+        if ($comment == "top-up") {
+            $title = "Your credit was topped up.";
+            $body = "Your credit balance was topped up on ".$credit->updated_on->format('jS F Y, H:m:s').". Your new balance is ".$credit->credit." credits.";
+        }
+        if ($comment == "auto_pay update") {
+            $title = "Your credit settings were updated.";
+            $body = "Your credit auto-pay settings were updated on ".$credit->updated_on->format('jS F Y, H:m:s').".";
+        }
+
+        $body = $body."\r\n If you have any questions or concerns, please contact support.";
+        
+        $data = new Notification();
+        $data->title = $title;
+        $data->body = $body;
+        $data->model = "UserCredit";
+        $data->model_id = $credit->id;
+        $data->user_id = $credit->user_id;
+
+        $data->save();
+        
+        NotificationSent::dispatch($data);
     }
 
     public function index() {

@@ -11,6 +11,11 @@ class PremiumPlan extends Model
 
     protected $fillable = ['name', 'slug', 'description', 'status', 'minimum_days', 'price'];
 
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
+
     public function premiumPlanSubscriptions() {
         return $this->hasMany(PremiumPlanSubscription::class);
     }

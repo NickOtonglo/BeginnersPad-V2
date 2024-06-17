@@ -12,7 +12,6 @@ class TransactionLog extends Model
     protected $fillable = [
         'confirmation_code',
         'amount',
-        'comment',
         'user_id',
         'payment_gateway_id',
         'payment_gateway_name',

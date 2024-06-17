@@ -33,7 +33,9 @@ export default function zonesMaster() {
         axios.get(request)
             .then(response => {
                 zones.value = response.data.data
-                zonesCount.value = response.data.meta.total
+                if (response.data.meta) {
+                    zonesCount.value = response.data.meta.total
+                }
             })
             .catch(error => console.log(error))
             .finally(isLoading.value = false)

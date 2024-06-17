@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('subscription_id');
             $table->unsignedBigInteger('zone_id');
+            $table->unique(['subscription_id', 'zone_id']);
             $table->timestamps();
         });
     }

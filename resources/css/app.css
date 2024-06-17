@@ -108,6 +108,20 @@ tr.single-column td {
     border-right: none;
 }
 
+table.horizontal-scroll {
+    /* display: block;
+    overflow-x: auto;
+    white-space: nowrap; */
+}
+
+table.horizontal-scroll td {
+    /* https://stackoverflow.com/questions/9789723/css-text-overflow-in-a-table-cell */
+    /* max-width: 100px; */
+    /* overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap; */
+}
+
 footer {
     background: var(--color-secondary);
     padding: 8px 20px;

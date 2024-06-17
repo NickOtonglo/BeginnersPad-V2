@@ -14,4 +14,8 @@ class UserCreditLog extends Model
     public function userActivityLog() {
         return $this->belongsTo(UserActivityLog::class, 'parent_id', 'id');
     }
+
+    public function user() {
+        return $this->belongsTo(User::class);
+    }
 }

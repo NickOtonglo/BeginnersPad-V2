@@ -74,6 +74,7 @@ Route::middleware(['auth:sanctum', 'logs.user'])->group(function() {
     Route::get('zones/{zone}/sub-zones/{subZone}/listings', '\App\Http\Controllers\Api\SubZoneController@getListings');
 
     Route::get('sub-zones', '\App\Http\Controllers\Api\SubZoneController@index');
+    Route::get('counties/{county}/zones', '\App\Http\Controllers\Api\ZonesController@getZonesByCounty');
 
     Route::get('listings/my-listings', '\App\Http\Controllers\Api\PropertiesController@getMyListings');
     Route::get('listings/my-listings/status/{status}', '\App\Http\Controllers\Api\PropertiesController@getMyListingsByStatus');
@@ -163,4 +164,10 @@ Route::middleware(['auth:sanctum', 'logs.user'])->group(function() {
     Route::get('notifications/badges', '\App\Http\Controllers\Api\NotificationsController@getBadges');
     Route::patch('notifications/key/{notification}', '\App\Http\Controllers\Api\NotificationsController@setToRead');
     Route::delete('notifications/{model}/{model_id}', '\App\Http\Controllers\Api\NotificationsController@destroy');
+
+    // Route::get('premium/subscriptions', '\App\Http\Controllers\Api\PremiumSubscriptionsController@getWaitingLists');
+    Route::get('premium/plans/waiting-list', '\App\Http\Controllers\Api\PremiumSubscriptionsController@getWaitingLists');
+    Route::post('premium/plans/waiting-list', '\App\Http\Controllers\Api\PremiumSubscriptionsController@addWaitingList');
+    Route::delete('premium/plans/waiting-list/{zone}', '\App\Http\Controllers\Api\PremiumSubscriptionsController@removeWaitingList');
+    Route::get('premium/plan/{plan}', '\App\Http\Controllers\Api\PremiumSubscriptionsController@getPremiumPlan');
 });

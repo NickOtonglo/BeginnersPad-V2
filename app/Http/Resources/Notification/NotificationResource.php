@@ -99,6 +99,12 @@ class NotificationResource extends JsonResource
                     $dest = 'tags.index';
                 }
                 break;
+
+            case 'Transaction':
+                if ($this->model_id) {
+                    $dest = 'transactions.mine';
+                }
+                break;
             
             case 'User':
                 if (auth()->user()->role_id >= 1 && auth()->user()->role_id <= 3) {

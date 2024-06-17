@@ -38,6 +38,7 @@ import UsersLogs from '../components/Users/Logs.vue'
 import UserManage from '../components/Users/Manage.vue'
 import ChatsIndex from '../components/Chats/Index.vue'
 import ChatView from '../components/Chats/View.vue'
+import WaitingListIndex from '../components/WaitingList/Index.vue'
 import { component } from 'v-viewer'
 
 function auth(to, from, next) {
@@ -251,6 +252,11 @@ const routes = [
         path: '/chats/:id',
         name: 'chat.view',
         component: ChatView,
+    },
+    {
+        path: '/premium/waiting-list',
+        name: 'waiting-list.index',
+        component: WaitingListIndex,
     }
 ]
 

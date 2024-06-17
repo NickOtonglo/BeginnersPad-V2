@@ -12,6 +12,6 @@ class PremiumPlanWaitingList extends Model
     protected $fillable = ['subscription_id', 'zone_id'];
 
     public function premiumPlanSubscription() {
-        return $this->belongsTo(PremiumPlanSubscription::class);
+        return $this->belongsTo(PremiumPlanSubscription::class, 'id', 'subscription_id');
     }
 }

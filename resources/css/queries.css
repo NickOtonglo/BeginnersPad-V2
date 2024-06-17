@@ -131,6 +131,14 @@
     }
 }
 
+@media(max-width: 850px) {
+    table.horizontal-scroll {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+}
+
 @media(max-width: 800px) {
     .section-dash #dashNavLister.dash-nav ul {
         justify-content: flex-start;
