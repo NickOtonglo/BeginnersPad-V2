@@ -20,7 +20,7 @@ class PremiumPlanSeeder extends Seeder
                     [
                         'name' => 'Waiting List',
                         'slug' => 'waiting-list',
-                        'description' => 'Subscibe to a zone and receive instant updates when listings are published in that zone.',
+                        'description' => "Join a zone's waiting list and receive instant updates when listings are published in that zone.",
                         'status' => 'active',
                         'minimum_days' => '14',
                         'price' => '100',
