@@ -165,6 +165,8 @@ Route::middleware(['auth:sanctum', 'logs.user'])->group(function() {
     Route::patch('notifications/key/{notification}', '\App\Http\Controllers\Api\NotificationsController@setToRead');
     Route::delete('notifications/{model}/{model_id}', '\App\Http\Controllers\Api\NotificationsController@destroy');
 
+
+    Route::post('premium/subscriptions', '\App\Http\Controllers\Api\PremiumSubscriptionsController@createSubscription');
     // Route::get('premium/subscriptions', '\App\Http\Controllers\Api\PremiumSubscriptionsController@getWaitingLists');
     Route::get('premium/plans/waiting-list', '\App\Http\Controllers\Api\PremiumSubscriptionsController@getWaitingLists');
     Route::post('premium/plans/waiting-list', '\App\Http\Controllers\Api\PremiumSubscriptionsController@addWaitingList');
