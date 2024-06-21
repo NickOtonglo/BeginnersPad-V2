@@ -8,6 +8,7 @@ use App\Models\FAQLog;
 use App\Models\HelpTicket;
 use App\Models\HelpTicketLog;
 use App\Models\PaymentGateway;
+use App\Models\PremiumPlan;
 use App\Models\PremiumPlanSubscriptionLog;
 use App\Models\Property;
 use App\Models\PropertyLog;
@@ -274,13 +275,16 @@ class CreateUserActivityLog
                     $subscription = $response->original['premium_plan_subscription'];
                     $comment = $response->original['comment'];
 
+                    $plan = PremiumPlan::find($subscription->premium_plan_id);
+
                     $data->period = $subscription->period;
                     $data->activated_at = $subscription->activated_at;
                     $data->expires_at = $subscription->expires_at;
+                    $data->user_id = $subscription->user_id;
                     $data->premium_plan_id = $subscription->premium_plan_id;
-                    $data->premium_plan_name = $subscription->premium_plan_name;
-                    $data->premium_plan_minimum_period = $subscription->premium_plan_minimum_period;
-                    $data->premium_plan_price = $subscription->premium_plan_price;
+                    $data->premium_plan_name = $plan->name;
+                    $data->premium_plan_minimum_period = $plan->minimum_days;
+                    $data->premium_plan_price = $plan->price;
 
                     if ($response->original['comment']) {
                         $data->comment = $response->original['comment'];
