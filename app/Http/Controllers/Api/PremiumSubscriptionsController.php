@@ -12,6 +12,7 @@ use App\Models\PremiumPlanSubscription;
 use App\Models\PremiumPlanWaitingList;
 use App\Models\User;
 use App\Models\Zone;
+use DateTime;
 use Exception;
 use Illuminate\Http\Request;
 
@@ -95,12 +96,32 @@ class PremiumSubscriptionsController extends Controller
         //
     }
 
-    public function createSubscription(PremiumPlan $plan, $request, User $user) {
+    public function createSubscription(Request $request, User $user = null) {
+        if (!$user) {
+            $user = auth()->user();
+        }
         $data = '';
-        $subscription = PremiumPlanSubscription::where('user_id', $user->id)->where('premium_plan_id', $plan->id)->first();
+        $plan = PremiumPlan::where('slug', $request->slug)->first();
+        // $subscription = PremiumPlanSubscription::where('user_id', $user->id)->where('premium_plan_id', $plan->id)->firstOrFail();
+        $subscription = $user->premiumSubscriptions()->where('premium_plan_id', $plan->id)->first();
         $comment = '';
 
         if ($subscription) {
+            // https://stackoverflow.com/questions/19031235/php-check-if-date-is-past-to-a-certain-date-given-in-a-certain-format
+            $expiry = new DateTime($subscription->expires_at);
+            $now = new DateTime();
+
+            if ($expiry > $now) {
+                // expiry is in the future, valid subscripton is already in effect
+                return response()->json([
+                    'message' => "Your subscription to this plan is still active.",
+                    'errors' => [
+                        'subscription_plan' => [
+                            "The subscription is still active",
+                        ]
+                    ],
+                ], 422);
+            }
             $data = $subscription;
         } else {
             $data = new PremiumPlanSubscription();
@@ -109,7 +130,8 @@ class PremiumSubscriptionsController extends Controller
         }
         $data->period = $plan->minimum_days;
         $data->activated_at = date("Y-m-d H:i:s");
-        $data->expires_at = date('Y-m-d H:i:s', strtotime('+1 day', strtotime($data->activated_at)));
+        // https://www.codexworld.com/how-to/add-days-hours-minutes-seconds-to-datetime-php/
+        $data->expires_at = date('Y-m-d H:i:s', strtotime('+'.$plan->minimum_days.' days', strtotime($data->activated_at)));
         $data->save();
 
         $response = [
