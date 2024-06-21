@@ -14,7 +14,7 @@
     <div class="nav-drawer-category">
         <p>Premium</p>
         <ul>
-            <li><a href="/premium/waiting-list">Waiting list <i class="fas fa-star"></i></a></li>
+            <li><a href="/premium/waiting-list"><i class="fas fa-star"></i> Waiting list</a></li>
         </ul>
     </div>
 </template>
