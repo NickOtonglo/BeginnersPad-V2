@@ -26,6 +26,7 @@ export default function premiumMaster() {
         time_left: '',
         subscriber: '',
         plan: '',
+        slug: '',
         waiting_lists: '',
     })
     const subscriptionLogs = ref({})
@@ -74,28 +75,43 @@ export default function premiumMaster() {
         if (isLoading.value) return
         isLoading.value = true
 
-        axios.post(request, data)
-            .then(response => {
-                // swal({
-                //     icon: 'success',
-                //     title: 'You have subscribed successfully to this plan.',
-                //     didClose: () => {
-                //         router.go(0)
-                //     }
-                // })
-            })
-            .catch(error => {
-                if (error.response?.data) {
-                    validationErrors.value = error.response.data.errors
-                } else {
-                    swal({
-                        icon: 'error',
-                        title: 'Error',
-                        text: 'An error occured. Please try again.',
+        swal.fire({
+            title: 'Are you sure?',
+            text: "You are about to subscribe to this plan. It will cost you "+data.price+" credits and is valid for "+data.period+" days.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: 'rgb(207, 95, 50)',
+            cancelButtonColor: 'rgb(238, 14, 14)',
+            confirmButtonText: 'Confirm'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                isLoading.value = true
+                axios.post(request, data)
+                    .then(response => {
+                        swal({
+                            icon: 'success',
+                            title: 'You have subscribed successfully to this plan.',
+                            didClose: () => {
+                                router.go(0)
+                            }
+                        })
                     })
-                }
-            })
-            .finally(isLoading.value = false)
+                    .catch(error => {
+                        if (error.response?.data) {
+                            validationErrors.value = error.response.data.errors
+                        } else {
+                            swal({
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'An error occured. Please try again.',
+                            })
+                        }
+                    })
+                    .finally(isLoading.value = false)
+            } else {
+                isLoading.value = false
+            }
+        })
     }
 
     const updateSubscription = (request, data) => {
