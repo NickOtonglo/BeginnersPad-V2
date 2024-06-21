@@ -9,6 +9,7 @@ class PremiumPlanSubscriptionLog extends Model
 {
     use HasFactory;
 
+    public $table = 'logs_user_activity_premium_plan_subscriptions';
     protected $fillable = [
         'period',
         'activated_at',
