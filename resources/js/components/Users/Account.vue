@@ -67,6 +67,38 @@
                             </template>
                         </div>
                     </div>
+                    <div v-if="user.role == 'Beginner'" class="panel-item bordered">
+                        <div class="lister-details">
+                            <div class="title-grp">
+                                <h3>Credit</h3>
+                                <div class="info-actions">
+                                    <i @click="checkCreditAccount(), click(paymentGatewaysRef)" class="fa-solid fa-money-bill"></i>
+                                </div>
+                            </div>
+                            <div v-if="account" class="details">
+                                <div class="header">
+                                    <div>
+                                        <h1>{{ account.credit }}</h1>
+                                        <h5>credits</h5>
+                                        <p>Last updated on {{ account.timestamp }}</p>
+                                    </div>
+                                </div>
+                                <div class="section-more">
+                                    <div class="switch-grp">
+                                        <span><h3>Auto-pay</h3></span>
+                                        <label class="switch">
+                                            <input :checked="account.auto_pay" 
+                                                   @change="account.auto_pay = !account.auto_pay, updateAccount(`/api/user/credit`, account)" 
+                                                   type="checkbox">
+                                            <span class="slider round"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <template>
+                            </template>
+                        </div>
+                    </div>
                 </div>
                 <div class="panel">
                     <div class="panel-item anchor-no-text-decoration">
@@ -96,7 +128,8 @@
                                     </div>
                                 </router-link>
                                 <div @click="setNotificationToRead(`/api/notifications/key/${notification.id}`), notification.read = 1"
-                                    v-if="!notification.dest" class="data-2 link" :class="notification.read == 0 ? 'bold' : ''">
+                                    v-if="!notification.dest" class="data-2 link"
+                                    :class="notification.read == 0 ? 'bold' : ''">
                                     <div class="text">
                                         <h5>{{ notification.time_ago }}</h5>
                                         <h4>{{ notification.title }}</h4>
@@ -134,6 +167,7 @@
     <UpdateForm ref="updateFormRef" />
     <UpdateBrand ref="updateBrandRef" />
     <CreateBrand ref="createBrandRef" />
+    <PaymentGateways ref="paymentGatewaysRef" />
 </template>
 
 <script setup>
@@ -141,9 +175,11 @@ import { onMounted, ref } from 'vue';
 import UpdateForm from '../Modals/EditUserAccount.vue'
 import UpdateBrand from '../Modals/EditBrand.vue'
 import CreateBrand from '../Modals/CreateBrand.vue'
+import PaymentGateways from '../Modals/PaymentGateways.vue';
 import CardUser from '../Cards/User1.vue';
 import CardBrand from '../Cards/Brand1.vue'
 import notificationsMaster from '../../composables/notifications';
+import userCreditMaster from '../../composables/userCredit';
 
 const user = ref({})
 
@@ -151,11 +187,19 @@ const props = defineProps(['modal'])
 const updateFormRef = ref(null);
 const updateBrandRef = ref(null);
 const createBrandRef = ref(null)
+const paymentGatewaysRef = ref(null)
 const {
     notifications,
     getNotifications,
     setNotificationToRead, 
 } = notificationsMaster()
+const { 
+    checkIfUserHasCreditAccount, 
+    createAccount, 
+    getCreditAccount,
+    account, 
+    updateAccount, 
+ } = userCreditMaster()
 
 function getUserAccount() {
     axios.get('api/user/account')
@@ -169,6 +213,12 @@ function getUserAccount() {
         .catch(error => console.log(error))
 }
 
+function checkCreditAccount() {
+    if (!checkIfUserHasCreditAccount(`/api/user/credit/check`)) {
+        createAccount(`/api/user/credit`)
+    }
+}
+
 function click(element) {
     element.openModal();
 }
@@ -176,6 +226,7 @@ function click(element) {
 onMounted(() => {
     getUserAccount()
     getNotifications(`/api/notifications/unread`)
+    getCreditAccount(`/api/user/credit`)
 })
 
 </script>
