@@ -97,7 +97,13 @@ export default function premiumMaster() {
                         })
                     })
                     .catch(error => {
-                        if (error.response?.data) {
+                        if (error.response?.data.errors) {
+                            swal({
+                                icon: 'error',
+                                title: 'Error',
+                                text: error.response?.data.message,
+                            })
+                        } else if (error.response?.data) {
                             validationErrors.value = error.response.data.errors
                         } else {
                             swal({
@@ -262,6 +268,6 @@ export default function premiumMaster() {
         updateSubscription, 
         deleteSubscription, 
         addWaitingList, 
-        removeWaitingList, 
+        removeWaitingList,  
     }
 }
