@@ -89,7 +89,7 @@ class User extends Authenticatable
         return $this->hasMany(Notification::class);
     }
 
-    public function userCredit() {
+    public function credit() {
         return $this->hasOne(UserCredit::class);
     }
 
