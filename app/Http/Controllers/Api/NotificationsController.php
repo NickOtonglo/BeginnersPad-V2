@@ -142,15 +142,15 @@ class NotificationsController extends Controller
 
     public function sendUserCreditNotification(UserCredit $credit, string $comment) {
         $title = "Your credit account was updated.";
-        $body = "Your credit account was updated on ".$credit->updated_on->format('jS F Y, H:m:s').".";
+        $body = "Your credit account was updated on ".$credit->updated_at->format('jS F Y, H:m:s').".";
 
         if ($comment == "top-up") {
             $title = "Your credit was topped up.";
-            $body = "Your credit balance was topped up on ".$credit->updated_on->format('jS F Y, H:m:s').". Your new balance is ".$credit->credit." credits.";
+            $body = "Your credit balance was topped up on ".$credit->updated_at->format('jS F Y, H:m:s').". Your new balance is ".$credit->credit." credits.";
         }
         if ($comment == "auto_pay update") {
             $title = "Your credit settings were updated.";
-            $body = "Your credit auto-pay settings were updated on ".$credit->updated_on->format('jS F Y, H:m:s').".";
+            $body = "Your credit auto-pay settings were updated on ".$credit->updated_at->format('jS F Y, H:m:s').".";
         }
 
         $body = $body."\r\n If you have any questions or concerns, please contact support.";
