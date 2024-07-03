@@ -41,6 +41,11 @@ Route::middleware(['auth:sanctum', 'logs.user'])->group(function() {
     Route::post('user/secret', '\App\Http\Controllers\Api\UserController@updatePassword');
     Route::post('user/view/{user}', '\App\Http\Controllers\Api\UserController@showUser');
 
+    Route::get('user/credit/check', '\App\Http\Controllers\Api\UserCreditController@doesUserHaveCreditAccount');
+    Route::post('user/credit', '\App\Http\Controllers\Api\UserCreditController@prePost');
+    Route::get('user/credit', '\App\Http\Controllers\Api\UserCreditController@show');
+    Route::patch('user/credit', '\App\Http\Controllers\Api\UserCreditController@prePost');
+
     Route::post('brand/avatar', '\App\Http\Controllers\Api\UserController@updateBrandAvatar');
     Route::delete('brand/avatar', '\App\Http\Controllers\Api\UserController@removeBrandAvatar');
     Route::patch('brand', '\App\Http\Controllers\Api\UserController@updateBrand');
@@ -165,6 +170,7 @@ Route::middleware(['auth:sanctum', 'logs.user'])->group(function() {
     Route::patch('notifications/key/{notification}', '\App\Http\Controllers\Api\NotificationsController@setToRead');
     Route::delete('notifications/{model}/{model_id}', '\App\Http\Controllers\Api\NotificationsController@destroy');
 
+    Route::get('payment-gateways', '\App\Http\Controllers\Api\TransactionsController@getPaymentGateways');
 
     Route::post('premium/subscriptions', '\App\Http\Controllers\Api\PremiumSubscriptionsController@createSubscription');
     // Route::get('premium/subscriptions', '\App\Http\Controllers\Api\PremiumSubscriptionsController@getWaitingLists');
