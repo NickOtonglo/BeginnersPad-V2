@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Api\UserCreditController;
 use App\Http\Requests\SaveUserRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -18,6 +19,10 @@ class AuthController extends Controller
         $user->role_id = $request->user_type;
         $user->password = bcrypt($request->password);
         $user->save();
+
+        if ($user->role_id == 5) {
+            app(UserCreditController::class)->store(0, $user->id, 'app/Http/Controllers/AuthController.php');
+        }
 
         $response = [
             'user' => $user,
