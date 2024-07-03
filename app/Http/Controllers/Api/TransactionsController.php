@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Transaction\TransactionResource;
+use App\Models\PaymentGateway;
 use App\Models\Transaction;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -89,5 +90,10 @@ class TransactionsController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+    
+    public function getPaymentGateways() {
+        $gateways = PaymentGateway::get(['id', 'name']);
+        return $gateways;
     }
 }
