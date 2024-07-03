@@ -11,6 +11,7 @@ use App\Models\PremiumPlan;
 use App\Models\PremiumPlanSubscription;
 use App\Models\PremiumPlanWaitingList;
 use App\Models\User;
+use App\Models\UserCredit;
 use App\Models\Zone;
 use DateTime;
 use Exception;
@@ -105,6 +106,17 @@ class PremiumSubscriptionsController extends Controller
         // $subscription = PremiumPlanSubscription::where('user_id', $user->id)->where('premium_plan_id', $plan->id)->firstOrFail();
         $subscription = $user->premiumSubscriptions()->where('premium_plan_id', $plan->id)->first();
         $comment = '';
+
+        if (!$this->transact($plan, $user->credit)) {
+            return response()->json([
+                'message' => "Your balance is insufficient. Kindly top-up your credit and try again.",
+                'errors' => [
+                    'credit' => [
+                        "Balance is insufficient",
+                    ]
+                ],
+            ], 422);
+        }
 
         if ($subscription) {
             // https://stackoverflow.com/questions/19031235/php-check-if-date-is-past-to-a-certain-date-given-in-a-certain-format
@@ -203,5 +215,20 @@ class PremiumSubscriptionsController extends Controller
 
     public function getPremiumPlan(PremiumPlan $plan) {
         return new PremiumPlanResource($plan);
+    }
+
+    public function transact(PremiumPlan $plan, UserCredit $credit) {
+        $planPrice = $plan->price;
+        $creditBalance = $credit->credit;
+
+        if ($creditBalance >= $planPrice) {
+            // dd($creditBalance.' >= '.$planPrice);
+            // dd(-$planPrice);
+            app(UserCreditController::class)->update($credit, floatval(-$planPrice), boolval($credit->auto_pay), $credit->user, null, true);
+            return true;
+        } else {
+            // dd($creditBalance.' < '.$planPrice);
+            return false;
+        }
     }
 }
