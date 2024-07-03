@@ -9,6 +9,7 @@ class UserCreditLog extends Model
 {
     use HasFactory;
 
+    public $table = 'logs_user_activity_user_credit';
     protected $fillable = ['user_id', 'credit', 'auto_pay', 'comment', 'parent_id'];
 
     public function userActivityLog() {
