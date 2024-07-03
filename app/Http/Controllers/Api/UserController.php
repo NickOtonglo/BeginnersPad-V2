@@ -361,6 +361,10 @@ class UserController extends Controller
         $data->status = 'preactive';
         $data->save();
 
+        if ($data->role_id == 5) {
+            app(UserCreditController::class)->store(0, $data->id, 'app/Http/Controllers/Api/UserController.php');
+        }
+
         $response = [
             'user' => $data,
             'model' => 'User',
