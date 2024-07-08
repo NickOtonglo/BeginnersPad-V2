@@ -4,6 +4,8 @@ namespace App\Http\Resources;
 
 use App\Models\PropertyReview;
 use App\Models\PropertyUnit;
+use Carbon\Carbon;
+use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -17,6 +19,17 @@ class PropertyLiteResource extends JsonResource
     public function toArray(Request $request): array
     {
         $rating = PropertyReview::where('property_id', $this->id)->avg('rating');
+        
+        $plan = '';
+        $published = new DateTime($this->published_at);
+        if ($published >= Carbon::now()->subHours(48)) {
+            // property published within the last 48 hours
+            $plan = 'waiting-list';
+        } else {
+            // property published more than 48 hours ago
+        }
+
+        if ($this->status == 'published' && $this->published_at )
 
         $subZone = [
             'name' => $this->subZone->name,
@@ -67,12 +80,13 @@ class PropertyLiteResource extends JsonResource
             'verified' => $this->verified,
             'stories' => $this->stories,
             'thumbnail' => $this->thumbnail,
-            'timestamp' => $this->created_at->format('jS F Y, H:m:s'),
-            'time_ago' => $this->created_at->diffForHumans(),
+            'timestamp' => Carbon::parse($this->published_at)->format('jS F Y, H:m:s'),
+            'time_ago' => Carbon::parse($this->published_at)->diffForHumans(),
             'window' => $window,
             'rating' => number_format($rating, 1),
             'brand' => new BrandResource($this->user->brand),
             'sub_zone' => $subZone,
+            'premium' => $plan,
         ];
     }
 }
