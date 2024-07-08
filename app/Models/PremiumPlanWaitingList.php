@@ -14,4 +14,8 @@ class PremiumPlanWaitingList extends Model
     public function premiumPlanSubscription() {
         return $this->belongsTo(PremiumPlanSubscription::class, 'id', 'subscription_id');
     }
+
+    public function zone() {
+        return $this->belongsTo(Zone::class);
+    }
 }
