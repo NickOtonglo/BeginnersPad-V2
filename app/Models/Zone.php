@@ -26,4 +26,8 @@ class Zone extends Model
     public function properties() {
         return $this->hasManyThrough(Property::class, SubZone::class);
     }
+
+    public function waitingLists() {
+        return $this->hasMany(PremiumPlanWaitingList::class);
+    }
 }
