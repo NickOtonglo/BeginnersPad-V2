@@ -19,7 +19,7 @@ export default function premiumMaster() {
     const subscriptions = ref({})
     const subscription = ref({
         id: '',
-        period_months: '',
+        period_days: '',
         activated_at: '',
         time_ago: '',
         expires_at: '',
