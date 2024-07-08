@@ -38,7 +38,7 @@ class SubscriptionResource extends JsonResource
         if ($plan->slug == 'waiting-list') {
             return [
                 'id' => $this->id,
-                'period_months' => $this->period,
+                'period_days' => $this->period,
                 'activated_at' => Carbon::parse($this->activated_at)->format('jS F Y, H:m:s'),
                 'time_ago' => Carbon::parse($this->activated_at)->diffForHumans(),
                 'expires_at' => Carbon::parse($this->expires_at)->format('jS F Y, H:m:s'),
