@@ -23,7 +23,7 @@ class WaitingListResource extends JsonResource
             'zone_id' => $this->zone_id,
             'zone' => $zone->name,
             'radius' => number_format($zone->radius*0.001, 3),
-            'properties_count' => $zone->properties()->count(),
+            'properties_count' => $zone->properties()->where('status', 'published')->count(),
             'county' => $zone->zoneCounty->name,
         ];
     }
