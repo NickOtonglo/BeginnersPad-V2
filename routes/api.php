@@ -173,8 +173,8 @@ Route::middleware(['auth:sanctum', 'logs.user'])->group(function() {
     Route::get('payment-gateways', '\App\Http\Controllers\Api\TransactionsController@getPaymentGateways');
 
     Route::post('premium/subscriptions', '\App\Http\Controllers\Api\PremiumSubscriptionsController@createSubscription');
-    // Route::get('premium/subscriptions', '\App\Http\Controllers\Api\PremiumSubscriptionsController@getWaitingLists');
-    Route::get('premium/plans/waiting-list', '\App\Http\Controllers\Api\PremiumSubscriptionsController@getWaitingLists');
+    // Route::get('premium/subscriptions', '\App\Http\Controllers\Api\PremiumSubscriptionsController@getWaitingListSubscription');
+    Route::get('premium/plans/waiting-list', '\App\Http\Controllers\Api\PremiumSubscriptionsController@getWaitingListSubscription');
     Route::post('premium/plans/waiting-list', '\App\Http\Controllers\Api\PremiumSubscriptionsController@addWaitingList');
     Route::delete('premium/plans/waiting-list/{zone}', '\App\Http\Controllers\Api\PremiumSubscriptionsController@removeWaitingList');
     Route::get('premium/plan/{plan}', '\App\Http\Controllers\Api\PremiumSubscriptionsController@getPremiumPlan');
