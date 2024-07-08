@@ -42,8 +42,8 @@
                     <tr class="single-column">
                         <td>{{ subscription.plan }}</td>
                         <td>{{ subscription.activated_at }}</td>
-                        <td v-if="subscription.period_months > 1">{{ subscription.period_months }} days</td>
-                        <td v-else>{{ subscription.period_months }} day</td>
+                        <td v-if="subscription.period_days > 1">{{ subscription.period_days }} days</td>
+                        <td v-else>{{ subscription.period_days }} day</td>
                         <td>{{ subscription.expires_at }}</td>
                         <td>{{ subscription.time_left }}</td>
                         <td v-if="subscription.status == 'active'"><i class="fa-solid fa-circle-check sub-active"></i>
