@@ -10,11 +10,15 @@ use App\Http\Resources\PremiumPlanSubscription\WaitingListResource;
 use App\Models\PremiumPlan;
 use App\Models\PremiumPlanSubscription;
 use App\Models\PremiumPlanWaitingList;
+use App\Models\Property;
+use App\Models\SubZone;
 use App\Models\User;
 use App\Models\UserCredit;
 use App\Models\Zone;
+use Carbon\Carbon;
 use DateTime;
 use Exception;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 
 class PremiumSubscriptionsController extends Controller
@@ -202,7 +206,7 @@ class PremiumSubscriptionsController extends Controller
         return response($response, 201);
     }
 
-    public function getWaitingLists() {
+    public function getWaitingListSubscription() {
         $plan = PremiumPlan::where('slug', 'waiting-list')->first();
 
         try {
@@ -215,6 +219,19 @@ class PremiumSubscriptionsController extends Controller
 
     public function getPremiumPlan(PremiumPlan $plan) {
         return new PremiumPlanResource($plan);
+    }
+
+    public function getUserWaitingLists(User $user, PremiumPlan $plan = null, PremiumPlanSubscription $subscription = null) {
+        if (!$plan) {
+            $plan = PremiumPlan::where('slug', 'waiting-list')->first();
+        }
+
+        if (!$subscription) {
+            $subscription = $user->premiumSubscriptions()->where('premium_plan_id', $plan->id)->first();
+        }
+
+        $waitingLists = $subscription->waitingLists;
+        return $waitingLists;
     }
 
     public function transact(PremiumPlan $plan, UserCredit $credit) {
@@ -230,5 +247,104 @@ class PremiumSubscriptionsController extends Controller
             // dd($creditBalance.' < '.$planPrice);
             return false;
         }
+    }
+
+    public function doesUserHaveValidWaitingListSubscription(User $user, PremiumPlan $plan = null, PremiumPlanSubscription $subscription = null) {
+        if (!$plan) {
+            $plan = PremiumPlan::where('slug', 'waiting-list')->first();
+        }
+
+        if (!$subscription) {
+            $subscription = $user->premiumSubscriptions()->where('premium_plan_id', $plan->id)->first();
+        }
+
+        if ($subscription) {
+            // check if subscription is valid
+            $expiry = new DateTime($subscription->expires_at);
+            $now = new DateTime();
+            if ($expiry > $now) {
+                // expiry is in the future, subscription is valid
+                return true;
+            } else {
+                // subscription is invalid
+            }
+        }
+        return false;
+    }
+
+    public function getWaitingListSubscriberListings(User $user, $properties, PremiumPlan $plan = null, PremiumPlanSubscription $subscription = null, $pagination = 25) {
+        // get user's waiting lists
+        $waitingLists = $this->getUserWaitingLists($user, $plan, $subscription);
+        if ($waitingLists->count() > 0) {
+            $list = [];
+            foreach ($waitingLists as $waitingList) {
+                // $item = $waitingList->zone->properties()->where('status', 'published')
+                //                                         ->where('published_at', '>=', Carbon::now()->subHours(48))
+                //                                         ->get();
+
+                // get listings in waiting lists that have been published within the last 48 hrs
+                $items = $waitingList->zone->properties()->where('status', 'published')
+                ->where('published_at', '>=', Carbon::now()->subHours(48))
+                    ->orderBy('published_at', 'ASC')
+                    ->get();
+                foreach ($items as $item) {
+                    array_push($list, $item);
+                }
+            }
+            $properties = $properties->where('status', 'published')
+            ->where('published_at', '<', Carbon::now()->subHours(48))
+                ->orderBy('published_at', 'desc');
+
+            // add listings to collection
+            $properties = new Collection($properties->get());
+            $properties = $properties->merge($list);
+            $properties = app(Controller::class)->paginate($properties, $pagination);
+        }
+        return $properties;
+    }
+
+    public function getWaitingListSubscriberListingsInSubZone(User $user, $properties, PremiumPlan $plan = null, PremiumPlanSubscription $subscription = null, $pagination = 25, SubZone $subZone = null) {
+        // check if user has valid waiting list subscription
+        // get user's waiting lists
+        // get listings in zone's waiting list that have been posted within the last 48 hrs
+        // check if listing belongs to selected sub-zone
+        // if listing belongs to selected sub-zone, add to array
+        // add listings to collection
+        $waitingLists = $this->getUserWaitingLists($user, $plan, $subscription);
+        if ($waitingLists->count() > 0) {
+            $list = [];
+            foreach ($waitingLists as $waitingList) {
+                $items = $waitingList->zone->properties()->where('status', 'published')
+                                                        ->where('published_at', '>=', Carbon::now()->subHours(48))
+                                                        ->orderBy('published_at', 'ASC')
+                                                        ->get();
+                foreach ($items as $item) {
+                    if ($item->sub_zone_id == $subZone->id) {
+                        array_push($list, $item);
+                    }
+                }
+            }
+            $properties = $properties->where('status', 'published')
+            ->where('published_at', '<', Carbon::now()->subHours(48))
+                ->orderBy('published_at', 'desc');
+
+            // add listings to collection
+            $properties = new Collection($properties->get());
+            $properties = $properties->merge($list);
+            $properties = app(Controller::class)->paginate($properties, $pagination);
+        }
+        return $properties;
+    }
+
+    public function isPropertyAccessibleToUser(User $user, Property $property) {
+        if ($this->doesUserHaveValidWaitingListSubscription($user)) {
+            $zone = $property->subZone->zone;
+            $waitingList = $this->getUserWaitingLists($user);
+            $waitingList = $waitingList->where('zone_id', $zone->id)->first();
+            if ($waitingList) {
+                return true;
+            }
+        }
+        return false;
     }
 }
