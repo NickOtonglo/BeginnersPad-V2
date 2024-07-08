@@ -9,12 +9,14 @@ use App\Http\Resources\Property\PropertyLogResource;
 use App\Http\Resources\PropertyLiteResource;
 use App\Http\Resources\PropertyPublicResource;
 use App\Http\Resources\PropertyResource;
+use App\Models\PremiumPlan;
 use App\Models\Property;
 use App\Models\PropertyFeature;
 use App\Models\PropertyFile;
 use App\Models\PropertyLog;
 use App\Models\SubZone;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -25,12 +27,16 @@ class PropertiesController extends Controller
     /**
      * Display a listing of the resource.
      */
+
     public function index()
     {
         // $properties = PropertyResource::collection(Property::where('status', 'published')->latest()->get());
         // return $properties;
 
         $request = request()->sort;
+        $user = auth()->user();
+        $plan = PremiumPlan::where('slug', 'waiting-list')->first();
+        $subscription = $user->premiumSubscriptions()->where('premium_plan_id', $plan->id)->first();
 
         $properties = Property::when(request('search_global'), function($query) {
             $query->where(function($q) {
@@ -42,9 +48,15 @@ class PropertiesController extends Controller
 
         if ($request) {
             if ($request == 'desc' || $request == 'asc') {
-                if (auth()->user() && (auth()->user()->role_id <= 3 &&  auth()->user()->role_id >= 1)) {
+                if ($user && ($user->role_id <= 3 &&  $user->role_id >= 1)) {
                     $properties = $properties->orderBy('created_at', $request)->where('status', '!=', 'unpublished')->paginate(25);
                 } else {
+                    // check if user is subscribed to waiting lists
+                    // check if subscription is valid
+                    
+                    // get user's waiting lists
+                    // get listings in waiting lists that have been published within the last 48 hrs
+                    // add listings to collection
                     $properties = $properties->orderBy('created_at', $request)
                                             ->where('status', 'published')
                                             ->where('published_at', '<', Carbon::now()->subHours(48))->paginate(25);
@@ -55,9 +67,16 @@ class PropertiesController extends Controller
             if ($request == 'area') {}
             if ($request == 'rooms') {}
         } else {
-            $properties = $properties->where('status', 'published')
-                                        ->where('published_at', '<', Carbon::now()->subHours(48))
-                                        ->latest()->paginate(25);
+            // check if user is subscribed to waiting lists
+            // check if subscription is valid
+            if (app(PremiumSubscriptionsController::class)->doesUserHaveValidWaitingListSubscription($user, $plan, $subscription)) {
+                // get user's waiting lists
+                $properties = app(PremiumSubscriptionsController::class)->getWaitingListSubscriberListings($user, $properties, $plan, $subscription);
+            } else {
+                $properties = $properties->where('status', 'published')
+                                            ->where('published_at', '<', Carbon::now()->subHours(48))
+                                            ->orderBy('published_at', 'DESC')->paginate(25);
+            }
         }
         return PropertyLiteResource::collection($properties);
     }
@@ -336,14 +355,26 @@ class PropertiesController extends Controller
 
     public function indexHome()
     {
+        $user = auth()->user();
+        $plan = PremiumPlan::where('slug', 'waiting-list')->first();
+        $subscription = $user->premiumSubscriptions()->where('premium_plan_id', $plan->id)->first();
+
         $properties = Property::when(request('search_global'), function($query) {
             $query->where(function($q) {
                 $q->where('slug', 'like', '%'.request('search_global').'%')
                   ->orWhere('name', 'like', '%'.request('search_global').'%')
                   ->orWhere('description', 'like', '%'.request('search_global').'%');
             });
-        })->where('status', 'published')
-        ->where('published_at', '<', Carbon::now()->subHours(48))->latest()->paginate(9);
+        });
+
+        if (app(PremiumSubscriptionsController::class)->doesUserHaveValidWaitingListSubscription($user, $plan, $subscription)) {
+            // get user's waiting lists
+            $properties = app(PremiumSubscriptionsController::class)->getWaitingListSubscriberListings($user, $properties, $plan, $subscription, 9);
+        } else {
+            $properties = $properties->where('status', 'published')
+            ->where('published_at', '<', Carbon::now()->subHours(48))->orderBy('published_at', 'desc')->paginate(9);
+        }
+
         return PropertyLiteResource::collection($properties);
     }
 
@@ -374,14 +405,28 @@ class PropertiesController extends Controller
     }
 
     public function getPropertiesBySubZone(SubZone $subZone) {
+        $user = auth()->user();
+        $plan = PremiumPlan::where('slug', 'waiting-list')->first();
+        $subscription = $user->premiumSubscriptions()->where('premium_plan_id', $plan->id)->first();
+
         $properties = '';
         if (auth()->user() && (auth()->user()->role_id <= 3 &&  auth()->user()->role_id >= 1)) {
             $properties = $subZone->properties()->where('status', '!=' ,'unpublished')->paginate(25);
         } else {
-            $properties = $subZone->properties()
-                            ->where('status', 'published')
-                            ->where('published_at', '<', Carbon::now()->subHours(48))
-                            ->paginate(25);
+            // check if user has valid waiting list subscription
+            // get user's waiting lists
+            // get listings in zone's waiting list that have been posted within the last 48 hrs
+            // check if listing belongs to selected sub-zone
+            // if listing belongs to selected sub-zone, add to array
+            // add listings to collection
+            $properties = $subZone->properties();
+            if (app(PremiumSubscriptionsController::class)->doesUserHaveValidWaitingListSubscription($user, $plan, $subscription)) {
+                $properties = app(PremiumSubscriptionsController::class)->getWaitingListSubscriberListingsInSubZone($user, $properties, $plan, $subscription, 9, $subZone);
+            } else {
+                $properties = $properties->where('status', 'published')
+                                ->where('published_at', '<', Carbon::now()->subHours(48))
+                                ->paginate(25);
+            }
         }
         return PropertyLiteResource::collection($properties);
     }
@@ -464,7 +509,9 @@ class PropertiesController extends Controller
     }
 
     public function isPropertyAccessibleToUser(Property $property) {
+        $user = auth()->user();
         if (
+            (app(PremiumSubscriptionsController::class)->isPropertyAccessibleToUser($user, $property)) ||
             ($property->status == 'published' && $property->published_at < Carbon::now()->subHours(48)) || 
             (auth()->user()->id == $property->user_id) || 
             (($property->status != 'unpublished' && $property->status != 'private') && 
