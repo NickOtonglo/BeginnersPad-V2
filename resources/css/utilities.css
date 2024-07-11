@@ -226,6 +226,16 @@ div.btn-icon-round:hover {
     font-weight: normal;
 }
 
+.card .plaque {
+    display: inline-block;
+    background: #fff;
+    border-radius: 5px;
+    margin: 8px;
+    padding: 3px;
+    box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.4);
+    font-weight: bold;
+}
+
 .card .image {
     position: relative;
     background: url(/images/static/thumb_default.jpg) center center;
