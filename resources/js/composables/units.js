@@ -448,8 +448,8 @@ export default function unitsMaster() {
 
         axios.get(`${request}&bed=${data[0][1]}&bath=${data[1][1]}&area=${data[2][1]}&pmin=${data[3][1]}&pmax=${data[4][1]}`)
             .then(response => {
-                units.value = response.data[0]
-                // unitsCount.value = response.data.meta.total
+                units.value = response.data.data
+                unitsCount.value = response.data.meta.total
             })
             .catch(error => console.log(error))
             .finally(isLoading.value = false)
