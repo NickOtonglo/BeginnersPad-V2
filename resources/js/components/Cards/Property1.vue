@@ -9,6 +9,9 @@
                     <template v-else>
                         <img src="/images/static/avatar.png" alt="">
                     </template>
+                    <div v-if="property.premium" class="plaque">
+                        <span><i class="fa-solid fa-star"></i> waiting list</span>
+                    </div>
                 </div>
             </template>
             <template v-else>
@@ -19,6 +22,9 @@
                     <template v-else>
                         <img src="/images/static/avatar.png" alt="">
                     </template>
+                    <div v-if="property.premium" class="plaque">
+                        <span><i class="fa-solid fa-star"></i> waiting list</span>
+                    </div>
                 </div>
             </template>
             <div class="card-info">
