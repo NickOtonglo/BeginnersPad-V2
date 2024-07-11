@@ -16,6 +16,7 @@ use App\Models\PropertyFile;
 use App\Models\PropertyLog;
 use App\Models\SubZone;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
@@ -33,16 +34,18 @@ class PropertiesController extends Controller
         // $properties = PropertyResource::collection(Property::where('status', 'published')->latest()->get());
         // return $properties;
 
+        $properties = '';
+
         $request = request()->sort;
         $user = auth()->user();
         $plan = PremiumPlan::where('slug', 'waiting-list')->first();
         $subscription = $user->premiumSubscriptions()->where('premium_plan_id', $plan->id)->first();
 
-        $properties = Property::when(request('search_global'), function($query) {
-            $query->where(function($q) {
-                $q->where('slug', 'like', '%'.request('search_global').'%')
-                  ->orWhere('name', 'like', '%'.request('search_global').'%')
-                  ->orWhere('description', 'like', '%'.request('search_global').'%');
+        $properties = Property::when(request('search_global'), function ($query) {
+            $query->where(function ($q) {
+                $q->where('slug', 'like', '%' . request('search_global') . '%')
+                ->orWhere('name', 'like', '%' . request('search_global') . '%')
+                ->orWhere('description', 'like', '%' . request('search_global') . '%');
             });
         });
 
@@ -53,19 +56,28 @@ class PropertiesController extends Controller
                 } else {
                     // check if user is subscribed to waiting lists
                     // check if subscription is valid
-                    
+
                     // get user's waiting lists
                     // get listings in waiting lists that have been published within the last 48 hrs
                     // add listings to collection
-                    $properties = $properties->orderBy('created_at', $request)
-                                            ->where('status', 'published')
-                                            ->where('published_at', '<', Carbon::now()->subHours(48))->paginate(25);
+                    if (app(PremiumSubscriptionsController::class)->doesUserHaveValidWaitingListSubscription($user, $plan, $subscription)) {
+                        // get user's waiting lists
+                        $properties = app(PremiumSubscriptionsController::class)->getWaitingListSubscriberListings($user, $properties, $plan, $subscription, 25, $request);
+                    } else {
+                        $properties = $properties->orderBy('created_at', $request)
+                            ->where('status', 'published')
+                            ->where('published_at', '<', Carbon::now()->subHours(48))->paginate(25);
+                    }
                 }
             }
-            if ($request == 'cheap') {}
-            if ($request == 'pricey') {}
-            if ($request == 'area') {}
-            if ($request == 'rooms') {}
+            if ($request == 'cheap') {
+            }
+            if ($request == 'pricey') {
+            }
+            if ($request == 'area') {
+            }
+            if ($request == 'rooms') {
+            }
         } else {
             // check if user is subscribed to waiting lists
             // check if subscription is valid
@@ -74,10 +86,13 @@ class PropertiesController extends Controller
                 $properties = app(PremiumSubscriptionsController::class)->getWaitingListSubscriberListings($user, $properties, $plan, $subscription);
             } else {
                 $properties = $properties->where('status', 'published')
-                                            ->where('published_at', '<', Carbon::now()->subHours(48))
-                                            ->orderBy('published_at', 'DESC')->paginate(25);
+                ->where('published_at', '<',
+                    Carbon::now()->subHours(48)
+                )
+                    ->orderBy('published_at', 'DESC')->paginate(25);
             }
         }
+        
         return PropertyLiteResource::collection($properties);
     }
 
@@ -357,22 +372,27 @@ class PropertiesController extends Controller
     {
         $user = auth()->user();
         $plan = PremiumPlan::where('slug', 'waiting-list')->first();
-        $subscription = $user->premiumSubscriptions()->where('premium_plan_id', $plan->id)->first();
-
+        
         $properties = Property::when(request('search_global'), function($query) {
             $query->where(function($q) {
                 $q->where('slug', 'like', '%'.request('search_global').'%')
-                  ->orWhere('name', 'like', '%'.request('search_global').'%')
-                  ->orWhere('description', 'like', '%'.request('search_global').'%');
+                ->orWhere('name', 'like', '%'.request('search_global').'%')
+                ->orWhere('description', 'like', '%'.request('search_global').'%');
             });
         });
-
-        if (app(PremiumSubscriptionsController::class)->doesUserHaveValidWaitingListSubscription($user, $plan, $subscription)) {
-            // get user's waiting lists
-            $properties = app(PremiumSubscriptionsController::class)->getWaitingListSubscriberListings($user, $properties, $plan, $subscription, 9);
+        
+        if ($user) {
+            $subscription = $user->premiumSubscriptions()->where('premium_plan_id', $plan->id)->first();
+            if (app(PremiumSubscriptionsController::class)->doesUserHaveValidWaitingListSubscription($user, $plan, $subscription)) {
+                // get user's waiting lists
+                $properties = app(PremiumSubscriptionsController::class)->getWaitingListSubscriberListings($user, $properties, $plan, $subscription, 9);
+            } else {
+                $properties = $properties->where('status', 'published')
+                ->where('published_at', '<', Carbon::now()->subHours(48))->orderBy('published_at', 'desc')->paginate(9);
+            }
         } else {
             $properties = $properties->where('status', 'published')
-            ->where('published_at', '<', Carbon::now()->subHours(48))->orderBy('published_at', 'desc')->paginate(9);
+                ->where('published_at', '<', Carbon::now()->subHours(48))->orderBy('published_at', 'desc')->paginate(9);
         }
 
         return PropertyLiteResource::collection($properties);
@@ -524,5 +544,29 @@ class PropertiesController extends Controller
         } else {
             return false;
         }
+    }
+
+    public function getPropertiesWithoutAuth($pagination = 9, $request = 'desc') {
+        $request = request()->sort;
+        $properties = Property::when(request('search_global'), function($query) {
+            $query->where(function($q) {
+                $q->where('slug', 'like', '%'.request('search_global').'%')
+                ->orWhere('name', 'like', '%'.request('search_global').'%')
+                ->orWhere('description', 'like', '%'.request('search_global').'%');
+            });
+        });
+
+        if ($request) {
+            if ($request == 'desc' || $request == 'asc') {
+                $properties = $properties->orderBy('created_at', $request)
+                                         ->where('status', 'published')
+                                         ->where('published_at', '<', Carbon::now()->subHours(48))->paginate($pagination);
+            }
+            if ($request == 'cheap') {}
+            if ($request == 'pricey') {}
+            if ($request == 'area') {}
+            if ($request == 'rooms') {}
+        }
+        return $properties;
     }
 }
