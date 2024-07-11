@@ -272,7 +272,13 @@ class PremiumSubscriptionsController extends Controller
         return false;
     }
 
-    public function getWaitingListSubscriberListings(User $user, $properties, PremiumPlan $plan = null, PremiumPlanSubscription $subscription = null, $pagination = 25) {
+    public function getWaitingListSubscriberListings(User $user, $properties, PremiumPlan $plan = null, PremiumPlanSubscription $subscription = null, $pagination = 25, $order = 'desc') {
+        if ($order == 'desc') {
+            $order = 'asc';
+        } else if ($order == 'asc') {
+            $order = 'desc';
+        }
+        
         // get user's waiting lists
         $waitingLists = $this->getUserWaitingLists($user, $plan, $subscription);
         if ($waitingLists->count() > 0) {
@@ -285,7 +291,7 @@ class PremiumSubscriptionsController extends Controller
                 // get listings in waiting lists that have been published within the last 48 hrs
                 $items = $waitingList->zone->properties()->where('status', 'published')
                 ->where('published_at', '>=', Carbon::now()->subHours(48))
-                    ->orderBy('published_at', 'ASC')
+                    ->orderBy('published_at', $order)
                     ->get();
                 foreach ($items as $item) {
                     array_push($list, $item);
@@ -293,17 +299,29 @@ class PremiumSubscriptionsController extends Controller
             }
             $properties = $properties->where('status', 'published')
             ->where('published_at', '<', Carbon::now()->subHours(48))
-                ->orderBy('published_at', 'desc');
+                ->orderBy('published_at', $order);
 
             // add listings to collection
             $properties = new Collection($properties->get());
             $properties = $properties->merge($list);
-            $properties = app(Controller::class)->paginate($properties, $pagination);
+            if ($order = 'desc') {
+                $properties = $properties->reverse()->values();
+            }
+
+            if ($pagination > 0) {
+                $properties = app(Controller::class)->paginate($properties, $pagination);
+            }
         }
         return $properties;
     }
 
-    public function getWaitingListSubscriberListingsInSubZone(User $user, $properties, PremiumPlan $plan = null, PremiumPlanSubscription $subscription = null, $pagination = 25, SubZone $subZone = null) {
+    public function getWaitingListSubscriberListingsInSubZone(User $user, $properties, PremiumPlan $plan = null, PremiumPlanSubscription $subscription = null, $pagination = 25, SubZone $subZone = null, $order = 'desc') {
+        if ($order == 'desc') {
+            $order = 'asc';
+        } else if ($order == 'asc') {
+            $order = 'desc';
+        }
+        
         // check if user has valid waiting list subscription
         // get user's waiting lists
         // get listings in zone's waiting list that have been posted within the last 48 hrs
@@ -316,7 +334,7 @@ class PremiumSubscriptionsController extends Controller
             foreach ($waitingLists as $waitingList) {
                 $items = $waitingList->zone->properties()->where('status', 'published')
                                                         ->where('published_at', '>=', Carbon::now()->subHours(48))
-                                                        ->orderBy('published_at', 'ASC')
+                                                        ->orderBy('published_at', $order)
                                                         ->get();
                 foreach ($items as $item) {
                     if ($item->sub_zone_id == $subZone->id) {
@@ -326,11 +344,20 @@ class PremiumSubscriptionsController extends Controller
             }
             $properties = $properties->where('status', 'published')
             ->where('published_at', '<', Carbon::now()->subHours(48))
-                ->orderBy('published_at', 'desc');
+                ->orderBy('published_at', $order);
 
             // add listings to collection
             $properties = new Collection($properties->get());
             $properties = $properties->merge($list);
+
+            if ($order = 'desc') {
+                $properties = $properties->reverse()->values();
+            }
+
+            if ($pagination > 0) {
+                $properties = app(Controller::class)->paginate($properties, $pagination);
+            }
+
             $properties = app(Controller::class)->paginate($properties, $pagination);
         }
         return $properties;
