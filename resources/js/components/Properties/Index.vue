@@ -176,7 +176,9 @@
                 <p style="text-align: center;">-no listings-</p>
             </template>
         </div>
-        <Pagination v-if="propertiesCount > 25" :totalPages="total_pages" :perPage="per_page"
+        <Pagination v-if="filterDataIsProperties && propertiesCount > 25" :totalPages="total_pages" :perPage="per_page"
+            :currentPage="current_page" @pagechanged="onPageChange" />
+        <Pagination v-if="!filterDataIsProperties && unitsCount > 25" :totalPages="total_pages" :perPage="per_page"
             :currentPage="current_page" @pagechanged="onPageChange" />
     </section>
 </template>
@@ -190,7 +192,6 @@ import CardProperty from '../Cards/Property1.vue';
 import CardUnit from '../Cards/PropertyUnit3.vue';
 import zonesMaster from '../../composables/zones';
 import subZonesMaster from '../../composables/subzones';
-import unitsMaster from '../../composables/units';
 
 const request = ref(`/api/listings`)
 // const btnSelected = ref('All')
@@ -205,13 +206,15 @@ const {
     current_page,
     properties,
     propertiesCount,
+    filterUnits, 
+    units, 
+    unitsCount, 
     onPageChange,
-    getPaginationDataWithRequest
+    getPaginationDataWithRequest,
 } = pagination()
 const { user, getUserData } = userMaster() 
 const { getZones, zones, zone } = zonesMaster()
 const { getSubZones, subZones, subZone } = subZonesMaster()
-const { filterUnits, units } = unitsMaster()
 const unit = ref({
     bedrooms: '',
     bathrooms: '',
@@ -239,11 +242,25 @@ function filterData(input) {
 
 function preFilterUnits(searchData, subZoneId, dataArray) {
     if (!subZoneId) {
-        unitFilterRequest.value = `/api/listings/units/all?search_global=${searchData}`
+        unitFilterRequest.value = `/api/listings/units/all`
     } else {
-        unitFilterRequest.value = `/api/listings/units/sub-zone/${subZoneId}?search_global=${searchData}`
+        unitFilterRequest.value = `/api/listings/units/sub-zone/${subZoneId}`
     }
-    filterUnits(unitFilterRequest.value, dataArray)
+
+    let specs = []
+    specs[0] = dataArray[0]
+    specs[1] = dataArray[1]
+    specs[2] = dataArray[2]
+    specs[3] = dataArray[3]
+    specs[4] = dataArray[4]
+
+    let unitParams = []
+    unitParams[0] = searchData
+    unitParams[1] = specs
+
+    localStorage.setItem('dataArray', JSON.stringify(unitParams))
+    getPaginationDataWithRequest(current_page.value, 'property_units_filtered', unitFilterRequest.value)
+    // filterUnits(unitFilterRequest.value, dataArray)
 }
 
 onBeforeMount(() => {
