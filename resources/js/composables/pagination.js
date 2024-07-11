@@ -20,7 +20,7 @@ export default function pagination() {
     const { zones, getZones, zonesCount } = zonesMaster()
     const { subZones, getSubZones, subZonesCount } = subZoneMaster()
     const { properties, getProperties, propertiesCount, propertyLogs, getAllPropertyLogs, propertyLogsCount } = propertiesMaster()
-    const { units, getUnits, unitsCount } = unitsMaster()
+    const { units, getUnits, unitsCount, filterUnits } = unitsMaster()
     const { favourites, getFavourites, favouritesCount } = favouriteMaster()
     const { tickets, getTickets, ticketsCount } = ticketsMaster()
     const { users, getUsers, usersCount, logs, getLogs } = userMaster()
@@ -80,6 +80,13 @@ export default function pagination() {
                 if (source == 'property_units') {
                     getUnits(`${request}?page=${page}`)
                 }
+                if (source == 'property_units_filtered') {
+                    let dataArray = []
+                    if (JSON.parse(localStorage.getItem('dataArray'))) {
+                        dataArray = JSON.parse(localStorage.getItem('dataArray'))
+                    }
+                    filterUnits(`${request}?page=${page}&search_global=${dataArray[0]}`, dataArray[1])
+                }
                 if (source == 'favourites') {
                     getFavourites(`${request}?page=${page}&search_global=${search_global.value}`)
                 }
@@ -112,10 +119,17 @@ export default function pagination() {
             sourceParam == 'properties' || 
             sourceParam == 'property_logs' || 
             sourceParam == 'property_units' || 
+            sourceParam == 'property_units_filtered' || 
             sourceParam == 'property_review_removal_logs' || 
             sourceParam == 'help_tickets' || 
             sourceParam == 'users' ||
             sourceParam == 'user_logs'
+        ) {
+            getPaginationDataWithRequest(page, sourceParam, requestParam)    
+        }
+
+        if (
+            sourceParam == 'property_units_filtered' 
         ) {
             getPaginationDataWithRequest(page, sourceParam, requestParam)    
         }
