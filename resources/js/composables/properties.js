@@ -24,12 +24,13 @@ export default function propertiesMaster() {
         sub_zone_id: '',
         brand: '',
         user: '',
+        premium: '',
         files: ref({
             id: '',
             name: '',
             type: '',
             property_id: '',
-        })
+        }),
     })
     const propertyLogs = ref({})
     const propertyLogsCount = ref(0)
