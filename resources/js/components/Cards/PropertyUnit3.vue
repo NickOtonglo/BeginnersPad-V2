@@ -9,6 +9,9 @@
                     <template v-else>
                         <img src="/images/static/avatar.png" alt="">
                     </template>
+                    <div v-if="unit.property.premium" class="plaque">
+                        <span><i class="fa-solid fa-star"></i> waiting list</span>
+                    </div>
                 </div>
             </template>
             <template v-else>
@@ -19,6 +22,9 @@
                     <template v-else>
                         <img src="/images/static/avatar.png" alt="">
                     </template>
+                    <div v-if="unit.property.premium" class="plaque">
+                        <span><i class="fa-solid fa-star"></i> waiting list</span>
+                    </div>
                 </div>
             </template>
             <div class="card-info">
@@ -26,7 +32,7 @@
                 <h4>{{ unit.name }}, {{ unit.property.name }}</h4>
                 <p class="location">Location: {{ unit.property.sub_zone.name }}, {{ unit.property.sub_zone.zone.county.name }}</p>
                 <p class="price">KES {{ unit.price }}</p>
-                <p class="timestamp">Added {{ unit.time_ago }}</p>
+                <p class="timestamp">Added {{ unit.property.time_ago }}</p>
             </div>
         </router-link>
     </div>
