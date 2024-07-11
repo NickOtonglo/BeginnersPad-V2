@@ -4,6 +4,8 @@ namespace App\Http\Resources\PropertyUnit;
 
 use App\Http\Resources\BrandResource;
 use App\Http\Resources\PropertyLiteResource;
+use Carbon\Carbon;
+use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -17,6 +19,15 @@ class PropertyUnitLiteWithPropertyLiteResource extends JsonResource
     public function toArray(Request $request): array
     {
         $property = $this->property;
+
+        $plan = '';
+        $published = new DateTime($property->published_at);
+        if ($published >= Carbon::now()->subHours(48)) {
+            // property published within the last 48 hours
+            $plan = 'waiting-list';
+        } else {
+            // property published more than 48 hours ago
+        }
 
         $subZone = [
             'name' => $property->subZone->name,
@@ -45,6 +56,8 @@ class PropertyUnitLiteWithPropertyLiteResource extends JsonResource
                 'thumbnail' => $property->thumbnail,
                 'brand' => new BrandResource($property->user->brand),
                 'sub_zone' => $subZone,
+                'premium' => $plan,
+                'time_ago' => Carbon::parse($property->published_at)->diffForHumans(),
             ]
         ];
     }
