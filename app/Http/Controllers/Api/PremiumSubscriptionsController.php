@@ -12,6 +12,7 @@ use App\Models\PremiumPlanSubscription;
 use App\Models\PremiumPlanWaitingList;
 use App\Models\Property;
 use App\Models\SubZone;
+use App\Models\System;
 use App\Models\User;
 use App\Models\UserCredit;
 use App\Models\Zone;
@@ -165,6 +166,20 @@ class PremiumSubscriptionsController extends Controller
         $user = auth()->user();
         $plan = PremiumPlan::where('slug', 'waiting-list')->first();
         $subscription = $user->premiumSubscriptions()->where('premium_plan_id', $plan->id)->first();
+        $limit = app(SystemController::class)->main(System::where('key', 'waiting_list_sub_limit')->first());
+
+        // check for waiting list subscription limit
+        if ($subscription->waitingLists()->count() >= intval($limit->value)) {
+            return response()->json([
+                'message' => "You have reached the maximum subscription limit of ".$limit->value." zones.",
+                'errors' => [
+                    'zone_id' => [
+                        "You have reached the maximum subscription limit",
+                    ]
+                ],
+            ], 422);
+        }
+
         $zone = Zone::find($request->zone_id);
 
         $data = new PremiumPlanWaitingList();
