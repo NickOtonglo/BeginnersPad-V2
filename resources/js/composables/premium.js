@@ -14,7 +14,7 @@ export default function premiumMaster() {
         status: '',
         minimum_days: '',
         price: '',
-
+        sub_limit: '',
     })
     const subscriptions = ref({})
     const subscription = ref({

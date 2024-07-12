@@ -62,7 +62,7 @@
             </table>
             <table v-if="subscription" class="horizontal-scroll">
                 <tr class="single-column">
-                    <th>Waiting lists</th>
+                    <th>Waiting lists <span v-if="plan">({{ plan.sub_limit - subscription.waiting_lists.length }} left)</span></th>
                 </tr>
                 <template v-if="subscription">
                     <tr class="single-column">
