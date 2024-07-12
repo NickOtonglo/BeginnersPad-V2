@@ -19,17 +19,23 @@ class PropertyLiteResource extends JsonResource
     public function toArray(Request $request): array
     {
         $rating = PropertyReview::where('property_id', $this->id)->avg('rating');
+        $user = auth()->user();
         
         $plan = '';
         $published = new DateTime($this->published_at);
-        if ($published >= Carbon::now()->subHours(48)) {
+        if ($user && $user->role_id == 5 && $this->status == 'published' && $published >= Carbon::now()->subHours(48)) {
             // property published within the last 48 hours
             $plan = 'waiting-list';
         } else {
             // property published more than 48 hours ago
         }
 
-        if ($this->status == 'published' && $this->published_at )
+        $timestamp = '';
+        if ($this->status == 'published' && $this->published_at) {
+            $timestamp = $this->published_at;
+        } else {
+            $timestamp = $this->created_at;
+        }
 
         $subZone = [
             'name' => $this->subZone->name,
@@ -80,8 +86,8 @@ class PropertyLiteResource extends JsonResource
             'verified' => $this->verified,
             'stories' => $this->stories,
             'thumbnail' => $this->thumbnail,
-            'timestamp' => Carbon::parse($this->published_at)->format('jS F Y, H:m:s'),
-            'time_ago' => Carbon::parse($this->published_at)->diffForHumans(),
+            'timestamp' => Carbon::parse($timestamp)->format('jS F Y, H:m:s'),
+            'time_ago' => Carbon::parse($timestamp)->diffForHumans(),
             'window' => $window,
             'rating' => number_format($rating, 1),
             'brand' => new BrandResource($this->user->brand),
