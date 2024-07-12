@@ -19,14 +19,22 @@ class PropertyUnitLiteWithPropertyLiteResource extends JsonResource
     public function toArray(Request $request): array
     {
         $property = $this->property;
+        $user = auth()->user();
 
         $plan = '';
         $published = new DateTime($property->published_at);
-        if ($published >= Carbon::now()->subHours(48)) {
+        if ($user && $user->role_id == 5 && $property->status == 'published' && $published >= Carbon::now()->subHours(48)) {
             // property published within the last 48 hours
             $plan = 'waiting-list';
         } else {
             // property published more than 48 hours ago
+        }
+
+        $timestamp = '';
+        if ($property->status == 'published' && $property->published_at) {
+            $timestamp = $property->published_at;
+        } else {
+            $timestamp = $property->created_at;
         }
 
         $subZone = [
@@ -57,7 +65,7 @@ class PropertyUnitLiteWithPropertyLiteResource extends JsonResource
                 'brand' => new BrandResource($property->user->brand),
                 'sub_zone' => $subZone,
                 'premium' => $plan,
-                'time_ago' => Carbon::parse($property->published_at)->diffForHumans(),
+                'time_ago' => Carbon::parse($timestamp)->diffForHumans(),
             ]
         ];
     }
