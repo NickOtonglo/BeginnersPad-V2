@@ -12,9 +12,11 @@ use App\Models\Notification;
 use App\Models\Property;
 use App\Models\PropertyLog;
 use App\Models\PropertyReviewRemovalLog;
+use App\Models\SubZone;
 use App\Models\Transaction;
 use App\Models\User;
 use App\Models\UserCredit;
+use App\Models\Zone;
 use Illuminate\Http\Request;
 
 class NotificationsController extends Controller
@@ -161,6 +163,23 @@ class NotificationsController extends Controller
         $data->model = "UserCredit";
         $data->model_id = $credit->id;
         $data->user_id = $credit->user_id;
+
+        $data->save();
+        
+        NotificationSent::dispatch($data);
+    }
+
+    public function sendWaitingListNotification(Property $property, User $user, Zone $zone, SubZone $subZone) {
+        $title = "[waiting list] New listing in ".$subZone->name.", ".$zone->name.".";
+        $body = "A listing has just been posted in a waiting list that you are subscribed to. You are receiving this notification because you are subscribed to the ".$zone->name." zone, ".$zone->zoneCounty->name." county"." waiting list.";
+        $body = $body."\r\n If you have any questions or concerns, please contact support.";
+
+        $data = new Notification();
+        $data->title = $title;
+        $data->body = $body;
+        $data->model = "Property";
+        $data->model_id = $property->slug;
+        $data->user_id = $user->id;
 
         $data->save();
         
