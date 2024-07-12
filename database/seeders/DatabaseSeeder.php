@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
             //     'email' => 'test@example.com',
             // ]);
             
+        // $this->call(SystemSeeder::class);
         // $this->call(RoleSeeder::class);
         // \App\Models\User::factory(30)->create();
         // $this->call(PropertyReviewRemovalReasonSeeder::class);

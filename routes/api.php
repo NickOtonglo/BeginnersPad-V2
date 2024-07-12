@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('system/{key}', '\App\Http\Controllers\Api\SystemController@main');
+
 Route::get('articles', '\App\Http\Controllers\Api\ArticlesController@index');
 Route::get('articles/{article}', '\App\Http\Controllers\Api\ArticlesController@show');
 Route::get('articles/{article}/author', '\App\Http\Controllers\Api\ArticlesController@getAuthorName');
