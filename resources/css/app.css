@@ -1555,7 +1555,7 @@ gmp-map {
 
 .chat-item .text span.user {
     font-size: 1.1rem;
-    font-weight: bolder;
+    font-weight: 400;
 }
 
 .chat-item .badge-mark {
@@ -1616,7 +1616,7 @@ gmp-map {
 
 .chat-thread .thread-header .text span {
     font-size: 1.4rem;
-    font-weight: bolder;
+    font-weight: 400;
 }
 
 .chat-thread .thread-messages {
