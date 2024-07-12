@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use App\Http\Controllers\Api\NotificationsController;
+use App\Jobs\NotifyWaitingListSubscribers;
 use App\Models\FAQ;
 use App\Models\FAQLog;
 use App\Models\HelpTicket;
@@ -324,6 +325,9 @@ class CreateUserActivityLog
             if ($response->original['model'] == 'Property') {
                 if ($data->status == 'published' || $data->status == 'rejected' || $data->status == 'suspended') {
                     app(NotificationsController::class)->sendPropertyNotification($property, $data);
+                }
+                if ($data->status == 'published') {
+                    NotifyWaitingListSubscribers::dispatchSync($property);
                 }
             }
             if ($response->original['model'] == 'HelpTicket') {
