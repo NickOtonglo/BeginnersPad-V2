@@ -41,12 +41,6 @@
                     <div class="section-more">
                         <a href="#">View listings in this zone <i class="fas fa-chevron-right"></i></a>
                     </div>
-                    <div class="charts">
-                        <h3>Relative occupancy chart</h3>
-                        <div class="chart" style="height: 300px;width: 250px;">
-                            <canvas id="chartDashListingsBeginner" width="250" height="300"></canvas>
-                        </div>
-                    </div>
                 </div>
                 <div class="panel">
                     <div class="container-btn-dropdown">

@@ -38,12 +38,6 @@
                     <div class="section-more">
                         <router-link :to="{ name: 'zone.view', params: {id: route.params.zone_id } }"><i class="fas fa-chevron-left"></i> View zone</router-link>
                     </div>
-                    <div class="charts">
-                        <h3>Relative occupancy chart</h3>
-                        <div class="chart" style="height: 300px;width: 250px;">
-                            <canvas id="chartDashListingsBeginner" width="250" height="300"></canvas>
-                        </div>
-                    </div>
                 </div>
                 <div class="panel">
                     <div class="listing-units-list">
