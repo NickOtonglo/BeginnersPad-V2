@@ -18,7 +18,12 @@ return new class extends Migration
             $table->text('preview');
             $table->longText('content');
             $table->string('thumbnail');
+            $table->string('audience_roles')->nullable(); // array of intended audiences (user role id), null if all users are included
             $table->integer('user_id');
+            $table->foreign('user_id')
+                ->references('id')
+                ->on('users')
+                ->onUpdate('cascade');
             $table->timestamps();
         });
     }
