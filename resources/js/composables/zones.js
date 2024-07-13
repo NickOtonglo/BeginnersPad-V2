@@ -18,6 +18,7 @@ export default function zonesMaster() {
             code: '',
             name: '',
         },
+        logs: {},
     })
     const zonesCount = ref(0)
     const countries = ref({})
