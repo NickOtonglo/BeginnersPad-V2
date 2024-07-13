@@ -18,12 +18,12 @@ class ZoneAdminResource extends JsonResource
     public function toArray(Request $request): array
     {
         $logs = [];
-        foreach ($this->logsParent as $item) {
+        foreach ($this->logsParent()->where('model', 'Zone')->get() as $item) {
             array_push($logs, $item->zoneLog);
         }
 
         $logsParent = [];
-        foreach ($this->logsParent as $item) {
+        foreach ($this->logsParent()->where('model', 'Zone')->get() as $item) {
             array_push($logsParent, $item);
         }
 

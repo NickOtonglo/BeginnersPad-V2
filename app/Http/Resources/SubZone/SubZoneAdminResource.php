@@ -18,12 +18,12 @@ class SubZoneAdminResource extends JsonResource
     public function toArray(Request $request): array
     {
         $logs = [];
-        foreach ($this->logsParent as $item) {
+        foreach ($this->logsParent()->where('model', 'SubZone') as $item) {
             array_push($logs, $item->subZoneLog);
         }
 
         $logsParent = [];
-        foreach ($this->logsParent as $item) {
+        foreach ($this->logsParent()->where('model', 'SubZone') as $item) {
             array_push($logsParent, $item);
         }
 
