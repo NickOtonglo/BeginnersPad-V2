@@ -87,7 +87,7 @@ class PropertyUnitsController extends Controller
      */
     public function show(Property $property, PropertyUnit $unit)
     {
-        if (app(PropertiesController::class)->isPropertyAccessibleToUser($property)) {
+        if ($this->isUnitAccessibleToUser($property, $unit)) {
             return new PropertyUnitResource($unit);
         } else {
             abort(404);
@@ -352,7 +352,7 @@ class PropertyUnitsController extends Controller
                     $properties = $properties->orderBy('created_at', $request)->where('status', '!=', 'unpublished')->get();
                     foreach($properties as $property) {
                         foreach($property->propertyUnits as $unit) {
-                            if ($unit->status == 'active') {
+                            if ($this->isUnitAccessibleToUser($property, $unit)) {
                                 array_push($units, $unit);
                             }
                         }
@@ -369,7 +369,7 @@ class PropertyUnitsController extends Controller
                     }
                     foreach($properties as $property) {
                         foreach($property->propertyUnits as $unit) {
-                            if ($unit->status == 'active') {
+                            if ($this->isUnitAccessibleToUser($property, $unit)) {
                                 array_push($units, $unit);
                             }
                         }
@@ -392,7 +392,9 @@ class PropertyUnitsController extends Controller
             }
             foreach($properties as $property) {
                 foreach($property->propertyUnits as $unit) {
-                    array_push($units, $unit);
+                    if ($this->isUnitAccessibleToUser($property, $unit)) {
+                        array_push($units, $unit);
+                    }
                 }
             }
         }
@@ -442,7 +444,7 @@ class PropertyUnitsController extends Controller
                     $properties = $properties->orderBy('created_at', $request)->where('status', '!=', 'unpublished')->get();
                     foreach($properties as $property) {
                         foreach($property->propertyUnits as $unit) {
-                            if ($unit->status == 'active') {
+                            if ($this->isUnitAccessibleToUser($property, $unit)) {
                                 array_push($units, $unit);
                             }
                         }
@@ -459,7 +461,7 @@ class PropertyUnitsController extends Controller
                     }
                     foreach($properties as $property) {
                         foreach($property->propertyUnits as $unit) {
-                            if ($unit->status == 'active') {
+                            if ($this->isUnitAccessibleToUser($property, $unit)) {
                                 array_push($units, $unit);
                             }
                         }
@@ -520,6 +522,25 @@ class PropertyUnitsController extends Controller
         
         $units = app(Controller::class)->paginate($units, 25);
         return PropertyUnitLiteWithPropertyLiteResource::collection($units);
+    }
+
+    public function isUnitAccessibleToUser(Property $property, PropertyUnit $unit) {
+        if (
+            app(PropertiesController::class)->isPropertyAccessibleToUser($property) &&
+            (
+                ($unit->status == 'active') || 
+                (
+                    (
+                    auth()->user()->role_id == 3 || 
+                    auth()->user()->role_id == 2 || 
+                    auth()->user()->role_id == 1
+                    )
+                ) || 
+                ($property->user_id == auth()->user()->id)
+            )
+            ) {
+            return true;
+        } return false;
     }
 
 }
