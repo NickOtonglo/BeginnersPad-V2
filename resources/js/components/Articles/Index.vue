@@ -36,7 +36,7 @@
                         @pagechanged="onPageChange"
             />
         </div>
-        <div class="fab-container">
+        <div v-if="user.role == 'Admin' || user.role == 'Super Admin' || user.role == 'System Admin'" class="fab-container">
             <router-link :to="{ name: 'article.create' }" class="fab btn btn-primary"><i class="fa-solid fa-plus"></i> New article</router-link>
         </div>
     </section>
@@ -47,9 +47,12 @@ import SearchBar from '../Search/SearchBar.vue';
 import { onBeforeUnmount, onMounted, ref, watch, onBeforeMount } from 'vue';
 import pagination from '../../composables/pagination';
 import tagsMaster from '../../composables/tags'
+import userMaster from '../../composables/users';
 
 const header = ref(null)
 const btnClearSearch = ref(null)
+
+const { user, getUserData } = userMaster()
 
 const { 
     search_global,
@@ -100,6 +103,7 @@ onBeforeMount(() => {
         getPaginationData(current_page.value, 'articles')
     }
     getTagsList(`/api/tags`)
+    getUserData()
 })
 
 onMounted(() => {
