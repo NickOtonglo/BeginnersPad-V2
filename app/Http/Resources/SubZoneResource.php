@@ -19,7 +19,7 @@ class SubZoneResource extends JsonResource
             'name' => $this->name,
             'lat' => (float) $this->lat,
             'lng' => (float) $this->lng,
-            'radius' => $this->radius*0.001,
+            'radius' => number_format($this->radius*0.001, 3),
             'description' => $this->description,
             'timestamp' => $this->created_at->format('jS F Y'),
             'nature_id' => $this->nature_id,
