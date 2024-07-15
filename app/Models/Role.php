@@ -10,6 +10,7 @@ class Role extends Model
     use HasFactory;
 
     public $timestamps = false;
+    // public $table = 'user_roles';
     protected $fillable = ['title', 'id', 'description'];
 
     public function getRouteKeyName()
