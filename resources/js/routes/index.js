@@ -54,6 +54,63 @@ function checkLoginGuest(to, from, next) {
     }
     else next()
 }
+function checkAdminView(to, from, next) {
+    if (!
+        (JSON.parse(localStorage.getItem('role')) == 3 || 
+        JSON.parse(localStorage.getItem('role')) == 2 || 
+        JSON.parse(localStorage.getItem('role')) == 1)
+    ) {
+        next('/404')
+    }
+    else next()
+}
+function checkListerView(to, from, next) {
+    if (!
+        (JSON.parse(localStorage.getItem('role')) == 4)
+    ) {
+        next('/404')
+    }
+    else next()
+}
+function checkBeginnerView(to, from, next) {
+    if (!
+        (JSON.parse(localStorage.getItem('role')) == 5)
+    ) {
+        next('/404')
+    }
+    else next()
+}
+function checkAdminListerView(to, from, next) {
+    if (!
+        (JSON.parse(localStorage.getItem('role')) == 3 || 
+        JSON.parse(localStorage.getItem('role')) == 2 || 
+        JSON.parse(localStorage.getItem('role')) == 1 || 
+        JSON.parse(localStorage.getItem('role')) == 4)
+    ) {
+        next('/404')
+    }
+    else next()
+}
+function checkAdminBeginnerView(to, from, next) {
+    if (!
+        (JSON.parse(localStorage.getItem('role')) == 3 || 
+        JSON.parse(localStorage.getItem('role')) == 2 || 
+        JSON.parse(localStorage.getItem('role')) == 1 || 
+        JSON.parse(localStorage.getItem('role')) == 5)
+    ) {
+        next('/404')
+    }
+    else next()
+}
+function checkListerBeginnerView(to, from, next) {
+    if (!
+        (JSON.parse(localStorage.getItem('role')) == 4 || 
+        JSON.parse(localStorage.getItem('role')) == 5)
+    ) {
+        next('/404')
+    }
+    else next()
+}
 
 const routes = [
     {
@@ -99,14 +156,9 @@ const routes = [
         component: ArticlesIndex
     },
     {
-        path: '/articles/my-articles/manage',
-        name: 'articles.mine',
-        component: ArticlesMine
-    },
-    {
-        path: '/articles/new',
-        name: 'article.create',
-        component: ArticleCreate
+        path: '/help/tickets',
+        name: 'tickets.list',
+        component: TicketsList
     },
     {
         path: '/articles/:slug',
@@ -114,34 +166,9 @@ const routes = [
         component: ArticleView
     },
     {
-        path: '/articles/:slug/edit',
-        name: 'article.edit',
-        component: ArticleEdit
-    },
-    {
-        path: '/tags',
-        name: 'tags.index',
-        component: TagsIndex,
-    },
-    {
         path: '/articles/tags/:name',
         name: 'tag.articles',
         component: ArticlesIndex,
-    },
-    {
-        path: '/zones',
-        name: 'zones.index',
-        component: ZonesIndex,
-    },
-    {
-        path: '/zones/:id',
-        name: 'zone.view',
-        component: ZoneView,
-    },
-    {
-        path: '/zones/:zone_id/sub-zones/:sub_id',
-        name: 'sub-zone.view',
-        component: SubZoneView,
     },
     {
         path: '/listings',
@@ -149,34 +176,9 @@ const routes = [
         component: PropertiesIndex,
     },
     {
-        path: '/listings/my-listings',
-        name: 'properties.mine',
-        component: PropertiesMine,
-    },
-    {
-        path: '/listings/my-listings/:slug',
-        name: 'property.manage',
-        component: PropertyManage,
-    },
-    {
         path: '/listings/:slug',
         name: 'property.view',
         component: PropertyView,
-    },
-    {
-        path: '/listings/logs',
-        name: 'properties.logs',
-        component: PropertiesLogs,
-    },
-    {
-        path: '/listings/:slug/logs',
-        name: 'property.logs',
-        component: PropertyLogs,
-    },
-    {
-        path: '/listings/my-listings/:slug/:unit_slug',
-        name: 'unit.manage',
-        component: PropertyUnitManage,
     },
     {
         path: '/listings/:slug/:unit_slug',
@@ -188,16 +190,7 @@ const routes = [
         name: 'reviews.index',
         component: PropertyReviewsIndex
     },
-    {
-        path: '/reviews',
-        name: 'reviews.mine',
-        component: PropertyReviewsMine
-    },
-    {
-        path: '/reviews/listings/logs',
-        name: 'reviews.logs',
-        component: PropertyReviewsLogs
-    },
+    
     {
         path: '/reviews/:slug',
         name: 'review.view',
@@ -219,29 +212,9 @@ const routes = [
         component: HelpFAQ
     },
     {
-        path: '/help/tickets',
-        name: 'tickets.list',
-        component: TicketsList
-    },
-    {
         path: '/help/tickets/:id',
         name: 'ticket.view',
         component: TicketView
-    },
-    {
-        path: '/users',
-        name: 'users.index',
-        component: UsersIndex
-    },
-    {
-        path: '/users/logs',
-        name: 'users.logs',
-        component: UsersLogs
-    },
-    {
-        path: '/users/profile/:username',
-        name: 'user.manage',
-        component: UserManage
     },
     {
         path: '/chats',
@@ -253,11 +226,129 @@ const routes = [
         name: 'chat.view',
         component: ChatView,
     },
+
     {
-        path: '/premium/waiting-list',
-        name: 'waiting-list.index',
-        component: WaitingListIndex,
-    }
+        beforeEnter: checkAdminView,
+        children: [
+            {
+                path: '/articles/my-articles/manage',
+                name: 'articles.mine',
+                component: ArticlesMine
+            },
+            {
+                path: '/articles/new',
+                name: 'article.create',
+                component: ArticleCreate
+            },
+            {
+                path: '/articles/:slug/edit',
+                name: 'article.edit',
+                component: ArticleEdit
+            },
+            {
+                path: '/tags',
+                name: 'tags.index',
+                component: TagsIndex,
+            },
+            {
+                path: '/zones',
+                name: 'zones.index',
+                component: ZonesIndex,
+            },
+            {
+                path: '/zones/:id',
+                name: 'zone.view',
+                component: ZoneView,
+            },
+            {
+                path: '/zones/:zone_id/sub-zones/:sub_id',
+                name: 'sub-zone.view',
+                component: SubZoneView,
+            },
+            {
+                path: '/listings/logs',
+                name: 'properties.logs',
+                component: PropertiesLogs,
+            },
+            {
+                path: '/reviews/listings/logs',
+                name: 'reviews.logs',
+                component: PropertyReviewsLogs
+            },
+            {
+                path: '/users',
+                name: 'users.index',
+                component: UsersIndex
+            },
+            {
+                path: '/users/logs',
+                name: 'users.logs',
+                component: UsersLogs
+            },
+            {
+                path: '/users/profile/:username',
+                name: 'user.manage',
+                component: UserManage
+            },
+        ]
+    },
+    {
+        beforeEnter: checkListerView,
+        children: [
+            {
+                path: '/listings/my-listings',
+                name: 'properties.mine',
+                component: PropertiesMine,
+            },
+            {
+                path: '/listings/my-listings/:slug',
+                name: 'property.manage',
+                component: PropertyManage,
+            },
+            {
+                path: '/listings/my-listings/:slug/:unit_slug',
+                name: 'unit.manage',
+                component: PropertyUnitManage,
+            },
+        ]
+    },
+    {
+        beforeEnter: checkBeginnerView,
+        children: [
+            {
+                path: '/reviews',
+                name: 'reviews.mine',
+                component: PropertyReviewsMine
+            },
+            {
+                path: '/premium/waiting-list',
+                name: 'waiting-list.index',
+                component: WaitingListIndex,
+            }
+        ]
+    },
+    {
+        beforeEnter: checkAdminListerView,
+        children: [
+            {
+                path: '/listings/:slug/logs',
+                name: 'property.logs',
+                component: PropertyLogs,
+            },
+        ]
+    },
+    {
+        beforeEnter: checkAdminBeginnerView,
+        children: [
+
+        ]
+    },
+    {
+        beforeEnter: checkListerBeginnerView,
+        children: [
+
+        ]
+    },
 ]
 
 export default createRouter({
