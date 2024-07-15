@@ -20,8 +20,8 @@ class AuthController extends Controller
         $user->password = bcrypt($request->password);
         $user->save();
 
-        if ($user->role_id == 5) {
-            app(UserCreditController::class)->store(0, $user->id, 'app/Http/Controllers/AuthController.php');
+        if ($user->role_id == 5 || $user->role_id == 4) {
+            app(UserCreditController::class)->store(0, $user, 'app/Http/Controllers/AuthController.php');
         }
 
         $response = [
