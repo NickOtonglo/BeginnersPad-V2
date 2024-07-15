@@ -29,6 +29,7 @@ window.axios.interceptors.response.use(
                 localStorage.removeItem('authenticated')
                 localStorage.removeItem('authToken')
                 localStorage.removeItem('user')
+                localStorage.removeItem('role')
             }
             location.assign('/sign-in')
         }

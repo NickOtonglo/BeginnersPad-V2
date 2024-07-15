@@ -44,6 +44,7 @@ export default function loginUser() {
         localStorage.setItem('authenticated', JSON.stringify(true))
         localStorage.setItem('authToken', response.data.token)
         localStorage.setItem('user', response.data.user.id)
+        localStorage.setItem('role', response.data.user.role_id)
         // router.push({ name: 'app.home' })
         router.go()
     }
@@ -58,6 +59,7 @@ export default function loginUser() {
                 localStorage.removeItem('authenticated')
                 localStorage.removeItem('authToken')
                 localStorage.removeItem('user')
+                localStorage.removeItem('role')
                 router.go()
             })
             .catch(error => console.log(error.response))
