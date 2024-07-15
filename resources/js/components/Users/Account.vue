@@ -22,9 +22,8 @@
                             <ul>
                                 <!-- <li>Account type: {{ user.role }}</li> -->
                                 <li>Email address: {{ user.email }}</li>
-                                <li>Last logged in on: 01-01-2021 00:00:00</li>
-                                <li>Registered on: {{ user.created_at }}</li>
-                                <li>Phone number: {{ user.telephone }}</li>
+                                <li>Joined on: {{ user.created_at }}</li>
+                                <li>Phone number: +{{ user.telephone }}</li>
                             </ul>
                         </div>
                     </div>
