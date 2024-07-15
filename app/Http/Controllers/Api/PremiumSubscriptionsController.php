@@ -108,6 +108,18 @@ class PremiumSubscriptionsController extends Controller
         }
         $data = '';
         $plan = PremiumPlan::where('slug', $request->slug)->first();
+
+        if (!$this->canUserSubscribeToPlan($user, $plan)) {
+            return response()->json([
+                'message' => "You do not have permission to subscribe to this plan.",
+                'errors' => [
+                    'Subscription' => [
+                        "User is not authorised to subscribe to plan",
+                    ]
+                ],
+            ], 422);
+        }
+        
         // $subscription = PremiumPlanSubscription::where('user_id', $user->id)->where('premium_plan_id', $plan->id)->firstOrFail();
         $subscription = $user->premiumSubscriptions()->where('premium_plan_id', $plan->id)->first();
         $comment = '';
@@ -388,5 +400,13 @@ class PremiumSubscriptionsController extends Controller
             }
         }
         return false;
+    }
+
+    public function canUserSubscribeToPlan(User $user, PremiumPlan $plan) {
+        if ($user->role->title == 'Beginner') {
+            if ($plan->slug == 'waiting-list') {
+                return true;
+            }
+        } return false;
     }
 }
