@@ -65,5 +65,11 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         // 'csrf' => \Http\Middleware\VerifyCsrfToken::class,
         'logs.user' => \App\Http\Middleware\CreateUserActivityLog::class,
+        'validate.admin' => \App\Http\Middleware\ValidateAdmins::class,
+        'validate.lister' => \App\Http\Middleware\ValidateListers::class,
+        'validate.beginner' => \App\Http\Middleware\ValidateBeginners::class,
+        'validate.admin.lister' => \App\Http\Middleware\ValidateAdminsAndListers::class,
+        'validate.admin.beginner' => \App\Http\Middleware\ValidateAdminsAndBeginners::class,
+        'validate.lister.beginner' => \App\Http\Middleware\ValidateListersAndBeginners::class,
     ];
 }
