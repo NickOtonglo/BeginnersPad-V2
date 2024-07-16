@@ -2,9 +2,13 @@
     <!-- Navbar -->
     <nav>
         <h1><router-link :to="{ name: 'app.home' }" href="/">Beginners Pad</router-link></h1>
-        <i @click="toggleHiddenNav" id="navToggle" class="fas fa-bars fa-2x toggle"></i>
+        <i @click="userAuth.isAuthenticated.value ? openDrawer() : toggleMenu()" 
+            id="navToggle"
+            class="navDrawerOpenAlt fas fa-bars fa-2x toggle" 
+            ref="toggleRef">
+        </i>
         <template v-if="userAuth.isAuthenticated.value">
-            <NavbarAuth :badges="badges" />
+            <NavbarAuth :open-drawer="openDrawer" :badges="badges" />
         </template>
         <template v-else>
             <NavbarGuest ref="navGuestRef" />
@@ -12,12 +16,12 @@
     </nav>
 
     <!-- Filler -->
-    <div id="pageFiller"></div>
+    <div @click="closeDrawer" id="pageFiller"></div>
 
     <!-- Nav drawer -->
     <template v-if="isUserFetched">
         <div class="nav-drawer closed" id="navDrawer">
-            <i id="navDrawerClose" class="fas fa-times fa-2x"></i>
+            <i @click="closeDrawer" id="navDrawerClose" class="fas fa-times fa-2x"></i>
             <div class="nav-drawer-category">
                 <ul>
                     <li>
@@ -69,6 +73,8 @@ import { ref, onMounted, onBeforeMount } from 'vue';
 import axios from 'axios';
 import notificationsMaster from '../composables/notifications'
 import broadcastMaster from '../composables/broadcast'
+import navDrawerMaster from '../composables/nav-drawer'
+import navBarMaster from '../composables/nav-bar'
 
 const userLogin = loginUser()
 const userAuth = checkAuth()
@@ -78,6 +84,7 @@ const user = ref({
 })
 const isUserFetched = ref(false)
 const navGuestRef = ref(null)
+const toggleRef = ref(null)
 
 const {
     badges, 
@@ -87,6 +94,15 @@ const {
 const {
     broadcastNotifications
 } = broadcastMaster()
+
+const {
+    openDrawer, 
+    closeDrawer, 
+} = navDrawerMaster()
+
+const {
+    toggleMenu
+} = navBarMaster()
 
 function getUserData() {
     if (userAuth.isAuthenticated.value) {
