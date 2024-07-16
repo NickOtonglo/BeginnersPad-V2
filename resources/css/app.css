@@ -222,6 +222,11 @@ gmp-map {
     cursor: pointer;
 }
 
+.badge-mark.alt {
+    top: 10px;
+    right: 10px;
+}
+
 /* Filler */
 .filler {
     position: fixed;
@@ -317,7 +322,8 @@ gmp-map {
     width: 50%;
 }
 
-#navDrawerOpen {
+#navDrawerOpen,
+.navDrawerOpen {
     cursor: pointer;
     color: var(--color-font);
 }
