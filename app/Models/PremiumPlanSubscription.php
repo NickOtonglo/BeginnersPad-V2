@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class PremiumPlanSubscription extends Model
 {
     use HasFactory;
-    protected $fillable = ['period', 'activated_at', 'expires_at', 'user_id', 'premium_plan_id'];
+    protected $fillable = ['period', 'activated_at', 'expires_at', /** 'status', */ 'user_id', 'premium_plan_id'];
 
     public function premiumPlan() {
         return $this->belongsTo(PremiumPlan::class);
