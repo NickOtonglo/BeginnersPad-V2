@@ -141,7 +141,6 @@ Route::middleware(['auth:sanctum', 'logs.user'])->group(function() {
         // authenticated user's tickets
         Route::get('help/tickets', '\App\Http\Controllers\Api\HelpController@getTickets');
         Route::get('help/tickets/status/{status}', '\App\Http\Controllers\Api\HelpController@getTicketsWithStatus');
-        Route::get('help/tickets/{ticket}', '\App\Http\Controllers\Api\HelpController@getTicket');
         Route::put('help/tickets/{ticket}', '\App\Http\Controllers\Api\HelpController@updateTicket');
         Route::patch('help/tickets/{ticket}', '\App\Http\Controllers\Api\HelpController@updateTicketStatus');
         Route::delete('help/tickets/{ticket}', '\App\Http\Controllers\Api\HelpController@destroyTicket');
@@ -161,6 +160,8 @@ Route::middleware(['auth:sanctum', 'logs.user'])->group(function() {
     Route::delete('user/avatar', '\App\Http\Controllers\Api\UserController@removeAvatar');
     Route::post('user/secret', '\App\Http\Controllers\Api\UserController@updatePassword');
     Route::post('user/view/{user}', '\App\Http\Controllers\Api\UserController@showUser');
+
+    Route::get('help/tickets/{ticket}', '\App\Http\Controllers\Api\HelpController@getTicket');
     
     Route::get('tags', '\App\Http\Controllers\Api\TagsController@index');
     
