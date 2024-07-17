@@ -39,6 +39,7 @@ import UserManage from '../components/Users/Manage.vue'
 import ChatsIndex from '../components/Chats/Index.vue'
 import ChatView from '../components/Chats/View.vue'
 import WaitingListIndex from '../components/WaitingList/Index.vue'
+import Dashboard from '../components/Dashboard/Index.vue'
 import { component } from 'v-viewer'
 
 function auth(to, from, next) {
@@ -126,105 +127,173 @@ const routes = [
     {
         path: '/',
         name: 'app.home',
-        component: Home
+        component: Home,
+        meta: {
+            name: 'Home'
+        }
     },
     {
         path: '/sign-up',
         name: 'auth.register',
-        component: Register
+        component: Register,
+        meta: {
+            name: 'Sign up'
+        }
     },
     {
         path: '/sign-in',
         name: 'auth.login',
         beforeEnter: checkLoginGuest,
-        component: Login
+        component: Login,
+        meta: {
+            name: 'Sign in'
+        }
     },
     {
         path: '/manage-account',
         name: 'users.account',
         beforeEnter: auth,
-        component: UserAccount
+        component: UserAccount,
+        meta: {
+            name: 'Account'
+        }
     },
     {
         path: '/notifications',
         name: 'user.notifications',
-        component: UserNotifications
+        component: UserNotifications,
+        meta: {
+            name: 'Notifications'
+        }
     },
     {
         path: '/articles',
         name: 'articles.index',
-        component: ArticlesIndex
+        component: ArticlesIndex,
+        meta: {
+            name: 'Articles'
+        }
     },
     {
         path: '/help/tickets',
         name: 'tickets.list',
-        component: TicketsList
+        component: TicketsList,
+        meta: {
+            name: 'Tickets'
+        }
     },
     {
         path: '/articles/:slug',
         name: 'article.view',
-        component: ArticleView
+        component: ArticleView,
+        meta: {
+            name: 'View article'
+        }
     },
     {
         path: '/articles/tags/:name',
         name: 'tag.articles',
         component: ArticlesIndex,
+        meta: {
+            name: 'Articles'
+        }
     },
     {
         path: '/listings',
         name: 'properties.index',
         component: PropertiesIndex,
+        meta: {
+            name: 'Listings'
+        }
     },
     {
         path: '/listings/:slug',
         name: 'property.view',
         component: PropertyView,
+        meta: {
+            name: 'View listing'
+        }
     },
     {
         path: '/listings/:slug/:unit_slug',
         name: 'unit.view',
         component: PropertyUnitView,
+        meta: {
+            name: 'View unit'
+        }
     },
     {
         path: '/listings/:slug/reviews',
         name: 'reviews.index',
-        component: PropertyReviewsIndex
+        component: PropertyReviewsIndex,
+        meta: {
+            name: 'Reviews'
+        }
     },
     
     {
         path: '/reviews/:slug',
         name: 'review.view',
-        component: PropertyReviewsView
+        component: PropertyReviewsView,
+        meta: {
+            name: 'View review'
+        }
     },
     {
         path: '/favourites',
         name: 'favourites.index',
-        component: UserFavouritesIndex
+        component: UserFavouritesIndex,
+        meta: {
+            name: 'Favourites'
+        }
     },
     {
         path: '/help',
         name: 'help.index',
-        component: HelpIndex
+        component: HelpIndex,
+        meta: {
+            name: 'Help'
+        }
     },
     {
         path: '/help/faq',
         name: 'help.faq',
-        component: HelpFAQ
+        component: HelpFAQ,
+        meta: {
+            name: 'Help FAQs'
+        }
     },
     {
         path: '/help/tickets/:id',
         name: 'ticket.view',
-        component: TicketView
+        component: TicketView,
+        meta: {
+            name: 'View ticket'
+        }
     },
     {
         path: '/chats',
         name: 'chats.index',
         component: ChatsIndex,
+        meta: {
+            name: 'Chats'
+        }
     },
     {
         path: '/chats/:id',
         name: 'chat.view',
         component: ChatView,
+        meta: {
+            name: 'View chat'
+        }
+    },
+    {
+        path: '/dashboard',
+        name: 'dashboard.index',
+        component: Dashboard,
+        meta: {
+            name: 'Dashboard'
+        }
     },
 
     {
@@ -233,62 +302,98 @@ const routes = [
             {
                 path: '/articles/my-articles/manage',
                 name: 'articles.mine',
-                component: ArticlesMine
+                component: ArticlesMine,
+                meta: {
+                    name: 'My articles'
+                }
             },
             {
                 path: '/articles/new',
                 name: 'article.create',
-                component: ArticleCreate
+                component: ArticleCreate,
+                meta: {
+                    name: 'Create article'
+                }
             },
             {
                 path: '/articles/:slug/edit',
                 name: 'article.edit',
-                component: ArticleEdit
+                component: ArticleEdit,
+                meta: {
+                    name: 'Update article'
+                }
             },
             {
                 path: '/tags',
                 name: 'tags.index',
                 component: TagsIndex,
+                meta: {
+                    name: 'Tags'
+                }
             },
             {
                 path: '/zones',
                 name: 'zones.index',
                 component: ZonesIndex,
+                meta: {
+                    name: 'Zones'
+                }
             },
             {
                 path: '/zones/:id',
                 name: 'zone.view',
                 component: ZoneView,
+                meta: {
+                    name: 'View zone'
+                }
             },
             {
                 path: '/zones/:zone_id/sub-zones/:sub_id',
                 name: 'sub-zone.view',
                 component: SubZoneView,
+                meta: {
+                    name: 'View sub-zone'
+                }
             },
             {
                 path: '/listings/logs',
                 name: 'properties.logs',
                 component: PropertiesLogs,
+                meta: {
+                    name: 'Listings logs'
+                }
             },
             {
                 path: '/reviews/listings/logs',
                 name: 'reviews.logs',
-                component: PropertyReviewsLogs
+                component: PropertyReviewsLogs,
+                meta: {
+                    name: 'Review logs'
+                }
             },
             {
                 path: '/users',
                 name: 'users.index',
-                component: UsersIndex
+                component: UsersIndex,
+                meta: {
+                    name: 'Users'
+                }
             },
             {
                 path: '/users/logs',
                 name: 'users.logs',
-                component: UsersLogs
+                component: UsersLogs,
+                meta: {
+                    name: 'User logs'
+                }
             },
             {
                 path: '/users/profile/:username',
                 name: 'user.manage',
-                component: UserManage
+                component: UserManage,
+                meta: {
+                    name: 'Manage user'
+                }
             },
         ]
     },
@@ -299,16 +404,25 @@ const routes = [
                 path: '/listings/my-listings',
                 name: 'properties.mine',
                 component: PropertiesMine,
+                meta: {
+                    name: 'My listings'
+                }
             },
             {
                 path: '/listings/my-listings/:slug',
                 name: 'property.manage',
                 component: PropertyManage,
+                meta: {
+                    name: 'Manage listing'
+                }
             },
             {
                 path: '/listings/my-listings/:slug/:unit_slug',
                 name: 'unit.manage',
                 component: PropertyUnitManage,
+                meta: {
+                    name: 'Manage unit'
+                }
             },
         ]
     },
@@ -318,12 +432,18 @@ const routes = [
             {
                 path: '/reviews',
                 name: 'reviews.mine',
-                component: PropertyReviewsMine
+                component: PropertyReviewsMine,
+                meta: {
+                    name: 'My reviews'
+                }
             },
             {
                 path: '/premium/waiting-list',
                 name: 'waiting-list.index',
                 component: WaitingListIndex,
+                meta: {
+                    name: 'Waiting list'
+                }
             }
         ]
     },
@@ -334,6 +454,9 @@ const routes = [
                 path: '/listings/:slug/logs',
                 name: 'property.logs',
                 component: PropertyLogs,
+                meta: {
+                    name: 'Listing logs'
+                }
             },
         ]
     },
