@@ -101,9 +101,10 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, onBeforeUpdate } from 'vue';
 import premiumMaster from '../../composables/premium';
 import JoinWaitingList from '../Modals/JoinWaitingList.vue';
+import userMaster from '../../composables/users';
 
 const {
     isLoading, 
@@ -114,6 +115,7 @@ const {
     removeWaitingList, 
     createSubscription, 
 } = premiumMaster()
+const { route } = userMaster()
 
 const leaveRef = ref(null)
 const joinWaitingListRef = ref(null)
@@ -136,6 +138,9 @@ function click(element) {
 onMounted(() => {
     getPlan(`/api/premium/plan/waiting-list`)
     getSubscription(`/api/premium/plans/waiting-list`)
+})
+onBeforeUpdate(() => {
+    document.title = route.meta.name+' | '+localStorage.getItem('title')
 })
 
 </script>

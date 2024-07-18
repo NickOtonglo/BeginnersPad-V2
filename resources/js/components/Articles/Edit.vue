@@ -100,6 +100,7 @@ onMounted(() => {
 onBeforeUpdate(() => {
     quillEditor.value.setHTML(article.value.content) // or article.value.content
     article.thumbnail = ''
+    document.title = route.meta.name+' | '+localStorage.getItem('title')
 })
 
 </script>

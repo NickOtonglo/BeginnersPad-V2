@@ -73,11 +73,12 @@
 </template>
 
 <script setup>
-import { onMounted, ref, onBeforeMount, watch } from 'vue';
+import { onMounted, ref, onBeforeMount, watch, onBeforeUpdate } from 'vue';
 import CreateZone from '../Modals/CreateZone.vue'
 import operateModal from '../../composables/modal'
 import pagination from '../../composables/pagination';
 import Map from '../Maps/ZonesIndex.vue'
+import zonesMaster from '../../composables/zones';
 
 const childComponentRef = ref(null);
 const btnClearSearch = ref(null)
@@ -94,6 +95,7 @@ const {
     onPageChange,
     getPaginationData
 } = pagination()
+const { route } = zonesMaster()
 
 const request = ref(`/api/zones`)
 
@@ -107,6 +109,9 @@ onBeforeMount(() => {
 
 onMounted(() => {
     operateModal(document.querySelector('#modal'))
+})
+onBeforeUpdate(() => {
+    document.title = route.meta.name+' | '+localStorage.getItem('title')
 })
 
 watch(search_global, (current, previous) => {

@@ -7,11 +7,14 @@
 import MyTickets from './MyTickets.vue';
 import Manage from './Manage.vue';
 import userMaster from '../../composables/users';
-import { onBeforeMount } from 'vue';
+import { onBeforeMount, onBeforeUpdate } from 'vue';
 
-const { user, getUserData } = userMaster()
+const { user, getUserData, route } = userMaster()
 
 onBeforeMount(() => {
     getUserData()
+})
+onBeforeUpdate(() => {
+    document.title = route.meta.name+' | '+localStorage.getItem('title')
 })
 </script>

@@ -114,7 +114,7 @@
 </template>
 
 <script setup>
-import { onBeforeMount, ref } from 'vue';
+import { onBeforeMount, onBeforeUpdate, ref } from 'vue';
 import userMaster from '../../composables/users'
 import CardUser from '../Cards/User1.vue';
 import CardBrand from '../Cards/Brand1.vue'
@@ -171,6 +171,9 @@ function actionSelected(action) {
 onBeforeMount(() => {
     getUser(`/api/users/profile/${route.params.username}`)
     getUserData()
+})
+onBeforeUpdate(() => {
+    document.title = '@'+user.value.username+' - '+route.meta.name+' | '+localStorage.getItem('title')
 })
 </script>
 

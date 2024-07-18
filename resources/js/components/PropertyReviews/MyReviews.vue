@@ -23,16 +23,19 @@
 </template>
 
 <script setup>
-import { onBeforeMount, ref } from 'vue';
+import { onBeforeMount, onBeforeUpdate, ref } from 'vue';
 import propertyReviewsMaster from '../../composables/property_reviews';
 import userMaster from '../../composables/users'
 import ComponentRatingStars from '../Misc/RatingStars.vue'
 
-const { getReviews, reviews, isLoading } = propertyReviewsMaster()
+const { getReviews, reviews, isLoading, route } = propertyReviewsMaster()
 const { getUserData, user } = userMaster()
 
 onBeforeMount(() => {
     getReviews(`/api/reviews`)
     getUserData()
+})
+onBeforeUpdate(() => {
+    document.title = route.meta.name+' | '+localStorage.getItem('title')
 })
 </script>

@@ -52,7 +52,7 @@
 </template>
 
 <script setup>
-import { onBeforeMount, ref } from 'vue';
+import { onBeforeMount, onBeforeUpdate, ref } from 'vue';
 import articlesMaster from '../../composables/articles';
 import tagsMaster from '../../composables/tags'
 import favouriteMaster from '../../composables/favourites';
@@ -86,6 +86,9 @@ onBeforeMount(() => {
     getArticle(request)
     getArticleTags(`${request}/tags`)
     getUserData()
+})
+onBeforeUpdate(() => {
+    document.title = article.value.title+' | '+localStorage.getItem('title')
 })
 </script>
 

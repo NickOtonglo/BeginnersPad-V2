@@ -47,10 +47,11 @@
 </template>
 
 <script setup>
-import { onBeforeMount } from 'vue';
+import { onBeforeMount, onBeforeUpdate } from 'vue';
 import chatsMaster from '../../composables/chats';
 
 const {
+    route, 
     isLoading, 
     chats, 
     getChats, 
@@ -60,5 +61,8 @@ let request = `/api/chats`
 
 onBeforeMount(() => {
     getChats(request)
+})
+onBeforeUpdate(() => {
+    document.title = route.meta.name+' | '+localStorage.getItem('title')
 })
 </script>

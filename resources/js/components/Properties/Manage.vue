@@ -130,7 +130,7 @@
                             </template>
                         </div>
                     </div>
-                    <div class="lister-details">
+                    <div v-if="property.brand" class="lister-details">
                         <h3>Lister information</h3>
                         <CardBrand :brand="property.brand" :user="user" :sectionMore="true" />
                     </div>
@@ -174,7 +174,7 @@
 
 <script setup>
 import propertiesMaster from '../../composables/properties';
-import { onBeforeMount, ref, onUpdated } from 'vue';
+import { onBeforeMount, ref, onUpdated, onBeforeUpdate } from 'vue';
 import CreateUnit from '../Modals/CreateUnit.vue';
 import EditPropertyFeatures from '../Modals/EditPropertyFeatures.vue';
 import EditPropertyPrimary from '../Modals/EditPropertyPrimary.vue'
@@ -224,6 +224,9 @@ onBeforeMount(() => {
     getProperty(`/api/listings/my-listings/${route.params.slug}`)
     getPaginationDataWithRequest(current_page.value, 'property_units', unitsRequest)
     getUserData()
+})
+onBeforeUpdate(() => {
+    document.title = property.value.name+' - '+route.meta.name+' | '+localStorage.getItem('title')
 })
 
 onUpdated(() => {

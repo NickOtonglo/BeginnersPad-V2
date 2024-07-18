@@ -58,7 +58,7 @@
 </template>
 
 <script setup>
-import { onBeforeMount, ref } from 'vue';
+import { onBeforeMount, onBeforeUpdate, ref } from 'vue';
 import userMaster from '../../composables/users'
 import pagination from '../../composables/pagination'
 import SearchBar from '../Search/SearchBar.vue';
@@ -75,7 +75,7 @@ const {
     getPaginationDataWithRequest
 } = pagination()
 
-const { user, getUserData } = userMaster()
+const { user, getUserData, route } = userMaster()
 const request = ref(`/api/listings/logs/all`)
 
 function filterLogs(input) {
@@ -91,6 +91,9 @@ onBeforeMount(() => {
     getPaginationDataWithRequest(current_page.value, `property_logs`, request.value)
     filter_sort.value = 'desc'
     getUserData()
+})
+onBeforeUpdate(() => {
+    document.title = route.meta.name+' | '+localStorage.getItem('title')
 })
 </script>
 

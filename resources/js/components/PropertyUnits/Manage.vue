@@ -141,7 +141,7 @@
 
 <script setup>
 import unitsMaster from '../../composables/units';
-import { onBeforeMount, ref } from 'vue';
+import { onBeforeMount, onBeforeUpdate, ref } from 'vue';
 import EditUnitPrimary from '../Modals/EditUnitPrimary.vue';
 import EditUnitFeatures from '../Modals/EditUnitFeatures.vue';
 import EditUnitDisclaimers from '../Modals/EditUnitDisclaimers.vue'
@@ -173,6 +173,9 @@ const deleteRequest = ref(`/api/listings/${route.params.slug}/units/${route.para
 
 onBeforeMount(() => {
     getUnit(`/api/listings/${route.params.slug}/units/${route.params.unit_slug}`)
+})
+onBeforeUpdate(() => {
+    document.title = unit.value.name+', '+unit.value.property.name+' - '+route.meta.name+' | '+localStorage.getItem('title')
 })
 
 function click(element) {

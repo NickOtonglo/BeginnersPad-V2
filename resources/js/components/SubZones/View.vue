@@ -103,7 +103,7 @@
 
 <script setup>
 import operateModal from '../../composables/modal';
-import { onMounted, ref } from 'vue';
+import { onBeforeUpdate, onMounted, ref } from 'vue';
 import EditSubZone from '../Modals/EditSubZone.vue';
 import CardProperty from '../Cards/Property2.vue'
 import subZonesMaster from '../../composables/subzones';
@@ -123,6 +123,9 @@ onMounted(() => {
     getSubZone(request.value)
     getProperties(`/api/zones/${route.params.zone_id}/sub-zones/${route.params.sub_id}/listings`)
     getNatures()
+})
+onBeforeUpdate(() => {
+    document.title = subZone.value.name+', '+subZone.value.zone.name+' Zone, '+subZone.value.zone.county.name+' County - '+route.meta.name+' | '+localStorage.getItem('title')
 })
 </script>
 

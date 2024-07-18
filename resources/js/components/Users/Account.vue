@@ -170,7 +170,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue';
+import { onBeforeUpdate, onMounted, ref } from 'vue';
 import UpdateForm from '../Modals/EditUserAccount.vue'
 import UpdateBrand from '../Modals/EditBrand.vue'
 import CreateBrand from '../Modals/CreateBrand.vue'
@@ -179,6 +179,7 @@ import CardUser from '../Cards/User1.vue';
 import CardBrand from '../Cards/Brand1.vue'
 import notificationsMaster from '../../composables/notifications';
 import userCreditMaster from '../../composables/userCredit';
+import userMaster from '../../composables/users';
 
 const user = ref({})
 
@@ -199,6 +200,7 @@ const {
     account, 
     updateAccount, 
  } = userCreditMaster()
+ const { route } = userMaster()
 
 function getUserAccount() {
     axios.get('api/user/account')
@@ -226,6 +228,9 @@ onMounted(() => {
     getUserAccount()
     getNotifications(`/api/notifications/unread`)
     getCreditAccount(`/api/user/credit`)
+})
+onBeforeUpdate(() => {
+    document.title = route.meta.name+' | '+localStorage.getItem('title')
 })
 
 </script>

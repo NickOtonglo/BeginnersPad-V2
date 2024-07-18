@@ -81,7 +81,7 @@
 </template>
 
 <script setup>
-import { ref, onBeforeMount } from 'vue'
+import { ref, onBeforeMount, onBeforeUpdate } from 'vue'
 import pagination from '../composables/pagination'
 import CardProperty from './Cards/Property1.vue';
 
@@ -95,6 +95,8 @@ const request = ref(`/api/listings/home`)
 onBeforeMount(() => {
     getPaginationDataWithRequest(current_page.value, 'properties', request.value)
 })
-
+onBeforeUpdate(() => {
+    document.title = localStorage.getItem('title')
+})
 
 </script>

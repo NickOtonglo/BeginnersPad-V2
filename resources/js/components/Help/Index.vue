@@ -91,7 +91,7 @@
 </template>
 
 <script setup>
-import { onBeforeMount } from 'vue'
+import { onBeforeMount, onBeforeUpdate } from 'vue'
 import faqMaster from '../../composables/faqs'
 import articlesMaster from '../../composables/articles'
 import userMaster from '../../composables/users'
@@ -100,7 +100,7 @@ import ticketsMaster from '../../composables/tickets'
 const { faqs, getFaqs } = faqMaster()
 const { articles, getArticles } = articlesMaster()
 const { user, getUserData } = userMaster()
-const { topics, getTopics, ticket, createTicket, validationErrors } = ticketsMaster()
+const { topics, getTopics, ticket, createTicket, validationErrors, route } = ticketsMaster()
 
 let ticketRequest = `/api/help/tickets`
 
@@ -109,6 +109,9 @@ onBeforeMount(() => {
     getArticles(`/api/tags/help/articles`)
     getTopics(`/api/help/topics`)
     getUserData()
+})
+onBeforeUpdate(() => {
+    document.title = route.meta.name+' | '+localStorage.getItem('title')
 })
 
 </script>

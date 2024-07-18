@@ -44,7 +44,7 @@
 
 <script setup>
 import SearchBar from '../Search/SearchBar.vue';
-import { onBeforeUnmount, onMounted, ref, watch, onBeforeMount } from 'vue';
+import { onBeforeUnmount, onMounted, ref, watch, onBeforeMount, onBeforeUpdate } from 'vue';
 import pagination from '../../composables/pagination';
 import tagsMaster from '../../composables/tags'
 import userMaster from '../../composables/users';
@@ -112,6 +112,10 @@ onMounted(() => {
 
 onBeforeUnmount(() => {
     // window.removeEventListener("scroll", initialiseScroll)
+})
+
+onBeforeUpdate(() => {
+    document.title = route.meta.name+' | '+localStorage.getItem('title')
 })
 
 watch(search_global, (current, previous) => {

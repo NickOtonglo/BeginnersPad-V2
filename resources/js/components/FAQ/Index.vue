@@ -27,13 +27,13 @@
 </template>
 
 <script setup>
-import { onBeforeMount, ref } from 'vue';
+import { onBeforeMount, ref, onBeforeUpdate } from 'vue';
 import faqsMaster from '../../composables/faqs';
 import AddFaqModal from '../Modals/AddFAQ.vue'
 import EditFaqModal from '../Modals/EditFAQ.vue'
 import userMaster from '../../composables/users';
 
-const { faqs, getFaqs, faq, getFaq } = faqsMaster()
+const { faqs, getFaqs, faq, getFaq, route } = faqsMaster()
 const { user, getUserData } = userMaster()
 
 const addFaqRef = ref(null)
@@ -43,6 +43,9 @@ let request = `/api/help/faq`
 onBeforeMount(() => {
     getFaqs(request)
     getUserData()
+})
+onBeforeUpdate(() => {
+    document.title = route.meta.name+' | '+localStorage.getItem('title')
 })
 
 function click(element) {

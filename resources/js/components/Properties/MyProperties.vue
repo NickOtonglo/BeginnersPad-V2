@@ -103,7 +103,7 @@
 </template>
 
 <script setup>
-import { ref, onBeforeMount, watch, onMounted } from 'vue'
+import { ref, onBeforeMount, watch, onMounted, onBeforeUpdate } from 'vue'
 import pagination from '../../composables/pagination'
 import SearchBar from '../Search/SearchBar.vue'
 import CreateProperty from '../Modals/CreateProperty.vue';
@@ -115,7 +115,7 @@ import subZonesMaster from '../../composables/subzones';
 
 const { user, getUserData } = userMaster() 
 const { getZones, zones, zone } = zonesMaster()
-const { getSubZones, subZones, subZone } = subZonesMaster()
+const { getSubZones, subZones, subZone, route } = subZonesMaster()
 
 const btnClearSearch = ref(null)
 const childComponentRef = ref(null);
@@ -159,6 +159,9 @@ onBeforeMount(() => {
 
 onMounted(() => {
     operateModal(document.querySelector('#modal'))
+})
+onBeforeUpdate(() => {
+    document.title = route.meta.name+' | '+localStorage.getItem('title')
 })
 
 watch(search_global, (current, previous) => {

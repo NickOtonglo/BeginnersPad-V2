@@ -127,7 +127,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue';
+import { onBeforeUpdate, onMounted, ref } from 'vue';
 import zonesMaster from '../../composables/zones';
 import EditZone from '../Modals/EditZone.vue'
 import CreateSub from '../Modals/CreateSubZone.vue'
@@ -161,6 +161,9 @@ onMounted(() => {
     // getSubZones('/api/zones/' + route.params.id + '/sub-zones')
     // operateModal(document.querySelector('#modal'))
     getCounties()
+})
+onBeforeUpdate(() => {
+    document.title = zone.value.name+' Zone, '+zone.value.county.name+' County - '+route.meta.name+' | '+localStorage.getItem('title')
 })
 </script>
 

@@ -21,7 +21,7 @@
 </template>
 
 <script setup>
-import { ref, onBeforeMount } from 'vue';
+import { ref, onBeforeMount, onBeforeUpdate } from 'vue';
 import ticketsMaster from '../../composables/tickets';
 import userMaster from '../../composables/users';
 import EditTicketModal from '../Modals/EditTicket.vue'
@@ -34,6 +34,9 @@ const editTicketRef = ref(null)
 onBeforeMount(() => {
     getTicket(request)
     getUserData()
+})
+onBeforeUpdate(() => {
+    document.title = 'Ticket #'+ticket.value.id+' | '+localStorage.getItem('title')
 })
 
 function click(element) {

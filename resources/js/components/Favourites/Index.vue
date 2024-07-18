@@ -56,7 +56,7 @@
 </template>
 
 <script setup>
-import { ref, onBeforeMount, watch } from 'vue'
+import { ref, onBeforeMount, watch, onBeforeUpdate } from 'vue'
 import favouritesMaster from '../../composables/favourites'
 import ComponentRatingStars from '../Misc/RatingStars.vue'
 import pagination from '../../composables/pagination'
@@ -78,11 +78,14 @@ const {
     getPaginationDataWithRequest
 } = pagination()
 
-const { deleteFavourite } = favouritesMaster()
+const { deleteFavourite, route } = favouritesMaster()
 let request = `/api/favourites`
 
 onBeforeMount(() => {
     getPaginationDataWithRequest(current_page.value, 'favourites', request)
+})
+onBeforeUpdate(() => {
+    document.title = route.meta.name+' | '+localStorage.getItem('title')
 })
 
 watch(search_global, (current, previous) => {

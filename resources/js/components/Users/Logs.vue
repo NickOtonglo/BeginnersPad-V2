@@ -45,10 +45,12 @@
 </template>
 
 <script setup>
-import { onBeforeMount, ref } from 'vue';
+import { onBeforeMount, onBeforeUpdate, ref } from 'vue';
 import pagination from '../../composables/pagination';
 import SearchBar from '../Search/SearchBar.vue';
+import userMaster from '../../composables/users';
 
+const { route } = userMaster()
 const {
     search_global,
     filter_sort,
@@ -64,6 +66,9 @@ const request = ref(`/api/users/logs/all`)
 
 onBeforeMount(() => {
     getPaginationDataWithRequest(current_page.value, 'user_logs', request.value)
+})
+onBeforeUpdate(() => {
+    document.title = route.meta.name+' | '+localStorage.getItem('title')
 })
 </script>
 

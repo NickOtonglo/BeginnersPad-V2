@@ -40,16 +40,19 @@
 </template>
 
 <script setup>
-import { onMounted, ref, onBeforeUnmount, onBeforeMount } from 'vue';
+import { onMounted, ref, onBeforeUnmount, onBeforeMount, onBeforeUpdate } from 'vue';
 import UpdateForm from '../Modals/EditTag.vue'
 import tagsMaster from '../../composables/tags'
 import operateModal from '../../composables/modal'
 
-const { getTag, getTagsList, storeTags, deleteTag, tag, tagsList, validationErrors, isLoading } = tagsMaster()
+const { getTag, getTagsList, storeTags, deleteTag, tag, tagsList, validationErrors, isLoading, route } = tagsMaster()
 const childComponentRef = ref(null);
 
 onMounted(() => {
     getTagsList(`api/tags`)
+})
+onBeforeUpdate(() => {
+    document.title = route.meta.name+' | '+localStorage.getItem('title')
 })
 
 function click(element) {

@@ -297,7 +297,7 @@
 </template>
 
 <script setup>
-import { onBeforeMount, onUpdated, ref } from 'vue';
+import { onBeforeMount, onBeforeUpdate, onUpdated, ref } from 'vue';
 import propertiesMaster from '../../composables/properties';
 import Pagination from '../Misc/Pagination.vue'
 import pagination from '../../composables/pagination';
@@ -361,6 +361,9 @@ onBeforeMount(() => {
     // if (property.value.lat) {
         // nearbySearch(property.value.lat, property.value.lng, `schools`)
     // }
+})
+onBeforeUpdate(() => {
+    document.title = property.value.name+' | '+localStorage.getItem('title')
 })
 
 onUpdated(() => {

@@ -54,7 +54,7 @@
 </template>
 
 <script setup>
-import { onBeforeMount, ref } from 'vue';
+import { onBeforeMount, onBeforeUpdate, ref } from 'vue';
 import propertiesMaster from '../../composables/properties';
 import propertyReviewsMaster from '../../composables/property_reviews';
 import userMaster from '../../composables/users'
@@ -79,6 +79,9 @@ onBeforeMount(() => {
     getReviews(`/api/listings/${route.params.slug}/reviews`)
     getMyReview(`/api/listings/${route.params.slug}/reviews`)
     getUserData()
+})
+onBeforeUpdate(() => {
+    document.title = property.value.name+' - '+route.meta.name+' | '+localStorage.getItem('title')
 })
 
 function click(element) {

@@ -40,14 +40,14 @@
     </section>
 </template>
 
-<script>
+<script setup>
+import { onBeforeUpdate } from 'vue';
 import loginUser from '../../composables/login.js'
 
-export default {
-    setup() {
-        const { credentials, validationErrors, isLoading, submitLogin } = loginUser()
+const { credentials, validationErrors, isLoading, submitLogin, route } = loginUser()
 
-        return { credentials, validationErrors, isLoading, submitLogin }
-    }
-}
+onBeforeUpdate(() => {
+    document.title = route.meta.name+' | '+localStorage.getItem('title')
+})
+
 </script>

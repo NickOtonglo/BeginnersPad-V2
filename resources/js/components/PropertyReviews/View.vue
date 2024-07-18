@@ -53,6 +53,7 @@ import propertyReviewsMaster from '../../composables/property_reviews';
 import userMaster from '../../composables/users'
 import EditReview from '../Modals/EditReview.vue';
 import ComponentRatingStars from '../Misc/RatingStars.vue'
+import { onBeforeUpdate } from 'vue';
 
 const { 
     property, 
@@ -69,6 +70,9 @@ onBeforeMount(() => {
     getProperty(`/api/listings/${route.params.slug}`)
     getMyReview(`/api/listings/${route.params.slug}/reviews`)
     getUserData()
+})
+onBeforeUpdate(() => {
+    document.title = property.value.name+' - '+route.meta.name+' | '+localStorage.getItem('title')
 })
 
 function click(element) {

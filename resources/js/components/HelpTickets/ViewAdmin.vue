@@ -75,7 +75,7 @@
 </template>
 
 <script setup>
-import { ref ,inject, onBeforeMount } from 'vue';
+import { ref ,inject, onBeforeMount, onBeforeUpdate } from 'vue';
 import ButtonDropdown from '../Misc/ButtonDropdown.vue';
 import ticketMaster from '../../composables/tickets'
 import userMaster from '../../composables/users'
@@ -111,6 +111,9 @@ const actionList = ref([
 onBeforeMount(() => {
     getTicket(request)
     getUserData()
+})
+onBeforeUpdate(() => {
+    document.title = 'Ticket #'+ticket.value.id+' | '+localStorage.getItem('title')
 })
 
 // https://vuejs.org/guide/components/events.html#event-arguments

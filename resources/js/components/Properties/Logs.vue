@@ -42,7 +42,7 @@
 </template>
 
 <script setup>
-import { onBeforeMount, ref } from 'vue';
+import { onBeforeMount, onBeforeUpdate, ref } from 'vue';
 import propertiesMaster from '../../composables/properties';
 import userMaster from '../../composables/users'
 
@@ -57,6 +57,9 @@ const { user, getUserData } = userMaster()
 onBeforeMount(() => {
     getPropertyLogs(`/api/listings/${route.params.slug}/logs`)
     getUserData()
+})
+onBeforeUpdate(() => {
+    document.title = route.meta.name+' | '+localStorage.getItem('title')
 })
 </script>
 

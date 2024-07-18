@@ -57,7 +57,7 @@
 </template>
 
 <script setup>
-import { inject, ref, onMounted } from 'vue'
+import { inject, ref, onMounted, onBeforeUpdate } from 'vue'
 import VueMultiselect from 'vue-multiselect'
 import 'vue-multiselect/dist/vue-multiselect.css'
 import articlesMaster from '../../composables/articles';
@@ -97,7 +97,9 @@ onMounted(() => {
     getArticle(request)
     getTagsList(`/api/tags`)
 })
-
+onBeforeUpdate(() => {
+    document.title = route.meta.name+' | '+localStorage.getItem('title')
+})
 </script>
 
 <style scoped>

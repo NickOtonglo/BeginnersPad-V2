@@ -44,8 +44,9 @@
 </template>
 
 <script setup>
-import { onBeforeMount } from 'vue';
+import { onBeforeMount, onBeforeUpdate } from 'vue';
 import pagination from '../../composables/pagination'
+import ticketsMaster from '../../composables/tickets';
 
 const {
     total_pages,
@@ -57,6 +58,8 @@ const {
     getPaginationDataWithRequest
 } = pagination()
 
+const { route } = ticketsMaster()
+
 let request = `/api/help/tickets`
 let status = '';
 
@@ -66,5 +69,8 @@ function fetchTickets(req) {
 
 onBeforeMount(() => {
     fetchTickets(request)
+})
+onBeforeUpdate(() => {
+    document.title = route.meta.name+' | '+localStorage.getItem('title')
 })
 </script>

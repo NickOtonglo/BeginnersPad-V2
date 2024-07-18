@@ -25,14 +25,14 @@
 
 <script setup>
 import SearchBar from '../Search/SearchBar.vue';
-import { onBeforeUnmount, onMounted, ref, onBeforeMount } from 'vue';
+import { onBeforeUnmount, onMounted, ref, onBeforeMount, onBeforeUpdate } from 'vue';
 import articlesMaster from '../../composables/articles'
 import { useRoute } from 'vue-router';
 
 const header = ref(null)
 
-const { getArticles, articles } = articlesMaster()
-const route = useRoute()
+const { getArticles, articles, route } = articlesMaster()
+// const route = useRoute()
 const tag = ref({
     name: route.params.name
 })
@@ -58,6 +58,10 @@ onMounted(() => {
 
 onBeforeUnmount(() => {
     // window.removeEventListener("scroll", initialiseScroll)
+})
+
+onBeforeUpdate(() => {
+    document.title = 'Tag: '+tag.value.name+' - '+route.meta.name+' | '+localStorage.getItem('title')
 })
 </script>
 

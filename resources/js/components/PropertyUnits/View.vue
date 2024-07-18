@@ -133,7 +133,7 @@
 </template>
 
 <script setup>
-import { ref, onBeforeMount } from 'vue';
+import { ref, onBeforeMount, onBeforeUpdate } from 'vue';
 import unitsMaster from '../../composables/units';
 import propertiesMaster from '../../composables/properties';
 import userMaster from '../../composables/users';
@@ -194,6 +194,9 @@ function submitForm(data) {
 onBeforeMount(() => {
     getUnit(`/api/listings/${route.params.slug}/units/${route.params.unit_slug}`)
     getUserData()
+})
+onBeforeUpdate(() => {
+    document.title = unit.value.name+', '+unit.value.property.name+' - '+route.meta.name+' | '+localStorage.getItem('title')
 })
 
 function click(element) {

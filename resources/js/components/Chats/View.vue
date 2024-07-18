@@ -70,7 +70,7 @@
 
 <script setup>
 import axios from 'axios';
-import { onBeforeMount, ref, watch, reactive } from 'vue';
+import { onBeforeMount, ref, watch, reactive, onBeforeUpdate } from 'vue';
 import ChatInput from '../Misc/ChatInput.vue';
 import chatsMaster from '../../composables/chats'
 import userMaster from '../../composables/users'
@@ -117,5 +117,8 @@ onBeforeMount(() => {
     broadcastChats(route.params.id)
     // window.scroll({top: 0, left: 0, behavior: 'smooth' });
     refThread.scrollTop = refThread.scrollHeight;
+})
+onBeforeUpdate(() => {
+    document.title = route.meta.name+' | '+localStorage.getItem('title')
 })
 </script>

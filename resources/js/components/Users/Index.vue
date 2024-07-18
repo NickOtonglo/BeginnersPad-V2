@@ -87,11 +87,12 @@
 </template>
 
 <script setup>
-import { onBeforeMount, ref } from 'vue';
+import { onBeforeMount, onBeforeUpdate, ref } from 'vue';
 import pagination from '../../composables/pagination';
 import CardUser from '../Cards/User1.vue';
 import SearchBar from '../Search/SearchBar.vue';
 import ModalAddUser from '../Modals/AddUser.vue'
+import userMaster from '../../composables/users';
 
 const {
     search_global,
@@ -105,6 +106,7 @@ const {
     getPaginationDataWithRequest,
     isLoading,
 } = pagination()
+const { route } = userMaster()
 
 const refAddUser = ref(null)
 const request = ref(`/api/users`)
@@ -127,5 +129,8 @@ function click(element) {
 
 onBeforeMount(() => {
     filterUsers('')
+})
+onBeforeUpdate(() => {
+    document.title = route.meta.name+' | '+localStorage.getItem('title')
 })
 </script>

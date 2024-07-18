@@ -92,14 +92,14 @@
     </section>
 </template>
 
-<script>
+<script setup>
+import { onBeforeUpdate } from 'vue';
 import registerUser from '../../composables/register.js';
 
-export default {
-    setup() {
-        const { credentials, isLoading, validationErrors, submitRegister } = registerUser()
+const { credentials, isLoading, validationErrors, submitRegister, route } = registerUser()
 
-        return { credentials, isLoading, validationErrors, submitRegister }
-    }
-}
+onBeforeUpdate(() => {
+    document.title = route.meta.name+' | '+localStorage.getItem('title')
+})
+
 </script>

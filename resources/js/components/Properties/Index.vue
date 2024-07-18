@@ -184,7 +184,7 @@
 </template>
 
 <script setup>
-import { ref, onBeforeMount, watch } from 'vue'
+import { ref, onBeforeMount, watch, onBeforeUpdate } from 'vue'
 import pagination from '../../composables/pagination'
 import userMaster from '../../composables/users'
 import SearchBar from '../Search/SearchBar.vue'
@@ -214,7 +214,7 @@ const {
 } = pagination()
 const { user, getUserData } = userMaster() 
 const { getZones, zones, zone } = zonesMaster()
-const { getSubZones, subZones, subZone } = subZonesMaster()
+const { getSubZones, subZones, subZone, route } = subZonesMaster()
 const unit = ref({
     bedrooms: '',
     bathrooms: '',
@@ -267,6 +267,9 @@ onBeforeMount(() => {
     getZones(`/api/zones`)
     filterData('')
     getUserData()
+})
+onBeforeUpdate(() => {
+    document.title = route.meta.name+' | '+localStorage.getItem('title')
 })
 
 watch(search_global, (current, previous) => {

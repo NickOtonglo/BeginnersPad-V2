@@ -49,16 +49,21 @@
     </section>
 </template>
 <script setup>
-import { onMounted, ref } from 'vue';
+import { onBeforeUpdate, onMounted, ref } from 'vue';
 import notificationsMaster from '../../composables/notifications';
+import userMaster from '../../composables/users';
 
 const {
     notifications, 
     getNotifications, 
     setNotificationToRead, 
 } = notificationsMaster()
+const { route } = userMaster()
 
 onMounted(() => {
     getNotifications(`/api/notifications`)
+})
+onBeforeUpdate(() => {
+    document.title = route.meta.name+' | '+localStorage.getItem('title')
 })
 </script>

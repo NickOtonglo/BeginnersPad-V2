@@ -62,7 +62,7 @@
 </template>
 
 <script setup>
-import { onBeforeMount, ref } from 'vue';
+import { onBeforeMount, ref, onBeforeUpdate } from 'vue';
 import pagination from '../../composables/pagination'
 import ticketsMaster from '../../composables/tickets';
 import ViewTicketModal from '../Modals/ViewTicket.vue'
@@ -79,7 +79,7 @@ const {
     getPaginationDataWithRequest
 } = pagination()
 
-const { ticketsRepsList, getRepsList, ticket, getTicket } = ticketsMaster()
+const { ticketsRepsList, getRepsList, ticket, getTicket, route } = ticketsMaster()
 
 const repListRef = ref(null)
 const viewTicketRef = ref(null)
@@ -107,6 +107,9 @@ function click(element) {
 onBeforeMount(() => {
     fetchTickets(request)
     getRepsList(`/api/help/tickets/manage/reps`)
+})
+onBeforeUpdate(() => {
+    document.title = route.meta.name+' | '+localStorage.getItem('title')
 })
 
 const props = defineProps({
