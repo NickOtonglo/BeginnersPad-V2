@@ -31,7 +31,7 @@
                 <router-link :to="{ name: 'users.index' }" @click="closeDrawer" href="/users">Manage</router-link>
             </li>
             <li :class="route.meta.name == 'User logs' ? 'selected' : ''">
-                <router-link :to="{ name: 'users.logs' }" @click="closeDrawer" href="/users/logs">User logs</router-link>
+                <router-link :to="{ name: 'users.logs' }" @click="closeDrawer" href="/users/logs">Logs</router-link>
             </li>
         </ul>
     </div>
