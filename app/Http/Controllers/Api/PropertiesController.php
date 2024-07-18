@@ -52,7 +52,7 @@ class PropertiesController extends Controller
         if ($request) {
             if ($request == 'desc' || $request == 'asc') {
                 if ($user && ($user->role_id <= 3 &&  $user->role_id >= 1)) {
-                    $properties = $properties->orderBy('created_at', $request)->where('status', '!=', 'unpublished')->paginate(25);
+                    $properties = $properties->orderBy('published_at', 'DESC')->orderBy('created_at', $request)->where('status', '!=', 'unpublished')->paginate(25);
                 } else {
                     // check if user is subscribed to waiting lists
                     // check if subscription is valid
@@ -257,7 +257,7 @@ class PropertiesController extends Controller
         }
 
         if ($request && ($request == 'desc' || $request == 'asc')) {
-            $properties = $properties->orderBy('created_at', $request)->paginate(25);
+            $properties = $properties->orderBy('published_at', $request)->orderBy('created_at', $request)->paginate(25);
         } else {
             $properties = $properties->latest()->paginate(25);
         }
@@ -416,9 +416,19 @@ class PropertiesController extends Controller
         }
 
         if ($request && ($request == 'desc' || $request == 'asc')) {
+            if ($status == 'published') {
+                $properties = $properties->orderBy('published_at', $request)->paginate(25);
+            } else if ($status == 'pending') {
+                $properties = $properties->orderBy('updated_at', $request)->paginate(25);
+            } else
             $properties = $properties->orderBy('created_at', $request)->paginate(25);
         } else {
-            $properties = $properties->latest()->paginate(25);
+            if ($status == 'published') {
+                $properties = $properties->orderBy('published_at', 'DESC')->paginate(25);
+            } else if ($status == 'pending') {
+                $properties = $properties->orderBy('updated_at', 'DESC')->paginate(25);
+            } else
+            $properties = $properties->orderBy('published_at', 'DESC')->orderBy('created_at', 'DESC')->paginate(25);
         }
 
         return PropertyLiteResource::collection($properties);
