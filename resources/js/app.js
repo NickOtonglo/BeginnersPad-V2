@@ -24,6 +24,8 @@ const globalOptions = {
     contentType: 'delta',
 }
 
+localStorage.setItem('title', 'BeginnersPad')
+
 const app = createApp(App)
 app.use(router)
 app.use(VueSweetalert2)
