@@ -1,10 +1,11 @@
 import axios from "axios";
 import { ref, reactive, inject } from "vue";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 
 export default function loginUser() {
     const isLoading = ref(false)
     const validationErrors = ref({})
+    const route = useRoute()
     const router = useRouter()
     const credentials = reactive({
         email: '',
@@ -65,5 +66,12 @@ export default function loginUser() {
             .catch(error => console.log(error.response))
     }
 
-    return { credentials, validationErrors, isLoading, submitLogin, logout }
+    return { 
+        credentials, 
+        validationErrors, 
+        isLoading, 
+        submitLogin, 
+        logout, 
+        route,
+    }
 }

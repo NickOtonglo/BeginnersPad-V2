@@ -1,10 +1,11 @@
 import axios from "axios";
 import { ref, reactive, inject } from "vue";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 
 export default function registerUser() {
     const isLoading = ref(false)
     const validationErrors = ref({})
+    const route = useRoute()
     const router = useRouter()
     const credentials = reactive({
         fname: '',
@@ -41,5 +42,5 @@ export default function registerUser() {
         router.push({ name: 'auth.login' })
     }
 
-    return { credentials, isLoading, validationErrors, submitRegister }
+    return { credentials, isLoading, validationErrors, submitRegister, route }
 }
