@@ -118,7 +118,7 @@ class PropertyReviewsController extends Controller
     }
 
     public function getMyReviews() {
-        $reviews = auth()->user()->propertyReviews;
+        $reviews = auth()->user()->propertyReviews()->latest()->get();
         return PropertyReviewResource::collection($reviews);
     }
     
