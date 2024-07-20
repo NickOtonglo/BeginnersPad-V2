@@ -6,6 +6,8 @@ export default function broadcastMaster() {
     const swal = inject('$swal')
     const router = useRouter()
 
+    // in case listener isn't working, run in console: "./vendor/bin/sail artisan queue:work"
+
     const broadcastChats = (request) => {
         window.Echo.private(`chats.${request}`)
             .listen('MessageSent', (e) => {
