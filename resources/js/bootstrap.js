@@ -31,12 +31,26 @@ window.axios.interceptors.response.use(
                 localStorage.removeItem('user')
                 localStorage.removeItem('role')
             }
-            location.assign('/sign-in')
+            if (!isPathAuthFree(location.pathname)) {
+                location.assign('/sign-in')
+            }
         }
 
         return Promise.reject(error)
     }
 )
+
+function isPathAuthFree(path) {
+    if (
+        path == '/' || 
+        path == '/sign-in' || 
+        path == '/sign-up' || 
+        path == '/help' || 
+        path == '/help/faq' ||
+        path == '/forgot-password' ||
+        path == '/reset-password'
+    ) { return true } return false
+}
 
 /**
  * Echo exposes an expressive API for subscribing to channels and listening
@@ -77,6 +91,22 @@ window.Echo = new Echo({
     disableStats: true,
     encrypted: true,
     cluster: 'ap2',
+    authorizer: (channel, options) => {
+        return {
+            authorize: (socketId, callback) => {
+                axios.post('/api/broadcasting/auth', {
+                    socket_id: socketId,
+                    channel_name: channel.name
+                })
+                .then(response => {
+                    callback(false, response.data);
+                })
+                .catch(error => {
+                    callback(true, error);
+                });
+            }
+        };
+    },
 });
 
 // window.Echo.private(`chats.${chatId}`)
