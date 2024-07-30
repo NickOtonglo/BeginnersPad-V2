@@ -10,10 +10,14 @@ use App\Http\Resources\Zone\ZoneAdminResource;
 use App\Http\Resources\ZoneCountiesResource;
 use App\Http\Resources\ZoneCountriesResource;
 use App\Http\Resources\ZonesResource;
+use App\Models\Property;
+use App\Models\PropertyReview;
+use App\Models\SubZone;
 use App\Models\Zone;
 use App\Models\ZoneCountry;
 use App\Models\ZoneCounty;
 use Illuminate\Http\Request;
+use stdClass;
 
 class ZonesController extends Controller
 {
@@ -160,5 +164,150 @@ class ZonesController extends Controller
     public function getZonesByCounty(ZoneCounty $county) {
         $zones = $county->zones;
         return ZonesResource::collection($zones);
+    }
+
+    public function getZoneByMostListed() {
+        // https://stackoverflow.com/a/44894877/11113076
+        $subZoneId = Property::select('sub_zone_id')->groupBy('sub_zone_id')->orderByRaw('COUNT(*) DESC')->first()->sub_zone_id;
+        $subZone = SubZone::find($subZoneId);
+        // $zone = $subZone->zone;
+
+        // $zone = $subZone->zone;
+        // $data = new stdClass();
+        // $data->zone = $zone;
+        // $data->subZone = $subZone;
+        // return $data;
+
+        return $subZone;
+    }
+
+    public function getSubZoneByHighestRating() {
+        $subZoneGrp = [];
+        $subZoneGrpAvg = [];
+        $properties = Property::select('sub_zone_id')->groupBy('sub_zone_id')->orderByRaw('COUNT(*) DESC')->get();
+        foreach ($properties as $item) {
+            $sbzn = SubZone::find($item->sub_zone_id);
+            $prpts = $sbzn->properties;
+            $propertiesList = [];
+            foreach ($prpts as $i) {
+                $rating = $i->propertyReviews()->avg('rating');
+                array_push($propertiesList, $rating);
+            }
+            $propertiesList = array_filter($propertiesList);
+            $average = 0;
+            if (count($propertiesList)) {
+                $average = array_sum($propertiesList)/count($propertiesList);
+            }
+            array_push($subZoneGrpAvg, $average);
+            array_push($subZoneGrp, [$sbzn->id]);
+        }
+        $highestRating = max($subZoneGrpAvg);
+        return $highestRating;
+    }
+
+    public function getZoneByRating(string $rating = 'all') {
+        $zonesList = [];
+        $zonesRatingList = [];
+        $zonesIdList = [];
+        $ratingsList = [];
+        $zones = Zone::get();
+        foreach ($zones as $zone) {
+            $ratingZone = [];
+            $avRatingZone = 0;
+            foreach ($zone->properties as $property) {
+                $ratingProperty = [];
+                $avRatingProperty = 0;
+                foreach ($property->propertyReviews as $review) {
+                    array_push($ratingProperty, $review->rating);
+                    array_push($ratingsList, [$property->name, $review->rating]);
+                }
+                if (count($ratingProperty)) {
+                    $avRatingProperty = array_sum($ratingProperty)/count($ratingProperty);
+                }
+                array_push($ratingZone, $avRatingProperty);
+            }
+            if (count($ratingZone)) {
+                $avRatingZone = array_sum($ratingZone)/count($ratingZone);
+            }
+            if ($avRatingZone > 0) {
+                array_push($zonesRatingList, $avRatingZone);
+                // array_push($zonesIdList, $avRatingZone);
+                array_push($zonesList, [$zone->id, $zone->name, number_format($avRatingZone, 1, '.', '')]);
+            }
+        }
+        
+        if ($rating == 'all') {
+            return $zonesList;
+        } else if ($rating == 'highest') {
+            $zoneRatingIndex = array_search(max($zonesRatingList), $zonesRatingList);
+            return $zonesList[$zoneRatingIndex];
+        } else if ($rating == 'lowest') {
+            $zoneRatingIndex = array_search(min($zonesRatingList), $zonesRatingList);
+            return $zonesList[$zoneRatingIndex];
+        }
+    }
+
+    // to be continued...
+    public function sortZoneRatingsDesc($mainList) {
+        $oldlist = $mainList;
+        $newList = [];
+        for ($i = 0; $i <= count($mainList); $i++) {
+            for ($j = 0; $j <= count($mainList[$i]); $j++) {
+
+            }
+        }
+    }
+
+    public function getZoneAverageRent(Zone $zone) {
+        $avgList = [];
+        $properties = $zone->properties()->where('status', 'published')->get();
+        foreach ($properties as $property) {
+            $unitsAvg = $property->propertyUnits()->where('status', 'active')->avg('price');
+            array_push($avgList, $unitsAvg);
+        }
+        $average = array_sum($avgList)/count($avgList);
+        return (float) $average;
+    }
+
+    public function getZoneByRent(string $rent = 'all') {
+        $zonesList = [];
+        $zonesRentList = [];
+        $zonesIdList = [];
+        $rentList = [];
+        $zones = Zone::get();
+        foreach ($zones as $zone) {
+            $rentZone = [];
+            $avRentZone = 0;
+            foreach ($zone->properties as $property) {
+                $rentProperty = [];
+                $avRentProperty = 0;
+                foreach ($property->propertyUnits as $unit) {
+                    array_push($rentProperty, $unit->price);
+                    array_push($rentList, [$property->name, $unit->name, $unit->price]);
+                }
+                if (count($rentProperty)) {
+                    $avRentProperty = array_sum($rentProperty)/count($rentProperty);
+                }
+                array_push($rentZone, $avRentProperty);
+            }
+            if (count($rentZone)) {
+                $avRentZone = array_sum($rentZone)/count($rentZone);
+            }
+            if ($avRentZone > 0) {
+                array_push($zonesRentList, $avRentZone);
+                // array_push($zonesIdList, $avRentZone);
+                array_push($zonesList, [$zone->id, $zone->name, $avRentZone]);
+            }
+        }
+        
+        if ($rent == 'all') {
+            return $zonesList;
+        } else if ($rent == 'highest') {
+            $zoneRentIndex = array_search(max($zonesRentList), $zonesRentList);
+            return $zonesList[$zoneRentIndex];
+        } else if ($rent == 'lowest') {
+            $zoneRentIndex = array_search(min($zonesRentList), $zonesRentList);
+            return $zonesList[$zoneRentIndex];
+        }
     }
 }
