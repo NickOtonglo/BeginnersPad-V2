@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\FAQResource;
 use App\Http\Resources\HelpTicketAdminResource;
+use App\Http\Resources\HelpTicketRepResource;
 use App\Http\Resources\HelpTicketResource;
 use App\Http\Resources\HelpTopicResource;
 use App\Models\FAQ;
@@ -146,8 +147,13 @@ class HelpController extends Controller
     }
 
     public function getTicketsReps() {
-        $repsList = HelpTicket::get()->pluck('assigned_to');
-        return $repsList;
+        $repsList = [];
+        $reps = HelpTicket::whereNot('assigned_to', null)->get()->pluck('assigned_to')->unique();
+        foreach ($reps as $rep) {
+            $rep = User::where('username', $rep)->first();
+            array_push($repsList, $rep);
+        }
+        return HelpTicketRepResource::collection($repsList);
     }
 
     public function getTicket(HelpTicket $ticket) {
