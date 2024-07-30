@@ -65,6 +65,10 @@ class User extends Authenticatable
         return $this->hasMany(Property::class);
     }
 
+    public function propertyUnits() {
+        return $this->hasManyThrough(PropertyUnit::class, Property::class);
+    }
+
     public function propertyReviews() {
         return $this->hasMany(PropertyReview::class, 'author_id', 'id');
     }
