@@ -16,6 +16,7 @@ export default function userMaster() {
         username: '',
         telephone: '',
         role_id: '',
+        role: '',
         avatar: '',
         status: '',
         password: '',
@@ -53,10 +54,17 @@ export default function userMaster() {
         }
     }    
 
-    const getUserAccount = () => {
+    function getUserAccount() {
         axios.get('api/user/account')
             .then(response => {
                 user.value = response.data
+    
+                axios.get('/api/user')
+                    .then(response => {
+                        user.value.role = response.data.role
+
+                    })
+                    .catch(error => console.log(error))
             })
             .catch(error => console.log(error))
     }
