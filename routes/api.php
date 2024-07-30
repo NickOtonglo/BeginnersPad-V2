@@ -69,6 +69,7 @@ Route::middleware(['auth:sanctum', 'logs.user'])->group(function() {
         Route::delete('help/faq/{faq}', '\App\Http\Controllers\Api\HelpController@destroyFaq');
         
         Route::get('help/tickets/manage/all', '\App\Http\Controllers\Api\HelpController@getTicketsAll');
+        Route::get('help/tickets/manage/reps', '\App\Http\Controllers\Api\HelpController@getTicketsReps');
         Route::get('help/tickets/manage/reps/{user}', '\App\Http\Controllers\Api\HelpController@getRepresentativeTickets');
         Route::get('help/tickets/manage/user/{user}', '\App\Http\Controllers\Api\HelpController@getTicketsByUser');
         Route::patch('help/tickets/manage/ticket/{ticket}', '\App\Http\Controllers\Api\HelpController@updateTicketStatus');
@@ -155,6 +156,8 @@ Route::middleware(['auth:sanctum', 'logs.user'])->group(function() {
         Route::get('user/credit', '\App\Http\Controllers\Api\UserCreditController@show');
         Route::patch('user/credit', '\App\Http\Controllers\Api\UserCreditController@prePost');
     });
+
+    Route::get('dashboard', '\App\Http\Controllers\Api\DashboardController@preLoad');
     
     Route::get('user', '\App\Http\Controllers\Api\UserController@getAuthenticatedUser');
     Route::get('user/account', '\App\Http\Controllers\Api\UserController@getAuthenticatedUserAccount');
