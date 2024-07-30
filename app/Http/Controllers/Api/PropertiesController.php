@@ -579,4 +579,19 @@ class PropertiesController extends Controller
         }
         return $properties;
     }
+
+    public function getMyListingsAverageRating() {
+        $ratingsList = [];
+        $average = 0;
+        $user = auth()->user();
+        $properties = $user->properties()->where('status', 'published')->get();
+        foreach ($properties as $property) {
+            $rating = $property->propertyReviews()->avg('rating');
+            array_push($ratingsList, $rating);
+        }
+        if (count($ratingsList)) {
+            $average = array_sum($ratingsList)/count($ratingsList);
+        }
+        return $average;
+    }
 }
