@@ -1328,12 +1328,22 @@ gmp-map {
 }
 
 .section-dash .dash-grp .items .item.card p {
-    font-weight: bold;
+    /* font-weight: bold; */
+    border-bottom: 1px dashed;
 }
 
-.section-dash .dash-grp .items .item.card h4 {
+.section-dash .dash-grp .items .item.card h1,
+.section-dash .dash-grp .items .item.card h2,
+.section-dash .dash-grp .items .item.card h3,
+.section-dash .dash-grp .items .item.card h4,
+.section-dash .dash-grp .items .item.card h5,
+.section-dash .dash-grp .items .item.card h6 {
     margin-top: 40px;
-    font-size: 2rem;
+    /* font-size: 1.1rem; */
+}
+
+.section-dash .dash-grp .items .item.card:hover p {
+    border-bottom-color: #fff;
 }
 
 .section-dash .dash-grp .items .item.card.item-primary {
