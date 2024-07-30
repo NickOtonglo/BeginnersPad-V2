@@ -409,4 +409,28 @@ class PremiumSubscriptionsController extends Controller
             }
         } return false;
     }
+
+    public function getWaitingListByPopularity(bool $nameOnly = true) {
+        $listList = [];
+        $list = PremiumPlanWaitingList::select('zone_id')->groupBy('zone_id')
+                                        ->orderByRaw('COUNT(*) DESC')->limit(5)->get();
+
+        if ($nameOnly) {
+            foreach ($list as $item) {
+                $zone = $item->zone->name;
+                array_push($listList, $zone);
+            }
+        } else {
+            foreach ($list as $item) {
+                $zone = $item->zone;
+                array_push($listList, $zone);
+            }
+        }
+        return $listList;
+    }
+
+    public function getAllActiveListingsCount() {
+        $count = Property::where('status', 'published')->where('published_at', '>', Carbon::now()->subHours(48))->count();
+        return $count;
+    }
 }
