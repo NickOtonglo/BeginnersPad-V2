@@ -3,6 +3,8 @@ import PageNotFound from '../components/Misc/PageNotFound.vue'
 import Home from '../components/Home.vue'
 import Login from '../components/Auth/Login.vue'
 import Register from '../components/Auth/Register.vue'
+import ForgotPassword from '../components/Auth/ForgotPassword.vue'
+import ResetPassword from '../components/Auth/ResetPassword.vue'
 import UserAccount from '../components/Users/Account.vue'
 import UserNotifications from '../components/Users/Notifications.vue'
 import ArticlesIndex from '../components/Articles/Index.vue'
@@ -147,6 +149,24 @@ const routes = [
         component: Login,
         meta: {
             name: 'Sign in'
+        }
+    },
+    {
+        path: '/forgot-password',
+        name: 'auth.forgot',
+        beforeEnter: checkLoginGuest,
+        component: ForgotPassword,
+        meta: {
+            name: 'Forgot password'
+        }
+    },
+    {
+        path: '/reset-password/:token',
+        name: 'auth.reset',
+        beforeEnter: checkLoginGuest,
+        component: ResetPassword,
+        meta: {
+            name: 'Reset password'
         }
     },
     {
