@@ -32,7 +32,7 @@
                     </button>
                     <!-- <input class="btn-submit" type="button" value="Sign in"> -->
                     <div class="link-forgot-password">
-                        <a href="#">Forgot your password?</a>
+                        <router-link :to="{ name: 'auth.forgot' }">Forgot your password?</router-link>
                     </div>
                 </form>
             </div>
