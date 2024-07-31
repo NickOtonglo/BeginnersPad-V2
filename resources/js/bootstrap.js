@@ -48,7 +48,7 @@ function isPathAuthFree(path) {
         path == '/help' || 
         path == '/help/faq' ||
         path == '/forgot-password' ||
-        path == '/reset-password'
+        path.includes('/reset-password')
     ) { return true } return false
 }
 
