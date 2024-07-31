@@ -45,9 +45,7 @@ const {
     credentials, 
     validationErrors, 
     isLoading, 
-    resetToken, 
     route, 
-    getResetToken,
     submitNewPassword,  
 } = loginUser()
 
