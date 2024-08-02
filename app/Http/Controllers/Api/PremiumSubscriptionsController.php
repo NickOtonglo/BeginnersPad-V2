@@ -371,21 +371,21 @@ class PremiumSubscriptionsController extends Controller
             }
             $properties = $properties->where('status', 'published')
             ->where('published_at', '<', Carbon::now()->subHours(48))
-                ->orderBy('published_at', $order);
-
+            ->orderBy('published_at', $order);
+            
             // add listings to collection
             $properties = new Collection($properties->get());
             $properties = $properties->merge($list);
-
+            
             if ($order = 'desc') {
                 $properties = $properties->reverse()->values();
             }
-
+            
             if ($pagination > 0) {
                 $properties = app(Controller::class)->paginate($properties, $pagination);
             }
-
-            $properties = app(Controller::class)->paginate($properties, $pagination);
+            
+            // $properties = app(Controller::class)->paginate($properties, $pagination);
         }
         return $properties;
     }
