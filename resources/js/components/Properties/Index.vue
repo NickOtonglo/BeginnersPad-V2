@@ -168,8 +168,13 @@
                 </template>
             </div>
             <div v-else class="cards">
-                <template v-for="item in units">
+                <template v-if="user.role" v-for="item in units">
                     <CardUnit :unit="item" />
+                </template>
+                <template v-else>
+                    <div></div>
+                    <h1 style="text-align: center;">Sign-in to see results</h1>
+                    <div></div>
                 </template>
             </div>
             <template v-if="!properties.length">
