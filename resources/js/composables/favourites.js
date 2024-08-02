@@ -58,6 +58,9 @@ export default function favouriteMaster() {
                 }
             })
             .catch(error => {
+                if (error.response?.status == '401') {
+                    router.push({ name: 'auth.login' })
+                }
                 if (error.response?.data) {
                     validationErrors.value = error.response.data.errors
                 } else {
