@@ -39,7 +39,9 @@ class PropertiesController extends Controller
         $request = request()->sort;
         $user = auth()->user();
         $plan = PremiumPlan::where('slug', 'waiting-list')->first();
-        $subscription = $user->premiumSubscriptions()->where('premium_plan_id', $plan->id)->first();
+        if ($user) {
+            $subscription = $user->premiumSubscriptions()->where('premium_plan_id', $plan->id)->first();
+        }
 
         $properties = Property::when(request('search_global'), function ($query) {
             $query->where(function ($q) {
@@ -60,7 +62,7 @@ class PropertiesController extends Controller
                     // get user's waiting lists
                     // get listings in waiting lists that have been published within the last 48 hrs
                     // add listings to collection
-                    if (app(PremiumSubscriptionsController::class)->doesUserHaveValidWaitingListSubscription($user, $plan, $subscription)) {
+                    if ($user && app(PremiumSubscriptionsController::class)->doesUserHaveValidWaitingListSubscription($user, $plan, $subscription)) {
                         // get user's waiting lists
                         $properties = app(PremiumSubscriptionsController::class)->getWaitingListSubscriberListings($user, $properties, $plan, $subscription, 25, $request);
                     } else {
@@ -81,7 +83,7 @@ class PropertiesController extends Controller
         } else {
             // check if user is subscribed to waiting lists
             // check if subscription is valid
-            if (app(PremiumSubscriptionsController::class)->doesUserHaveValidWaitingListSubscription($user, $plan, $subscription)) {
+            if ($user && app(PremiumSubscriptionsController::class)->doesUserHaveValidWaitingListSubscription($user, $plan, $subscription)) {
                 // get user's waiting lists
                 $properties = app(PremiumSubscriptionsController::class)->getWaitingListSubscriberListings($user, $properties, $plan, $subscription);
             } else {
@@ -154,7 +156,7 @@ class PropertiesController extends Controller
         // }
 
         if ($this->isPropertyAccessibleToUser($property)) {
-             return new PropertyPublicResource($property);
+            return new PropertyPublicResource($property);
         } else {
             abort(404);
         }
@@ -437,7 +439,9 @@ class PropertiesController extends Controller
     public function getPropertiesBySubZone(SubZone $subZone) {
         $user = auth()->user();
         $plan = PremiumPlan::where('slug', 'waiting-list')->first();
-        $subscription = $user->premiumSubscriptions()->where('premium_plan_id', $plan->id)->first();
+        if ($user) {
+            $subscription = $user->premiumSubscriptions()->where('premium_plan_id', $plan->id)->first();
+        }
 
         $properties = '';
         if (auth()->user() && (auth()->user()->role_id <= 3 &&  auth()->user()->role_id >= 1)) {
@@ -450,7 +454,7 @@ class PropertiesController extends Controller
             // if listing belongs to selected sub-zone, add to array
             // add listings to collection
             $properties = $subZone->properties();
-            if (app(PremiumSubscriptionsController::class)->doesUserHaveValidWaitingListSubscription($user, $plan, $subscription)) {
+            if ($user && app(PremiumSubscriptionsController::class)->doesUserHaveValidWaitingListSubscription($user, $plan, $subscription)) {
                 $properties = app(PremiumSubscriptionsController::class)->getWaitingListSubscriberListingsInSubZone($user, $properties, $plan, $subscription, 9, $subZone);
             } else {
                 $properties = $properties->where('status', 'published')
@@ -541,13 +545,13 @@ class PropertiesController extends Controller
     public function isPropertyAccessibleToUser(Property $property) {
         $user = auth()->user();
         if (
-            (app(PremiumSubscriptionsController::class)->isPropertyAccessibleToUser($user, $property)) ||
+            ($user && app(PremiumSubscriptionsController::class)->isPropertyAccessibleToUser($user, $property)) ||
             ($property->status == 'published' && $property->published_at < Carbon::now()->subHours(48)) || 
-            (auth()->user()->id == $property->user_id) || 
+            ($user->id == $property->user_id) || 
             (($property->status != 'unpublished' && $property->status != 'private') && 
-                (auth()->user()->role_id == 3 || 
-                 auth()->user()->role_id == 2 || 
-                 auth()->user()->role_id == 1)
+                ($user->role_id == 3 || 
+                 $user->role_id == 2 || 
+                 $user->role_id == 1)
             )
          ) {
             return true;
