@@ -141,7 +141,8 @@
                                 <CardPropertyUnit :property="property" :unit="unit" />
                             </template>
                             <template v-if="!units.length">
-                                <p style="text-align: center;">-no units-</p>
+                                <h1 v-if="!user.role" style="text-align: center;">Sign-in to see available units</h1>
+                                <p v-else style="text-align: center;">-no units-</p>
                             </template>
                             <template v-if="unitsCount > 5">
                                 <Pagination :totalPages="total_pages"
@@ -279,7 +280,8 @@
                                 </template>
                             </div>
                             <template v-if="!reviews.length">
-                                <p style="text-align: center;">-no reviews-</p>
+                                <h1 v-if="!user.role" style="text-align: center;">Sign-in to see reviews</h1>
+                                <p v-else style="text-align: center;">-no reviews-</p>
                             </template>
                         </div>
                         <div v-if="reviews.length" class="section-more">
