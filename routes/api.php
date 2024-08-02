@@ -32,10 +32,21 @@ Route::get('listings', '\App\Http\Controllers\Api\PropertiesController@index');
 
 Route::get('listings/units/all', 'App\Http\Controllers\Api\PropertyUnitsController@getUnitsQuery');
 Route::get('listings/units/sub-zone/{sub_zone}', 'App\Http\Controllers\Api\PropertyUnitsController@getUnitsBySubZone');
+    
+Route::get('listings/{property}', '\App\Http\Controllers\Api\PropertiesController@show');
+Route::get('listings/{property}/units', 'App\Http\Controllers\Api\PropertyUnitsController@index');
 
 Route::get('help/faq', '\App\Http\Controllers\Api\HelpController@getFaqs');
 Route::get('help/topics', '\App\Http\Controllers\Api\HelpController@getTopics');
 Route::post('help/tickets', '\App\Http\Controllers\Api\HelpController@storeTicket')->middleware('logs.user');
+
+Route::get('zones/countries', '\App\Http\Controllers\Api\ZonesController@getCountries');
+Route::get('zones/counties', '\App\Http\Controllers\Api\ZonesController@getCounties');
+Route::get('zones/sub/roles', '\App\Http\Controllers\Api\SubZoneController@getNatures');
+Route::get('zones/{zone}/sub-zones', '\App\Http\Controllers\Api\SubZoneController@getZoneSubs');
+Route::get('listings/sub-zone/{sub_zone}', '\App\Http\Controllers\Api\PropertiesController@getPropertiesBySubZone');
+    
+Route::get('zones', '\App\Http\Controllers\Api\ZonesController@index');
 
 Route::middleware(['auth:sanctum', 'logs.user'])->group(function() {
     
@@ -171,14 +182,9 @@ Route::middleware(['auth:sanctum', 'logs.user'])->group(function() {
     
     Route::get('tags', '\App\Http\Controllers\Api\TagsController@index');
     
-    Route::get('zones/countries', '\App\Http\Controllers\Api\ZonesController@getCountries');
-    Route::get('zones/counties', '\App\Http\Controllers\Api\ZonesController@getCounties');
-    Route::get('zones/sub/roles', '\App\Http\Controllers\Api\SubZoneController@getNatures');
     
-    Route::get('zones', '\App\Http\Controllers\Api\ZonesController@index');
     Route::get('zones/{zone}', '\App\Http\Controllers\Api\ZonesController@show');
     
-    Route::get('zones/{zone}/sub-zones', '\App\Http\Controllers\Api\SubZoneController@getZoneSubs');
     Route::get('zones/{zone}/sub-zones/{subZone}', '\App\Http\Controllers\Api\SubZoneController@show');
     Route::get('zones/{zone}/sub-zones/{subZone}/listings', '\App\Http\Controllers\Api\SubZoneController@getListings');
     
@@ -186,10 +192,7 @@ Route::middleware(['auth:sanctum', 'logs.user'])->group(function() {
     Route::get('counties/{county}/zones', '\App\Http\Controllers\Api\ZonesController@getZonesByCounty');
     
     Route::get('listings/status/{status}', '\App\Http\Controllers\Api\PropertiesController@getPropertiesByStatus');
-    Route::get('listings/sub-zone/{sub_zone}', '\App\Http\Controllers\Api\PropertiesController@getPropertiesBySubZone');
-    
-    Route::get('listings/{property}', '\App\Http\Controllers\Api\PropertiesController@show');
-    Route::get('listings/{property}/units', 'App\Http\Controllers\Api\PropertyUnitsController@index');
+
     Route::get('listings/{property}/units/{unit}', '\App\Http\Controllers\Api\PropertyUnitsController@show');
     
     Route::get('listings/{property}/reviews', 'App\Http\Controllers\Api\PropertyReviewsController@index');
