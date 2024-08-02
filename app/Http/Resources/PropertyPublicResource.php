@@ -22,7 +22,11 @@ class PropertyPublicResource extends JsonResource
     {
         $features = PropertyFeature::where('property_id', $this->id)->get(['item']);
         $files = PropertyFile::where('property_id', $this->id)->get(['name']);
-        $units = PropertyUnit::where('property_id', $this->id)->get();
+        $units = [];
+        if (auth()->user()) {
+            $units = PropertyUnit::where('property_id', $this->id)->get();
+            $units = PropertyUnitLiteResource::collection($units);
+        }
         $user = User::where('id', $this->user_id)->first()->username;
         $subZone = [
             'name' => $this->subZone->name,
@@ -34,7 +38,11 @@ class PropertyPublicResource extends JsonResource
             ]
         ];
         $rating = PropertyReview::where('property_id', $this->id)->avg('rating');
-        $favourite = UserFavourite::where('model', 'Property')->where('model_id', $this->id)->where('user_id', auth()->user()->id)->first();
+        $favourite = null;
+        if (auth()->user()) {
+            $favourite = UserFavourite::where('model', 'Property')->where('model_id', $this->id)->where('user_id', auth()->user()->id)->first();
+            $favourite = new UserFavouriteLiteResource($favourite);
+        }
         $favourite_count = UserFavourite::where('model', 'Property')->where('model_id', $this->id)->count();
         $rentMin = 0;
         $rentMax = 0;
@@ -85,8 +93,8 @@ class PropertyPublicResource extends JsonResource
             'files' => PropertyFilesResource::collection($files),
             'brand' => new BrandResource($this->user->brand),
             'sub_zone' => $subZone,
-            'units' => PropertyUnitLiteResource::collection($units),
-            'favourite' => new UserFavouriteLiteResource($favourite),
+            'units' => $units,
+            'favourite' => $favourite,
             'favourite_count' => $favourite_count,
         ];
     }
