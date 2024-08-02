@@ -26,7 +26,7 @@ class PropertyUnitsController extends Controller
      */
     public function index(Property $property)
     {
-        if (app(PropertiesController::class)->isPropertyAccessibleToUser($property)) {
+        if (Auth()->user() && app(PropertiesController::class)->isPropertyAccessibleToUser($property)) {
             $units = $property->propertyUnits()->paginate(5);
             return PropertyUnitResource::collection($units);
         } else {
@@ -333,7 +333,9 @@ class PropertyUnitsController extends Controller
     public function getUnitsQuery() {
         $user = auth()->user();
         $plan = PremiumPlan::where('slug', 'waiting-list')->first();
-        $subscription = $user->premiumSubscriptions()->where('premium_plan_id', $plan->id)->first();
+        if ($user) {
+            $subscription = $user->premiumSubscriptions()->where('premium_plan_id', $plan->id)->first();
+        }
         
         $units = [];
         $request = request()->sort;
@@ -358,7 +360,7 @@ class PropertyUnitsController extends Controller
                         }
                     }
                 } else {
-                    if (app(PremiumSubscriptionsController::class)->doesUserHaveValidWaitingListSubscription($user, $plan, $subscription)) {
+                    if ($user && app(PremiumSubscriptionsController::class)->doesUserHaveValidWaitingListSubscription($user, $plan, $subscription)) {
                         // get user's waiting lists
                         $properties = app(PremiumSubscriptionsController::class)->getWaitingListSubscriberListings($user, $properties, $plan, $subscription, 0, $request);
                     } else {
@@ -381,7 +383,7 @@ class PropertyUnitsController extends Controller
             if ($request == 'area') {}
             if ($request == 'rooms') {}
         } else {
-            if (app(PremiumSubscriptionsController::class)->doesUserHaveValidWaitingListSubscription($user, $plan, $subscription)) {
+            if ($user && app(PremiumSubscriptionsController::class)->doesUserHaveValidWaitingListSubscription($user, $plan, $subscription)) {
                 // get user's waiting lists
                 $properties = app(PremiumSubscriptionsController::class)->getWaitingListSubscriberListings($user, $properties, $plan, $subscription, 0);
             } else {
@@ -425,7 +427,9 @@ class PropertyUnitsController extends Controller
     public function getUnitsBySubZone(SubZone $subZone) {
         $user = auth()->user();
         $plan = PremiumPlan::where('slug', 'waiting-list')->first();
-        $subscription = $user->premiumSubscriptions()->where('premium_plan_id', $plan->id)->first();
+        if ($user) {
+            $subscription = $user->premiumSubscriptions()->where('premium_plan_id', $plan->id)->first();
+        }
 
         $units = [];
         $request = request()->sort;
@@ -450,7 +454,7 @@ class PropertyUnitsController extends Controller
                         }
                     }
                 } else {
-                    if (app(PremiumSubscriptionsController::class)->doesUserHaveValidWaitingListSubscription($user, $plan, $subscription)) {
+                    if ($user && app(PremiumSubscriptionsController::class)->doesUserHaveValidWaitingListSubscription($user, $plan, $subscription)) {
                         // get user's waiting lists
                         $properties = app(PremiumSubscriptionsController::class)->getWaitingListSubscriberListings($user, $properties, $plan, $subscription, 0, $request);
                     } else {
@@ -474,7 +478,7 @@ class PropertyUnitsController extends Controller
             if ($request == 'rooms') {}
         } else {
             if ($subZone) {
-                if (app(PremiumSubscriptionsController::class)->doesUserHaveValidWaitingListSubscription($user, $plan, $subscription)) {
+                if ($user && app(PremiumSubscriptionsController::class)->doesUserHaveValidWaitingListSubscription($user, $plan, $subscription)) {
                     $properties = app(PremiumSubscriptionsController::class)->getWaitingListSubscriberListingsInSubZone($user, $properties, $plan, $subscription, 9, $subZone);
                 } else {
                     $properties = $properties->where('status', 'published')
@@ -484,7 +488,7 @@ class PropertyUnitsController extends Controller
                                     ->get();
                 }
             } else {
-                if (app(PremiumSubscriptionsController::class)->doesUserHaveValidWaitingListSubscription($user, $plan, $subscription)) {
+                if ($user && app(PremiumSubscriptionsController::class)->doesUserHaveValidWaitingListSubscription($user, $plan, $subscription)) {
                     // get user's waiting lists
                     $properties = app(PremiumSubscriptionsController::class)->getWaitingListSubscriberListings($user, $properties, $plan, $subscription, 0);
                 } else {
@@ -526,7 +530,7 @@ class PropertyUnitsController extends Controller
 
     public function isUnitAccessibleToUser(Property $property, PropertyUnit $unit) {
         if (
-            app(PropertiesController::class)->isPropertyAccessibleToUser($property) &&
+            auth()->user() && app(PropertiesController::class)->isPropertyAccessibleToUser($property) &&
             (
                 ($unit->status == 'active') || 
                 (
