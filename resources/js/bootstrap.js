@@ -48,7 +48,11 @@ function isPathAuthFree(path) {
         path == '/help' || 
         path == '/help/faq' ||
         path == '/forgot-password' ||
-        path.includes('/reset-password')
+        path.substring(0,16) == '/reset-password/' ||
+
+        path == '/listings' || 
+        path.substring(0,10) == '/articles/' || 
+        path.substring(0,10) == '/listings/'
     ) { return true } return false
 }
 
