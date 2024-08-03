@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('thumbnail');
             $table->string('role_ids')->nullable(); // array of intended audiences (user role id), null if all users are included
             $table->boolean('requires_auth')->default(false);
-            $table->integer('user_id');
+            $table->bigInteger('user_id');
             $table->foreign('user_id')
                 ->references('id')
                 ->on('users')
