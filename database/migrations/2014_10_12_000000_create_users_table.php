@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('avatar')->nullable();
             $table->string('status')->default('active'); //preactive, active, inactive, suspended
             $table->string('password');
+            $table->dateTime('last_login_at')->nullable()->default(null);
             $table->rememberToken();
             $table->timestamps();
         });
