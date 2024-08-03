@@ -18,7 +18,8 @@ return new class extends Migration
             $table->text('preview');
             $table->longText('content');
             $table->string('thumbnail');
-            $table->string('audience_roles')->nullable(); // array of intended audiences (user role id), null if all users are included
+            $table->string('role_ids')->nullable(); // array of intended audiences (user role id), null if all users are included
+            $table->boolean('requires_auth')->default(false);
             $table->integer('user_id');
             $table->foreign('user_id')
                 ->references('id')
