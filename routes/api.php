@@ -23,6 +23,7 @@ Route::get('articles', '\App\Http\Controllers\Api\ArticlesController@index');
 Route::get('articles/{article}', '\App\Http\Controllers\Api\ArticlesController@show');
 Route::get('articles/{article}/author', '\App\Http\Controllers\Api\ArticlesController@getAuthorName');
 
+Route::get('tags', '\App\Http\Controllers\Api\TagsController@index');
 Route::get('articles/{article}/tags', '\App\Http\Controllers\Api\ArticlesController@getTags');
 Route::get('tags/{tag}', '\App\Http\Controllers\Api\TagsController@show');
 Route::get('tags/{tag}/articles', '\App\Http\Controllers\Api\TagsController@getArticles');
@@ -178,10 +179,7 @@ Route::middleware(['auth:sanctum', 'logs.user'])->group(function() {
     Route::post('user/secret', '\App\Http\Controllers\Api\UserController@updatePassword');
     Route::post('user/view/{user}', '\App\Http\Controllers\Api\UserController@showUser');
 
-    Route::get('help/tickets/{ticket}', '\App\Http\Controllers\Api\HelpController@getTicket');
-    
-    Route::get('tags', '\App\Http\Controllers\Api\TagsController@index');
-    
+    Route::get('help/tickets/{ticket}', '\App\Http\Controllers\Api\HelpController@getTicket');    
     
     Route::get('zones/{zone}', '\App\Http\Controllers\Api\ZonesController@show');
     
