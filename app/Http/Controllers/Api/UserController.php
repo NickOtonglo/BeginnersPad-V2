@@ -322,6 +322,13 @@ class UserController extends Controller
         ]);
     }
 
+    public function getRegAccountTypes() {
+        $roles = Role::where('title', 'Lister')->orWhere('title', 'Beginner')->get();
+        return response()->json([
+            'data' => $roles,
+        ]);
+    }
+
     public function saveUser(SaveUserAdminRequest $request) {
         $user = auth()->user();
 
