@@ -18,6 +18,10 @@ export default function registerUser() {
         password_confirmation: '',
         terms_agree: false
     })
+    const accountTypes = ref({
+        id: '',
+        title: '',
+    })
     const swal = inject('$swal')
 
     const submitRegister = async() => {
@@ -42,5 +46,23 @@ export default function registerUser() {
         router.push({ name: 'auth.login' })
     }
 
-    return { credentials, isLoading, validationErrors, submitRegister, route }
+    const getAccountTypes = () => {
+        if (isLoading.value) return
+        isLoading.value = true
+
+        axios.get('/api/sign-up/accounts')
+            .then(response => accountTypes.value = response.data.data)
+            .catch(error => console.log(error))
+            .finally(isLoading.value = false)
+    }
+
+    return { 
+        credentials, 
+        isLoading, 
+        validationErrors, 
+        submitRegister, 
+        accountTypes,
+        getAccountTypes,
+        route, 
+    }
 }
