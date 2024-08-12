@@ -48,8 +48,9 @@
                         <label for="user_type">Account type</label>
                         <select v-model="credentials.user_type" name="user_type" id="user_type">
                             <option value="" selected>--select account type--</option>
-                            <option value="5">Customer</option>
-                            <option value="4">Property lister</option>
+                            <template v-for="item in accountTypes">
+                                <option :value="item.id">{{ item.title }}</option>
+                            </template>
                         </select>
                         <div v-for="message in validationErrors?.user_type" class="txt-alert txt-danger">
                             <li>{{ message }}</li>
@@ -93,11 +94,22 @@
 </template>
 
 <script setup>
-import { onBeforeUpdate } from 'vue';
+import { onBeforeMount, onBeforeUpdate } from 'vue';
 import registerUser from '../../composables/register.js';
 
-const { credentials, isLoading, validationErrors, submitRegister, route } = registerUser()
+const { 
+    credentials, 
+    isLoading, 
+    validationErrors, 
+    submitRegister, 
+    accountTypes, 
+    getAccountTypes, 
+    route 
+} = registerUser()
 
+onBeforeMount(() => {
+    getAccountTypes()
+})
 onBeforeUpdate(() => {
     document.title = route.meta.name+' | '+localStorage.getItem('title')
 })
