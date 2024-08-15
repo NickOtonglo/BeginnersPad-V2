@@ -35,9 +35,6 @@ Route::get('listings', '\App\Http\Controllers\Api\PropertiesController@index');
 
 Route::get('listings/units/all', 'App\Http\Controllers\Api\PropertyUnitsController@getUnitsQuery');
 Route::get('listings/units/sub-zone/{sub_zone}', 'App\Http\Controllers\Api\PropertyUnitsController@getUnitsBySubZone');
-    
-Route::get('listings/{property}', '\App\Http\Controllers\Api\PropertiesController@show');
-Route::get('listings/{property}/units', 'App\Http\Controllers\Api\PropertyUnitsController@index');
 
 Route::get('help/faq', '\App\Http\Controllers\Api\HelpController@getFaqs');
 Route::get('help/topics', '\App\Http\Controllers\Api\HelpController@getTopics');
@@ -221,3 +218,7 @@ Route::middleware(['auth:sanctum', 'logs.user'])->group(function() {
     Route::get('premium/plan/{plan}', '\App\Http\Controllers\Api\PremiumSubscriptionsController@getPremiumPlan');
     
 });
+
+// Routes that will cause conflict with routes above, best to be left below this comment
+Route::get('listings/{property}', '\App\Http\Controllers\Api\PropertiesController@show');
+Route::get('listings/{property}/units', 'App\Http\Controllers\Api\PropertyUnitsController@index');
