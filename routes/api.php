@@ -190,6 +190,7 @@ Route::middleware(['auth:sanctum', 'logs.user'])->group(function() {
     
     Route::get('listings/status/{status}', '\App\Http\Controllers\Api\PropertiesController@getPropertiesByStatus');
 
+    Route::get('listings/{property}/units', 'App\Http\Controllers\Api\PropertyUnitsController@index');
     Route::get('listings/{property}/units/{unit}', '\App\Http\Controllers\Api\PropertyUnitsController@show');
     
     Route::get('listings/{property}/reviews', 'App\Http\Controllers\Api\PropertyReviewsController@index');
@@ -221,4 +222,3 @@ Route::middleware(['auth:sanctum', 'logs.user'])->group(function() {
 
 // Routes that will cause conflict with routes above, best to be left below this comment
 Route::get('listings/{property}', '\App\Http\Controllers\Api\PropertiesController@show');
-Route::get('listings/{property}/units', 'App\Http\Controllers\Api\PropertyUnitsController@index');
