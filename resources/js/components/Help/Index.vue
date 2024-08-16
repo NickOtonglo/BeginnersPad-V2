@@ -41,7 +41,7 @@
                 </div>
             </div>
             <!-- Form -->
-            <div v-if="user.role == 'Lister' || user.role == 'Beginner' || user.role == 'Unset' || !user.username" class="help-form">
+            <div v-if="user.role == 'Lister' || user.role == 'Beginner' || user.role == 'Unset' || !user.username" class="help-form" id="contact-form">
                 <h3 class="section-title">Contact representative</h3>
                 <form @submit.prevent="createTicket(ticketRequest, ticket)">
                     <div v-if="!user.username" class="form-group">
