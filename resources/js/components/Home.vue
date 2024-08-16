@@ -5,10 +5,9 @@
             <div class="container">
                 <div>
                     <h1>Welcome to Beginners Pad</h1>
-                    <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Cum ex corporis aut porro vitae nam iusto neque est?
-                        Dolores distinctio nam cupiditate veniam enim! Magnam quae delectus expedita tempore eaque!
-                    </p>
-                    <a href="#" class="btn btn-link">Learn more</a>
+                    <p>Finding your next home doesn’t need to be hard, or expensive! If you are just starting out in
+                        life, or if you’re in need of a cost-friendly home, you can count on us!</p>
+                    <router-link :to="{ name: 'app.about' }" class="btn btn-link">Learn more</router-link>
                 </div>
             </div>
         </div>
@@ -31,7 +30,8 @@
                 <p style="text-align: center;">-no listings-</p>
             </template>
             <div v-if="properties.length" class="section-more">
-                <router-link :to="{ name: 'properties.index' }">View more listings <i class="fas fa-chevron-right"></i></router-link>
+                <router-link :to="{ name: 'properties.index' }">View more listings <i
+                        class="fas fa-chevron-right"></i></router-link>
             </div>
         </div>
     </section>
@@ -41,19 +41,32 @@
         <div class="container">
             <h3 class="section-title">Why choose beginners pad?</h3>
             <div class="marketing-item">
-                <h4>Find your next home</h4>
-                <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Fugit odit cumque reiciendis itaque eaque repudiandae.</p>
-                <a href="#">Learn more <i class="fas fa-chevron-right"></i></a>
+                <h4>It's a great place to begin</h4>
+                <p>
+                    Are you moving and on a tight budget? Beginners Pad is for tight budgets! We allow only affordable
+                    listings on our platform, so you don't have to worry about breaking the bank while looking for a
+                    home with us.
+                </p>
+                <router-link :to="{ name: 'app.about' }">Learn more <i class="fas fa-chevron-right"></i></router-link>
             </div>
             <div class="marketing-item">
-                <h4>Subscribe to premium waiting list to get the newest listing updates before they go public</h4>
-                <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Fugit odit cumque reiciendis itaque eaque repudiandae.</p>
-                <a href="#">Learn more <i class="fas fa-chevron-right"></i></a>
+                <h4>What you see is what you get</h4>
+                <p>
+                    We have ensured that what has been listed has been personally approved by us in a process that
+                    strictly enforces our terms of service for your benefit. No fishy or questionable listings here!
+                </p>
+                <router-link :to="{ name: 'app.about' }">Learn more <i class="fas fa-chevron-right"></i></router-link>
             </div>
             <div class="marketing-item">
-                <h4>List your property with us</h4>
-                <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Fugit odit cumque reiciendis itaque eaque repudiandae.</p>
-                <a href="#">Learn more <i class="fas fa-chevron-right"></i></a>
+                <h4>We have already done all the heavy lifting for you</h4>
+                <p>
+                    We have visited and inspected all the properties listed here and we have ensured that they exist and
+                    are just as they appear in the pictures. You no longer have to transit to view a couple of homes in
+                    person to confirm if they are being represented properly. You can now save that money! No
+                    middle-men, no scammers, no stress! You will interact directly with the landlord or their selected
+                    representatives.
+                </p>
+                <router-link :to="{ name: 'app.about' }">Learn more <i class="fas fa-chevron-right"></i></router-link>
             </div>
         </div>
     </section>
@@ -68,13 +81,13 @@
         </div>
         <!-- About section -->
         <div class="about">
-            <a href="#">Who we are</a>
-            <a href="#">Contact us</a>
+            <router-link :to="{ name: 'app.about', hash: '#who-we-are' }">Who we are</router-link>
+            <router-link :to="{ name: 'help.index', hash: '#contact-form' }">Contact us</router-link>
         </div>
         <!-- Other links -->
         <div class="others">
-            <a href="#">Privacy policy</a>
-            <a href="#">Terms of service</a>
+            <router-link :to="{ name: 'app.privacy' }">Privacy policy</router-link>
+            <router-link :to="{ name: 'app.terms' }">Terms of service</router-link>
             <router-link :to="{ name: 'articles.index' }">Articles</router-link>
         </div>
     </section>
