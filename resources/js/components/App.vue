@@ -1,4 +1,6 @@
 <template>
+    <!-- Cookies notice -->
+    <ModalCookie v-if="!isCookieConsented" @consented="setConsentedValue" />
     <!-- Navbar -->
     <nav>
         <h1><router-link :to="{ name: 'app.home' }" href="/">Beginners Pad</router-link></h1>
@@ -75,6 +77,7 @@ import notificationsMaster from '../composables/notifications'
 import broadcastMaster from '../composables/broadcast'
 import navDrawerMaster from '../composables/nav-drawer'
 import navBarMaster from '../composables/nav-bar'
+import ModalCookie from './Modals/Cookies.vue'
 
 const userLogin = loginUser()
 const userAuth = checkAuth()
@@ -85,6 +88,7 @@ const user = ref({
 const isUserFetched = ref(false)
 const navGuestRef = ref(null)
 const toggleRef = ref(null)
+const isCookieConsented = ref(false)
 
 const {
     badges, 
@@ -119,6 +123,10 @@ function getNotificationsData() {
     }
 }
 
+function setConsentedValue(data) {
+    isCookieConsented.value = localStorage.getItem('cookiesConsented')
+}
+
 function toggleHiddenNav () {
     if(userAuth.isAuthenticated.value) {
         console.log('open nav drawer')
@@ -131,6 +139,7 @@ onBeforeMount(() => {
     getUserData()
     getNotificationsData()
     broadcastNotifications(localStorage.getItem('user'))
+    isCookieConsented.value = JSON.parse(localStorage.getItem('cookiesConsented'))
 })
 
 onMounted(() => {
