@@ -311,6 +311,15 @@ class PropertiesController extends Controller
                         .$file->extension();
             // $path = $file->storeAs('images/listings/'.$property->slug, $filename, ['disk' => 'public_uploads']);
             $file->storeAs('images/listings/'.$property->slug, $filename, ['disk' => 'public_uploads']);
+            // Storage::putFileAs(
+            //     'images/listings/'.$property->slug, 
+            //     $file, 
+            //     $filename, 
+            //     [
+            //         'visibility' => 'public',
+            //         'directory_visibility' => 'public'
+            //     ]
+            // );
 
             $post = new PropertyFile;
             $post->name = $filename;
@@ -342,6 +351,15 @@ class PropertiesController extends Controller
                             .'-'.$property->slug.'.'
                             .$file->extension();
                 $file->storeAs('images/listings/'.$property->slug, $filename, ['disk' => 'public_uploads']);
+                // Storage::putFileAs(
+                //     'images/listings/'.$property->slug, 
+                //     $file, 
+                //     $filename, 
+                //     [
+                //         'visibility' => 'public',
+                //         'directory_visibility' => 'public'
+                //     ]
+                // );
         
                 // Delete old thumbnail
                 Storage::disk('public_uploads')->delete('images/listings/'.$property->slug.'/'.$property->thumbnail);
@@ -547,7 +565,7 @@ class PropertiesController extends Controller
         if (
             ($user && app(PremiumSubscriptionsController::class)->isPropertyAccessibleToUser($user, $property)) ||
             ($property->status == 'published' && $property->published_at < Carbon::now()->subHours(48)) || 
-            ($user->id == $property->user_id) || 
+            ($user && $user->id == $property->user_id) || 
             (($property->status != 'unpublished' && $property->status != 'private') && 
                 ($user->role_id == 3 || 
                  $user->role_id == 2 || 
