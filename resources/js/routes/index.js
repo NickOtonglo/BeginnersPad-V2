@@ -1,6 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import PageNotFound from '../components/Misc/PageNotFound.vue'
 import Home from '../components/Home.vue'
+import About from '../components/Docs/About.vue'
+import PrivacyPolicy from '../components/Docs/PrivacyPolicy.vue'
+import Terms from '../components/Docs/Terms.vue'
 import Login from '../components/Auth/Login.vue'
 import Register from '../components/Auth/Register.vue'
 import ForgotPassword from '../components/Auth/ForgotPassword.vue'
@@ -132,6 +135,30 @@ const routes = [
         component: Home,
         meta: {
             name: 'Home'
+        }
+    },
+    {
+        path: '/about',
+        name: 'app.about',
+        component: About,
+        meta: {
+            name: 'About'
+        }
+    },
+    {
+        path: '/privacy-policy',
+        name: 'app.privacy',
+        component: PrivacyPolicy,
+        meta: {
+            name: 'Privacy Policy'
+        }
+    },
+    {
+        path: '/terms-of-service',
+        name: 'app.terms',
+        component: Terms,
+        meta: {
+            name: 'Terms of Service'
         }
     },
     {
