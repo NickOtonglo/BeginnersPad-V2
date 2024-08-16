@@ -55,6 +55,11 @@ button, .btn {
     color: #fff;
 }
 
+.btn-dark-outline {
+    border-color: #fff;
+    color: #fff;
+}
+
 /* Button group (.btn-grp) */
 .btn-grp {
     display: flex;
@@ -985,6 +990,34 @@ select.btn-dropdown {
 
 .modal .modal-content .img-grp.rounded input {
     display: none;
+}
+
+.modal-floating {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    margin: 35px;
+    border-radius: 20px;
+    position: relative;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.4);
+    transition: 0.3s;
+    padding: 15px;
+    margin: 10px;
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    width:calc(100% - 40px);
+    z-index: 20;
+}
+
+.modal-floating.cookies {
+    background-color: var(--color-tertiary);
+}
+
+.modal-floating .content,
+.modal-floating .content b {
+    color: #fff;
 }
 
 .share-panel {
