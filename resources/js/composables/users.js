@@ -31,6 +31,7 @@ export default function userMaster() {
     const usersCount = ref(0)
     const roles = ref({})
     const logs = ref({})
+    const secret = ref(null)
 
     const getRoles = () => {
         if (isLoading.value) return
@@ -326,6 +327,25 @@ export default function userMaster() {
             .finally(isLoading.value = false)
     }
 
+    const checkPassword = (password) => {
+        if (isLoading.value) return
+        isLoading.value = true
+        validationErrors.value = null
+
+        axios.post(`/api/confirm-secret`, password)
+            .then(response => {
+                secret.value = response.data
+            })
+            .catch(error => {
+                if (error.response?.data) {
+                    validationErrors.value = error.response.data.errors
+                } else {
+                    console.log(error)
+                }
+            })
+            .finally(isLoading.value = false)
+    }
+
     return {
         route,
         router,
@@ -333,6 +353,7 @@ export default function userMaster() {
         users,
         roles,
         logs,
+        secret,
         usersCount,
         validationErrors,
         getUserAccount,
@@ -347,5 +368,6 @@ export default function userMaster() {
         saveUser,
         updateUserStatus,
         getLogs,
+        checkPassword, 
     }
 }
