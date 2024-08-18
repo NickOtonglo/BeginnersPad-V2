@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SaveUserAdminRequest;
 use App\Http\Requests\UpdateBrandRequest;
@@ -491,5 +492,27 @@ class UserController extends Controller
             });
         })->latest()->paginate(200);
         return UserLogResource::collection($logs);
+    }
+
+    public function confirmSecret(Request $request) {
+        $request->validate([
+            'password' => 'required',
+        ]);
+
+        if(app(AuthController::class)->checkPassword($request->password)) {
+            return response()->json([
+                'message' => 'The password is OK.',
+                'status' => 201,
+            ], 201);
+        }
+
+        return response()->json([
+            'message' => 'The password is incorrect.',
+            'errors' => [
+                'password' => [
+                    'Incorrect password',
+                ]
+            ],
+        ], 422);
     }
 }
