@@ -71,7 +71,9 @@
     <div class="nav-drawer-category">
         <p>System</p>
         <ul>
-            <li><router-link v-if="user_role == 'System Admin'" :to="{ name: 'system.index' }">Manage</router-link></li>
+            <li>
+                <router-link  @click="closeDrawer" v-if="user_role == 'System Admin'" :to="{ name: 'system.index' }">Manage</router-link>
+            </li>
             <li><a href="#">Reports</a></li>
             <li><a href="#">System logs</a></li>
         </ul>
