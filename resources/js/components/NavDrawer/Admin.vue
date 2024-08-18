@@ -71,7 +71,7 @@
     <div class="nav-drawer-category">
         <p>System</p>
         <ul>
-            <li><a href="#">Manage</a></li>
+            <li><router-link v-if="user_role == 'System Admin'" :to="{ name: 'system.index' }">Manage</router-link></li>
             <li><a href="#">Reports</a></li>
             <li><a href="#">System logs</a></li>
         </ul>
@@ -86,5 +86,6 @@ const router = useRouter()
 
 const props = defineProps({
     closeDrawer: Function,
+    user_role: String,
 })
 </script>
