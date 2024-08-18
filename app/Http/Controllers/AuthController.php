@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Api\SystemController;
 use App\Http\Controllers\Api\UserCreditController;
 use App\Http\Requests\SaveUserRequest;
+use App\Models\System;
 use App\Models\User;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
 
@@ -24,7 +27,14 @@ class AuthController extends Controller
         $user->save();
 
         if ($user->role_id == 5 || $user->role_id == 4) {
-            app(UserCreditController::class)->store(0, $user, 'app/Http/Controllers/AuthController.php');
+            if ($user->role->title == 'Lister') {
+                app(UserCreditController::class)->store(0, $user, 'app/Http/Controllers/AuthController.php');
+            }
+            
+            if ($user->role->title == 'Beginner') {
+                $user_credit_amount = System::where('key', 'user_credit_amount')->first()->value;
+                app(UserCreditController::class)->store((int)$user_credit_amount, $user, 'app/Http/Controllers/AuthController.php');
+            }
         }
 
         $response = [
@@ -123,5 +133,13 @@ class AuthController extends Controller
         return $status === Password::PASSWORD_RESET
                 ? with('status', __($status))
                 : back()->withErrors(['email' => [__($status)]]);
+    }
+
+    public function checkPassword($password) {
+        $user = auth()->user();
+        if (Hash::check($password, $user->password)) {
+            return true;
+        }
+        return false;
     }
 }
