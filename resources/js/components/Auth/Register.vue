@@ -74,7 +74,7 @@
                         <div class="form-check">
                             <input v-model="credentials.terms_agree" class="form-check-input" type="checkbox" name="terms" id="terms" >
                             <p class="form-check-label">
-                                I agree to the <a href="#">Terms and Conditions of Beginners Pad</a>
+                                I agree to the <router-link :to="{ name: 'app.terms' }">Terms of Service of Beginners Pad</router-link>
                             </p>
                         </div>
                         <div v-for="message in validationErrors?.terms_agree" class="txt-alert txt-danger">
