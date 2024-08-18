@@ -18,6 +18,7 @@ use App\Models\PropertyUnit;
 use App\Models\PropertyUnitLog;
 use App\Models\SubZone;
 use App\Models\SubZoneLog;
+use App\Models\SystemLog;
 use App\Models\Tag;
 use App\Models\TagLog;
 use App\Models\TransactionLog;
@@ -292,6 +293,19 @@ class CreateUserActivityLog
                     } else {
                         $data->comment = $response->original['model'].' #'.$response->original['key'].': '.$request->method();
                     }
+
+                    break;
+
+                case 'System':
+                    $data = new SystemLog();
+
+                    $system = $response->original['system'];
+                    $comment = $response->original['comment'];
+
+                    if ($response->original['key']) {
+                        // logging particular keys
+                    }
+                    $data->comment = $response->original['comment'];
 
                     break;
 
