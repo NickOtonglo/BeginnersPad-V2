@@ -15,12 +15,32 @@ class SystemSeeder extends Seeder
     public function run(): void
     {
         System::factory()
-                ->count(1)
+                ->count(6)
                 ->state(new Sequence(
                     [
+                        'key' => 'property_unit_max_rent',
+                        'value' => '30000',
+                    ],
+                    [
                         'key' => 'waiting_list_sub_limit',
-                        'value' => 5,
-                    ]
+                        'value' => '5',
+                    ],
+                    [
+                        'key' => 'user_credit_free',
+                        'value' => 'false',
+                    ],
+                    [
+                        'key' => 'user_credit_user_roles',
+                        'value' => '[5]',
+                    ],
+                    [
+                        'key' => 'user_credit_amount',
+                        'value' => '0',
+                    ],
+                    [
+                        'key' => 'user_credit_daily_limit',
+                        'value' => '0',
+                    ],
                 ))->create();
     }
 }
