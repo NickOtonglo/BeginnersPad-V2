@@ -12,8 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('system', function (Blueprint $table) {
-            $table->string('key')->primary()->unique();
+            $table->id();
+            $table->string('key')->unique();
             $table->string('value')->nullable();
+            $table->string('type')->nullable();
         });
     }
 
