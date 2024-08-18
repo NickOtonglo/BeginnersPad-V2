@@ -45,6 +45,7 @@ import ChatsIndex from '../components/Chats/Index.vue'
 import ChatView from '../components/Chats/View.vue'
 import WaitingListIndex from '../components/WaitingList/Index.vue'
 import Dashboard from '../components/Dashboard/Index.vue'
+import SystemIndex from '../components/System/Index.vue'
 import { component } from 'v-viewer'
 
 function auth(to, from, next) {
@@ -57,6 +58,14 @@ function auth(to, from, next) {
 function checkLoginGuest(to, from, next) {
     if (JSON.parse(localStorage.getItem('authenticated'))) {
         next('/')
+    }
+    else next()
+}
+function checkSystemAdminView(to, from, next) {
+    if (!
+        (JSON.parse(localStorage.getItem('role')) == 1)
+    ) {
+        next('/404')
     }
     else next()
 }
@@ -341,6 +350,20 @@ const routes = [
         meta: {
             name: 'Dashboard'
         }
+    },
+
+    {
+        beforeEnter: checkSystemAdminView,
+        children: [
+            {
+                path: '/system',
+                name: 'system.index',
+                component: SystemIndex,
+                meta: {
+                    name: 'System'
+                }
+            },
+        ]
     },
 
     {
