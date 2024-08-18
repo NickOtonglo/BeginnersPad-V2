@@ -50,7 +50,7 @@
                     <li><a href="#" @click="userLogin.logout"><i class="fas fa-sign-out-alt"></i> Sign out</a></li>
                 </ul>
             </div>
-            <NavDrawerAdmin :closeDrawer="closeDrawer" v-if="user.role == 'Admin' || user.role == 'Super Admin' || user.role == 'System Admin'" />
+            <NavDrawerAdmin :closeDrawer="closeDrawer" v-if="user.role == 'Admin' || user.role == 'Super Admin' || user.role == 'System Admin'" :user_role="user.role" />
             <NavDrawerLister :closeDrawer="closeDrawer" v-if="user.role == 'Lister'" />
             <NavDrawerBeginner :closeDrawer="closeDrawer" v-if="user.role == 'Beginner'" />
         </div>
