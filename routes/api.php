@@ -49,7 +49,10 @@ Route::get('listings/sub-zone/{sub_zone}', '\App\Http\Controllers\Api\Properties
 Route::get('zones', '\App\Http\Controllers\Api\ZonesController@index');
 
 Route::middleware(['auth:sanctum', 'logs.user'])->group(function() {
-    
+    Route::middleware(['validate.system_admin'])->group(function() {
+        Route::post('system/reset', '\App\Http\Controllers\Api\SystemController@reset');
+    });
+
     Route::middleware(['validate.admin'])->group(function() {
         Route::post('articles', '\App\Http\Controllers\Api\ArticlesController@store');
         Route::patch('articles/{article}', '\App\Http\Controllers\Api\ArticlesController@update');
@@ -153,7 +156,6 @@ Route::middleware(['auth:sanctum', 'logs.user'])->group(function() {
     });
     
     Route::middleware(['validate.lister.beginner'])->group(function() {
-        // authenticated user's tickets
         Route::get('help/tickets', '\App\Http\Controllers\Api\HelpController@getTickets');
         Route::get('help/tickets/status/{status}', '\App\Http\Controllers\Api\HelpController@getTicketsWithStatus');
         Route::put('help/tickets/{ticket}', '\App\Http\Controllers\Api\HelpController@updateTicket');
@@ -168,6 +170,7 @@ Route::middleware(['auth:sanctum', 'logs.user'])->group(function() {
         Route::patch('user/credit', '\App\Http\Controllers\Api\UserCreditController@prePost');
     });
 
+    Route::post('confirm-secret', '\App\Http\Controllers\Api\UserController@confirmSecret');
     Route::get('dashboard', '\App\Http\Controllers\Api\DashboardController@preLoad');
     
     Route::get('user', '\App\Http\Controllers\Api\UserController@getAuthenticatedUser');
