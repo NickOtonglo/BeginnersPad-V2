@@ -23,7 +23,7 @@
                                 <!-- <li>Account type: {{ user.role }}</li> -->
                                 <li>Email address: {{ user.email }}</li>
                                 <li>Joined on: {{ user.created_at }}</li>
-                                <li>Phone number: +{{ user.telephone }}</li>
+                                <li>Phone number: {{ user.telephone }}</li>
                             </ul>
                         </div>
                     </div>
