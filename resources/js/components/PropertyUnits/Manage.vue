@@ -124,8 +124,6 @@
                     <div class="listing-actions">
                         <h3>Actions</h3>
                         <div class="btn-grp vertical">
-                            <button>Activate</button>
-                            <button>Deactivate (hide)</button>
                             <button @click="deleteUnit(deleteRequest)">Delete</button>
                         </div>
                     </div>
