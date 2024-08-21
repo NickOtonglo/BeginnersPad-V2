@@ -28,7 +28,7 @@ class PropertyUnitsController extends Controller
     {
         if (Auth()->user() && app(PropertiesController::class)->isPropertyAccessibleToUser($property)) {
             $units = $property->propertyUnits()->paginate(5);
-            return PropertyUnitResource::collection($units);
+            return PropertyUnitLiteResource::collection($units);
         } else {
             // return redirect()->to('http://heera.it');
             abort(404);
@@ -54,6 +54,7 @@ class PropertyUnitsController extends Controller
         $data->name = $request->name;
         $data->story = $request->story;
         $data->price = $request->price;
+        $data->description = $request->description;
         $data->init_deposit = $request->init_deposit;
         $data->init_deposit_period = $request->init_deposit_period;
         $data->floor_area = $request->floor_area;
@@ -111,6 +112,7 @@ class PropertyUnitsController extends Controller
         $data->name = $request->name;
         $data->story = $request->story;
         $data->price = $request->price;
+        $data->description = $request->description;
         $data->init_deposit = $request->init_deposit;
         $data->init_deposit_period = $request->init_deposit_period;
         $data->floor_area = $request->floor_area;
