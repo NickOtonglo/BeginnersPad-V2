@@ -50,8 +50,12 @@
                 <p class="floor">Floor/story: {{ unit.story }}</p>
                 <p>Status: {{ unit.status }}</p>
                 <p class="timestamp">Added on {{ unit.timestamp }}</p>
-                <p class="description">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Totam quae explicabo numquam soluta in
-                    repellat, consectetur iure officiis beatae alias quibusdam sit saepe, quam pariatur.</p>
+                <template v-if="unit.description">
+                    <p class="description">{{ unit.description }}</p>
+                </template>
+                <template v-else>
+                    <p class="description">-no description-</p>
+                </template>
             </div>
             
             <div>
